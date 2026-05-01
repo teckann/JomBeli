@@ -1,0 +1,46 @@
+import { createClient } from "./server";
+
+export async function getUserInfo(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("userID", id)
+    .single();
+
+  if (error) return null;
+  return data;
+}
+
+export async function initializeNewUser(id, fullName) {
+  const existing = await getUserInfo(id);
+
+  if (!existing) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("users")
+      .insert([{ userID: id, fullName: fullName }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Failed to Create New User", error.message);
+      throw new Error("Could not create new user");
+    }
+
+    return data;
+  }
+  return existing;
+}
+
+export async function getProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("*");
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch products");
+  }
+
+  return data;
+}
