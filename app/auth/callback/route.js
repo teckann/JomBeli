@@ -21,8 +21,8 @@ export async function GET(request) {
       if (user) {
         await initializeNewUser(user.id, user.user_metadata.full_name);
 
-        const userInfo = await getUserInfo(user.id);
-        if (userInfo) role = userInfo.role;
+        // const userInfo = await getUserInfo(user.id);
+        // if (userInfo) role = userInfo.role;
       }
 
       // switch (role) {
