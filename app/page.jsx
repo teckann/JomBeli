@@ -24,15 +24,16 @@ export default async function Home() {
       </p>
 
       <p>
-        Name: <span>{userInfo.fullName}</span>
+        Name: <span>{userInfo.username}</span>
       </p>
 
       <p>
         Email: <span>{user.email}</span>
       </p>
 
-      <LogoutButton /><br />
-      <ThemeToggleButton/>
+      <LogoutButton />
+      <br />
+      <ThemeToggleButton />
     </div>
   );
 }
