@@ -1,17 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --background: white;
-  --foreground: black;
+  /* ----------------------------------------------------------
+     TYPOGRAPHY
+  ---------------------------------------------------------- */
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Outfit', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  --text-xs:   0.6875rem;  /* 11px */
+  --text-sm:   0.8125rem;  /* 13px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+  --text-5xl:  3rem;       /* 48px */
+  --text-6xl:  3.75rem;    /* 60px */
+  --text-7xl:  4.5rem;     /* 72px */
+
+  /* ----------------------------------------------------------
+     LIGHT MODE PALETTE
+  ---------------------------------------------------------- */
+  --color-primary:         #DF3B3C;   
+  --color-primary-dark:    #B52E2F;   
+  --color-primary-darker:  #8C2122;   
+  --color-primary-light:   #E86364;   
+  --color-primary-lighter: #F5ABAB;   
+  --color-primary-subtle:  #FAEAEA;   
+
+  --color-sub:             #F8E4E4;   
+  --color-sub-dark:        #F0CECE;   
+  --color-sub-light:       #FDF3F3;   
+
+  --color-bg:              #FDFAF9;   
+  --color-surface:         #FFFFFF;  
+  --color-surface-muted:   #F9F5F5;   
+
+  --color-text-primary:    #1A1010;   
+  --color-text-secondary:  #5C3A3A;   
+  --color-text-muted:      #9E7070;   
+  --color-text-on-primary: #FFFFFF;   
+
+  --color-border:          #E8CFCF;   
+  --color-border-light:    #F4E6E6;   
+  --color-border-strong:   #D4B0B0;   
+
+  --color-success:         #1E9E6B;
+  --color-success-bg:      #E6F7F1;
+  --color-success-text:    #0F5C3E;
+
+  --color-warning:         #D97706;
+  --color-warning-bg:      #FEF3C7;
+  --color-warning-text:    #7C4A08;
+
+  --color-danger:          #DF3B3C;   
+  --color-danger-bg:       #FAEAEA;
+  --color-danger-text:     #8C2122;
+
+  --color-info:            #2563EB;
+  --color-info-bg:         #EFF6FF;
+  --color-info-text:       #1E40AF;
+
+  --color-rating:          #F59E0B;
 }
 
-[data-theme='dark'] {
-  --background: black;
-  --foreground: white;
+/* ----------------------------------------------------------
+   DARK MODE PALETTE
+---------------------------------------------------------- */
+[data-theme="dark"] {
+  --color-primary:         #E84A4B;   
+  --color-primary-dark:    #DF3B3C;   
+  --color-primary-darker:  #B52E2F;   
+  --color-primary-light:   #ED6E6F;   
+  --color-primary-lighter: #F39899;   
+  --color-primary-subtle:  #331415;   
+
+  --color-sub:             #3A2424;   
+  --color-sub-dark:        #4F3131;   
+  --color-sub-light:       #271717;   
+
+  --color-bg:              #120B0B;   
+  --color-surface:         #1C1212;   
+  --color-surface-muted:   #261A1A;   
+
+  --color-text-primary:    #FAECEC;  
+  --color-text-secondary:  #D6C2C2;  
+  --color-text-muted:      #947E7E;  
+  --color-text-on-primary: #FFFFFF;   
+
+  --color-border:          #3D2B2B;   
+  --color-border-light:    #2E1F1F;   
+  --color-border-strong:   #614545;   
+
+  --color-success:         #22C55E;
+  --color-success-bg:      #062E19;
+  --color-success-text:    #86EFAC;
+
+  --color-warning:         #F59E0B;
+  --color-warning-bg:      #2E1D05;
+  --color-warning-text:    #FDE047;
+
+  --color-danger:          #E84A4B;   
+  --color-danger-bg:       #331415;
+  --color-danger-text:     #FCA5A5;
+
+  --color-info:            #3B82F6;
+  --color-info-bg:         #091E42;
+  --color-info-text:       #93C5FD;
+
+  --color-rating:          #FBBF24;
 }
-
-
 
 body{
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
 }
 
+ 
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary);
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin: 0 5px 0 5px;
+}
