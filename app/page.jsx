@@ -1,4 +1,4 @@
-import LogoutButton from "./_components/LogoutButton";
+import SignOutButton from "./_components/SignOutButton";
 import ThemeToggleButton from "./_components/ThemeToggleButton";
 import { getUser } from "./_lib/auth";
 import { getUserInfo } from "./_lib/data-services";
@@ -31,7 +31,7 @@ export default async function Home() {
         Email: <span>{user.email}</span>
       </p>
 
-      <LogoutButton />
+      <SignOutButton />
       <br />
       <ThemeToggleButton />
     </div>

@@ -1,5 +1,4 @@
-import LoginButton from "../_components/LoginButton";
-import LoginForm from "../_components/LoginForm";
+import SignInForm from "../_components/SignInForm";
 
 async function page({ searchParams }) {
   const { error, message } = await searchParams;
@@ -7,12 +6,7 @@ async function page({ searchParams }) {
   return (
     <div>
       <h1>Sign In</h1>
-
-      <LoginForm />
-
-      <div>OR</div>
-
-      <LoginButton />
+      <SignInForm />
     </div>
   );
 }
