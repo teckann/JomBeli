@@ -46,19 +46,54 @@ export async function middleware(request) {
     },
   );
 
+  const url = request.nextUrl.clone();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // not logged in
   if (!user) {
-    const url = request.nextUrl.clone();
     url.pathname = "/signin";
     return NextResponse.redirect(url);
+  }
+
+  // auth user
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select("role")
+    .eq("user_id", user.id)
+    .single();
+
+  const role = data?.role;
+
+  // redirect logic
+  if (url.pathname === "/") {
+    if (role === "Admin") {
+      url.pathname = "/admin";
+      return NextResponse.redirect(url);
+    }
+
+    if (role === "Courier") {
+      url.pathname = "/courier";
+      return NextResponse.redirect(url);
+    }
+
+    if (role === "Seller") {
+      url.pathname = "/seller";
+      return NextResponse.redirect(url);
+    }
+
+    if (role === "Buyer") {
+      url.pathname = "/buyer";
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;
 }
 
+// protected route
 export const config = {
   matcher: ["/"],
 };

@@ -2,8 +2,7 @@
 
 import { signInWithEmailAction } from "../_lib/actions";
 import { signInWithGoogleAction } from "../_lib/actions";
-// import "@/app/_styles/globals.css";
-// import styles from "./SignInForm.module.css";
+// import styles from "../_component_styles/SignInForm.module.css";
 
 export default function SignInForm() {
   return (
