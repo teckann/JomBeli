@@ -1,36 +1,45 @@
 "use client";
 
+import Link from "next/link";
 import { signInWithEmailAction } from "../../_lib/actions";
-import { signInWithGoogleAction } from "../../_lib/actions";
 import styles from "./SignInForm.module.css";
 
 export default function SignInForm() {
   return (
-    <form action={signInWithEmailAction} className={styles.form}>
-      <p>Or continue with email address</p>
-      <div>
-        <label>Email</label>
-        <input type="email" id="email" name="email" required />
-      </div>
+    <div className={styles.container}>
+      <p className={styles.dividerText}>Or continue with email address</p>
+      <form action={signInWithEmailAction} className={styles.form}>
+        <div className={styles.inputGroup}>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email address"
+            required
+          />
+        </div>
 
-      <div>
-        <label>Password</label>
-        <input type="password" id="password" name="password" required />
-      </div>
+        <div className={styles.inputGroup}>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
 
-      <div>
-        <a href="#">Forgot Password?</a>
-      </div>
+        <button type="submit" className={styles.submitButton}>
+          Sign In
+        </button>
+      </form>
 
-      <button type="submit">Sign In</button>
-
-      <button onClick={() => signInWithGoogleAction()}>
-        Login with Google
-      </button>
-
-      <p>
-        Don&apos;t have an account? <a href="#">Sign Up</a>
+      <p className={styles.signupText}>
+        Don&apos;t have an account?{" "}
+        <Link href="#" className={styles.signupLink}>
+          Sign Up
+        </Link>
       </p>
-    </form>
+    </div>
   );
 }

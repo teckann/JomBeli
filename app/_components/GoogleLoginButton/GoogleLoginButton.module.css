@@ -2,31 +2,38 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
-.container p {
-  font-weight: 500;
-  color: #333;
+.title {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  margin: 0;
+  text-align: left;
+  font-family: var(--font-body);
 }
 
-.button {
-  width: 300px;
+.googleButton {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  padding: 10px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   cursor: pointer;
-
-  font-size: 14px;
-  font-weight: 700;
+  background-color: var(--color-surface);
+  transition: all 0.2s;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
 }
 
-.button:hover {
-  background-color: #f5f5f5;
-  border-color: #ccc;
+.googleButton:hover {
+  background-color: var(--color-surface-muted);
+  border-color: var(--color-border-strong);
 }
 
 .icon {
