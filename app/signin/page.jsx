@@ -1,5 +1,5 @@
-import SignInForm from "../_components/SignInForm";
-import LandingCard from "../_components/LandingCard";
+import SignInForm from "../_components/SignInForm/SignInForm";
+import LandingCard from "../_components/LandingCard/LandingCard";
 
 import styles from "./page.module.css";
 

@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import styles from "../_component_styles/LandingCard.module.css";
-import LandingWarningBanner from "./LandingWarningBanner";
+import styles from "./LandingCard.module.css";
+import LandingWarningBanner from "../LandingWarningBanner/LandingWarningBanner";
 import { useState } from "react";
-import GoogleLoginButton from "./GoogleLoginButton";
+import GoogleLoginButton from "../GoogleLoginButton/GoogleLoginButton";
 
 function LandingCard({ Form }) {
   const [validationStatus, setValidationStatus] = useState(false);

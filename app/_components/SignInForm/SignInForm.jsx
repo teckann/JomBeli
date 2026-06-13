@@ -1,8 +1,8 @@
 "use client";
 
-import { signInWithEmailAction } from "../_lib/actions";
-import { signInWithGoogleAction } from "../_lib/actions";
-import styles from "../_component_styles/SignInForm.module.css";
+import { signInWithEmailAction } from "../../_lib/actions";
+import { signInWithGoogleAction } from "../../_lib/actions";
+import styles from "./SignInForm.module.css";
 
 export default function SignInForm() {
   return (

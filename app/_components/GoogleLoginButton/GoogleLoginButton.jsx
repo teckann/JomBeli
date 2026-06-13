@@ -1,7 +1,7 @@
 "use client";
 
-import { signInWithGoogleAction } from "../_lib/actions";
-import styles from "../_component_styles/GoogleLoginButton.module.css";
+import { signInWithGoogleAction } from "../../_lib/actions";
+import styles from "./GoogleLoginButton.module.css";
 import Image from "next/image";
 
 export default function GoogleLoginButton() {

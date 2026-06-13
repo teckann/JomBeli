@@ -1,4 +1,4 @@
-import styles from "../_component_styles/LandingWarningBanner.module.css";
+import styles from "./LandingWarningBanner.module.css";
 
 function LandingWarningBanner({ message }) {
   return (
