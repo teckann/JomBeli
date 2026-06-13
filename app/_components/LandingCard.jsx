@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "../_component_styles/LandingCard.module.css";
 import LandingWarningBanner from "./LandingWarningBanner";
 import { useState } from "react";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 function LandingCard({ Form }) {
   const [validationStatus, setValidationStatus] = useState(false);
@@ -23,9 +24,11 @@ function LandingCard({ Form }) {
 
       <div className={styles.form_container}>
         <div className={styles.form}>
-          {validationStatus ? (
-            <LandingWarningBanner message={validationFailMessage} />
-          ) : null}
+          <div>
+            <h1 className={styles.title}>Sign in</h1>
+          </div>
+
+          <GoogleLoginButton />
           <Form />
         </div>
       </div>

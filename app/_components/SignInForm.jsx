@@ -2,11 +2,12 @@
 
 import { signInWithEmailAction } from "../_lib/actions";
 import { signInWithGoogleAction } from "../_lib/actions";
-// import styles from "../_component_styles/SignInForm.module.css";
+import styles from "../_component_styles/SignInForm.module.css";
 
 export default function SignInForm() {
   return (
-    <form action={signInWithEmailAction}>
+    <form action={signInWithEmailAction} className={styles.form}>
+      <p>Or continue with email address</p>
       <div>
         <label>Email</label>
         <input type="email" id="email" name="email" required />
