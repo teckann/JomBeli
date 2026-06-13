@@ -1,7 +1,7 @@
-import SignOutButton from "./_components/SignOutButton";
-import ThemeToggleButton from "./_components/ThemeToggleButton";
-import { getUser } from "./_lib/auth";
-import { getUserInfo } from "./_lib/data-services";
+import SignOutButton from "../_components/SignOutButton";
+import ThemeToggleButton from "../_components/ThemeToggleButton";
+import { getUser } from "../_lib/auth";
+import { getUserInfo } from "../_lib/data-services";
 
 export const revalidate = 0;
 
@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>[Buyer] Home Page</h1>
 
       <p>
         User ID: <span>{user.id}</span>

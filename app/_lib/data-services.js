@@ -3,9 +3,9 @@ import { createClient } from "./server";
 export async function getUserInfo(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("users")
+    .from("USERS_T")
     .select("*")
-    .eq("userID", id)
+    .eq("user_id", id)
     .single();
 
   if (error) return null;
@@ -18,8 +18,8 @@ export async function initializeNewUser(id, fullName) {
   if (!existing) {
     const supabase = await createClient();
     const { data, error } = await supabase
-      .from("users")
-      .insert([{ userID: id, fullName: fullName }])
+      .from("USERS_T")
+      .insert([{ user_id: id, username: fullName }])
       .select()
       .single();
 

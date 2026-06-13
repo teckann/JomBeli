@@ -1,19 +1,15 @@
-import LoginButton from "../_components/LoginButton";
-import LoginForm from "../_components/LoginForm";
+import SignInForm from "../_components/SignInForm";
+import LandingCard from "../_components/LandingCard";
+
+import styles from "./page.module.css";
 
 async function page({ searchParams }) {
   const { error, message } = await searchParams;
 
   return (
-    <div>
-      <h1>Sign In</h1>
-
-      <LoginForm />
-
-      <div>OR</div>
-
-      <LoginButton />
-    </div>
+    <main className={styles.main}>
+      <LandingCard Form={SignInForm} />
+    </main>
   );
 }
 

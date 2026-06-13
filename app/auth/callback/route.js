@@ -7,40 +7,52 @@ export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
 
+  let next = "/signin";
+
   if (code) {
-    const supabase = await createClient();
+    try {
+      const supabase = await createClient();
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
-      const user = await getUser();
-      // let role = "buyer";
-      let next = searchParams.get("next") ?? "/";
+      if (!error) {
+        const user = await getUser();
 
-      // initialize new user & retrieve the role
-      if (user) {
-        await initializeNewUser(user.id, user.user_metadata.full_name);
+        if (user) {
+          await initializeNewUser(user.id, user.user_metadata.full_name);
 
-        // const userInfo = await getUserInfo(user.id);
-        // if (userInfo) role = userInfo.role;
+          const userInfo = await getUserInfo(user.id);
+
+          if (userInfo) {
+            const { user_status, role } = userInfo;
+
+            const isSuspend = user_status !== "Active";
+
+            if (!isSuspend) {
+              if (role === "Admin") {
+                next = "/admin";
+              } else if (role === "Courier") {
+                next = "/courier";
+              } else if (role === "Seller") {
+                next = "/seller";
+              } else if (role === "Buyer") {
+                next = "/buyer";
+              } else {
+                next = searchParams.get("next") ?? "/";
+              }
+            } else {
+              await supabase.auth.signOut();
+              next = "/signin";
+            }
+          }
+        }
       }
-
-      // switch (role) {
-      //   case "buyer":
-      //     next = "/";
-      //     break;
-      //   case "seller":
-      //     next = "products";
-      //     break;
-      //   default:
-      //     next = "/";
-      //     break;
-      // }
-
-      const redirectTo = new URL(next, origin);
-      return NextResponse.redirect(redirectTo);
+    } catch (err) {
+      console.error("Auth callback unexpected error:", err);
+      next = "/signin";
     }
   }
 
-  return NextResponse.redirect(`${origin}/signin`);
+  const redirectTo = new URL(next, origin);
+  return NextResponse.redirect(redirectTo);
 }
