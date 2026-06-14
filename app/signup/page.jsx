@@ -7,10 +7,17 @@ export const metadata = {
   title: "Sign Up",
 };
 
-async function page() {
+async function page({ searchParams }) {
+  const { error, message } = await searchParams;
+
   return (
     <main className={styles.main}>
-      <LandingCard Form={SignUpForm} />
+      <LandingCard
+        Form={SignUpForm}
+        title="Sign up"
+        message={message}
+        error={error}
+      />
     </main>
   );
 }

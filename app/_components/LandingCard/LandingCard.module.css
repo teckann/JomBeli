@@ -55,6 +55,19 @@
   color: #1a1010;
 }
 
+.success_msg,
+.error_msg {
+  font-size: 14px;
+}
+
+.success_msg {
+  color: #1e9e6b;
+}
+
+.error_msg {
+  color: #df3b3c;
+}
+
 @media (max-width: 768px) {
   .card {
     max-height: none;

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signInWithEmailAction } from "../../_lib/actions";
 import styles from "./SignInForm.module.css";
 
-function SignInForm() {
+function SignInForm({ handleIsClicked }) {
   return (
     <div className={styles.container}>
       <p className={styles.dividerText}>Or continue with email address</p>
@@ -29,7 +29,11 @@ function SignInForm() {
           />
         </div>
 
-        <button type="submit" className={styles.submitButton}>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          onClick={handleIsClicked}
+        >
           Sign In
         </button>
       </form>

@@ -8,11 +8,16 @@ export const metadata = {
 };
 
 async function page({ searchParams }) {
-  // const { error, message } = await searchParams;
+  const { error, message } = await searchParams;
 
   return (
     <main className={styles.main}>
-      <LandingCard Form={SignInForm} />
+      <LandingCard
+        Form={SignInForm}
+        title="Sign in"
+        message={message}
+        error={error}
+      />
     </main>
   );
 }

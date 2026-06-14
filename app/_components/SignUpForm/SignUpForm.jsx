@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { signInWithEmailAction } from "../../_lib/actions";
+import { signUpWithEmailAction } from "../../_lib/actions";
 import styles from "./SignUpForm.module.css";
 
 function SignUpForm() {
   return (
     <div className={styles.container}>
-      <p className={styles.dividerText}>Or continue with email address</p>
-      <form action={signInWithEmailAction} className={styles.form}>
+      <p className={styles.dividerText}>One step closer to getting started</p>
+      <form action={signUpWithEmailAction} className={styles.form}>
         <div className={styles.inputGroup}>
           <input
             type="email"
@@ -29,15 +29,52 @@ function SignUpForm() {
           />
         </div>
 
+        <div className={styles.inputGroup}>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+        </div>
+
+        <div className={styles.roleContainer}>
+          <p className={styles.roleText}>Select your preferred role</p>
+
+          <div className={styles.roleOptions}>
+            <label>
+              <input
+                type="radio"
+                className={styles.radio}
+                name="role"
+                value="Buyer"
+                defaultChecked
+              />
+              Buyer
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                className={styles.radio}
+                name="role"
+                value="Seller"
+              />
+              Seller
+            </label>
+          </div>
+        </div>
+
         <button type="submit" className={styles.submitButton}>
-          Sign In
+          Sign Up Now
         </button>
       </form>
 
       <p className={styles.signupText}>
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className={styles.signupLink}>
-          Sign Up
+        Have an account already?{" "}
+        <Link href="/signin" className={styles.signupLink}>
+          Sign In
         </Link>
       </p>
     </div>
