@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { signInWithEmailAction } from "../../_lib/actions";
-import styles from "./SignInForm.module.css";
+import styles from "./SignUpForm.module.css";
 
 function SignUpForm() {
   return (
