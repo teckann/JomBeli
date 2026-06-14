@@ -7,7 +7,7 @@
 
 .dividerText {
   font-size: 14px;
-  color: #5c3a3a;
+  color: var(--color-text-secondary);
   text-align: left;
   margin: 0;
   font-family: var(--font-body);
@@ -27,25 +27,25 @@
 .inputGroup input {
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid #e8cfcf;
+  border: 1px solid var(--color-border);
   border-radius: 10px;
   font-size: 16px;
   outline: none;
   transition: border-color 0.2s;
-  background-color: #ffffff;
-  color: #1a1010;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   font-family: var(--font-body);
 }
 
 .inputGroup input:focus {
-  border-color: #fd3b3c;
+  border-color: var(--color-primary);
 }
 
 .submitButton {
   width: 100%;
   padding: 14px 20px;
-  background-color: #fd3b3c;
-  color: #ffffff;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 10px;
   font-size: 16px;
@@ -57,23 +57,31 @@
 }
 
 .submitButton:hover {
-  background-color: #b52e2f;
+  background-color: var(--color-primary-dark);
 }
 
 .signupText {
   font-size: 14px;
-  color: #5c3a3a;
+  color: var(--color-text-secondary);
   text-align: center;
   margin: 8px 0 0 0;
   font-family: var(--font-body);
 }
 
-.signupLink {
+.signupLink,
+.forgotLink {
   color: var(--color-primary);
   text-decoration: none;
   font-weight: 500;
 }
 
-.signupLink:hover {
+.forgotLink {
+  font-size: 13px;
+  text-align: right;
+  font-weight: 400;
+}
+
+.signupLink:hover,
+.forgotLink:hover {
   text-decoration: underline;
 }
