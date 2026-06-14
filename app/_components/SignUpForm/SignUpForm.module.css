@@ -77,3 +77,33 @@
 .signupLink:hover {
   text-decoration: underline;
 }
+
+.roleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.roleText {
+  font-size: 14px;
+  color: #5c3a3a;
+  margin: 8px 0 0 0;
+  font-family: var(--font-body);
+}
+
+.roleOptions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.roleOptions label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.radio {
+  accent-color: #fd3b3c;
+}
