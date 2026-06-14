@@ -1,18 +1,16 @@
-import SignInForm from "../_components/SignInForm/SignInForm";
+import SignUpForm from "../_components/SignUpForm/SignUpForm";
 import LandingCard from "../_components/LandingCard/LandingCard";
 
 import styles from "./page.module.css";
 
 export const metadata = {
-  title: "Sign In",
+  title: "Sign Up",
 };
 
-async function page({ searchParams }) {
-  // const { error, message } = await searchParams;
-
+async function page() {
   return (
     <main className={styles.main}>
-      <LandingCard Form={SignInForm} />
+      <LandingCard Form={SignUpForm} />
     </main>
   );
 }

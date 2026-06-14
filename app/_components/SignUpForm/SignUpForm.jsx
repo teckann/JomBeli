@@ -4,7 +4,7 @@ import Link from "next/link";
 import { signInWithEmailAction } from "../../_lib/actions";
 import styles from "./SignInForm.module.css";
 
-function SignInForm() {
+function SignUpForm() {
   return (
     <div className={styles.container}>
       <p className={styles.dividerText}>Or continue with email address</p>
@@ -44,4 +44,4 @@ function SignInForm() {
   );
 }
 
-export default SignInForm;
+export default SignUpForm;

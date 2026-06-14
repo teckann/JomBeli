@@ -4,7 +4,7 @@ import { signInWithGoogleAction } from "../../_lib/actions";
 import styles from "./GoogleLoginButton.module.css";
 import Image from "next/image";
 
-export default function GoogleLoginButton() {
+function GoogleLoginButton() {
   return (
     <div className={styles.container}>
       <p className={styles.title}>Sign in with open account</p>
@@ -25,3 +25,5 @@ export default function GoogleLoginButton() {
     </div>
   );
 }
+
+export default GoogleLoginButton;
