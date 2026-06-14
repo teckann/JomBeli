@@ -3,6 +3,10 @@ import LandingCard from "../_components/LandingCard/LandingCard";
 
 import styles from "./page.module.css";
 
+export const metadata = {
+  title: "Sign In",
+};
+
 async function page({ searchParams }) {
   const { error, message } = await searchParams;
 

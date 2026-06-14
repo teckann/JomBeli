@@ -36,7 +36,7 @@ export default function SignInForm() {
 
       <p className={styles.signupText}>
         Don&apos;t have an account?{" "}
-        <Link href="#" className={styles.signupLink}>
+        <Link href="/signup" className={styles.signupLink}>
           Sign Up
         </Link>
       </p>
