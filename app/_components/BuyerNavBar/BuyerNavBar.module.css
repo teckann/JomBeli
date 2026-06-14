@@ -1,6 +1,7 @@
 .wrapper{
-    margin: 15px;
+    padding: 15px;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     width: 100%;
     background-color: var(--color-surface-muted);
@@ -10,39 +11,83 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 5px 20px;
 }
 
 .logo{
     flex: 1;
+    font-size: var(--text-3xl);
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.searchContainer{
+    flex: 8;
+    display: flex;
 }
 
 .searchbar{
-    flex: 5;
+    flex: 8;
+    width: 100%;
+    align-self: center;
+    font-size: var(--text-base);
     border-radius: 8px;
-    border: 1px transparent;
+    height: 40px;
+    border: 2px solid transparent;
+    padding: 10px 20px;
+    transition: all 0.4s ease;
+    outline: none;
+}
+
+.searchButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    flex: 1;
+    font-weight: bold;
+    border-radius: 8px;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.searchbar:hover{
+    border: 2px solid var(--color-border);
+}
+
+.searchbar:focus{
+    border: 2px solid var(--color-primary-lighter);
 }
 
 .bottomContainer{
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 5px 20px;
 }
 
-.leftLink{
-    display: flex;
-    gap: 20px;
-}
-
-.rightLink{
+.LinkContainer{
     display: flex;
     gap: 20px;
 }
 
 .link{
+    display: flex;
+    gap: 10px;
     text-decoration: none;
-    background-color: var(--color-primary-subtle);
+    border: 1px solid transparent;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     color: var(--color-text-primary);
+    transition: 0.5s all ease-out;
+}
+
+.link:hover{
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.svg{
+    width: 20px;
+    height: 20px;
 }
