@@ -7,7 +7,9 @@ import styles from "./SignUpForm.module.css";
 function SignUpForm() {
   return (
     <div className={styles.container}>
-      <p className={styles.dividerText}>One step closer to getting started</p>
+      <p className={styles.dividerText}>
+        Just a few quick things to get started
+      </p>
       <form action={signUpWithEmailAction} className={styles.form}>
         <div className={styles.inputGroup}>
           <input

@@ -29,6 +29,10 @@ function SignInForm({ handleIsClicked }) {
           />
         </div>
 
+        <Link href="/forgotPassword" className={styles.forgotLink}>
+          Forgot Password?
+        </Link>
+
         <button
           type="submit"
           className={styles.submitButton}
