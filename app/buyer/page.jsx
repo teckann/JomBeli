@@ -1,4 +1,5 @@
 import SignOutButton from "../_components/SignOutButton";
+import StarRating from "../_components/StarRating/StarRating";
 import ThemeToggleButton from "../_components/ThemeToggleButton";
 import { getUser } from "../_lib/auth";
 import { getUserInfo } from "../_lib/data-services";
@@ -34,6 +35,10 @@ export default async function Home() {
       <SignOutButton />
       <br />
       <ThemeToggleButton />
+      <br />
+
+      {/* testing */}
+      <StarRating />
     </div>
   );
 }
