@@ -5,6 +5,8 @@
     flex-direction: column;
     width: 100%;
     background-color: var(--color-surface-muted);
+    position: sticky;
+    top: 0;
 }
 
 .topContainer{
