@@ -128,9 +128,56 @@ export async function signUpWithEmailAction(formData) {
   if (insertError) {
     console.error("Insert USER_T error:", insertError.message);
 
-    // return redirect("/signup?error=Failed to create user profile.");
-    return redirect(`/signup?error=${encodeURIComponent(insertError.message)}`);
+    return redirect("/signup?error=Failed to create user profile.");
+    // return redirect(`/signup?error=${encodeURIComponent(insertError.message)}`);
   }
 
   return redirect("/signin?message=Your account is ready. Sign in now!");
+}
+
+export async function emailVerification(formData) {
+  const email = formData.get("email");
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select("user_id, safety_question1")
+    .eq("email", email)
+    .single();
+
+  if (!data) {
+    return redirect(
+      "/forgot?error=Email not found. Please enter a valid email address.",
+    );
+    // return redirect(`/forgot?error=${encodeURIComponent(error.message)}`);
+  }
+
+  if (!data.safety_question1) {
+    return redirect(
+      "/forgot?error=Unable to proceed to the next step, safety questions not set. Please contact support@jombeli.com for support.",
+    );
+  }
+
+  return redirect(`/forgot/verification?id=${data.user_id}`);
+}
+
+export async function resetPasswordAction(formData) {
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error("Sign in error:", error.message);
+    return redirect(
+      "/signin?error=Invalid email or password. Please try again.",
+    );
+  }
+
+  // here got redirect problem
+  return redirect("/");
 }

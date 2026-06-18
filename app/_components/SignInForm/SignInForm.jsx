@@ -29,7 +29,7 @@ function SignInForm({ handleIsClicked }) {
           />
         </div>
 
-        <Link href="/forgotPassword" className={styles.forgotLink}>
+        <Link href="/forgot" className={styles.forgotLink}>
           Forgot Password?
         </Link>
 
