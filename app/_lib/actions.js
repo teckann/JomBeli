@@ -1,11 +1,25 @@
 "use server";
 
 import { createClient } from "./server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo } from "./data-services";
+
+const weakPasswordWarning =
+  "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
+
+const checkStrongPassword = (password) => {
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+  if (!passwordRegex.test(password)) {
+    return false;
+  }
+
+  return true;
+};
 
 export async function signInWithGoogleAction() {
   const supabase = await createClient();
@@ -88,12 +102,8 @@ export async function signUpWithEmailAction(formData) {
     return redirect("/signup?error=Passwords do not match.");
   }
 
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-  if (!passwordRegex.test(password)) {
-    return redirect(
-      "/signup?error=Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
-    );
+  if (!checkStrongPassword(password)) {
+    return redirect(`/signup?error=${weakPasswordWarning}`);
   }
 
   // register user in auth table
@@ -137,7 +147,7 @@ export async function signUpWithEmailAction(formData) {
   return redirect("/signin?message=Your account is ready. Sign in now!");
 }
 
-export async function emailVerification(formData) {
+export async function emailVerificationAction(formData) {
   const email = formData.get("email");
   const supabase = await createClient();
 
@@ -163,7 +173,7 @@ export async function emailVerification(formData) {
   return redirect(`/forgot/verification?id=${data.user_id}`);
 }
 
-export async function safetyQuestionValidation(formData) {
+export async function safetyQuestionValidationAction(formData) {
   const id = formData.get("id");
   const input1 = formData.get("answer1");
   const input2 = formData.get("answer2");
@@ -174,7 +184,7 @@ export async function safetyQuestionValidation(formData) {
   const isMatch2 = await bcrypt.compare(input2, answer2);
 
   if (isMatch1 && isMatch2) {
-    return redirect("/resetpassword");
+    return redirect(`/resetpassword?id=${id}&status=pass`);
   }
 
   return redirect(
@@ -183,22 +193,37 @@ export async function safetyQuestionValidation(formData) {
 }
 
 export async function resetPasswordAction(formData) {
-  const email = formData.get("email");
-  const password = formData.get("password");
-  const supabase = await createClient();
+  const id = formData.get("id");
+  const newPassword = formData.get("newPassword");
+  const confirmNewPassword = formData.get("confirmNewPassword");
+  const defaultPath = `/resetpassword?id=${id}&status=pass`;
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
+  // give the highest access control
+  const supabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+
+  if (newPassword !== confirmNewPassword) {
+    return redirect(`${defaultPath}&error=Passwords do not match.`);
+  }
+
+  if (!checkStrongPassword(newPassword)) {
+    return redirect(`${defaultPath}&error=${weakPasswordWarning}`);
+  }
+
+  const { error } = await supabase.auth.admin.updateUserById(id, {
+    password: newPassword,
   });
 
   if (error) {
-    console.error("Sign in error:", error.message);
+    console.error("Reset password error:", error.message);
     return redirect(
-      "/signin?error=Invalid email or password. Please try again.",
+      `${defaultPath}&error=Unable to reset your password at the moment. Please try again later.`,
     );
   }
 
-  // here got redirect problem
-  return redirect("/");
+  return redirect(
+    "/signin?message=Your password has been reset. You can now sign in.",
+  );
 }
