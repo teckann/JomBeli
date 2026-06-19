@@ -4,6 +4,8 @@ import { createClient } from "./server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcrypt";
+import { getUserInfo } from "./data-services";
 
 export async function signInWithGoogleAction() {
   const supabase = await createClient();
@@ -141,7 +143,7 @@ export async function emailVerification(formData) {
 
   const { data, error } = await supabase
     .from("USERS_T")
-    .select("user_id, safety_question1")
+    .select("user_id, security_question1")
     .eq("email", email)
     .single();
 
@@ -152,13 +154,32 @@ export async function emailVerification(formData) {
     // return redirect(`/forgot?error=${encodeURIComponent(error.message)}`);
   }
 
-  if (!data.safety_question1) {
+  if (!data.security_question1) {
     return redirect(
       "/forgot?error=Unable to proceed to the next step, safety questions not set. Please contact support@jombeli.com for support.",
     );
   }
 
   return redirect(`/forgot/verification?id=${data.user_id}`);
+}
+
+export async function safetyQuestionValidation(formData) {
+  const id = formData.get("id");
+  const input1 = formData.get("answer1");
+  const input2 = formData.get("answer2");
+
+  const { answer1, answer2 } = await getUserInfo(id);
+
+  const isMatch1 = await bcrypt.compare(input1, answer1);
+  const isMatch2 = await bcrypt.compare(input2, answer2);
+
+  if (isMatch1 && isMatch2) {
+    return redirect("/resetpassword");
+  }
+
+  return redirect(
+    `/forgot/verification?id=${id}&error=Verification failed. Please try again.`,
+  );
 }
 
 export async function resetPasswordAction(formData) {

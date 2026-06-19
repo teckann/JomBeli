@@ -6,7 +6,15 @@ import LandingWarningBanner from "../LandingWarningBanner/LandingWarningBanner";
 import { useState } from "react";
 import GoogleLoginButton from "../GoogleLoginButton/GoogleLoginButton";
 
-function LandingCard({ Form, title, message, error }) {
+function LandingCard({
+  Form,
+  title,
+  message,
+  error,
+  userId,
+  securityQuestion1,
+  securityQuestion2,
+}) {
   // const [validationStatus, setValidationStatus] = useState(false);
   // const [validationFailMessage, setValidationFailMessage] = useState("");
   const [isClicked, setIsClicked] = useState(false);
@@ -45,7 +53,16 @@ function LandingCard({ Form, title, message, error }) {
           {title === "Sign in" && <GoogleLoginButton />}
 
           {/* pass to form to handle the message disappear logic */}
-          <Form handleIsClicked={handleIsClicked} />
+          {securityQuestion1 ? (
+            <Form
+              handleIsClicked={handleIsClicked}
+              userId={userId}
+              securityQuestion1={securityQuestion1}
+              securityQuestion2={securityQuestion2}
+            />
+          ) : (
+            <Form handleIsClicked={handleIsClicked} />
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-const password = "jonas123";
+const password = "SDBL";
 const hash = await bcrypt.hash(password, 13);
 
 // const salt = bcrypt.genSaltSync(10);
@@ -8,5 +8,5 @@ const hash = await bcrypt.hash(password, 13);
 
 console.log(hash);
 
-const isMatch = await bcrypt.compare("jonas123", hash);
+const isMatch = await bcrypt.compare("SDBL", hash);
 console.log(isMatch);
