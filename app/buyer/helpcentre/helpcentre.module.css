@@ -1,0 +1,31 @@
+.hero{
+    text-align: center;
+}
+
+.linkContainer{
+    margin: 50 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    max-width: 1200px;
+}
+
+.linkCard{
+    width: 300px;
+    height: 200px;
+    border: 1px solid;
+}
+
+.faqContainer{
+    margin: 50 auto;
+    display: flex;
+    max-width: 1200px;
+    justify-content: space-between;
+}
+
+.faqContent{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
