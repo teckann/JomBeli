@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { safetyQuestionValidation } from "../../_lib/actions";
+import { safetyQuestionValidationAction } from "../../_lib/actions";
 import styles from "./SecurityQuestionVerificationForm.module.css";
 
 function SecurityQuestionVerificationForm({
@@ -15,7 +15,7 @@ function SecurityQuestionVerificationForm({
       <p className={styles.dividerText}>
         Please answer your security questions to proceed.
       </p>
-      <form action={safetyQuestionValidation} className={styles.form}>
+      <form action={safetyQuestionValidationAction} className={styles.form}>
         <input type="hidden" name="id" value={userId} />
 
         <div className={styles.inputGroup}>

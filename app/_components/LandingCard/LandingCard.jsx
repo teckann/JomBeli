@@ -52,7 +52,8 @@ function LandingCard({
           {/* signin & signup & forgot share one component, so I do like this to make sure google login will be hidden in signup & forgot page */}
           {title === "Sign in" && <GoogleLoginButton />}
 
-          {/* pass to form to handle the message disappear logic */}
+          {/* pass handleIsClicked to form to handle the message disappear logic */}
+          {/* security question exist then show the form with id & question */}
           {securityQuestion1 ? (
             <Form
               handleIsClicked={handleIsClicked}
@@ -60,7 +61,11 @@ function LandingCard({
               securityQuestion1={securityQuestion1}
               securityQuestion2={securityQuestion2}
             />
+          ) : // userId exist, then means is reset password
+          userId ? (
+            <Form handleIsClicked={handleIsClicked} userId={userId} />
           ) : (
+            // else normal form
             <Form handleIsClicked={handleIsClicked} />
           )}
         </div>

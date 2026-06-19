@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { emailVerification } from "../../_lib/actions";
+import { emailVerificationAction } from "../../_lib/actions";
 import styles from "./EmailVerificationForm.module.css";
 
 function EmailVerificationForm({ handleIsClicked }) {
@@ -10,7 +10,7 @@ function EmailVerificationForm({ handleIsClicked }) {
       <p className={styles.dividerText}>
         Don&apos;t worry! We will guide you to reset your password.
       </p>
-      <form action={emailVerification} className={styles.form}>
+      <form action={emailVerificationAction} className={styles.form}>
         <div className={styles.inputGroup}>
           <input
             type="email"
