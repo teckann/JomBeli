@@ -1,0 +1,16 @@
+.btn {
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-size: 1em;
+    display: flex;
+    transition: color 0.2s ease;
+}
+
+.btn:hover {
+    color: red;
+}
+
+/* .logOutIcon {
+    color: blue;
+} */
