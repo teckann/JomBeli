@@ -1,0 +1,145 @@
+.logo {
+    flex: 1;
+    font-size: var(--text-3xl);
+    font-weight: bold;
+    color: var(--color-primary);
+    /* padding: 0.5em; */
+}
+
+.topContainer {
+    display: flex;
+    padding: 0.5em;
+}
+
+.wrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    width: 14em;
+    gap: 1em;
+    background-color: #EBF5EE;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.middleMenuSelection {
+
+}
+
+.linkContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding-top: 1em;
+}
+
+.middleContainer {
+    display: felx;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.middleMenuText {
+    color: var(--color-primary-dark);
+}
+
+.svg {
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.link, .servicesNavBar {
+    color: #395756;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    /* justify-content: center; */
+    padding: 0.5em;
+    padding-left: 1em;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: color 0.2s ease;
+    font-size: 1em;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+.smallLink {
+    color: #395756;
+    width: 80%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    /* justify-content: center; */
+    padding: 1em;
+    padding-left: 2em;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: color 0.2s ease;
+    font-size: 0.8em;
+}
+
+.smallLink:hover {
+    background-color: #D1E7DD;
+    color: var(--color-primary);
+}
+
+.smallLinkContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.link:hover, .servicesNavBar:hover {
+    background-color: #D1E7DD;
+    color: var(--color-primary);
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+}
+
+.userImage{
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5em;
+}
+
+.userName {
+    font-weight: bold;
+}
+
+.bottomMenuSelection {
+    display: flex;
+
+}
+
+.logOutContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4em;
+}
+
+.arrowSvg {
+    width: 2em;
+    height: 2em;
+    transition: transform 0.2s ease;
+    font-size: 0.8em;
+}
