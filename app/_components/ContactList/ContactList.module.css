@@ -1,4 +1,5 @@
-.main {
+.main,
+.mainNoData {
   background-color: var(--color-sub);
   width: 25%;
   height: 100%;
@@ -7,6 +8,40 @@
   flex-direction: column;
   /* gap: 18px; */
   overflow-y: auto;
+}
+
+.mainNoData {
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  gap: 10px;
+}
+
+.mainNoData h2 {
+  font-size: 25px;
+  color: var(--color-primary-darker);
+}
+
+.mainNoData p {
+  color: var(--color-primary-dark);
+}
+
+.noDataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.imageContainer {
+  position: relative;
+  width: 60%;
+  height: 23%;
+}
+
+.image {
+  object-fit: cover;
 }
 
 .link {

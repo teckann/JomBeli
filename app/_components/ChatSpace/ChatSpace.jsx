@@ -20,7 +20,7 @@ const TempCoverComponent = () => {
       </div>
 
       <div className={styles.noDataContainer}>
-        <h2>Select a chat to start messaging</h2>
+        <h2>Select a Chat to Start Messaging</h2>
         <p>Choose a conversation from the sidebar to begin.</p>
       </div>
     </div>

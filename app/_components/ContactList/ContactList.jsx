@@ -10,6 +10,8 @@ async function ContactList() {
   const contacts = await getContactList(user.id);
   console.log(contacts);
 
+  if (!contacts || contacts.length === 0) return <TempCoverComponent />;
+
   return (
     <div className={styles.main}>
       {contacts.map((contact) => (
@@ -38,6 +40,26 @@ const Contact = ({ user_id, username, avatar }) => {
         <p className={styles.lastOnline}>Last Online: xxx</p>
       </div>
     </Link>
+  );
+};
+
+const TempCoverComponent = () => {
+  return (
+    <div className={styles.mainNoData}>
+      <div className={styles.imageContainer}>
+        <Image
+          src="/contact-is-empty.png"
+          alt="Chat is empty"
+          fill
+          className={styles.image}
+        />
+      </div>
+
+      <div className={styles.noDataContainer}>
+        <h2>Chat is Empty</h2>
+        <p>No conversations yet.</p>
+      </div>
+    </div>
   );
 };
 
