@@ -1,0 +1,40 @@
+.messageField {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+
+.left {
+  align-items: flex-start;
+}
+
+.right {
+  align-items: flex-end;
+}
+
+.username {
+  color: var(--color-info-text);
+  margin-bottom: 4px;
+}
+
+.messageBox {
+  max-width: 60%;
+  padding: 1rem;
+  border-radius: 12px;
+  background-color: #eee;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.right .messageBox {
+  background-color: #dcf8c6;
+}
+
+.time {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  align-self: flex-end;
+}

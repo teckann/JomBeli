@@ -1,7 +1,6 @@
 "use client";
 
 import { signOutAction } from "../_lib/actions";
-import Style from "@/app/_styles/globals.css";
 
 function SignOutButton() {
   return (

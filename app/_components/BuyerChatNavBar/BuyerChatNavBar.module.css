@@ -1,0 +1,60 @@
+.main {
+  height: 10%;
+  width: 100%;
+  background-color: var(--color-surface-muted);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.2rem;
+}
+
+.userInfo {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+
+.avatarContainer {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.menu {
+  /* background-color: red; */
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.link,
+.username {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.link:hover {
+  color: var(--color-primary);
+  font-width: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.username:hover {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+}
