@@ -1,0 +1,44 @@
+.mainNoData {
+  /* background-color: red; */
+  background-color: var(--color-primary-subtle);
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.mainNoData h2 {
+  font-size: 25px;
+  color: var(--color-primary-darker);
+}
+
+.mainNoData p {
+  color: var(--color-primary-dark);
+}
+
+.noDataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.main {
+  background-color: var(--color-primary-subtle);
+  width: 75%;
+  height: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  width: 40%;
+  height: 40%;
+}
+
+.image {
+  object-fit: cover;
+}
