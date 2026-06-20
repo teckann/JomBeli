@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo } from "./data-services";
+import { createMessage } from "./message-services";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -226,4 +227,14 @@ export async function resetPasswordAction(formData) {
   return redirect(
     "/signin?message=Your password has been reset. You can now sign in.",
   );
+}
+
+export async function sendMessageAction(formData) {
+  const message = formData.get("content");
+  const sender_id = formData.get("senderID");
+  const receiver_id = formData.get("receiverID");
+
+  await createMessage(sender_id, receiver_id, message);
+
+  revalidatePath("/chatbox");
 }
