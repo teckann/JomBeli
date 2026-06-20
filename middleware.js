@@ -95,5 +95,11 @@ export async function middleware(request) {
 
 // protected route
 export const config = {
-  matcher: ["/"],
+  matcher: [
+    "/",
+    "/buyer/:path*",
+    "/seller/:path*",
+    "/admin/:path*",
+    "/courier/:path*",
+  ],
 };

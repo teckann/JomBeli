@@ -1,4 +1,5 @@
 .hero{
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -12,9 +13,21 @@
 }
 
 .linkCard{
-    width: 300px;
+    position: relative;
+    width: 350px;
     height: 200px;
     border: 1px solid;
+    background-color: var(--color-surface);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    flex-grow: 1;
+}
+
+.linkCard a{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 
 .faqContainer{
@@ -22,10 +35,24 @@
     display: flex;
     max-width: 1200px;
     justify-content: space-between;
+    background-color: var(--color-surface);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.faqBanner{
+    flex: 1;
 }
 
 .faqContent{
     display: flex;
+    flex: 1 ;
     flex-direction: column;
     gap: 20px;
+
+}
+
+.faqContent p{
+    color: var(--color-text-muted);
 }
