@@ -1,3 +1,46 @@
+/* 
+    GENERAL
+*/
+.LinkContainer{
+    display: flex;
+    gap: 20px;
+}
+
+.link{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    padding: 10px;
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    transition: 0.5s all ease-out;
+}
+
+.link:hover{
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+
+.profileLink{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    border: 1px solid;
+    padding: 0 10px;
+    border-radius: 50px;
+}
+
+.profileImage{
+    border-radius: 999px;
+}
+
+/* 
+    WITH SEARCH BAR
+*/
 .wrapper{
     padding: 15px;
     display: flex;
@@ -11,6 +54,7 @@
 }
 
 .topContainer{
+    height: 10%;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -35,7 +79,6 @@
     align-self: center;
     font-size: var(--text-base);
     border-radius: 8px;
-    height: 40px;
     border: 2px solid transparent;
     padding: 10px 20px;
     transition: all 0.4s ease;
@@ -64,33 +107,25 @@
 }
 
 .bottomContainer{
+    height: 10%;
     display: flex;
     justify-content: space-between;
     padding: 5px 20px;
 }
 
-.LinkContainer{
-    display: flex;
-    gap: 20px;
-}
 
-.link{
+/* 
+    WITHOUT SEARCH BAR
+*/
+.noSearchWrapper{
+    height: 10%;
+    padding: 15px;
     display: flex;
     gap: 10px;
-    text-decoration: none;
-    border: 1px solid transparent;
-    padding: 10px;
-    border-radius: 10px;
-    color: var(--color-text-primary);
-    transition: 0.5s all ease-out;
-}
-
-.link:hover{
-    background-color: var(--color-primary);
-    color: var(--color-text-on-primary);
-}
-
-.svg{
-    width: 20px;
-    height: 20px;
+    width: 100%;
+    background-color: var(--color-surface-muted);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    justify-content: space-between;
 }
