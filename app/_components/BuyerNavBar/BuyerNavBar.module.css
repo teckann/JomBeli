@@ -7,6 +7,7 @@
     background-color: var(--color-surface-muted);
     position: sticky;
     top: 0;
+    z-index: 100;
 }
 
 .topContainer{

@@ -44,3 +44,19 @@ export async function getProducts() {
 
   return data;
 }
+
+export async function getWalletBalance(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select("balances")
+    .eq("user_id", id)
+    .single();
+
+  if (error) {
+    console.error("Failed to fetch balance:", error.message);
+    throw new Error("Could not fetch balance");
+  }
+
+  return data;
+}
