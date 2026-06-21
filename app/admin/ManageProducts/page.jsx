@@ -66,7 +66,7 @@ export async function ProductOverViewBar() {
 
             <div className={Styles.analyticsBarDatas}>
                 {overviewData.map((data) => (
-                    <ProductDataAnalyticsComponent title={data.title} count={data.count}  />
+                    <ProductDataAnalyticsComponent key={data.id} title={data.title} count={data.count}  />
                 ))}
                 
             </div>
