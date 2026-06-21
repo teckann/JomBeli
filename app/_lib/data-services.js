@@ -98,7 +98,7 @@ export async function getTransactionMonths(id) {
 
   // sorting logic
   const months = Array.from(monthsMap.values()).sort(
-    (a, b) => new Date(a.year, a.month) - new Date(b.year, b.month),
+    (a, b) => new Date(b.year, b.month) - new Date(a.year, a.month),
   );
 
   // check if there have another years
@@ -137,7 +137,8 @@ export async function getTransactions(id) {
   const { data, error } = await supabase
     .from("WALLET_TRANSACTIONS_T")
     .select("*")
-    .eq("user_id", id);
+    .eq("user_id", id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Failed to fetch transaction records:", error.message);
@@ -145,4 +146,44 @@ export async function getTransactions(id) {
   }
 
   return data;
+}
+
+export async function getFilterTransactions(id, month, type) {
+  const supabase = await createClient();
+
+  let query = supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*")
+    .eq("user_id", id);
+
+  // type filtering
+  if (type && type !== "all") {
+    query = query.eq("direction", type);
+  }
+
+  // month filtering (2026-1 || 2025-12)
+  if (month && month !== "all") {
+    const [year, m] = month.split("-");
+    const safeMonth = `${year}-${m.padStart(2, "0")}`;
+
+    const start = new Date(`${safeMonth}-01T00:00:00Z`);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + 1);
+
+    query = query
+      .gte("created_at", start.toISOString())
+      .lt("created_at", end.toISOString());
+  }
+
+  // sorting
+  query = query.order("created_at", { ascending: false });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Failed to fetch transaction records:", error.message);
+    throw new Error("Could not fetch transaction records");
+  }
+
+  return data || [];
 }

@@ -1,4 +1,7 @@
-import { getTransactions } from "@/app/_lib/data-services";
+import {
+  getFilterTransactions,
+  getTransactions,
+} from "@/app/_lib/data-services";
 import styles from "./TransactionRecords.module.css";
 
 async function TransactionRecords({ userID, month, type }) {
@@ -7,6 +10,9 @@ async function TransactionRecords({ userID, month, type }) {
 
   if (!month && !type) records = await getTransactions(userID);
 
+  if (month || type) records = await getFilterTransactions(userID, month, type);
+
+  console.log(records);
   const length = records.length;
 
   return (
