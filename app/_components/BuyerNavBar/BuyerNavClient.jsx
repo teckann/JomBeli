@@ -86,16 +86,16 @@ export default function BuyerNavBarClient({ user }) {
             Cart
           </Link>
           <Link className={Styles.link} href="">
-            RM {balance.balances.toFixed(2)}
+            RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
             <Image
               className={Styles.profileImage}
-              src={user.user_metadata.picture}
+              src={avatar}
               width={30}
               height={30}
             />
-            {user.user_metadata.name}
+            {username}
           </Link>
         </div>
       </div>
