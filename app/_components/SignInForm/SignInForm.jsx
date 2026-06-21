@@ -15,6 +15,7 @@ function SignInForm({ handleIsClicked }) {
             id="email"
             name="email"
             placeholder="Email address"
+            onClick={(e) => (e.target.value = "limjinming0609@gmail.com")}
             required
           />
         </div>
@@ -25,6 +26,7 @@ function SignInForm({ handleIsClicked }) {
             id="password"
             name="password"
             placeholder="Password"
+            onClick={(e) => (e.target.value = "jimmy123")}
             required
           />
         </div>
