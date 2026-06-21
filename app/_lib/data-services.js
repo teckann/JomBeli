@@ -35,7 +35,7 @@ export async function initializeNewUser(id, fullName) {
 
 export async function getProducts() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("products").select("*");
+  const { data, error } = await supabase.from("PRODUCTS_T").select("*");
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
