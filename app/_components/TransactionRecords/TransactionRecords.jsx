@@ -46,14 +46,20 @@ function formatDate(datetime) {
 }
 
 const Record = ({ title, direction, amount, datetime }) => {
+  const flag = direction === "Credit";
+
   return (
-    <div>
+    <div className={styles.record}>
       <div className={styles.recordTitle}>
-        <p>{title}</p>
-        <p>{formatDate(datetime)}</p>
+        <p className={styles.title}>{title}</p>
+        <p className={styles.datetime}>{formatDate(datetime)}</p>
       </div>
 
-      <div className={styles.recordDirection}>RM {amount}</div>
+      <div
+        className={`${styles.recordDirection} ${flag ? styles.greenColor : styles.redColor}`}
+      >
+        {flag ? "+" : "-"} RM {amount}
+      </div>
     </div>
   );
 };

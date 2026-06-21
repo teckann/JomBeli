@@ -1,5 +1,6 @@
 .filterBar {
-  background-color: #f7f5f3;
+  background-color: var(--color-primary-subtle);
+  /* background-color: var(--color-sub); */
   width: 100%;
   height: 10%;
   color: var(--color-text-primary);
