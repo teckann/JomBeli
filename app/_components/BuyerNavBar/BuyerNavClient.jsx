@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
-export default async function BuyerNavBarClient({user, balance}) {  
+export default function BuyerNavBarClient({user, balance}) {  
   const RouteWithSearch = ["/buyer"];
   const currentPath = usePathname();
 
