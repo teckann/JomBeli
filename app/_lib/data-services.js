@@ -35,7 +35,7 @@ export async function initializeNewUser(id, fullName) {
 
 export async function getProducts() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("products").select("*");
+  const { data, error } = await supabase.from("PRODUCTS_T").select("*");
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
@@ -52,21 +52,6 @@ export async function getWalletBalance(id) {
     .select("balances")
     .eq("user_id", id)
     .single();
-
-  if (error) {
-    console.error("Failed to fetch balance:", error.message);
-    throw new Error("Could not fetch balance");
-  }
-
-  return data;
-}
-
-export async function getSellerVoucher(id) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("VOUCHERS_T")
-    .select("*")
-    .eq("user_id", id);
 
   if (error) {
     console.error("Failed to fetch balance:", error.message);

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { signInWithEmailAction } from "../../_lib/actions";
 import styles from "./SignInForm.module.css";
+import { useFormStatus } from "react-dom";
+import SpinnerMini from "../SpinnerMini/SpinnerMini";
 
 function SignInForm({ handleIsClicked }) {
   return (
@@ -35,13 +37,7 @@ function SignInForm({ handleIsClicked }) {
           Forgot Password?
         </Link>
 
-        <button
-          type="submit"
-          className={styles.submitButton}
-          onClick={handleIsClicked}
-        >
-          Sign In
-        </button>
+        <SubmitButton handleIsClicked={handleIsClicked} />
       </form>
 
       <p className={styles.signupText}>
@@ -53,5 +49,20 @@ function SignInForm({ handleIsClicked }) {
     </div>
   );
 }
+
+const SubmitButton = ({ handleIsClicked }) => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={styles.submitButton}
+      onClick={handleIsClicked}
+    >
+      {pending ? <SpinnerMini /> : "Sign In"}
+    </button>
+  );
+};
 
 export default SignInForm;
