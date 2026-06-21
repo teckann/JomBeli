@@ -118,8 +118,8 @@ export default async function AdminNavBar(){
             </ div>
             <div className={Styles.bottomMenuSelection}>
                 <div className={Styles.userInfo}>
-                    <div className={Styles.userImage}>
-                        <Image src="" alt="User Image" width={40} height={40} />
+                    <div>
+                        <Image className={Styles.userImage} src={userInfo.avatar} alt="User Image" width={40} height={40} />
                     </div>
                     <div className={Styles.userDetails}>
                         <span className={Styles.userName}>{userInfo.username}</span>

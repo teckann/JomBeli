@@ -9,6 +9,7 @@
 .topContainer {
     display: flex;
     padding: 0.5em;
+    margin-bottom: 1em;
 }
 
 .wrapper {
@@ -16,7 +17,6 @@
     height: 100%;
     flex-direction: column;
     width: 14em;
-    gap: 1em;
     background-color: #EBF5EE;
     position: fixed;
     top: 0;
@@ -24,7 +24,7 @@
 }
 
 .middleMenuSelection {
-
+    width: 100%;
 }
 
 .linkContainer {
@@ -35,7 +35,7 @@
 }
 
 .middleContainer {
-    display: felx;
+    display: flex;
     flex-direction: column;
     gap: 0.5em;
     align-items: center;
@@ -127,7 +127,7 @@
 
 .bottomMenuSelection {
     display: flex;
-
+    background-color: #9DBBAE;
 }
 
 .logOutContainer {
