@@ -8,7 +8,7 @@ async function ContactList() {
   const user = await getUser();
 
   const contacts = await getContactList(user.id);
-  console.log(contacts);
+  // console.log(contacts);
 
   if (!contacts || contacts.length === 0) return <TempCoverComponent />;
 

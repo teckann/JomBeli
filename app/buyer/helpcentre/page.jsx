@@ -1,13 +1,11 @@
 import Styles from "@/app/buyer/helpcentre/helpcentre.module.css"
 import { faqData } from "./FAQ"
 import Link from "next/link"
+import SupportPageHero from "@/app/_components/SupportPageHero/SupportPageHero"
 export default function HelpPage(){
     return(
         <div>
-            <div className={Styles.hero}>
-                <h1>Need Assistance?</h1>
-            </div>
-            
+            <SupportPageHero/>            
             <div className={Styles.linkContainer}>
                 <div className={Styles.linkCard}>
                     <h2>Chatbot</h2>
@@ -30,13 +28,10 @@ export default function HelpPage(){
                 </div>
                 <div className={Styles.faqContent}>
                     {faqData.map((data)=>(
-                        <>
-                            <div key={data.id}>
-                                <h2>{data.question}</h2>
-                                <p>{data.answer}</p>
-                            </div>
-                            <hr />
-                        </>
+                        <div key={data.id}>
+                            <h2>{data.question}</h2>
+                            <p>{data.answer}</p>
+                        </div>
                     ))}
                 </div>
             </div>

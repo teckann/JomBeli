@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
-export default function BuyerNavBar() {
+export default async function BuyerNavBar() {
   return (
     <div className={Styles.wrapper}>
       {/* Top section */}
@@ -108,7 +108,7 @@ export default function BuyerNavBar() {
         </div>
 
         <div className={Styles.LinkContainer}>
-          <Link className={Styles.link} href="/buyer/chat">
+          <Link className={Styles.link} href="/chat">
             <svg
               className={Styles.svg}
               width="20px"
