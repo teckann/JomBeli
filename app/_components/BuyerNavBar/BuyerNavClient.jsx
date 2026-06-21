@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
-export default function BuyerNavBarClient({user, balance}) {  
+export default function BuyerNavBarClient({ user }) {
+  const { username, avatar, balances } = user;
+
   const RouteWithSearch = ["/buyer"];
   const currentPath = usePathname();
 
-  if(RouteWithSearch.includes(currentPath)){
-    return(
+  if (RouteWithSearch.includes(currentPath)) {
+    return (
       <div className={Styles.wrapper}>
         {/* Top section */}
         <div className={Styles.topContainer}>
@@ -47,19 +49,23 @@ export default function BuyerNavBarClient({user, balance}) {
               Cart
             </Link>
             <Link className={Styles.link} href="">
-              RM {balance.balances.toFixed(2)}
+              RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
-              <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
-              {user.user_metadata.name}
+              <Image
+                className={Styles.profileImage}
+                src={avatar}
+                width={30}
+                height={30}
+              />
+              {username}
             </Link>
           </div>
         </div>
       </div>
     );
-  }
-  else{
-    return(
+  } else {
+    return (
       <div className={Styles.noSearchWrapper}>
         <span className={Styles.logo}>JomBeli</span>
 
@@ -83,12 +89,16 @@ export default function BuyerNavBarClient({user, balance}) {
             RM {balance.balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
-            <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
+            <Image
+              className={Styles.profileImage}
+              src={user.user_metadata.picture}
+              width={30}
+              height={30}
+            />
             {user.user_metadata.name}
           </Link>
         </div>
       </div>
-    )
+    );
   }
-
 }
