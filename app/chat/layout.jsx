@@ -1,11 +1,11 @@
-import BuyerChatNavBar from "../_components/BuyerChatNavBar/BuyerChatNavBar";
+import BuyerNavBar from "../_components/BuyerNavBar/BuyerNavBar";
 import styles from "./page.module.css";
 
 export default function BuyerLayout({ children }) {
   return (
     <>
       <div className={styles.main}>
-        <BuyerChatNavBar />
+        <BuyerNavBar />
 
         {children}
       </div>
