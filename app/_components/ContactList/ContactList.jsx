@@ -30,7 +30,7 @@ async function ContactList() {
 }
 const Contact = ({ user_id, username, avatar }) => {
   return (
-    <Link href={`/buyer/chat?id=${user_id}`} className={styles.link}>
+    <Link href={`/chat?id=${user_id}`} className={styles.link}>
       <div className={styles.avatarContainer}>
         <Image src={avatar} alt="avatar" fill className={styles.avatar} />
       </div>
