@@ -13,7 +13,7 @@ async function chat({ searchParams }) {
 
   return (
     <div className={styles.content}>
-      <ContactList />
+      <ContactList paramID={id} />
 
       <ChatSpace id={id} />
     </div>

@@ -7,6 +7,9 @@ function WalletFilterBar({ availableMonths }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const currentMonth = searchParams.get("month") || "all";
+  const currentType = searchParams.get("type") || "all";
+
   const handleChange = (e) => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -20,7 +23,12 @@ function WalletFilterBar({ availableMonths }) {
       <div className={styles.filterDiv1}>
         <div className={styles.filter}>
           <label>Month:</label>
-          <select name="month" id="month" onChange={(e) => handleChange(e)}>
+          <select
+            name="month"
+            id="month"
+            value={currentMonth}
+            onChange={handleChange}
+          >
             <option value="all">All</option>
             {availableMonths.map((month) => (
               <option key={month.value} value={month.value}>
@@ -32,7 +40,12 @@ function WalletFilterBar({ availableMonths }) {
 
         <div className={styles.filter}>
           <label>Type:</label>
-          <select name="type" id="type" onChange={(e) => handleChange(e)}>
+          <select
+            name="type"
+            id="type"
+            value={currentType}
+            onChange={handleChange}
+          >
             <option value="all">All</option>
             <option value="Credit">Credit</option>
             <option value="Debit">Debit</option>

@@ -1,5 +1,6 @@
 .main {
-  background-color: #f7f5f3;
+  /* background-color: var(--color-primary-subtle); */
+  background-color: var(--color-sub);
   width: 100%;
   height: 90%;
   color: var(--color-text-primary);
@@ -9,11 +10,15 @@
 
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+}
+
+.main h2 {
+  color: var(--color-primary);
 }
 
 .content {
-  background-color: red;
+  /* background-color: red; */
   border-radius: 10px;
   height: 90%;
 }
@@ -24,4 +29,36 @@
   width: 100%;
   margin-bottom: 1rem;
   border-bottom: 1px solid #c4c3c3;
+}
+
+.greenColor {
+  color: var(--color-success);
+}
+
+.redColor {
+  color: var(--color-danger);
+}
+
+.record {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recordTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text-primary);
+}
+
+.datetime {
+  font-size: 13px;
+  color: var(--color-text-muted);
 }

@@ -9,7 +9,6 @@ import ManageServicesNavBar from './AdminManageServices';
 export default async function AdminNavBar(){
 
     const user = await getUser();
-    console.log(user);
 
     const userInfo = await getUserInfo(user.id);
 
@@ -68,7 +67,7 @@ export default async function AdminNavBar(){
                             </svg>
                             Manage Vouchers
                         </Link>
-                        <Link className={Styles.link} href="/admin">
+                        <Link className={Styles.link} href="/admin/ManageProducts">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className={Styles.svg}>
                                 <g fill="none" fillRule="evenodd">
                                 <path d="M0 0h32v32H0z" />
