@@ -12,10 +12,14 @@ async function chat({ searchParams }) {
   const { id } = await searchParams;
 
   return (
-    <div className={styles.content}>
-      <ContactList paramID={id} />
+    <div className={styles.main}>
+      <BuyerChatNavBar />
 
-      <ChatSpace id={id} />
+      <div className={styles.content}>
+        <ContactList />
+
+        <ChatSpace id={id} />
+      </div>
     </div>
   );
 }

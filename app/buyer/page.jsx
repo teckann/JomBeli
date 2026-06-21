@@ -5,6 +5,7 @@ import { getUser } from "../_lib/auth";
 import { getUserInfo } from "../_lib/data-services";
 import { getWalletBalance } from "@/app/_lib/data-services";
 
+
 export const revalidate = 0;
 
 export default async function Home() {
@@ -13,7 +14,7 @@ export default async function Home() {
 
   const userInfo = await getUserInfo(user.id);
   const balance = await getWalletBalance(user.id);
-  console.log(balance);
+  console.log(balance)
 
   return (
     <div>

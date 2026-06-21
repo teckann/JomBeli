@@ -216,7 +216,7 @@
     margin: 12px 0;
     background-color: var(--color-surface-muted);
     border-radius: 8px;
-    border: px dashed var(--color-border);
+    border: 1px dashed var(--color-border);
 }
 
 .cardFooter {

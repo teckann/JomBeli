@@ -1,15 +1,11 @@
 .spinner_mini {
-  margin: 0 auto;
+  margin: 0;
   width: 20px;
   aspect-ratio: 1;
-
   border-radius: 50%;
-
-  border: 3px solid transparent;
-  border-top-color: var(--color-primary);
-  border-right-color: var(--color-primary-light);
-
-  animation: rotate 0.8s linear infinite;
+  border: 2px solid theme("colors.primary.200");
+  border-right-color: transparent;
+  animation: rotate 1s infinite linear;
 }
 
 @keyframes rotate {

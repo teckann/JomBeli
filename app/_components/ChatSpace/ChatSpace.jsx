@@ -5,8 +5,6 @@ import { getUser } from "@/app/_lib/auth";
 import { getUserInfo } from "@/app/_lib/data-services";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import { sendMessageAction } from "@/app/_lib/actions";
-import { Suspense } from "react";
-import Spinner from "../Spinner/Spinner";
 
 async function ChatSpace({ id }) {
   if (!id) return <TempCoverComponent />;
@@ -20,13 +18,11 @@ async function ChatSpace({ id }) {
   return (
     <div className={styles.main}>
       <div className={styles.chatMessages}>
-        <Suspense fallback={<Spinner />}>
-          <ChatMessages
-            messages={messages}
-            currentUserInfo={currentUserInfo}
-            selectedUserInfo={selectedUserInfo}
-          />
-        </Suspense>
+        <ChatMessages
+          messages={messages}
+          currentUserInfo={currentUserInfo}
+          selectedUserInfo={selectedUserInfo}
+        />
       </div>
 
       <InputForm

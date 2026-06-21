@@ -1,8 +1,6 @@
 import React from 'react';
 import styles from './productlisting.module.css'; 
 import Image from 'next/image';
-import Navbar from '@/app/_components/SellerNavBar/SellerNavBar.jsx';
-import Link from 'next/link';
 
 export default function ProductListingPage() {
     // Sample data oni will change ltr 
@@ -17,7 +15,29 @@ export default function ProductListingPage() {
 
   return (
     <div className={styles.container}>
-        <Navbar />
+        {/* Navigation Bar*/}
+        <header className={styles.header}>
+            <div className={styles.logoWrapper}>
+                <Image 
+                    src="/logo.png"       
+                    alt="Logo"    
+                    width={180}  
+                    height={48}      
+                    priority       
+                    className={styles.logoImg}   
+                    />
+            </div>
+       
+            <nav className={styles.nav}>
+            <a href="#" className={styles.navLink}>Overview</a>
+            <a href="#" className={styles.navLinkActive}>My Store</a>
+            <a href="#" className={styles.navLink}>Orders</a>
+            <a href="#" className={styles.navLink}>Vouchers</a>
+            <a href="#" className={styles.navLink}>Chat</a>
+            <a href="#" className={styles.navLink}>Wallet</a>
+            </nav>
+            <div className={styles.avatar}></div>
+        </header>
 
         <main className={styles.main}>
             {/* Seller Info*/}

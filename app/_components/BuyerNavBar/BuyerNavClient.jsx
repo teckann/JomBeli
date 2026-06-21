@@ -4,14 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
-export default function BuyerNavBarClient({ user }) {
-  const { username, avatar, balances } = user;
-
+export default async function BuyerNavBarClient({user, balance}) {  
   const RouteWithSearch = ["/buyer"];
   const currentPath = usePathname();
 
-  if (RouteWithSearch.includes(currentPath)) {
-    return (
+  if(RouteWithSearch.includes(currentPath)){
+    return(
       <div className={Styles.wrapper}>
         {/* Top section */}
         <div className={Styles.topContainer}>
@@ -49,23 +47,19 @@ export default function BuyerNavBarClient({ user }) {
               Cart
             </Link>
             <Link className={Styles.link} href="">
-              RM {balances.toFixed(2)}
+              RM {balance.balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
-              <Image
-                className={Styles.profileImage}
-                src={avatar}
-                width={30}
-                height={30}
-              />
-              {username}
+              <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
+              {user.user_metadata.name}
             </Link>
           </div>
         </div>
       </div>
     );
-  } else {
-    return (
+  }
+  else{
+    return(
       <div className={Styles.noSearchWrapper}>
         <span className={Styles.logo}>JomBeli</span>
 
@@ -86,19 +80,15 @@ export default function BuyerNavBarClient({ user }) {
             Cart
           </Link>
           <Link className={Styles.link} href="">
-            RM {balances.toFixed(2)}
+            RM {balance.balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
-            <Image
-              className={Styles.profileImage}
-              src={avatar}
-              width={30}
-              height={30}
-            />
-            {username}
+            <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
+            {user.user_metadata.name}
           </Link>
         </div>
       </div>
-    );
+    )
   }
+
 }

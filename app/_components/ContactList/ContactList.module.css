@@ -19,11 +19,11 @@
 
 .mainNoData h2 {
   font-size: 25px;
-  color: var(--color-text-primary);
+  color: var(--color-primary-darker);
 }
 
 .mainNoData p {
-  color: var(--color-text-primary);
+  color: var(--color-primary-dark);
 }
 
 .noDataContainer {
@@ -58,8 +58,7 @@
 }
 
 .link:hover {
-  /* background-color: var(--color-primary-lighter); */
-  background-color: var(--color-primary-subtle);
+  background-color: var(--color-primary-lighter);
 }
 
 .contactInfo {
@@ -99,8 +98,4 @@
 .avatar {
   border-radius: 50%;
   object-fit: cover;
-}
-
-.hover {
-  background-color: var(--color-primary-subtle);
 }

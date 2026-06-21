@@ -4,7 +4,7 @@ import styles from "./ContactList.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
-async function ContactList({ paramID }) {
+async function ContactList() {
   const user = await getUser();
 
   const contacts = await getContactList(user.id);
@@ -17,10 +17,10 @@ async function ContactList({ paramID }) {
       {contacts.map((contact) => (
         <div key={contact.user_id}>
           <Contact
+            key={contact.user_id}
             user_id={contact.user_id}
             username={contact.username}
             avatar={contact.avatar}
-            selected={paramID === contact.user_id}
           />
           <div className={styles.line}></div>
         </div>
@@ -28,12 +28,9 @@ async function ContactList({ paramID }) {
     </div>
   );
 }
-const Contact = ({ user_id, username, avatar, selected }) => {
+const Contact = ({ user_id, username, avatar }) => {
   return (
-    <Link
-      href={`/chat?id=${user_id}`}
-      className={`${styles.link} ${selected ? styles.hover : ""}`}
-    >
+    <Link href={`/buyer/chat?id=${user_id}`} className={styles.link}>
       <div className={styles.avatarContainer}>
         <Image src={avatar} alt="avatar" fill className={styles.avatar} />
       </div>
