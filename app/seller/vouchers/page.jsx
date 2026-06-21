@@ -23,9 +23,9 @@ async function Vouchers() {
             
 
                 <SellerTable tableHeader={[{header: 'Voucher Name', data: 'voucher_name'},
-                                           {header: 'T&C', data: 'max_spend'},
+                                           {header: 'T&C', multiple: (row) => <> Min spend: RM{row.min_spend} <br /> Discount cap at: RM{row.max_spend} </>},
                                            {header: 'Discount', data: 'discount_value'},
-                                           {header: 'Expiry', data: 'start_date'}]} 
+                                           {header: 'Expiry', multiple: (row) => `${row.start_date} - ${row.end_date}`}]} 
                              tableData={Vdata} />
 
 

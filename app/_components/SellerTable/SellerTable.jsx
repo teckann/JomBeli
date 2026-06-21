@@ -8,7 +8,7 @@ import styles from './SellerTable.module.css'
 
 const SellerTable = ({
     tableHeader = [{header: 'Voucher Name', data: 'voucher_name'},
-                   {header: 'T&C', data: 'max_spend'+','+'min_spend'},
+                   {header: 'T&C', multiple: (row) => `Min: RM${row.min_spend} — Max: RM${row.max_spend}`},
                    {header: 'Discount', data: 'discount_value'},
                    {header: 'Expiry', data: 'start_date'+','+'end_date'}] ,
     tableData,
@@ -61,7 +61,7 @@ const SellerTable = ({
                             <tr key={row.id}>
                                 {tableHeader.map((oneData, id) => (
                                     <td key = {id}>
-                                        {row[oneData.data]}
+                                        {oneData.data ? row[oneData.data] : oneData.multiple(row)}
                                     </td>                                    
                                 ))}
 
