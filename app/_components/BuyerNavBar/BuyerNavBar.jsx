@@ -1,5 +1,5 @@
 import { getUser } from "@/app/_lib/auth";
-import { getUserInfo, getWalletBalance } from "@/app/_lib/data-services";
+import { getUserInfo } from "@/app/_lib/data-services";
 import BuyerNavBarClient from "./BuyerNavClient";
 
 export default async function BuyerNavBar() {

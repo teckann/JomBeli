@@ -7,9 +7,18 @@ import ChatMessages from "../ChatMessages/ChatMessages";
 import { sendMessageAction } from "@/app/_lib/actions";
 import { Suspense } from "react";
 import Spinner from "../Spinner/Spinner";
+import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
 
 async function ChatSpace({ id }) {
-  if (!id) return <TempCoverComponent />;
+  if (!id)
+    return (
+      <TempCoverComponent
+        imagePath="/data-not-found.png"
+        alt="Data not found"
+        title="Select a Chat to Start Messaging"
+        desc="Choose a conversation from the sidebar to begin."
+      />
+    );
 
   const user = await getUser();
 
@@ -37,26 +46,6 @@ async function ChatSpace({ id }) {
     </div>
   );
 }
-
-const TempCoverComponent = () => {
-  return (
-    <div className={styles.mainNoData}>
-      <div className={styles.imageContainer}>
-        <Image
-          src="/data-not-found.png"
-          alt="Data not found"
-          fill
-          className={styles.image}
-        />
-      </div>
-
-      <div className={styles.noDataContainer}>
-        <h2>Select a Chat to Start Messaging</h2>
-        <p>Choose a conversation from the sidebar to begin.</p>
-      </div>
-    </div>
-  );
-};
 
 const InputForm = ({ sendMessageAction, receiverID, senderID }) => {
   return (

@@ -3,6 +3,8 @@ import {
   getTransactions,
 } from "@/app/_lib/data-services";
 import styles from "./TransactionRecords.module.css";
+import Image from "next/image";
+import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
 
 async function TransactionRecords({ userID, month, type }) {
   // console.log(month, type);
@@ -12,7 +14,7 @@ async function TransactionRecords({ userID, month, type }) {
 
   if (month || type) records = await getFilterTransactions(userID, month, type);
 
-  console.log(records);
+  // console.log(records);
   const length = records.length;
 
   return (
@@ -20,19 +22,27 @@ async function TransactionRecords({ userID, month, type }) {
       <h2>Transaction History</h2>
 
       <div className={styles.content}>
-        {records.map((record, index) => (
-          <>
-            <Record
-              key={record.wallet_transaction_id}
-              title={record.transaction_type}
-              direction={record.direction}
-              amount={record.amount}
-              datetime={record.created_at}
-            />
+        {length === 0 ? (
+          <TempCoverComponent
+            imagePath="/data-not-found.png"
+            alt="Data not found"
+            title="No Transaction Records"
+            desc="Your transaction history will appear here once you start using your wallet."
+          />
+        ) : (
+          records.map((record, index) => (
+            <div key={record.wallet_transaction_id}>
+              <Record
+                title={record.transaction_type}
+                direction={record.direction}
+                amount={record.amount}
+                datetime={record.created_at}
+              />
 
-            {index !== length - 1 && <Line />}
-          </>
-        ))}
+              {index !== length - 1 && <Line />}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
