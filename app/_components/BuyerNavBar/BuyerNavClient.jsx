@@ -8,7 +8,7 @@ const Links = [
   { path: "#", name: "Category", position: "L"},
   { path: "#", name: "Voucher", position: "L"},
   { path: "/buyer/helpcentre", name: "Help Centre", position: "L"},
-  { path: "#", name: "Message", position: "R"},
+  { path: "/buyer/chat", name: "Message", position: "R"},
   { path: "#", name: "Cart", position: "R"},
 ]
 
@@ -65,7 +65,7 @@ export default function BuyerNavBarClient({user}){
                 )
               }
             })}
-            <Link className={Styles.link} href="">
+            <Link className={Styles.link} href="/buyer/wallet">
               RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
@@ -90,7 +90,7 @@ export default function BuyerNavBarClient({user}){
               {item.name}
             </Link>
           ))}
-          <Link className={Styles.link} href="">
+          <Link className={Styles.link} href="/buyer/wallet">
             RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
