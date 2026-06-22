@@ -218,3 +218,18 @@ export async function getFilterTransactions(id, month, type) {
   return data || [];
 }
 
+
+export async function getSellerVoucher(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("VOUCHERS_T")
+    .select("*")
+    .eq("user_id", id);
+
+  if (error) {
+    console.error("Failed to fetch balance:", error.message);
+    throw new Error("Could not fetch balance");
+  }
+
+  return data;
+}

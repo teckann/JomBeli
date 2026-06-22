@@ -1,89 +1,137 @@
 import React from 'react';
+import { getUser } from "@/app/_lib/auth";
 import styles from './productlisting.module.css'; 
-import Image from 'next/image';
-import Navbar from '@/app/_components/SellerNavBar/SellerNavBar.jsx';
+import { supabase } from "@/app/_lib/supabase";
+import { getProducts } from "@/app/_lib/data-services";
 import Link from 'next/link';
 
-export default function ProductListingPage() {
-    // Sample data oni will change ltr 
-    const products = [
-        { id: 1, name: "Product name", price: "RM2999.90", category: "Category" },
-        { id: 2, name: "Product name", price: "RM2908.90", category: "Category" },
-        { id: 3, name: "Product name", price: "RM3939.00", category: "Category" },
-        { id: 4, name: "Product name", price: "RM2999.90", category: "Category" },
-        { id: 5, name: "Product name", price: "RM2908.90", category: "Category" },
-        { id: 6, name: "Product name", price: "RM3939.00", category: "Category" },
-    ];
+export default async function ProductListingPage() {
+    // get user data
+    const currentUser = await getUser();
+    if (!currentUser || !currentUser.id) {
+        return <div className={styles.loading}>Please log in to view your shop.</div>;
+    }
+    const loggedInUserId = currentUser.id;
+    
+    // get product data of the specific user (seller)
+    const products = await getProducts(loggedInUserId);
+    const { data: sellerData, error: userError } = await supabase
+        .from('USERS_T')
+        .select('username, avatar')
+        .eq('user_id', loggedInUserId)
+        .maybeSingle(); 
 
-  return (
-    <div className={styles.container}>
-        <Navbar />
+    if (userError) {
+        console.error("[Next.js] Failed to fetch data from USERS_T table:", userError.message);
+    }
 
-        <main className={styles.main}>
-            {/* Seller Info*/}
-            <section className={styles.shopHeader}>
+    // here
+    const shopName = sellerData?.username || currentUser.email || "My Store";
+    const displayProducts = products || [];
 
-            <div className={styles.shopAvatar}></div>
-            <div className={styles.shopInfo}>
-                <h1 className={styles.shopNameRow}>
-                Shop name <span className={styles.shopRating}>★ Shop Rating</span>
-                </h1>
-                <div>
-                    <p className={styles.shopDescription}>Discover the latest in tech innovation at JomBeli Gadgets. We specialize in high-performance electronics, smart mobile accessories, premium audio devices, and trending lifestyle gadgets. Driven by a passion for quality and authentic products, we provide tech lovers with reliable devices that seamlessly blend style and functionality. Enjoy secure checkout, fast shipping, and top-tier customer support. Upgrade your tech game with JomBeli now!</p>
-                </div>
-            </div>
-            </section>
+    const categoriesMap = displayProducts.reduce((acc, product) => {
+        const catName = product.category || 'General';
+        if (!acc[catName]) {
+            acc[catName] = [];
+        }
+        acc[catName].push(product);
+        return acc;
+    }, {});
 
-            <div className={styles.searchBarRow}>
-            <input 
-                type="text" 
-                placeholder="Search..." 
-                className={styles.searchInput}
-            />
-            <div className={styles.actionButtons}>
-                <button className="btn btn-outline">Manage Category</button>
-                <button className="btn btn-primary">Add New Product</button>
-            </div>
-            </div>
+    const categoryList = Object.keys(categoriesMap);
 
-            <hr className={styles.divider} />
-            <div className={styles.contentLayout}>
-            <aside className={styles.sidebar}>
-                <div>
-                <h2 className={styles.sidebarTitle}>TRENDING PRODUCTS</h2>
-                <p className={styles.sidebarDesc}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                </p>
-                </div>
-                <div>
-                <h2 className={styles.sidebarTitle}>PHONE</h2>
-                <p className={styles.sidebarDesc}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                </p>
-                </div>
-            </aside>
+    return (
+        <div className={styles.container}>
+            <main className={styles.main}>
+                {/* Shop Header Section */}
+                <section className={styles.shopHeader}>
+                    {sellerData?.avatar ? (
+                        <div className={styles.shopAvatarContainer}>
+                            <img src={sellerData.avatar} alt={shopName} className={styles.shopAvatarImg} />
+                        </div>
+                    ) : (
+                        <div className={styles.shopAvatar}></div>
+                    )}
 
-            <div className={styles.productGrid}>
-                {products.map((product) => (
-                <div key={product.id} className={styles.productCard}>
-                    <span className={styles.categoryTag}>{product.category}</span>
-                    
-                    <div className={styles.imagePlaceholder}></div>
-                    
-                    <div className={styles.cardFooter}>
-                    <div>
-                        <h3 className={styles.productName}>{product.name}</h3>
-                        <p className={styles.productPrice}>{product.price}</p>
+                    <div className={styles.shopInfo}>
+                        <h1 className={styles.shopNameRow}>
+                            {shopName} <span className={styles.shopRating}>★ 4.7</span>
+                        </h1>
+                        <p className={styles.shopDescription}>
+                            Welcome to {shopName}. Every item in this collection represents our commitment to excellence. 
+                            We source only premium-grade products to ensure maximum reliability and satisfaction. 
+                            Explore a curated world crafted exclusively to elevate your lifestyle, with inventory synchronized live.
+                        </p>
                     </div>
-                    <button className="btn btn-ghost" style={{ padding: '2px 8px' }}>View</button>
+                </section>
+
+                <div className={styles.searchBarRow}>
+                    <input type="text" placeholder="Search..." className={styles.searchInput} />
+                    <div className={styles.actionButtons}>
+                        <button className="btn btn-outline">Manage Category</button>
+                        <button className="btn btn-primary">Add New Product</button>
                     </div>
                 </div>
-                ))}
-            </div>
 
-            </div>
-        </main>
+                <hr className={styles.divider} />
+                
+                {categoryList.length > 0 ? (
+                    categoryList.map((categoryName) => {
+                        const categoryProducts = categoriesMap[categoryName];
 
+                        return (
+                            <div key={categoryName} className={styles.categoryBlock}>
+                                <aside className={styles.sidebar}>
+                                    <h2 className={styles.sidebarTitle}>{categoryName.toUpperCase()}</h2>
+                                    <p className={styles.sidebarDesc}>
+                                        Explore our top collection of {categoryName.toLowerCase()} updated live. Quality guaranteed.
+                                    </p>
+                                </aside>
+
+                                <div className={styles.productGrid}>
+                                    {categoryProducts.map((product) => {
+                                        const hasImage = product.product_image_url && product.product_image_url.length > 0;
+                                        const mainImage = hasImage ? product.product_image_url[0] : null;
+
+                                        return (
+                                            <div key={product.product_id} className={styles.productCard}>
+                                                <span className={styles.categoryTag}>{product.category || 'General'}</span>
+                                                
+                                                <div className={styles.imagePlaceholder}>
+                                                    {mainImage ? (
+                                                        <img src={mainImage} alt={product.product_name} />
+                                                    ) : (
+                                                        <div className={styles.noImageText}>No Image</div>
+                                                    )}
+                                                </div>
+                                                
+                                                <div className={styles.cardFooter}>
+                                                    <div className={styles.productMeta}>
+                                                        <h3 className={styles.productName}>{product.product_name}</h3>
+                                                        <p className={styles.productPrice}>
+                                                            RM{product.price ? Number(product.price).toFixed(2) : "0.00"}
+                                                        </p>
+                                                    </div>
+                                                    
+                                                    <Link 
+                                                        href={`/seller/productdetails/${product.product_id}`} 
+                                                        className="btn btn-ghost" 
+                                                        style={{ padding: '2px 8px', textDecoration: 'none' }}
+                                                    >
+                                                        View
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div className={styles.noProducts}>No products found.</div>
+                )}
+            </main>
         </div>
     );
-    }
+}
