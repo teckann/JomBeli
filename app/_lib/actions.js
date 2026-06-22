@@ -238,3 +238,5 @@ export async function sendMessageAction(formData) {
 
   revalidatePath("/chatbox");
 }
+
+export async function topUpAction(formData) {}
