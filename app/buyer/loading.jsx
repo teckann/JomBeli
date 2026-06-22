@@ -1,5 +1,5 @@
-import RoseThreeSpinner from "../_components/RoseThreeSpinner/RoseThreeSpinner";
+import Spinner from "../_components/Spinner/Spinner";
 
 export default function Laoding() {
-  return <RoseThreeSpinner />;
+  return <Spinner />;
 }

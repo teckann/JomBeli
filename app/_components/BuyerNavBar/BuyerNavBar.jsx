@@ -1,10 +1,13 @@
 import { getUser } from "@/app/_lib/auth";
-import { getWalletBalance } from "@/app/_lib/data-services";
+import { getUserInfo, getWalletBalance } from "@/app/_lib/data-services";
 import BuyerNavBarClient from "./BuyerNavClient";
 
 export default async function BuyerNavBar() {
+  // get auth info (such as id, token, etc.)
   const user = await getUser();
-  const balance = await getWalletBalance(user.id);
 
-  return <BuyerNavBarClient user={user} balance={balance} />;
+  // get user profile info (USERS_T)
+  const userInfo = await getUserInfo(user.id);
+
+  return <BuyerNavBarClient user={userInfo} />;
 }

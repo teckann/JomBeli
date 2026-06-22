@@ -17,8 +17,8 @@ export default function BuyerNavBarClient({user, balance}) {
   const RouteWithSearch = ["/buyer", "/"];
   const currentPath = usePathname();
 
-  if(RouteWithSearch.includes(currentPath)){
-    return(
+  if (RouteWithSearch.includes(currentPath)) {
+    return (
       <div className={Styles.wrapper}>
         {/* Top section */}
         <div className={Styles.topContainer}>
@@ -68,9 +68,8 @@ export default function BuyerNavBarClient({user, balance}) {
         </div>
       </div>
     );
-  }
-  else{
-    return(
+  } else {
+    return (
       <div className={Styles.noSearchWrapper}>
         <Link className={Styles.logo} href="/buyer">JomBeli</Link>
         <div className={Styles.LinkContainer}>
@@ -88,7 +87,6 @@ export default function BuyerNavBarClient({user, balance}) {
           </Link>
         </div>
       </div>
-    )
+    );
   }
-
 }

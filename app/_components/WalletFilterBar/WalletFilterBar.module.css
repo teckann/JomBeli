@@ -1,0 +1,80 @@
+.filterBar {
+  background-color: var(--color-primary-subtle);
+  /* background-color: var(--color-sub); */
+  width: 100%;
+  height: 10%;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-primary-dark);
+  border-radius: 20px;
+  padding: 0 2rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterDiv1 {
+  /* background-color: blue; */
+  width: 50%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterDiv2 {
+  /* background-color: blue; */
+  width: 20%;
+}
+
+.filter {
+  /* background-color: red; */
+  padding: 0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter label {
+  font-weight: 450;
+  color: var(--color-text-primary);
+}
+
+.filter select,
+.button {
+  width: 100%;
+  padding: 0.4rem 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  outline: none;
+  transition: border-color 0.2s;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.filter select:focus,
+.filter select:hover {
+  border-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+  cursor: pointer;
+}

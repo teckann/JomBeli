@@ -5,6 +5,13 @@
     font-family: var(--font-body);
 }
 
+.categoryBlock {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 60px; 
+    align-items: flex-start;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -72,9 +79,10 @@
     margin-top: 16px;
     display: flex;
     gap: 24px;
-    margin-bottom: 10px;
     align-items: center;
+    margin-bottom: 30px;
 }
+
 
 .shopAvatar {
     width: 100px;
@@ -86,8 +94,8 @@
 }
 
 .shopInfo {
-    padding-top: 20px;
     flex: 1;
+    align-items: center;
 }
 
 .shopNameRow {
@@ -110,7 +118,6 @@
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     margin-top: 4;
-    margin-bottom: 30px;
     line-height: 1.6;
 }
 
@@ -155,23 +162,22 @@
 }
 
 .contentLayout {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 32px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 32px;
 }
 
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 0px;
+    width: 250px;
+    flex-shrink: 0;
 }
 
 .sidebar > div:nth-child(1) {
-  min-height: 312px; 
+    min-height: 312px; 
 }
 
 .sidebar > div:nth-child(2) {
-  margin-top: 12px;
+    margin-top: 12px;
 }
 
 .sidebarTitle {
@@ -189,22 +195,28 @@
 }
 
 .productGrid {
+    flex-grow: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px; 
 }
 
 .productCard {
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
     padding: 16px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 288px;
-    background-color: var(--color-surface); 
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
+
+/* .productCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+} */
 
 .categoryTag {
     font-size: var(--text-xs);
@@ -212,11 +224,22 @@
 }
 
 .imagePlaceholder {
-    flex: 1;
-    margin: 12px 0;
-    background-color: var(--color-surface-muted);
+    width: 100%;
+    height: 220px;      
+    background-color: #f9f9f9;
     border-radius: 8px;
-    border: 1px dashed var(--color-border);
+    overflow: hidden;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.imagePlaceholder img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
 }
 
 .cardFooter {
@@ -239,14 +262,14 @@
 }
 
 .categoryContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 48px; 
+    display: flex;
+    flex-direction: column;
+    gap: 48px; 
 }
 
 .categorySection {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 32px;
-  align-items: flex-start; 
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 32px;
+    align-items: flex-start; 
 }
