@@ -7,13 +7,13 @@ import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 const Links = [
   { path: "#", name: "Category", position: "L"},
   { path: "#", name: "Voucher", position: "L"},
-  { path: "/buyer/helpcentre/", name: "Help Centre", position: "L"},
+  { path: "/buyer/helpcentre", name: "Help Centre", position: "L"},
   { path: "#", name: "Message", position: "R"},
   { path: "#", name: "Cart", position: "R"},
 ]
 
-
-export default function BuyerNavBarClient({user, balance}) {  
+export default function BuyerNavBarClient({user}){
+  const { username, avatar, balances } = user;  
   const RouteWithSearch = ["/buyer", "/"];
   const currentPath = usePathname();
 
@@ -40,7 +40,11 @@ export default function BuyerNavBarClient({user, balance}) {
             {Links.map((item)=>{
               if(item.position=="L"){
                 return(
-                  <Link className={Styles.link} href={item.path} key={item.name}>
+                  <Link 
+                    className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
+                    href={item.path} 
+                    key={item.name}
+                  >
                     {item.name}
                   </Link>
                 )
@@ -51,18 +55,22 @@ export default function BuyerNavBarClient({user, balance}) {
             {Links.map((item)=>{
               if(item.position=="R"){
                 return(
-                  <Link className={Styles.link} href={item.path} key={item.name}>
+                  <Link 
+                    className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
+                    href={item.path} 
+                    key={item.name}
+                  >
                     {item.name}
                   </Link>
                 )
               }
             })}
             <Link className={Styles.link} href="">
-              RM {balance.balances.toFixed(2)}
+              RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
-              <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30} alt="ProfileImage"/>
-              {user.user_metadata.name}
+              <Image className={Styles.profileImage} src={avatar} width={30} height={30} alt="ProfileImage"/>
+              {username}
             </Link>
           </div>
         </div>
@@ -74,16 +82,20 @@ export default function BuyerNavBarClient({user, balance}) {
         <Link className={Styles.logo} href="/buyer">JomBeli</Link>
         <div className={Styles.LinkContainer}>
           {Links.map((item)=>(
-            <Link className={Styles.link} href={item.path} key={item.name}>
+            <Link 
+              className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
+              href={item.path} 
+              key={item.name}
+            >
               {item.name}
             </Link>
           ))}
           <Link className={Styles.link} href="">
-            RM {balance.balances.toFixed(2)}
+            RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
-            <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30} alt="ProfileImage"/>
-            {user.user_metadata.name}
+            <Image className={Styles.profileImage} src={avatar} width={30} height={30} alt="ProfileImage"/>
+            {username}
           </Link>
         </div>
       </div>
