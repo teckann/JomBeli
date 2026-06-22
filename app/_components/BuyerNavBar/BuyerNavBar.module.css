@@ -1,6 +1,14 @@
 /* 
     GENERAL
 */
+.logo{
+    flex: 1;
+    font-size: var(--text-3xl);
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
 .LinkContainer{
     display: flex;
     gap: 20px;
@@ -15,12 +23,19 @@
     padding: 10px;
     border-radius: 10px;
     color: var(--color-text-primary);
-    transition: 0.5s all ease-out;
+    transition: 0.2s all ease;
 }
 
 .link:hover{
-    background-color: var(--color-primary);
-    color: var(--color-text-on-primary);
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.link.active{
+    color: var(--color-primary);
+    font-weight: bold;
+    border-bottom: 2px solid var(--color-primary);
+    border-radius: 0;
 }
 
 .profileLink{
@@ -59,13 +74,6 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     padding: 5px 20px;
-}
-
-.logo{
-    flex: 1;
-    font-size: var(--text-3xl);
-    font-weight: bold;
-    color: var(--color-primary);
 }
 
 .searchContainer{

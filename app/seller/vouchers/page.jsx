@@ -1,4 +1,4 @@
-import SellerTable from '@/app/_components/SellerTable/SellerTable';
+import VoucherTable from '@/app/_components/SellerTable/voucherTable';
 import styles from './vouchers.module.css'
 
 import { getSellerVoucher } from "@/app/_lib/data-services";
@@ -22,32 +22,41 @@ async function Vouchers() {
 
             
 
-                <SellerTable tableHeader={[{header: 'Voucher Name', data: 'voucher_name'},
-                                           {header: 'T&C', multiple: (row) => <> Min spend: RM{row.min_spend} <br /> Discount cap at: RM{row.max_spend} </>},
-                                           {header: 'Discount', data: 'discount_value'},
-                                           {header: 'Expiry', multiple: (row) => `${row.start_date} - ${row.end_date}`}]} 
-                             tableData={Vdata} />
+                <VoucherTable data={Vdata} />
+
+        <div className={styles.rightside}>
+            
+            <div className={styles.specialDay}>
+                Today is lalalala day (with calendar)
+            </div>
+
+        <div className={styles.blockReal}>
+            <div className={styles.realTime}>
+
+                l***m used ticket name <br /> <br />
+                l***m used ticket name with a long anme <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
+                l***m used ticket name <br /> <br />
 
 
-                <div className={styles.realTime}>
-
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name with a long anme <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
-                    l***m used ticket name <br /> <br />
+            </div>
 
 
-                </div>
+        </div>
+            
+
+        </div>
+                
             
 
 

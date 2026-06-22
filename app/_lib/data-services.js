@@ -45,6 +45,36 @@ export async function getProducts() {
   return data;
 }
 
+export async function getAllUserInfo() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+  .from("USERS_T")
+  .select("user_id, username, email, contact_number, role, balances, user_status");
+
+  if (error) {
+    console.error("Failed to fetch users:", error.message);
+    throw new Error("Could not fetch users");
+  }
+  //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
+  if (!data){
+    return [];
+  }
+
+  //loop through the array of users to clean up missing data
+  const cleanedData = data.map((user) => {
+    const cleanedUser = {};
+    
+    for (const key in user){
+      //put dash if an value inside the user is null, or else return the non-null value
+      cleanedUser[key] = user[key] === null ? "-" : user[key];
+    }
+
+    return cleanedUser;
+  })
+
+  return cleanedData;
+}
+
 export async function getWalletBalance(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -194,7 +224,8 @@ export async function getSellerVoucher(id) {
   const { data, error } = await supabase
     .from("VOUCHERS_T")
     .select("*")
-    .eq("user_id", id);
+    .eq("user_id", id)
+    .eq("voucher_type", "shop");
 
   if (error) {
     console.error("Failed to fetch balance:", error.message);
@@ -203,3 +234,21 @@ export async function getSellerVoucher(id) {
 
   return data;
 }
+
+
+export async function getSellerRefund(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("VOUCHERS_T")
+    .select("*")
+    .eq("user_id", id)
+    .eq("voucher_type", "shop");
+
+  if (error) {
+    console.error("Failed to fetch balance:", error.message);
+    throw new Error("Could not fetch balance");
+  }
+
+  return data;
+}
+

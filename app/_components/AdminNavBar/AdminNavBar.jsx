@@ -28,7 +28,7 @@ export default async function AdminNavBar(){
                             </svg>
                             Dashboard
                         </Link>
-                        <Link className={Styles.link} href="/admin">
+                        <Link className={Styles.link} href="/admin/ManageUsers">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={Styles.svg}>
                                 <g fill="currentColor">
                                 <circle cx={9.001} cy={6} r={4} />
