@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./TopUp.module.css";
 import { topUpAction } from "@/app/_lib/actions";
 import Image from "next/image";
+import { useFormStatus } from "react-dom";
+import SpinnerMini from "../SpinnerMini/SpinnerMini";
 
 const options = [50, 100, 150, 200];
 const payments = [
-  { payment: "Please select payment method", logo: "" },
   { payment: "Online Banking - Maybank2u", logo: "/maybank2u-logo.png" },
   { payment: "Online Banking - CIMB Clicks", logo: "/cimb-logo.png" },
   { payment: "Online Banking - Public Bank", logo: "/public-logo.png" },
@@ -19,12 +20,15 @@ const payments = [
   { payment: "DuitNow Transfer", logo: "/duitnow-logo.png" },
 ];
 
-function TopUp() {
+function TopUp({ userID }) {
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState("");
   const [isFocus, setIsFocus] = useState(false);
-  const [isValid, setIsisValid] = useState(true);
+  const [isValid, setIsisValid] = useState(false);
   const [paymentIconPath, setPaymentIconPath] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState("");
+
+  const formRef = useRef(null);
 
   const formatCurrency = (num) => {
     if (String(num).includes(".")) return num;
@@ -83,8 +87,19 @@ function TopUp() {
     const item = payments.find((p) => p.payment === value);
     const path = item.logo;
 
+    setSelectedPayment(value);
     setPaymentIconPath(item.logo);
     // console.log(path);
+  };
+
+  const handleSubmit = async () => {
+    if (!amount || Number(amount) < 10 || !selectedPayment) {
+      return;
+    }
+
+    const formData = new FormData(formRef.current);
+
+    await topUpAction(formData);
   };
 
   const warning = !isValid && amount !== "";
@@ -93,7 +108,9 @@ function TopUp() {
     <div className={styles.topUpContainer}>
       <p className={styles.title}>Input Top Up Amount</p>
 
-      <form action="" onKeyDown={handleKeyDown} className={styles.form}>
+      {/* handle action in submit button - manually */}
+      <form ref={formRef} onKeyDown={handleKeyDown} className={styles.form}>
+        <input name="userID" id="userID" value={userID} type="hidden" />
         <div className={styles.inputContainer}>
           <div
             className={`${styles.inputField} ${warning ? styles.warning : ""}`}
@@ -102,6 +119,8 @@ function TopUp() {
             <input
               type="text"
               inputMode="numeric"
+              name="amount"
+              id="amount"
               value={display}
               onChange={handleChange}
               onFocus={handleFocus}
@@ -149,8 +168,13 @@ function TopUp() {
             name="payment"
             id="payment"
             className={styles.select}
+            value={selectedPayment}
             onChange={handleBankChange}
           >
+            <option value="" disabled>
+              Please select payment method
+            </option>
+
             {payments.map((item, index) => (
               <option key={index} value={item.payment}>
                 {item.payment}
@@ -165,9 +189,7 @@ function TopUp() {
             <p className={styles.totalAmount}>RM {display || 0}</p>
           </div>
 
-          <button type="submit" className={styles.submitButton}>
-            Top Up
-          </button>
+          <SubmitButton handleSubmit={handleSubmit} />
         </div>
       </form>
     </div>
@@ -179,6 +201,27 @@ const PaymentLogo = ({ path }) => {
     <div className={styles.imageContainer}>
       <Image src={path} alt="Logo" fill sizes="40px" className={styles.image} />
     </div>
+  );
+};
+
+const SubmitButton = ({ handleSubmit }) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
+    await handleSubmit();
+    setLoading(false);
+  };
+
+  return (
+    <button
+      type="button"
+      className={styles.submitButton}
+      onClick={handleClick}
+      disabled={loading}
+    >
+      {loading ? <SpinnerMini /> : "Top Up"}
+    </button>
   );
 };
 export default TopUp;

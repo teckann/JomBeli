@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo } from "./data-services";
 import { createMessage } from "./message-services";
+import IDGenerator from "./random-id-generator";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -239,4 +240,30 @@ export async function sendMessageAction(formData) {
   revalidatePath("/chatbox");
 }
 
-export async function topUpAction(formData) {}
+export async function topUpAction(formData) {
+  const wallet_transaction_id = await IDGenerator();
+  const user_id = formData.get("userID");
+  const transaction_type = "Top Up";
+  const direction = "Credit";
+  const payment_method = formData.get("payment");
+  const amount = Number(formData.get("amount"));
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("WALLET_TRANSACTIONS_T").insert([
+    {
+      wallet_transaction_id,
+      user_id,
+      transaction_type,
+      direction,
+      payment_method,
+      amount,
+    },
+  ]);
+
+  if (error) {
+    console.error("Insert error:", error);
+    throw new Error("Top up failed");
+  }
+
+  revalidatePath("/buyer/wallet");
+}
