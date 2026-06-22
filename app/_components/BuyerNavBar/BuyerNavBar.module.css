@@ -1,6 +1,14 @@
 /* 
     GENERAL
 */
+.logo{
+    flex: 1;
+    font-size: var(--text-3xl);
+    font-weight: bold;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
 .LinkContainer{
     display: flex;
     gap: 20px;
@@ -59,13 +67,6 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     padding: 5px 20px;
-}
-
-.logo{
-    flex: 1;
-    font-size: var(--text-3xl);
-    font-weight: bold;
-    color: var(--color-primary);
 }
 
 .searchContainer{

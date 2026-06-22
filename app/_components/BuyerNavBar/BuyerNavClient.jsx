@@ -4,8 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
+const Links = [
+  { path: "#", name: "Category", position: "L"},
+  { path: "#", name: "Voucher", position: "L"},
+  { path: "/buyer/helpcentre/", name: "Help Centre", position: "L"},
+  { path: "#", name: "Message", position: "R"},
+  { path: "#", name: "Cart", position: "R"},
+]
+
+
 export default function BuyerNavBarClient({user, balance}) {  
-  const RouteWithSearch = ["/buyer"];
+  const RouteWithSearch = ["/buyer", "/"];
   const currentPath = usePathname();
 
   if(RouteWithSearch.includes(currentPath)){
@@ -13,7 +22,7 @@ export default function BuyerNavBarClient({user, balance}) {
       <div className={Styles.wrapper}>
         {/* Top section */}
         <div className={Styles.topContainer}>
-          <span className={Styles.logo}>JomBeli</span>
+          <Link className={Styles.logo} href="/buyer">JomBeli</Link>
           <form action="" className={Styles.searchContainer}>
             <input
               className={Styles.searchbar}
@@ -28,29 +37,31 @@ export default function BuyerNavBarClient({user, balance}) {
         {/* Bottom section */}
         <div className={Styles.bottomContainer}>
           <div className={Styles.LinkContainer}>
-            <Link className={Styles.link} href="">
-              Category
-            </Link>
-            <Link className={Styles.link} href="">
-              Voucher
-            </Link>
-            <Link className={Styles.link} href="/buyer/helpcentre/">
-              Help Centre
-            </Link>
+            {Links.map((item)=>{
+              if(item.position=="L"){
+                return(
+                  <Link className={Styles.link} href={item.path} key={item.name}>
+                    {item.name}
+                  </Link>
+                )
+              }
+            })}
           </div>
-
           <div className={Styles.LinkContainer}>
-            <Link className={Styles.link} href="/chat">
-              Messages
-            </Link>
-            <Link className={Styles.link} href="">
-              Cart
-            </Link>
+            {Links.map((item)=>{
+              if(item.position=="R"){
+                return(
+                  <Link className={Styles.link} href={item.path} key={item.name}>
+                    {item.name}
+                  </Link>
+                )
+              }
+            })}
             <Link className={Styles.link} href="">
               RM {balance.balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
-              <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
+              <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30} alt="ProfileImage"/>
               {user.user_metadata.name}
             </Link>
           </div>
@@ -61,29 +72,18 @@ export default function BuyerNavBarClient({user, balance}) {
   else{
     return(
       <div className={Styles.noSearchWrapper}>
-        <span className={Styles.logo}>JomBeli</span>
-
+        <Link className={Styles.logo} href="/buyer">JomBeli</Link>
         <div className={Styles.LinkContainer}>
-          <Link className={Styles.link} href="">
-            Category
-          </Link>
-          <Link className={Styles.link} href="">
-            Voucher
-          </Link>
-          <Link className={Styles.link} href="/buyer/helpcentre/">
-            Help Centre
-          </Link>
-          <Link className={Styles.link} href="/chat">
-            Messages
-          </Link>
-          <Link className={Styles.link} href="">
-            Cart
-          </Link>
+          {Links.map((item)=>(
+            <Link className={Styles.link} href={item.path} key={item.name}>
+              {item.name}
+            </Link>
+          ))}
           <Link className={Styles.link} href="">
             RM {balance.balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
-            <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30}/>
+            <Image className={Styles.profileImage} src={user.user_metadata.picture} width={30} height={30} alt="ProfileImage"/>
             {user.user_metadata.name}
           </Link>
         </div>
