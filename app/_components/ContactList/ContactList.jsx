@@ -31,7 +31,7 @@ async function ContactList({ paramID }) {
 const Contact = ({ user_id, username, avatar, selected }) => {
   return (
     <Link
-      href={`/chat?id=${user_id}`}
+      href={`/buyer/chat?id=${user_id}`}
       className={`${styles.link} ${selected ? styles.hover : ""}`}
     >
       <div className={styles.avatarContainer}>

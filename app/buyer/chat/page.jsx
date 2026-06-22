@@ -1,4 +1,3 @@
-import BuyerChatNavBar from "@/app/_components/BuyerChatNavBar/BuyerChatNavBar";
 import ContactList from "@/app/_components/ContactList/ContactList";
 import ChatSpace from "@/app/_components/ChatSpace/ChatSpace";
 

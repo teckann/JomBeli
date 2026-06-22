@@ -42,13 +42,13 @@ export default function BuyerNavBarClient({ user }) {
           </div>
 
           <div className={Styles.LinkContainer}>
-            <Link className={Styles.link} href="/chat">
+            <Link className={Styles.link} href="/buyer/chat">
               Messages
             </Link>
             <Link className={Styles.link} href="">
               Cart
             </Link>
-            <Link className={Styles.link} href="">
+            <Link className={Styles.link} href="/buyer/wallet">
               RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
@@ -79,13 +79,13 @@ export default function BuyerNavBarClient({ user }) {
           <Link className={Styles.link} href="/buyer/helpcentre/">
             Help Centre
           </Link>
-          <Link className={Styles.link} href="/chat">
+          <Link className={Styles.link} href="/buyer/chat">
             Messages
           </Link>
           <Link className={Styles.link} href="">
             Cart
           </Link>
-          <Link className={Styles.link} href="">
+          <Link className={Styles.link} href="/buyer/wallet">
             RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
