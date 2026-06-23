@@ -28,7 +28,7 @@ async function page({ searchParams }) {
       <div className={styles.div2}>
         <Wallet>
           <WalletBalances balances={balances} />
-          <TopUp />
+          <TopUp userID={user.id} />
         </Wallet>
       </div>
     </main>
