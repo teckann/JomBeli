@@ -7,8 +7,6 @@
 .scon{
     margin: 20 10 20 20;
     background-color: transparent;
-    display: grid;
-    grid-template-columns: 1fr 300px;
 
 }
 
@@ -37,7 +35,6 @@
 
     position: sticky;
 
-    margin-left: 20px;
     margin-top: 20px;
 
     top: 80px;                 

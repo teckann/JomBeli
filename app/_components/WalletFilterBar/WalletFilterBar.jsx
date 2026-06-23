@@ -22,7 +22,7 @@ function WalletFilterBar({ availableMonths }) {
     <form className={styles.filterBar}>
       <div className={styles.filterDiv1}>
         <div className={styles.filter}>
-          <label>Month:</label>
+          <label htmlFor="month">Month:</label>
           <select
             name="month"
             id="month"
@@ -39,7 +39,7 @@ function WalletFilterBar({ availableMonths }) {
         </div>
 
         <div className={styles.filter}>
-          <label>Type:</label>
+          <label htmlFor="type">Type:</label>
           <select
             name="type"
             id="type"

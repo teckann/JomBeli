@@ -76,3 +76,50 @@ export async function getTotalCategoryCount() {
         return totalCategories;
 }
 
+export async function getFilterManageProducts(category, status, productName) {
+
+    const supabase = await createClient();
+
+    console.log(`hhhhhhhhhhh ${productName}`);
+    
+    if (productName?.trim()) {
+        const { data, error } = await supabase
+            .from("PRODUCTS_T")
+            .select("*")
+            .ilike("product_name", `${productName}%`);
+
+            if (error) {
+                console.error(error);
+                return [];
+            }
+
+            return data;
+    }
+    else {
+        let query = supabase
+        .from("PRODUCTS_T")
+        .select("*");
+
+        if (category && category !== "All") {
+        query = query.eq("category", category);
+        // console.log("category detected");
+        }
+
+        if (status) {
+        query = query.eq("product_status", status);
+        // console.log("status detected");
+        }
+
+        console.log(query);
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error(error);
+            throw new Error("Could not fetch product records");
+        }
+
+        return data;
+        }
+}
+

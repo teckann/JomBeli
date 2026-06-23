@@ -22,6 +22,7 @@ export default function Navbar() {
         <a href="#" className={styles.navLink}>Overview</a>
         <a href="#" className={styles.navLinkActive}>My Store</a>
         <a href="#" className={styles.navLink}>Orders</a>
+        <a href="/seller/refunds" className={styles.navLink}>Refunds</a>
         <a href="/seller/vouchers" className={styles.navLink}>Vouchers</a>
         <a href="#" className={styles.navLink}>Chat</a>
         <a href="#" className={styles.navLink}>Wallet</a>

@@ -1,19 +1,49 @@
+'use client'
+
 import React from 'react'
 
 import SpotlightCard from '@/app/_components/SpotlightCard/SpotlightCard';
 
 import styles from './SellerTable.module.css'
+import FilterTable from './filterTable.jsx'
+
+import { useState, useEffect } from 'react';
+
 
 
 
 const SellerTable = ({
-    tableHeader = [{header: 'Voucher Name', data: 'voucher_name'},
-                   {header: 'T&C', multiple: (row) => `Min: RM${row.min_spend} — Max: RM${row.max_spend}`},
-                   {header: 'Discount', data: 'discount_value'},
-                   {header: 'Expiry', data: 'start_date'+','+'end_date'}] ,
-    tableData,
+    // three type of data can be entry
+    tableHeader = [],
+    tableData = [],
     align = 'left'
 }) => {
+
+
+
+    const [search, setSearch] = useState('');
+
+
+        const filteredData = tableData.filter((dataFilting) => {
+        if (!search) return true;
+
+            return tableHeader.some((head) => {
+
+                let fixData;
+
+                if (head.data) {
+                    fixData = dataFilting[head.data];
+                } else if (head.multiple) {
+                    fixData = head.multiple(dataFilting);
+
+                }
+
+                
+                const dataFiltered = head.data ? dataFilting[head.data] : head.multiple(dataFilting);
+                return dataFiltered.toString().toLowerCase().includes(search.toLowerCase());
+            });
+        
+        });
 
 
   return (
@@ -29,24 +59,13 @@ const SellerTable = ({
 
 
         <div className={styles.focon}>
-            <div className={styles.finding}>
 
-                <div className={styles.search}>
-                    I am search bar
-                </div>
-                <div className={styles.filter}>
-                    I am filter
-                </div>
-                <div className={styles.sort}>
-                    I am sort by
-                </div>
+            <FilterTable changeSearch={setSearch} />
 
-            </div>
-
-            <div  style={{textAlign: align}}>
+            <div style={{textAlign: align}}>
 
                 
-                <SpotlightCard className='table' spotlightColor="rgba(255, 255, 5, 0.25)">
+                <SpotlightCard className='table' spotlightheador="rgba(255, 5, 243, 0.4)">
                         
                         <thead className={styles.thead}  style={{textAlign: align}}>
                             <tr>
@@ -57,7 +76,7 @@ const SellerTable = ({
                         </thead>
 
                         <tbody className={styles.tbody}  styles={{textAlign: align}}>
-                            {tableData.map((row) => (
+                            {filteredData.map((row) => (
                             <tr key={row.id}>
                                 {tableHeader.map((oneData, id) => (
                                     <td key = {id}>
