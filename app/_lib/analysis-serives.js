@@ -123,3 +123,49 @@ export async function getFilterManageProducts(category, status, productName) {
         }
 }
 
+export async function getFilterUsers(role, status, username) {
+
+    const supabase = await createClient();
+
+    console.log(`hhhhhhhhhhh ${username}`);
+    
+    if (username?.trim()) {
+        const { data, error } = await supabase
+            .from("USERS_T")
+            .select("*")
+            .ilike("username", `${username}%`);
+
+            if (error) {
+                console.error(error);
+                return [];
+            }
+
+            return data;
+    }
+    else {
+        let query = supabase
+        .from("USERS_T")
+        .select("*");
+
+        if (role && role !== "All") {
+        query = query.eq("role", role);
+        // console.log("category detected");
+        }
+
+        if (status) {
+        query = query.eq("user_status", status);
+        // console.log("status detected");
+        }
+
+        console.log(query);
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.error(error);
+            throw new Error("Could not fetch user records");
+        }
+
+        return data;
+        }
+}
