@@ -2,6 +2,7 @@ import React from 'react';
 import { getUser } from "@/app/_lib/auth";
 import styles from './productdetails.module.css'; 
 import { createClient } from '@supabase/supabase-js';
+import DynamicProductView from './DynamicProductView.jsx'; 
 
 export default async function ProductDetailPage({ params }) {
   const currentUser = await getUser();
@@ -72,6 +73,7 @@ export default async function ProductDetailPage({ params }) {
                     .maybeSingle();
 
                   if (!userError && userData) {
+                 
                     latestReview.reviewer_name = userData.username;
                   } else {
                     latestReview.reviewer_name = "Anonymous User";
@@ -87,7 +89,33 @@ export default async function ProductDetailPage({ params }) {
     }
   }
 
+  if (!product) {
+    return (
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <div className={styles.topPartWrapper}>
+            <div className={styles.topLeftColumn}>
+              <a href="/seller/productlisting" className={styles.backBtn} style={{ textDecoration: 'none' }}>
+                ← Back
+              </a>
+              <h1 className={styles.productTitle}>SELECTED PRODUCT NAME (Not Synced)</h1>
+            </div>
+          </div>
+          <hr className={styles.divider} />
+          <div style={{ textAlign: 'center', padding: '100px 0', color: '#cc0000', fontWeight: 'bold' }}>
+            Product ID: {currentUrlId || 'Undefined'} (No DB Match)
+          </div>
+        </main>
+      </div>
+    );
   }
 
-
-
+  return (
+    <DynamicProductView 
+      initialProduct={product} 
+      variants={variants} 
+      currentUrlId={currentUrlId} 
+      latestReview={latestReview} 
+    />
+  );
+}
