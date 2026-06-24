@@ -274,14 +274,26 @@ export async function getProductDetails(productId) {
 
   const { data, error } = await supabase
     .from("PRODUCTS_T")
-    .select({ product_status: "Inactive" })
+    .select(`
+      *,
+      USERS_T!PRODUCTS_T_user_id_fkey (
+        username
+      ),
+      PRODUCT_VARIANTS_T (
+        product_variant_id,
+        sku,
+        product_variant_price,
+        product_variant_stock,
+        product_variant_status
+      )
+    `)
     .eq("product_id", productId)
-    .select();
+    .single();
 
   if (error) {
-    console.error("Fetch product error:", error);
-    throw new Error("Could not fetch product");
-  }
+    console.error("Fetch product details error:", error);
+    throw new Error("Could not fetch product details");
+  } 
 
   return data;
 }

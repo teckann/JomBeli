@@ -1,0 +1,63 @@
+.upperPart {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    align-items: center;
+}
+
+.productDetailsPage {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    width: 100%;
+}
+
+.productCard {
+    width: 50%;
+}
+
+.backButtonPart, .productDescription {
+    width: 100%;
+}
+
+.itemCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.itemImage {
+    border: none;
+    border-radius: 50%;
+}
+
+.smallDescripDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E0EEC6;
+    border-radius: 15%;
+    padding: 5px 20px;
+}
+
+.smallDescripOne {
+    display: flex;
+    gap: 0.3em;
+}
+
+.cardDescription {
+    display:flex;
+    gap: 0.3em;
+    flex-direction: column;
+}
+
+.green {
+     color: #1E3231;
+}
+
+.red {
+    color: red;
+}
+
