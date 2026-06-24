@@ -48,29 +48,31 @@ export async function getProducts() {
 export async function getAllUserInfo() {
   const supabase = await createClient();
   const { data, error } = await supabase
-  .from("USERS_T")
-  .select("user_id, username, email, contact_number, role, balances, user_status");
+    .from("USERS_T")
+    .select(
+      "user_id, username, email, contact_number, role, balances, user_status",
+    );
 
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
   }
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
-  if (!data){
+  if (!data) {
     return [];
   }
 
   //loop through the array of users to clean up missing data
   const cleanedData = data.map((user) => {
     const cleanedUser = {};
-    
-    for (const key in user){
+
+    for (const key in user) {
       //put dash if an value inside the user is null, or else return the non-null value
       cleanedUser[key] = user[key] === null ? "-" : user[key];
     }
 
     return cleanedUser;
-  })
+  });
 
   return cleanedData;
 }
@@ -218,7 +220,6 @@ export async function getFilterTransactions(id, month, type) {
   return data || [];
 }
 
-
 export async function getSellerVoucher(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -234,7 +235,6 @@ export async function getSellerVoucher(id) {
 
   return data;
 }
-
 
 export async function getSellerRefund(id) {
   const supabase = await createClient();
@@ -253,7 +253,6 @@ export async function getSellerRefund(id) {
 }
 
 export async function deactiveProduct(productId) {
-
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -271,7 +270,6 @@ export async function deactiveProduct(productId) {
 }
 
 export async function getProductDetails(productId) {
-
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -286,4 +284,22 @@ export async function getProductDetails(productId) {
   }
 
   return data;
+}
+
+export async function setBalances(userID, amount) {
+  const supabase = await createClient();
+  const { balances: currentBalances } = await getUserInfo(userID);
+  const updatedBalances = Number(currentBalances) + Number(amount);
+
+  const { error } = await supabase
+    .from("USERS_T")
+    .update({
+      balances: updatedBalances,
+    })
+    .eq("user_id", userID);
+
+  if (error) {
+    console.error("Insert error:", error);
+    throw new Error("Update balances failed");
+  }
 }
