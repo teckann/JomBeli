@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo } from "./data-services";
+import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
 import IDGenerator from "./random-id-generator";
 
@@ -265,5 +265,6 @@ export async function topUpAction(formData) {
     throw new Error("Top up failed");
   }
 
+  await setBalances(user_id, amount);
   revalidatePath("/buyer/wallet");
 }
