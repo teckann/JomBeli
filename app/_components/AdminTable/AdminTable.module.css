@@ -5,25 +5,86 @@
 }
 
 .tableTitles {
-    display: flex;
+    /* display: flex; */
     width: 100%;
-    justify-content: space-around;
-    align-items: center;
+    /* justify-content: space-around; */
+    /* align-items: center; */
     background-color: var(--color-primary-dark);
     color: var(--color-text-on-primary);
-    border-radius: 10px;
-    padding: 1em;
+    /* border-radius: 10px; */
+    padding: 0;
+    /* vertical-align: top/middle; */
 }
 
 .tableFrame {
     width: 100%;
+    /* vertical-align: bottom; */
+    /* border: 1; */
+    border-collapse: collapse;
+    border-radius: 10%;
 }
 
 .columnTitle {
-    display: flex;
-    justify-content: center;
+    /* display: flex; */
+    /* justify-content: center; */
+    padding: 1em;
 }
 
 .tableHeading {
     width: 100%;
+}
+
+.dataRow {
+    /* display: flex; */
+    width: 100%;
+    /* vertical-align: middle; */
+    /* align-items: center; */
+}
+
+.dataRow:hover {
+    color: #902D41;
+    cursor: default;
+    background-color:	#E8E8E8;
+}
+
+.dataShow {
+    padding: 0.3em 0.5em;
+    text-align: center;
+
+}
+
+.evenRows {
+    background-color: #F7E1D7;
+}
+
+.tableWrapper {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.actionButton {
+    border: none;
+    background-color: transparent;
+    transition: all 0.2s ease-out;
+}
+
+.actionButton:hover {
+    transform: scale(1.2);
+}
+
+.icons:hover {
+    font-size: 1.2em;
+}
+
+.showPageTextContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+}
+
+.pageCounterText {
+    color: #D5A18E;
+    text-decoration: underline;
+    font-size: 1.2em;
 }
