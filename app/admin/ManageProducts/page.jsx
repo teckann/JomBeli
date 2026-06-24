@@ -1,27 +1,23 @@
 import Styles from './ManageProducts.module.css';
 import { getUser } from '@/app/_lib/auth';
-import { getUserInfo } from '@/app/_lib/data-services';
 import Link from 'next/link';
 import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount, getFilterManageProducts } from '@/app/_lib/analysis-serives';
 import AdminFilterProductsBar from '@/app/_components/AdminFilterProductsBars/AdminFilterProductsBars';
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
+// import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
 export default async function manageProductsPage({ searchParams }) {
 
     const { category, status, productName } = await searchParams;
 
-    // console.log(category, status, productName);
-
-    const user = await getUser();
-
     const productList = await getFilterManageProducts(category, status, productName);
-    console.log(productList);
 
     const titles = ["Product Id", "Product Name", "Seller Name", "Price (RM)", "Description", "Category", "Status"];
-    const actions = [{title: "Deactive", icon: "DeactiveIcon"}, {title: "VIew", icon: "InfoIcon"}]
-    const datas = productList.map((product) => [product.product_id, product.product_name, "Cynthia (Test)", product.price, 
-        product.product_description, product.category, product.product_status]);
+
+    const actions = [{type: "viewProduct"}];
+    const fields = ["product_id", "product_name", "USERS_T.username", "price", "product_description", "category", "product_status"];
+    const datas = productList;
 
 
 
@@ -49,7 +45,7 @@ export default async function manageProductsPage({ searchParams }) {
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} actions={actions} datas={datas} />
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat="product_id" />
             </div>
         </div>
     );

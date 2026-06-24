@@ -1,5 +1,6 @@
 import { createClient } from "./server";
 import {} from "./data-services";
+import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
 
 export async function getTotalProductsCount() {
     const supabase = await createClient();
@@ -79,14 +80,18 @@ export async function getTotalCategoryCount() {
 export async function getFilterManageProducts(category, status, productName) {
 
     const supabase = await createClient();
-
-    console.log(`hhhhhhhhhhh ${productName}`);
     
     if (productName?.trim()) {
         const { data, error } = await supabase
-            .from("PRODUCTS_T")
-            .select("*")
-            .ilike("product_name", `${productName}%`);
+        .from("PRODUCTS_T")
+        .select(`
+            *,
+            USERS_T!PRODUCTS_T_user_id_fkey (
+                username
+            )
+        `)
+        .ilike("product_name", `${productName}%`)
+        .order("created_at", { ascending: true });
 
             if (error) {
                 console.error(error);
@@ -98,17 +103,22 @@ export async function getFilterManageProducts(category, status, productName) {
     else {
         let query = supabase
         .from("PRODUCTS_T")
-        .select("*");
+        .select(`
+            *,
+            USERS_T!PRODUCTS_T_user_id_fkey (
+                username
+            )
+        `);
 
         if (category && category !== "All") {
         query = query.eq("category", category);
-        // console.log("category detected");
         }
 
         if (status) {
         query = query.eq("product_status", status);
-        // console.log("status detected");
         }
+
+        query = query.order("created_at", { ascending: true });
 
         console.log(query);
 
@@ -126,14 +136,13 @@ export async function getFilterManageProducts(category, status, productName) {
 export async function getFilterUsers(role, status, username) {
 
     const supabase = await createClient();
-
-    console.log(`hhhhhhhhhhh ${username}`);
     
     if (username?.trim()) {
         const { data, error } = await supabase
             .from("USERS_T")
             .select("*")
-            .ilike("username", `${username}%`);
+            .ilike("username", `${username}%`)
+            .order("created_at", { ascending: true });
 
             if (error) {
                 console.error(error);
@@ -149,15 +158,13 @@ export async function getFilterUsers(role, status, username) {
 
         if (role && role !== "All") {
         query = query.eq("role", role);
-        // console.log("category detected");
         }
 
         if (status) {
         query = query.eq("user_status", status);
-        // console.log("status detected");
         }
 
-        console.log(query);
+        query = query.order("created_at", { ascending: true });
 
         const { data, error } = await query;
 

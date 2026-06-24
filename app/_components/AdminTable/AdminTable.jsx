@@ -1,56 +1,127 @@
 "use client";
 
 import Styles from './AdminTable.module.css';
+import { useRouter } from "next/navigation";
+import { useState } from 'react';
 
-export default function AdminTable({titles, actions, datas}) {
+export default function AdminTable({titles, actions, fields, datas, dataIdFormat}) {
 
-    console.log(datas);
+    const router = useRouter();
+
+    // name = title name, icon = icon function, handler = handle action, show = precondition for show
+    // define icon and actions
+    // under {}, object are iterable (kkep object properties), [] only iterable for array
+    const actionMaps = {viewProduct: {name: "View", icon: <InfoIcon />, handler: (product) => router.push(`/admin/ManageProducts/${getdataPath(product, "product_id")}`), show: (data) => true}};
+
+    // console.log(datas);
 
     // action = [{}, {}]
     // if contain action, just add one more row
     const finalTitles = actions ? [...titles, "Action"] : titles;
 
-    const totalColumns = titles.length;
+    let [pageCounter, setPageCounter] = useState(1);
+
+    const maxRowsForTable = 4;
+
+    const maxPages = Math.ceil(datas.length / maxRowsForTable);
+
+    const startSlicePoint = (pageCounter - 1) * maxRowsForTable;
+    const endSlicePoint = startSlicePoint + maxRowsForTable;
+
+    // set the copy of slice array
+    const datasSliced = datas.slice(startSlicePoint, endSlicePoint);
+
+    const handleFirstPageCounter = () => {
+        setPageCounter(1);
+    }
+    
+    const handleDeductPageCounter = () => {
+        if (pageCounter > 1) {
+            setPageCounter(pageCounter - 1);
+        }
+    }
+    const handlePlusPageCounter = () => {
+        if (pageCounter < maxPages) {
+            setPageCounter(pageCounter + 1);
+        }
+    }
+
+    const handleEndPageCounter = () => {
+        setPageCounter(maxPages);
+    }
+
+    let counter = 0;
 
     return (
-        <table className={ Styles.tableFrame }>
-            <thead className={ Styles.tableHeading}>
-                <tr className={ Styles.tableTitles }>
-                    {finalTitles.map((title) =>  
-                        <th className={ Styles.columnTitle } key={title}>{title}</th>
-                    )}
-                </tr>
-            </thead>
-            <tbody>
-                    {
-                        datas.map((data) =>
-                            // <tr key={data}>                             
-                            // </tr>
-                            // {console.log(data);}
-                            <InsertData key={data} data={data} actions={actions} />
-                        )
-                    }
-            </tbody>
-        </table>
+        <div className={ Styles.overallTable}>
+            <div className={ Styles.tableWrapper }>
+                <table className={ Styles.tableFrame }>
+                    <thead className={ Styles.tableHeading}>
+                        <tr className={ Styles.tableTitles }>
+                            {finalTitles.map((title) =>  
+                                <th className={ Styles.columnTitle } key={title}>{title}</th>
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {
+                                datasSliced.map((data) => {
+                                    counter++;
+                                    const evenRows = (counter % 2 == 0 ? true : false);
+                                    return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
+                                }
+                                )
+                            }
+                    </tbody>
+                </table>
+            </div>
+            <div className={ Styles.showPageTextContainer }>
+                <span className={ Styles.showPageText }>
+                    <button className="btn btn-primary" onClick={() => handleFirstPageCounter()}>{"<<"}</button>
+                    <button className="btn btn-primary" onClick={() => handleDeductPageCounter()}>-</button>
+                    <span>page <span className={ Styles.pageCounterText }>{pageCounter}</span> of {maxPages}</span>
+                    <button className="btn btn-primary" onClick={() => handlePlusPageCounter()}>+</button>
+                    <button className="btn btn-primary" onClick={() => handleEndPageCounter()}>{">>"}</button>
+                </span>
+            </div>
+        </div>
     );
     
 }
 
-export function InsertData({data, actions}) {
+export function InsertData({evenRows, fields, data, actions, actionMaps}) {
 
+    // let counter = 0;
 
     return(
-        <tr>
-            {data.map((each) => 
-                <td key={each}>{each}</td>
+        <tr className={ `${Styles.dataRow} ${evenRows ? Styles.evenRows : ""}`}>
+            {fields.map((field) => 
+                <td align="center" key={field} className={ Styles.dataShow }>{getdataPath(data, field)}</td>
             )}
             {
-                actions.map((action) => {
-                    
-                })
+                actions &&
+                    <td className={Styles.dataShow}>
+                        {
+                            actions.map((action) => {
+                                // console.log(action.type);
+                                const actionConfig = actionMaps[action.type];
+
+                                return (actionConfig.show(data) &&
+                                <button key={actionConfig.name} className={Styles.actionButton} title={actionConfig.name} onClick={() => actionMaps[action.type].handler(data)}>
+                                    {actionConfig.icon}
+                                </button>
+                            )
+                            })
+                        }
+                    </td>                
             }
         </tr>
     )
+}
+
+// convert the path pass from fields (string into valid format)
+export function getdataPath(data, path) {
+    return path.split(".").reduce((acc, cur) => acc?.[cur], data);
 }
 
 export function DeactiveIcon() {
@@ -61,7 +132,7 @@ export function DeactiveIcon() {
     );
 }
 
-export function ActivateIcon() {
+export function ReactiveIcon() {
     return(
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className={ Styles.icons }>
             <path fill="none" d="M0 0h48v48H0z" />
@@ -73,7 +144,6 @@ export function ActivateIcon() {
 export function InfoIcon() {
     return(
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className={ Styles.icons }>
-            <title>{"open-external"}</title>
             <path
             fill="currentColor"
             fillRule="evenodd"
