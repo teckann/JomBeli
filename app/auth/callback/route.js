@@ -29,7 +29,7 @@ export async function GET(request) {
             const isSuspend = user_status !== "Active";
 
             if (!isSuspend) {
-              if (role === "Admin") {
+              if (role === "Admin" || role === "Super Admin") {
                 next = "/admin";
               } else if (role === "Courier") {
                 next = "/courier";

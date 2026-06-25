@@ -69,7 +69,7 @@ export async function middleware(request) {
 
   // redirect logic
   if (url.pathname === "/") {
-    if (role === "Admin") {
+    if (role === "Admin" || role === "Super Admin") {
       url.pathname = "/admin";
       return NextResponse.redirect(url);
     }
