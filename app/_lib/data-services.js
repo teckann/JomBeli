@@ -45,13 +45,16 @@ export async function getProducts() {
   return data;
 }
 
-export async function getAllUserInfo() {
+export async function getBuyerSellerInfo() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("USERS_T")
     .select(
       "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)"
-    );
+    )
+    .in("role",["Buyer","Seller"]);
+    
+    // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
 
   if (error) {
     console.error("Failed to fetch users:", error.message);
@@ -87,7 +90,7 @@ export function formatUserData(data) {
       }
     }
 
-    // Flatten the object and assign the new address string
+    // Flatten the object to remove nested objects and assign the new address string
     const cleanedUser = { ...user };
 
     delete cleanedUser.ADDRESSES_T;
@@ -290,6 +293,25 @@ export async function deactiveProduct(productId) {
   if (error) {
     console.error("Deactivate product error:", error);
     throw new Error("Could not deactive product");
+  }
+
+  return data;
+}
+
+export async function getBuyerSellerDetails(userId){
+  const supabase = await createClient();
+
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+    .eq("user_id",userId)
+    .single();
+
+  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+
+  if(error) {
+    console.error("Fetch user data error:", error)
+    throw new Error("Could not find user")
   }
 
   return data;
