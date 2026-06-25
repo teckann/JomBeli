@@ -2,6 +2,9 @@ import { getProductDetails } from "@/app/_lib/data-services";
 import Styles from './productDetails.module.css';
 import { getProductSales, getProductReviews } from "@/app/_lib/analysis-serives";
 import Image from "next/image";
+import AdminItemCard from '@/app/_components/AdminItemCard/AdminItemCard';
+import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
+import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
 
 export default async function ProductDetails({params}) {
     const resolvedParams = await params;
@@ -10,6 +13,11 @@ export default async function ProductDetails({params}) {
     const product = await getProductDetails(productId);
     const sales = await getProductSales(productId);
     const reviews = await getProductReviews(productId);
+
+    const informationList = [{field: "Product Name", value: product.product_name}, {field: "Description", value: product.product_description},
+        {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : product.discount}`},
+        {field: "Available Price", value: (product.price * ((100 - product.discount) / 100))}
+    ]
 
 
     return (<div className={ Styles.productDetailsPage }>
@@ -21,23 +29,73 @@ export default async function ProductDetails({params}) {
                 <h1>Product Details</h1>
                 <p>View product details here</p>
             </div>
-            <div className={ Styles.itemCard }>
-                <div>
-                    <Image className={Styles.itemImage} src={product.product_image_url} alt="Product Image" width={300} height={300} />
+            <AdminItemCard id={productId} name={product.product_name} category={product.product_status} itemStatus={product.product_status} imageUrl={product.product_image_url} />
+        </div>
+        <div className={ Styles.middlePart }>
+            <div className={ Styles.productInformationContainer }>
+                <div className={ Styles.informationUpper }>
+                    <div className={ Styles.informationLeft }>
+                        <ShowItemInformationList itemTitle="Product Information" objectlist={informationList} />
+                    </div>
+                    <div className={ Styles.informationRight }>
+                        <AdminTitle title="Product Related Information" />
+                        <div className={ Styles.relatedInformation }>
+                            <div>
+                                ⭐Rating: {product.overall_product_rating}
+                            </div>
+                            <div>
+                                ⌛Created at: {product.created_at}
+                            </div>
+                            <div>
+                                🧑🏻Created by: {product.USERS_T.username}
+                            </div>
+                            <div>
+                                📜Total Orders: {sales.totalOrders}
+                            </div>
+                            <div>
+                                💵Total Sales: {sales.totalSales}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className={ Styles.cardDescription }>
-                    <div>
-                        <h3>{product.product_name}</h3>
-                    </div>
-                    <div className={ Styles.smallDescripOne}>
-                        <span className={ Styles.smallDescripDiv }>{productId}</span>
-                        <span className={ Styles.smallDescripDiv }>{product.category}</span>
-                    </div>
-                    <div>
-                        <span className={ `${Styles.smallDescripDiv} ${product.product_status === "Active" ? Styles.green : Styles.red}` }>{product.product_status}</span>
-                    </div>
+                <div className={ Styles.buttonPart }>
+                    {product.product_status === "Active" ? <AdminDeactiveProductButton productId={productId} /> : <AdminReactiveProductButton productId={productId} />}
                 </div>
             </div>
         </div>
     </div>);
+}
+
+export function ShowItemInformationList({ itemTitle, objectlist }) {
+    
+    return (
+        <div className={ Styles.informationListFrame }>
+            <AdminTitle title={itemTitle} />
+            <div className={ Styles.informationSpace }>
+                {objectlist.map((each) => {
+                    return <div key={each.field} className={ Styles.informationRow }>
+                        <div className={ Styles.informationField }>
+                            {each.field}
+                        </div>
+                        <div className={ Styles.informationMiddleQuote }>:</div>
+                        <div className={ Styles.informationValue}>
+                            {each.value}
+                        </div>
+                    </div>
+                })}
+            </div>
+        </div>
+    )
+}
+
+export function getdataPath(data, path) {
+    return path.split(".").reduce((acc, cur) => acc?.[cur], data);
+}
+
+export function AdminTitle({title}) {
+    return (
+        <div className={ Styles.titleBar }>
+            <span classname={Styles.titleText}>{title}<hr className={Styles.hrLength} /></span>
+        </div>
+    )
 }
