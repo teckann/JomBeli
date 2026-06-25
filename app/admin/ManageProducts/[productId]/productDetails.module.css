@@ -12,52 +12,101 @@
     padding: 1em;
     align-items: center;
     width: 100%;
-}
-
-.productCard {
-    width: 50%;
+    gap: 1em;
 }
 
 .backButtonPart, .productDescription {
     width: 100%;
 }
 
-.itemCard {
+.informationLeft {
+    width: 50%;
+}
+
+.middlePart {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.itemImage {
-    border: none;
-    border-radius: 50%;
-}
-
-.smallDescripDiv {
+.productInformationContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #E0EEC6;
-    border-radius: 15%;
-    padding: 5px 20px;
-}
-
-.smallDescripOne {
-    display: flex;
-    gap: 0.3em;
-}
-
-.cardDescription {
-    display:flex;
-    gap: 0.3em;
+    width: 80%;
+    background-color: bisque;
+    border-radius: 2em;
     flex-direction: column;
+    padding: 0.3em;
 }
 
-.green {
-     color: #1E3231;
+.informationUpper {
+    display: flex;
 }
 
-.red {
-    color: red;
+.informationRight {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    gap: 1em;
 }
 
+.relatedInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.buttonPart {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em 0;
+}
+
+
+
+
+.informationListFrame {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.informationSpace {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.informationRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.informationField {
+    width: 30%;
+}
+
+.informationMiddleQuote {
+    width: 5%;
+}
+
+.informationValue {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    background-color: pink;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.titleBar {
+    display: flex;
+    /* padding: 1em; */
+    color: grey;
+}
+
+.hrLength {
+    width: 30%;
+    
+}

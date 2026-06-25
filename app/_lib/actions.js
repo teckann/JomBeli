@@ -300,3 +300,37 @@ export async function BuyerContactForm(formData) {
 
   redirect("/buyer/helpcentre");
 }
+
+export async function deactiveProduct(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .update({ product_status: "Inactive" })
+    .eq("product_id", productId)
+    .select();
+
+  if (error) {
+    console.error("Deactivate product error:", error);
+    throw new Error("Could not deactive product");
+  }
+
+  return data;
+}
+
+export async function reactiveProduct(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .update({ product_status: "Active" })
+    .eq("product_id", productId)
+    .select();
+
+  if (error) {
+    console.error("Deactivate product error:", error);
+    throw new Error("Could not deactive product");
+  }
+
+  return data;
+}

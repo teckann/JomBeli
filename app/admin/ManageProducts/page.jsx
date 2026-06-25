@@ -7,6 +7,7 @@ import AdminTable from '@/app/_components/AdminTable/AdminTable';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
+
 export default async function manageProductsPage({ searchParams }) {
 
     const { category, status, productName } = await searchParams;
