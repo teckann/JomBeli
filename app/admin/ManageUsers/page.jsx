@@ -1,18 +1,22 @@
-import { getAllUserInfo } from '@/app/_lib/data-services';
-import Link from 'next/link';
 import Styles from './ManageUsers.module.css';
+import Link from 'next/link';
 import AdminTable from '@/app/_components/AdminTable/AdminTable'
-import AdminFilterUser from '@/app/_components/AdminFilterUsersSearch/AdminFilterUsers';
+import AdminFilterUser from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
 import { getFilterUsers }from '@/app/_lib/analysis-serives';
 
 export default async function manageUser({ searchParams }) {
     const { role, status, username } = await searchParams;
 
     const userList = await getFilterUsers(role, status, username);
-    console.log(userList);
-    const titles = ["Full Name","Email","Contact Number","Role","Balances","Status"];
-    const actions = [{title:"deactive",icon:"Deactive"},{title:"info",icon:"InfoIcon"}];
-    const datas = userList.map((user) => [user.username, user.email, user.contact_number, user.role, user.balances, user.user_status]);
+
+    // console.log(userList);
+    const titles = ["Full Name","Email","Contact Number","Address","Role","Balances","Status"];
+
+    const actions = [{type:"viewUsers"}];
+
+    const fields = ["username", "ADDRESSES_T", "email", "contact_number","role", "balances", "user_status"];
+
+    const datas = userList;
     
     return (
         <div className={Styles.contentPage}>
@@ -26,11 +30,10 @@ export default async function manageUser({ searchParams }) {
                 <AdminFilterUser />
             </div>
             <div>
-                <AdminTable titles={titles} actions={actions} datas={datas}/>
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat={"user_id"}/>
             </div>
         </div> 
     )
-
 }
 
 

@@ -1,6 +1,7 @@
 import { createClient } from "./server";
 import {} from "./data-services";
 import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
+import { formatUserData } from "./data-services"
 
 export async function getTotalProductsCount() {
     const supabase = await createClient();
@@ -137,42 +138,117 @@ export async function getFilterUsers(role, status, username) {
 
     const supabase = await createClient();
     
-    if (username?.trim()) {
-        const { data, error } = await supabase
-            .from("USERS_T")
-            .select("*")
-            .ilike("username", `${username}%`)
-            .order("created_at", { ascending: true });
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)");
 
-            if (error) {
-                console.error(error);
-                return [];
-            }
-
-            return data;
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
     }
-    else {
-        let query = supabase
-        .from("USERS_T")
-        .select("*");
 
-        if (role && role !== "All") {
-        query = query.eq("role", role);
-        }
+    if (role && role !== "All"){
+      query = query.eq("role",role);
+    }
 
-        if (status) {
-        query = query.eq("user_status", status);
-        }
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
 
-        query = query.order("created_at", { ascending: true });
+    query = query.order("created_at", { ascending: true });
 
-        const { data, error } = await query;
+    const { data, error } = await query;
 
-        if (error) {
-            console.error(error);
-            throw new Error("Could not fetch user records");
-        }
+    if (error){
+      console.error(error);
+      return[];
+    }
 
-        return data;
-        }
+    return formatUserData(data);
+}
+
+export async function getProductSales(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDER_ITEMS_T")
+    .select(`
+      quantity,
+      subtotal,
+      order_id,
+      PRODUCT_VARIANTS_T!inner (
+        product_id
+      )
+    `)
+    .eq("PRODUCT_VARIANTS_T.product_id", productId);
+
+  if (error) {
+    console.error("Fetch sales error:", error);
+    throw new Error("Could not fetch product sales");
+  }
+
+  const totalOrders = new Set(
+    data.map(item => item.order_id)
+  ).size;
+
+  const totalQuantitySold = data.reduce(
+    (sum, item) => sum + Number(item.quantity || 0),
+    0
+  );
+
+  const totalSales = data.reduce(
+    (sum, item) => sum + Number(item.subtotal || 0),
+    0
+  );
+
+  return {
+    totalOrders,
+    totalQuantitySold,
+    totalSales,
+  };
+}
+
+export async function getProductReviews(productId) {
+  const supabase = await createClient();
+
+  // use product Id to get varient id first
+  const { data: variants, error: variantError } = await supabase
+    .from("PRODUCT_VARIANTS_T")
+    .select("product_variant_id")
+    .eq("product_id", productId);
+
+  if (variantError) throw variantError;
+
+  // change to iterable array
+  const variantIds = variants.map(v => v.product_variant_id);
+
+  // get orders containing those variants
+  const { data: orderItems, error: orderError } = await supabase
+    .from("ORDER_ITEMS_T")
+    .select("order_id")
+    .in("product_variant_id", variantIds);
+
+  if (orderError) throw orderError;
+
+  // remove the repetitive orderid
+  const orderIds = [...new Set(orderItems.map(i => i.order_id))];
+
+  // Get review
+  const { data: reviews, error: reviewError } = await supabase
+    .from("REVIEWS_T")
+    .select(`
+      review_id,
+      product_rating,
+      comment,
+      created_at,
+      USERS_T!REVIEWS_T_user_id_fkey (
+        username,
+        avatar
+      )
+    `)
+    .in("order_id", orderIds)
+    .order("created_at", { ascending: true });
+
+  if (reviewError) throw reviewError;
+
+  return reviews;
 }

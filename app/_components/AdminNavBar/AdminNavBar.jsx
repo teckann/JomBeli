@@ -22,7 +22,7 @@ export default async function AdminNavBar(){
                 <div className={Styles.middleMenuSelection}>
                     <span className={Styles.middleMenuText}>Main Menu</span>
                     <div className={Styles.linkContainer}>
-                        <Link className={Styles.link} href="/admin">
+                        <Link className={Styles.link} href="/admin/Dashboard">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 64 64" className={Styles.svg}>
                                 <path fill="currentColor" d="M32 0C14.355 0 0 14.355 0 32s14.355 32 32 32 32-14.355 32-32S49.645 0 32 0zM15.023 15.023a4 4 0 0 1 5.66 0c1.566 1.57 1.582 4.105.012 5.664-1.559 1.566-4.078 1.582-5.633.023l-.035-.031a4.01 4.01 0 0 1-.004-5.656zM8.102 32c0-2.211 1.77-4 3.977-4h.043a4 4 0 0 1 0 8c-2.212 0-4.02-1.789-4.02-4zm12.609 16.93-.027.039a4.02 4.02 0 0 1-5.66.008 4.004 4.004 0 0 1 .004-5.664c1.566-1.562 4.105-1.578 5.66-.012a3.966 3.966 0 0 1 .023 5.629zM36 32c0 2.211-1.789 4-4 4s-4-1.789-4-4V12c0-2.211 1.789-4 4-4s4 1.789 4 4v20zm7.285-16.941.031-.031a3.998 3.998 0 1 1 5.656 5.656c-1.566 1.566-4.105 1.578-5.668.012-1.562-1.563-1.577-4.079-.019-5.637zm5.692 33.918a4.003 4.003 0 0 1-5.66-.008c-1.566-1.562-1.582-4.109-.02-5.664 1.566-1.566 4.078-1.578 5.637-.02l.039.027a4.028 4.028 0 0 1 .004 5.665zM52 36c-2.211 0-4.02-1.789-4.02-4s1.77-4 3.977-4H52a4 4 0 0 1 0 8z" />
                             </svg>
