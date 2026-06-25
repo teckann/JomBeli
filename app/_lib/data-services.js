@@ -50,31 +50,57 @@ export async function getAllUserInfo() {
   const { data, error } = await supabase
     .from("USERS_T")
     .select(
-      "user_id, username, email, contact_number, role, balances, user_status",
+      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)"
     );
 
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
   }
+  
+  return formatUserData(data);
+}
+
+export function formatUserData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
-  if (!data) {
+  if (!data || data.length === 0) {
     return [];
   }
 
-  //loop through the array of users to clean up missing data
-  const cleanedData = data.map((user) => {
-    const cleanedUser = {};
+  // Map through and format the data
+  return data.map((user) => {
+    let fullAddress = "-";
+    
+    // String the address together
+    if (user.ADDRESSES_T) {
+      const addr = user.ADDRESSES_T;
+      const addressParts = [
+        addr.street, 
+        addr.city, 
+        addr.state, 
+        addr.postcode, 
+        addr.country
+      ].filter(Boolean); 
+      
+      if (addressParts.length > 0) {
+        fullAddress = addressParts.join(", ");
+      }
+    }
 
-    for (const key in user) {
-      //put dash if an value inside the user is null, or else return the non-null value
-      cleanedUser[key] = user[key] === null ? "-" : user[key];
+    // Flatten the object and assign the new address string
+    const cleanedUser = { ...user };
+
+    delete cleanedUser.ADDRESSES_T;
+
+    cleanedUser.full_address = fullAddress;
+
+    // Replace any null values with dashes
+    for (const key in cleanedUser) {
+      cleanedUser[key] = cleanedUser[key] === null ? "-" : cleanedUser[key];
     }
 
     return cleanedUser;
   });
-
-  return cleanedData;
 }
 
 export async function getWalletBalance(id) {
@@ -274,26 +300,14 @@ export async function getProductDetails(productId) {
 
   const { data, error } = await supabase
     .from("PRODUCTS_T")
-    .select(`
-      *,
-      USERS_T!PRODUCTS_T_user_id_fkey (
-        username
-      ),
-      PRODUCT_VARIANTS_T (
-        product_variant_id,
-        sku,
-        product_variant_price,
-        product_variant_stock,
-        product_variant_status
-      )
-    `)
+    .select({ product_status: "Inactive" })
     .eq("product_id", productId)
-    .single();
+    .select();
 
   if (error) {
-    console.error("Fetch product details error:", error);
-    throw new Error("Could not fetch product details");
-  } 
+    console.error("Fetch product error:", error);
+    throw new Error("Could not fetch product");
+  }
 
   return data;
 }

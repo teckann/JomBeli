@@ -1,6 +1,7 @@
 import { createClient } from "./server";
 import {} from "./data-services";
 import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
+import { formatUserData } from "./data-services"
 
 export async function getTotalProductsCount() {
     const supabase = await createClient();
@@ -137,44 +138,32 @@ export async function getFilterUsers(role, status, username) {
 
     const supabase = await createClient();
     
-    if (username?.trim()) {
-        const { data, error } = await supabase
-            .from("USERS_T")
-            .select("*")
-            .ilike("username", `${username}%`)
-            .order("created_at", { ascending: true });
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)");
 
-            if (error) {
-                console.error(error);
-                return [];
-            }
-
-            return data;
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
     }
-    else {
-        let query = supabase
-        .from("USERS_T")
-        .select("*");
 
-        if (role && role !== "All") {
-        query = query.eq("role", role);
-        }
+    if (role && role !== "All"){
+      query = query.eq("role",role);
+    }
 
-        if (status) {
-        query = query.eq("user_status", status);
-        }
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
 
-        query = query.order("created_at", { ascending: true });
+    query = query.order("created_at", { ascending: true });
 
-        const { data, error } = await query;
+    const { data, error } = await query;
 
-        if (error) {
-            console.error(error);
-            throw new Error("Could not fetch user records");
-        }
+    if (error){
+      console.error(error);
+      return[];
+    }
 
-        return data;
-        }
+    return formatUserData(data);
 }
 
 export async function getProductSales(productId) {
