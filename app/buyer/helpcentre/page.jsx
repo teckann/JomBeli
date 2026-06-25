@@ -9,7 +9,7 @@ export default function HelpPage(){
             <div className={Styles.linkContainer}>
                 <div className={Styles.linkCard}>
                     <h2>Chatbot</h2>
-                    <Link href="">Chatbot</Link>
+                    <Link href="/buyer/chatbot">Chatbot</Link>
                 </div>
                 <div className={Styles.linkCard}>
                     <h2>How our platform works</h2>
