@@ -21,6 +21,8 @@
   /* background-color: red; */
   border-radius: 10px;
   height: 90%;
+  overflow-y: auto;
+  padding: 0.5rem;
 }
 
 .line {
@@ -61,4 +63,28 @@
 .datetime {
   font-size: 13px;
   color: var(--color-text-muted);
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+    height: auto;
+    min-height: 300px;
+  }
+
+  .content {
+    height: auto;
+    min-height: 300px;
+  }
+
+  .contentNoData {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .record {
+    flex-direction: row;
+    gap: 10px;
+  }
 }

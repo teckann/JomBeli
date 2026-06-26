@@ -75,3 +75,29 @@
 .walletAmount h2 {
   font-size: var(--text-4xl);
 }
+
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 0.5rem;
+  }
+
+  .div1 {
+    width: 100%;
+    padding: 0.5em;
+  }
+
+  .div2 {
+    width: 100%;
+    padding: 0.5em;
+  }
+
+  .wallet {
+    padding: 1rem;
+  }
+
+  .walletAmount h2 {
+    font-size: var(--text-3xl);
+  }
+}

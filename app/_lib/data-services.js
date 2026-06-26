@@ -45,34 +45,65 @@ export async function getProducts() {
   return data;
 }
 
-export async function getAllUserInfo() {
+export async function getBuyerSellerInfo() {
   const supabase = await createClient();
   const { data, error } = await supabase
-  .from("USERS_T")
-  .select("user_id, username, email, contact_number, role, balances, user_status");
+    .from("USERS_T")
+    .select(
+      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)"
+    )
+    .in("role",["Buyer","Seller"]);
+    
+    // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
 
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
   }
+  
+  return formatUserData(data);
+}
+
+export function formatUserData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
-  if (!data){
+  if (!data || data.length === 0) {
     return [];
   }
 
-  //loop through the array of users to clean up missing data
-  const cleanedData = data.map((user) => {
-    const cleanedUser = {};
+  // Map through and format the data
+  return data.map((user) => {
+    let fullAddress = "-";
     
-    for (const key in user){
-      //put dash if an value inside the user is null, or else return the non-null value
-      cleanedUser[key] = user[key] === null ? "-" : user[key];
+    // String the address together
+    if (user.ADDRESSES_T) {
+      const addr = user.ADDRESSES_T;
+      const addressParts = [
+        addr.street, 
+        addr.city, 
+        addr.state, 
+        addr.postcode, 
+        addr.country
+      ].filter(Boolean); 
+      
+      if (addressParts.length > 0) {
+        fullAddress = addressParts.join(", ");
+      }
+    }
+
+    // Flatten the object to remove nested objects and assign the new address string
+    const cleanedUser = { ...user };
+
+    delete cleanedUser.ADDRESSES_T;
+
+    cleanedUser.full_address = fullAddress;
+
+    // Replace any null values with dashes
+    for (const key in cleanedUser) {
+      cleanedUser[key] = cleanedUser[key] === null ? "-" : cleanedUser[key];
     }
 
     return cleanedUser;
-  })
-
-  return cleanedData;
+  });
 }
 
 export async function getWalletBalance(id) {
@@ -218,7 +249,6 @@ export async function getFilterTransactions(id, month, type) {
   return data || [];
 }
 
-
 export async function getSellerVoucher(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -234,7 +264,6 @@ export async function getSellerVoucher(id) {
 
   return data;
 }
-
 
 export async function getSellerRefund(id) {
   const supabase = await createClient();
@@ -252,3 +281,85 @@ export async function getSellerRefund(id) {
   return data;
 }
 
+export async function deactiveProduct(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .update({ product_status: "Inactive" })
+    .eq("product_id", productId)
+    .select();
+
+  if (error) {
+    console.error("Deactivate product error:", error);
+    throw new Error("Could not deactive product");
+  }
+
+  return data;
+}
+
+export async function getBuyerSellerDetails(userId){
+  const supabase = await createClient();
+
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+    .eq("user_id",userId)
+    .single();
+
+  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+
+  if(error) {
+    console.error("Fetch user data error:", error)
+    throw new Error("Could not find user")
+  }
+
+  return data;
+}
+
+export async function getProductDetails(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select(`
+      *,
+      USERS_T!PRODUCTS_T_user_id_fkey (
+        username
+      ),
+      PRODUCT_VARIANTS_T (
+        product_variant_id,
+        sku,
+        product_variant_price,
+        product_variant_stock,
+        product_variant_status
+      )
+    `)
+    .eq("product_id", productId)
+    .single();
+
+  if (error) {
+    console.error("Fetch product details error:", error);
+    throw new Error("Could not fetch product details");
+  } 
+
+  return data;
+}
+
+export async function setBalances(userID, amount) {
+  const supabase = await createClient();
+  const { balances: currentBalances } = await getUserInfo(userID);
+  const updatedBalances = Number(currentBalances) + Number(amount);
+
+  const { error } = await supabase
+    .from("USERS_T")
+    .update({
+      balances: updatedBalances,
+    })
+    .eq("user_id", userID);
+
+  if (error) {
+    console.error("Insert error:", error);
+    throw new Error("Update balances failed");
+  }
+}

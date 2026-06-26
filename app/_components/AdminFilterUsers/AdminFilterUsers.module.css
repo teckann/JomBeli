@@ -1,0 +1,29 @@
+.filterBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em 1em;
+}
+
+.searchUserBar{
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+.roleDropdown{
+    padding: 10px; 
+    border-radius: 5px;
+    border: none;
+}
+
+.statusDropdown{
+    padding: 10px; 
+    border-radius: 5%;
+    border: none;
+}
+
+.roleAndStatus{
+    display:flex;
+    gap: 16px;
+}

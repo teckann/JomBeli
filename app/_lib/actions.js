@@ -6,8 +6,10 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo } from "./data-services";
+import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
+import IDGenerator from "./random-id-generator";
+import { supabase } from "./supabase";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -237,4 +239,96 @@ export async function sendMessageAction(formData) {
   await createMessage(sender_id, receiver_id, message);
 
   revalidatePath("/chatbox");
+}
+
+export async function topUpAction(formData) {
+  const wallet_transaction_id = await IDGenerator();
+  const user_id = formData.get("userID");
+  const transaction_type = "Top Up";
+  const direction = "Credit";
+  const payment_method = formData.get("payment");
+  const amount = Number(formData.get("amount"));
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("WALLET_TRANSACTIONS_T").insert([
+    {
+      wallet_transaction_id,
+      user_id,
+      transaction_type,
+      direction,
+      payment_method,
+      amount,
+    },
+  ]);
+
+  if (error) {
+    console.error("Insert error:", error);
+    throw new Error("Top up failed");
+  }
+
+  await setBalances(user_id, amount);
+  revalidatePath("/buyer/wallet");
+}
+
+export async function BuyerContactForm(formData) {
+  const supabase = await createClient();
+  const category = formData.get("category");
+  const message = formData.get("description");
+  const userID = formData.get("id");
+  const supportId = await IDGenerator();
+
+  if (!category || !message) {
+    return { error: "All fields are required." };
+  }
+
+  const { error } = await supabase.from("SUPPORTS_T").insert([
+    {
+      support_id: supportId,
+      support_type: category,
+      support_description: message,
+      support_status: "pending",
+      reporter_id: userID,
+    },
+  ]);
+
+  if (error) {
+    console.error("Supabase Error:", error.message);
+    throw new Error("Failed to submit form. Please try again.");
+  }
+
+  redirect("/buyer/helpcentre");
+}
+
+export async function deactiveProduct(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .update({ product_status: "Inactive" })
+    .eq("product_id", productId)
+    .select();
+
+  if (error) {
+    console.error("Deactivate product error:", error);
+    throw new Error("Could not deactive product");
+  }
+
+  return data;
+}
+
+export async function reactiveProduct(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .update({ product_status: "Active" })
+    .eq("product_id", productId)
+    .select();
+
+  if (error) {
+    console.error("Deactivate product error:", error);
+    throw new Error("Could not deactive product");
+  }
+
+  return data;
 }

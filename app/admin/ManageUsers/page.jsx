@@ -1,10 +1,23 @@
-import { getAllUserInfo } from '@/app/_lib/data-services';
-import Link from 'next/link';
 import Styles from './ManageUsers.module.css';
-import UserTable from '@/app/_components/AdminManageUsersTable/AdminManageUsersTable';
+import Link from 'next/link';
+import AdminTable from '@/app/_components/AdminTable/AdminTable'
+import AdminFilterUser from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
+import { getFilterUsers }from '@/app/_lib/analysis-serives';
 
-export default async function manageUser() {
+export default async function manageUser({ searchParams }) {
+    const { role, status, username } = await searchParams;
 
+    const userList = await getFilterUsers(role, status, username);
+
+    // console.log(userList);
+    const titles = ["Full Name","Email","Contact Number","Address","Role","Balances","Status"];
+
+    const actions = [{type:"viewUsers"}];
+
+    const fields = ["username", "ADDRESSES_T", "email", "contact_number","role", "balances", "user_status"];
+
+    const datas = userList;
+    
     return (
         <div className={Styles.contentPage}>
             <div className={Styles.upperPart}>
@@ -13,13 +26,14 @@ export default async function manageUser() {
                     <p>Manage System Users Right Now!</p>
                 </div>
             </div>
-            <div className={Styles.showTablePart}>
-                <UserTable />
+            <div>
+                <AdminFilterUser />
             </div>
-        </div>
-        
+            <div>
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat={"user_id"}/>
+            </div>
+        </div> 
     )
-
 }
 
 

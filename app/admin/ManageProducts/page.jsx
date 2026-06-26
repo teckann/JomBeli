@@ -1,13 +1,26 @@
 import Styles from './ManageProducts.module.css';
 import { getUser } from '@/app/_lib/auth';
-import { getUserInfo } from '@/app/_lib/data-services';
 import Link from 'next/link';
-import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount } from '@/app/_lib/analysis-serives';
+import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount, getFilterManageProducts } from '@/app/_lib/analysis-serives';
 import AdminFilterProductsBar from '@/app/_components/AdminFilterProductsBars/AdminFilterProductsBars';
+import AdminTable from '@/app/_components/AdminTable/AdminTable';
+// import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
-export default async function manageProductsPage() {
 
-    const user = await getUser();
+
+export default async function manageProductsPage({ searchParams }) {
+
+    const { category, status, productName } = await searchParams;
+
+    const productList = await getFilterManageProducts(category, status, productName);
+
+    const titles = ["Product Id", "Product Name", "Seller Name", "Price (RM)", "Description", "Category", "Status"];
+
+    const actions = [{type: "viewProduct"}];
+    const fields = ["product_id", "product_name", "USERS_T.username", "price", "product_description", "category", "product_status"];
+    const datas = productList;
+
+
 
     return (
         <div className={ Styles.contentPage}>
@@ -28,7 +41,12 @@ export default async function manageProductsPage() {
                     <h2>Product Listing</h2>
                     <p>View and manage system products through this table</p>
                 </div>
-                <AdminFilterProductsBar />
+                <div>
+                    <AdminFilterProductsBar />
+                </div>
+            </div>
+            <div>
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat="product_id" />
             </div>
         </div>
     );
@@ -43,6 +61,8 @@ export function GenerateReportButton() {
         </button>
     );
 }
+
+// export async function 
 
 export async function ProductOverViewBar() {
 
@@ -66,7 +86,7 @@ export async function ProductOverViewBar() {
 
             <div className={Styles.analyticsBarDatas}>
                 {overviewData.map((data) => (
-                    <ProductDataAnalyticsComponent key={data.id} title={data.title} count={data.count}  />
+                    <ProductDataAnalyticsComponent key={data.title} title={data.title} count={data.count}  />
                 ))}
                 
             </div>

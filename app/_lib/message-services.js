@@ -6,7 +6,8 @@ export async function getContactList(user_id) {
   const { data, error } = await supabase
     .from("MESSAGES_T")
     .select("sender_id, receiver_id")
-    .or(`sender_id.eq.${user_id},receiver_id.eq.${user_id}`);
+    .or(`sender_id.eq.${user_id},receiver_id.eq.${user_id}`)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error);

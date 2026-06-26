@@ -65,7 +65,7 @@ export default function BuyerNavBarClient({user}){
                 )
               }
             })}
-            <Link className={Styles.link} href="/buyer/wallet">
+            <Link className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`} href="/buyer/wallet">
               RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
@@ -90,7 +90,7 @@ export default function BuyerNavBarClient({user}){
               {item.name}
             </Link>
           ))}
-          <Link className={Styles.link} href="/buyer/wallet">
+          <Link className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`} href="/buyer/wallet">
             RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
