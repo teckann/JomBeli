@@ -1,0 +1,33 @@
+.main {
+  /* background-color: red; */
+  height: auto;
+  margin: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.bannerArea {
+  background-color: bisque;
+  height: 300px;
+}
+
+.discountProductsArea {
+  background-color: bisque;
+  height: auto;
+  width: 100%;
+  padding: 1rem 2rem;
+}
+
+.titleContainer {
+  color: var(--color-primary);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--color-primary);
+}
