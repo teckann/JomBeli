@@ -2,6 +2,7 @@ import Link from "next/link";
 import ProductListing from "../_components/ProductListing/ProductListing";
 import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
 import styles from "./page.module.css";
+import ThemeToggleButton from "../_components/ThemeToggleButton";
 
 export default async function Home() {
   const dailyDiscover = await getProducts();
@@ -21,6 +22,8 @@ export default async function Home() {
         </div>
         <ProductListing products={discountProducts} />
       </div>
+
+      <ThemeToggleButton />
     </main>
   );
 }

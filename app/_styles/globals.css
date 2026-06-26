@@ -55,10 +55,15 @@ body {
   --color-surface: #ffffff;
   --color-surface-muted: #f9f5f5;
 
-  --color-text-primary: #1a1010;
-  --color-text-secondary: #5c3a3a;
-  --color-text-muted: #9e7070;
-  --color-text-on-primary: #ffffff;
+  /* new color scheme */
+  --color-bg-primary: #eeeeee;
+  --color-bg-surface: #ffffff;
+  --color-bg-card: #ffffff;
+  --color-bg-input: #f1f5f9;
+  --color-bg-hover: #eef2f7;
+  --color-border-primary: #d1d5db;
+  --color-font-primary: #111827;
+  --color-font-secondary: #6b7280;
 
   --color-border: #e8cfcf;
   --color-border-light: #f4e6e6;
@@ -102,12 +107,22 @@ body {
   --color-surface: #1c1212;
   --color-surface-muted: #261a1a;
 
+  /* new color scheme */
+  --color-bg-primary: #0d0e11;
+  --color-bg-surface: #111317;
+  --color-bg-card: #14161c;
+  --color-bg-input: #181a20;
+  --color-bg-hover: #2a2d36;
+  --color-border-primary: #24262e;
+  --color-font-primary: #e5e7eb;
+  --color-font-secondary: #a1a6b3;
+
   --color-text-primary: #faecec;
   --color-text-secondary: #d6c2c2;
-  --color-text-muted: #947e7e;
+  --color-text-muted: #282828;
   --color-text-on-primary: #ffffff;
 
-  --color-border: #3d2b2b;
+  --color-border: #231c1c;
   --color-border-light: #2e1f1f;
   --color-border-strong: #614545;
 
@@ -136,7 +151,6 @@ body {
   font-family: var(--font-body);
 }
 
- 
 /* ----------------------------------------------------------
    BUTTON BASE STYLES
 ---------------------------------------------------------- */
@@ -156,7 +170,11 @@ body {
   border-radius: 10px;
   margin: 0 5px 0 5px;
   padding: 5px 10px;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
   user-select: none;
 }
 
@@ -240,4 +258,3 @@ body {
   color: var(--color-text-on-primary);
   border-color: var(--color-primary);
 }
-

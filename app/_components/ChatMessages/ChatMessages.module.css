@@ -14,7 +14,7 @@
 }
 
 .username {
-  color: var(--color-info-text);
+  color: var(--color-font-primary);
   margin-bottom: 4px;
 }
 

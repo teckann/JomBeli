@@ -1,19 +1,19 @@
 .main {
-  /* background-color: red; */
+  background-color: var(--color-bg-primary);
   height: auto;
-  margin: 0 2rem;
+  padding: 1rem 3rem;
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
 .bannerArea {
-  background-color: bisque;
+  background-color: var(--color-bg-surface);
   height: 300px;
 }
 
 .discountProductsArea {
-  background-color: bisque;
+  background-color: var(--color-bg-surface);
   height: auto;
   width: 100%;
   padding: 1rem 2rem;
