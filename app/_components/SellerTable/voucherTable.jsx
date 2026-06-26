@@ -2,6 +2,7 @@
 
 import React from 'react'
 import SellerTable from '@/app/_components/SellerTable/SellerTable';
+import Link from 'next/link';
 
 
 
@@ -14,7 +15,7 @@ const VoucherTable = ({ data }) => {
                       {header: 'Discount', data: 'discount_value'},
                       {header: 'Expiry', multiple: (row) => `${row.start_date} - ${row.end_date}`}, 
                       {header: 'Created By', multiple: (row) => `${row.temp_date} ${row.temp_time}`}, 
-                      {header: 'Action', multiple: () => <> <a href="">view</a> </>}]} 
+                      {header: 'Action', multiple: (row) => <> <Link href={`./vouchers/${row.voucher_id}`}>view</Link> </>}]} 
         navColumn='voucher_status'
         filterNav = {[{nav: 'All', navStatus: ''},
                       {nav: 'Active', navStatus: 'active'},

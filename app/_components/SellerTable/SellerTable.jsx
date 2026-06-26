@@ -7,7 +7,7 @@ import SpotlightCard from '@/app/_components/SpotlightCard/SpotlightCard';
 import styles from './SellerTable.module.css'
 import  FilterTable, { FilterBig } from './filterTable.jsx'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 
 
