@@ -21,6 +21,8 @@
   /* background-color: red; */
   border-radius: 10px;
   height: 90%;
+  overflow-y: auto;
+  padding: 0.5rem;
 }
 
 .line {

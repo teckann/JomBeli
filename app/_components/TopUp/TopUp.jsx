@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import styles from "./TopUp.module.css";
 import { topUpAction } from "@/app/_lib/actions";
 import Image from "next/image";
-import { useFormStatus } from "react-dom";
 import SpinnerMini from "../SpinnerMini/SpinnerMini";
 
 const options = [50, 100, 150, 200];
@@ -14,7 +13,7 @@ const payments = [
   { payment: "Online Banking - Public Bank", logo: "/public-logo.png" },
   { payment: "Online Banking - UOB", logo: "/uob-logo.png" },
   {
-    payment: "Online Banking - Hong Leong Connect",
+    payment: "Online Banking - Hong Leong Bank",
     logo: "/hongleong-logo.png",
   },
   { payment: "DuitNow Transfer", logo: "/duitnow-logo.png" },
@@ -27,6 +26,8 @@ function TopUp({ userID }) {
   const [isValid, setIsisValid] = useState(false);
   const [paymentIconPath, setPaymentIconPath] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("");
+  const [isSelectPaymentOption, setIsSelectPaymentOption] = useState(true);
+  const [isEnterAmount, setIsEnterAmount] = useState(true);
 
   const formRef = useRef(null);
 
@@ -44,6 +45,7 @@ function TopUp({ userID }) {
     // remove the 0 in front
     const cleaned = value.replace(/^0+(?=\d)/, "");
 
+    setIsEnterAmount(true);
     setAmount(cleaned);
     setDisplay(cleaned);
   };
@@ -85,21 +87,24 @@ function TopUp({ userID }) {
     const value = e.target.value;
 
     const item = payments.find((p) => p.payment === value);
-    const path = item.logo;
 
     setSelectedPayment(value);
     setPaymentIconPath(item.logo);
-    // console.log(path);
+    setIsSelectPaymentOption(true);
   };
 
   const handleSubmit = async () => {
     if (!amount || Number(amount) < 10 || !selectedPayment) {
+      if (!selectedPayment) setIsSelectPaymentOption(false);
+      if (!amount) setIsEnterAmount(false);
       return;
     }
 
     const formData = new FormData(formRef.current);
 
     await topUpAction(formData);
+    setAmount(0);
+    setDisplay(0);
   };
 
   const warning = !isValid && amount !== "";
@@ -130,6 +135,9 @@ function TopUp({ userID }) {
           </div>
 
           {warning && <p className={styles.error}>Minimum amount is RM10</p>}
+          {!isEnterAmount && (
+            <p className={styles.error}>Please enter amount</p>
+          )}
 
           <div className={styles.optionContainer}>
             {options.map((option) => (
@@ -146,41 +154,46 @@ function TopUp({ userID }) {
           </div>
         </div>
 
-        <div className={styles.paymenSelectField}>
-          <div className={styles.paymentLogo}>
-            {paymentIconPath ? (
-              <PaymentLogo path={paymentIconPath} />
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                width="34"
-                height="34"
-                className={styles.defaultIcon}
-              >
-                <path d="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2H2V5zm0 4h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9zm4 5h6v2H6v-2z" />
-              </svg>
-            )}
-          </div>
+        <div>
+          <div className={styles.paymenSelectField}>
+            <div className={styles.paymentLogo}>
+              {paymentIconPath ? (
+                <PaymentLogo path={paymentIconPath} />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  width="34"
+                  height="34"
+                  className={styles.defaultIcon}
+                >
+                  <path d="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2H2V5zm0 4h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9zm4 5h6v2H6v-2z" />
+                </svg>
+              )}
+            </div>
 
-          <select
-            name="payment"
-            id="payment"
-            className={styles.select}
-            value={selectedPayment}
-            onChange={handleBankChange}
-          >
-            <option value="" disabled>
-              Please select payment method
-            </option>
-
-            {payments.map((item, index) => (
-              <option key={index} value={item.payment}>
-                {item.payment}
+            <select
+              name="payment"
+              id="payment"
+              className={styles.select}
+              value={selectedPayment}
+              onChange={handleBankChange}
+            >
+              <option value="" disabled>
+                Please select payment method
               </option>
-            ))}
-          </select>
+
+              {payments.map((item, index) => (
+                <option key={index} value={item.payment}>
+                  {item.payment}
+                </option>
+              ))}
+            </select>
+          </div>
+          {!isSelectPaymentOption && (
+            <p className={styles.error}>Select a payment method</p>
+          )}
         </div>
 
         <div className={styles.conclude}>
@@ -224,4 +237,5 @@ const SubmitButton = ({ handleSubmit }) => {
     </button>
   );
 };
+
 export default TopUp;
