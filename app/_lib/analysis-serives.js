@@ -239,6 +239,7 @@ export async function getProductReviews(productId) {
       review_id,
       product_rating,
       comment,
+      user_id,
       created_at,
       USERS_T!REVIEWS_T_user_id_fkey (
         username,
