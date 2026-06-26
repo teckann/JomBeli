@@ -33,20 +33,20 @@ async function Vouchers() {
         <div className={styles.blockReal}>
             <div className={styles.realTime}>
 
-                l***m used ticket name <br /> <br />
-                l***m used ticket name with a long anme <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
-                l***m used ticket name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name with a long anme <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
+                l***m used voucher name <br /> <br />
 
 
             </div>
