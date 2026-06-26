@@ -307,14 +307,20 @@ export async function getBuyerSellerDetails(userId){
     .eq("user_id",userId)
     .single();
 
-  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+  // console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
 
   if(error) {
     console.error("Fetch user data error:", error)
     throw new Error("Could not find user")
   }
+  const cleanedData = {
+    ...data, // copy all the original user data
+    
+    // overwrites the created_at field with the cleaned 10-character date
+    created_at: data.created_at ? data.created_at.substring(0, 10) : "No date provided"
+  };
 
-  return data;
+  return cleanedData;
 }
 
 export async function getProductDetails(productId) {
