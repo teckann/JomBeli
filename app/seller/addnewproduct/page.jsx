@@ -15,14 +15,11 @@ export default function AddNewProduct () {
         description: ''
     });
 
-    // for Part 2 and 3 need use [] cuz can have more than 1 set of data
-    // Part 2: Product Variants
     const [variants, setVariants] = useState ([{
         option: '',
         values: '',
     }])
 
-    // Part 3: sku
     const [sku, setSKU] = useState ([])
 
     useEffect(() => {
@@ -50,6 +47,21 @@ export default function AddNewProduct () {
 
         // Cartesian Product (to generate sku)
         const generateCartesian = (arrays) => {
+            // reduce = gabung eh function
+            // acc = accumulator (edi gabung eh group)
+            // curr = current (now gabunging eh)
+            
+            // S1: first array is [["red", "blue"], {["1TB"]]
+            // now the acc still is a empty []
+            // now i take a = [] this empty basket
+            // and take the "red" and store into a = []
+            // "blue also same"
+            // so now the acc = [["red"], ["blue"]]
+
+            // S2: next loop ["1TB"]
+            // now the acc = [["red"], ["blue"]]
+            // use res.push([...a, b]); to push 1TB into each []
+            // u will get [["red", "1TB"], ["blue", "1TB"]]
             return arrays.reduce((acc, curr) => {
                 const res = [];
                 acc.forEach(a => {
@@ -87,6 +99,7 @@ export default function AddNewProduct () {
             setVariants(updated.length > 0 ? updated : [{ option: '', values: '' }]);
         };
 
+        // change data
         const handleVariantChange = (index, field, value) => {
             const updated = [...variants];
             updated[index][field] = value;
@@ -153,9 +166,53 @@ export default function AddNewProduct () {
                 </div>
                 </section>
 
+                <section className={styles.card}>
+                    <h2>Product Variants</h2>
+                    <p className={styles.tip}>Tip: Separate multiple values with commas (e.g., Red, Blue, Green)</p>
+                    
+                    {variants.map((v, idx) => (
+                        <div key={idx} className={styles.variantRow}>
+                        <div className={styles.inputGroup}>
+                            <label>Option :</label>
+                            <input 
+                            type="text" 
+                            placeholder="e.g., Color" 
+                            value={v.option}
+                            onChange={(e) => handleVariantChange(idx, 'option', e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            <label>Value :</label>
+                            <input 
+                            type="text" 
+                            placeholder="e.g., Red, Blue" 
+                            value={v.values}
+                            onChange={(e) => handleVariantChange(idx, 'values', e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.actionBtns}>
+                            <button type="button" onClick={handleAddOption} className={styles.iconBtn}>＋</button>
+                            <button type="button" onClick={() => handleRemoveOption(idx)} className={styles.iconBtn}>🗑️</button>
+                        </div>
+                        </div>
+                    ))}
+                    
+                    <button type="button" onClick={handleAddOption} className={styles.addMoreLink}>
+                        Add more option
+                    </button>
+                    </section>
+
+               
+
+
+
+
+
                
             </form>
             </div>
+
+            
         );
 
 
