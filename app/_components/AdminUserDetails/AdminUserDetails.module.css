@@ -1,0 +1,54 @@
+.userName {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 1.5%;
+    color: #000;
+}
+
+.headerWrapper {
+    margin-bottom: 24px;
+}
+
+.sectionTitle {
+    display: inline-block; 
+    font-size: 16px;
+    font-weight: 500;
+    color: #7a7a7a;
+    margin: 0;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #b5b5b5;
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    row-gap: 16px;
+    column-gap: 12px;
+    align-items: center; 
+}
+
+.label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 400;
+}
+
+.colon {
+    font-size: 14px;
+    color: #333;
+}
+
+.value {
+    background-color: #E0EEC6; 
+    height: 28px;
+    border-radius: 20px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center; 
+    font-size: 14px;
+    color: #333;
+    max-width: 250px; 
+}
+.ASAContainer{
+    margin-bottom: 24px;
+}
