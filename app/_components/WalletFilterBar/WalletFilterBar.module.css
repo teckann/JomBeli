@@ -78,3 +78,40 @@
   background-color: var(--color-primary-dark);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .filterBar {
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    gap: 10px;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  .filterDiv1 {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filterDiv2 {
+    width: 100%;
+  }
+
+  .filter {
+    flex: 1;
+    min-width: calc(50% - 5px);
+    flex-direction: row;
+    gap: 10px;
+    padding: 0;
+  }
+
+  .filter select,
+  .button {
+    padding: 0.6rem 1rem;
+  }
+}

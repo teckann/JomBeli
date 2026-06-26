@@ -3,7 +3,6 @@ import {
   getTransactions,
 } from "@/app/_lib/data-services";
 import styles from "./TransactionRecords.module.css";
-import Image from "next/image";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
 
 async function TransactionRecords({ userID, month, type }) {
@@ -21,7 +20,9 @@ async function TransactionRecords({ userID, month, type }) {
     <div className={styles.main}>
       <h2>Transaction History</h2>
 
-      <div className={styles.content}>
+      <div
+        className={`${styles.content} ${length === 0 ? styles.contentNoData : ""}`}
+      >
         {length === 0 ? (
           <TempCoverComponent
             imagePath="/data-not-found.png"

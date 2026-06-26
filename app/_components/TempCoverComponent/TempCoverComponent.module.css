@@ -37,3 +37,28 @@
 .image {
   object-fit: cover;
 }
+
+@media (max-width: 768px) {
+  .mainNoData {
+    width: 100%;
+    padding: 2rem 0;
+    gap: 15px;
+  }
+
+  .mainNoData h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .mainNoData p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .imageContainer {
+    width: 200px;
+    height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+  }
+}
