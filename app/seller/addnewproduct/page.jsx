@@ -289,7 +289,7 @@ export default function AddNewProduct () {
                         </div>
                         <div className={styles.actionBtns}>
                             <button type="button" onClick={handleAddOption} className={styles.iconBtn}>＋</button>
-                            <button type="button" onClick={() => handleRemoveOption(idx)} className={styles.iconBtn}>🗑️</button>
+                            <button type="button" onClick={() => handleRemoveOption(idx)} className={styles.iconBtn}>X</button>
                         </div>
                         </div>
                     ))}
@@ -346,7 +346,7 @@ export default function AddNewProduct () {
                                 </td>
                                 <td>
                                 <button type="button" onClick={() => handleRemoveCombo(idx)} className={styles.deleteRowBtn}>
-                                    🗑️
+                                    X
                                 </button>
                                 </td>
                             </tr>
