@@ -4,10 +4,12 @@ import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
 import styles from "./page.module.css";
 import ThemeToggleButton from "../_components/ThemeToggleButton";
 import SignOutButton from "../_components/SignOutButton";
+import { Suspense } from "react";
+import Spinner from "../_components/Spinner/Spinner";
 
 export default async function Home() {
-  const dailyDiscover = await getProducts();
-  const discountProducts = await getTop4DiscountProducts();
+  // const dailyDiscover = await getProducts();
+  // const discountProducts = await getTop4DiscountProducts();
   // console.log(dailyDiscover);
 
   return (
@@ -34,7 +36,9 @@ export default async function Home() {
           </Link>
         </div>
 
-        <ProductListing products={discountProducts} />
+        <Suspense fallback={<Spinner />}>
+          <ProductListing type="discountProducts" />
+        </Suspense>
       </div>
 
       {/* temp */}
