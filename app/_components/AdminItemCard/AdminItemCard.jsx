@@ -3,11 +3,16 @@ import Image from "next/image";
 
 export default function AdminItemCard({id, name, category, itemStatus, imageUrl}) {
 
+    const activeImage = imageUrl?.length > 0 ? imageUrl[0] : null;
+
     return (
         <div className={ Styles.itemCard }>
             <div>
-                {console.log(imageUrl)}
-                <Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={300} height={300} />
+                {/* {console.log(imageUrl)} */}
+                {activeImage ? (<Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={300} height={300} />
+                ):(
+                    <div className={Styles.itemImage}>No Image Found</div>
+                )}
             </div>
             <div className={ Styles.cardDescription }>
                 <div>

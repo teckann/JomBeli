@@ -1,8 +1,10 @@
-import { getBuyerSellerDetails, getBuyerOrderCount, getBuyerTotalSpent } from "@/app/_lib/data-services";
+import { getBuyerSellerDetails } from "@/app/_lib/data-services";
+import { getBuyerOrderCount, getBuyerTotalSpent, getSellerOrderCount, getSellerGrossEarnings } from "@/app/_lib/analysis-serives"
 import Styles from "./UserDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
+
 export default async function UserDetail({params}){
     const resolvedParams = await params;
     const userId = resolvedParams?.userId ? String (resolvedParams.userId).trim() : ""
@@ -11,6 +13,8 @@ export default async function UserDetail({params}){
     const country = user?.ADDRESSES_T?.[0]?.country || "No country provided";
     const OrderCount = await getBuyerOrderCount(userId);
     const TotalSpent = await getBuyerTotalSpent(userId);
+    const SellerOrderCount = await getSellerOrderCount(userId); 
+    const GrossEarnings = await getSellerGrossEarnings(userId);
 
     return(
         <div className={Styles.userDetailsPage}>
@@ -35,7 +39,7 @@ export default async function UserDetail({params}){
                 </div>
                 <div className={Styles.rightSide}>
                     <AccountSecurityAnalysis user={user} />
-                    <AccountActivityMonitoring user={user} OrderCount={OrderCount} TotalSpent={TotalSpent}/>
+                    <AccountActivityMonitoring user={user} OrderCount={OrderCount} TotalSpent={TotalSpent} SellerItemsSold={SellerOrderCount} GrossEarnings={GrossEarnings}/>
                 </div>
             </div>
         </div>

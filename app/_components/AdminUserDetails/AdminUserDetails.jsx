@@ -35,7 +35,7 @@ export function UserInformation({ user, country }){
     )
 }
 
-export function AccountActivityMonitoring({ user,OrderCount,TotalSpent }){
+export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerItemsSold,GrossEarnings }){
     return(
         <>
         <div className={Styles.headerWrapper}>
@@ -48,27 +48,31 @@ export function AccountActivityMonitoring({ user,OrderCount,TotalSpent }){
             <div className={Styles.value}>{}</div> */}
             {user?.role === 'Buyer' && (
                 <>
-                {/* <PlaceholderIcon /> */}
+                
                 <span className={Styles.label}>Total Order History</span>
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>{OrderCount}</div>
-                {/* <PlaceholderIcon /> */}
+               
                 <span className={Styles.label}>Total Purchase Amount</span>
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>{TotalSpent ? TotalSpent.toFixed(2) : "-"}</div>
-                {/* <PlaceholderIcon /> */}
-                <span className={Styles.label}>Current Balance</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{user.balances}</div>
+                
                 </>
             )}
             {user?.role === 'Seller' &&(
                 <>
                 <span className={Styles.label}>Total Items Sold</span>
                 <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{}</div>
+                <div className={Styles.value}>{SellerItemsSold}</div>
+
+                <span className={Styles.label}>Gross Earnings</span>
+                <span className={Styles.colon}>:</span>
+                <div className={Styles.value}>{GrossEarnings}</div>
                 </>
             )}
+            <span className={Styles.label}>Current Balance</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.balances != null ? Number(user.balances).toFixed(2) : "-"}</div>
         </div>
         </>
     )

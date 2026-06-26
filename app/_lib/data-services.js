@@ -324,6 +324,10 @@ export async function getBuyerSellerDetails(userId) {
     created_at: data.created_at
       ? data.created_at.substring(0, 10)
       : "No date provided",
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar ? [data.avatar] : []
   };
 
   return cleanedData;
@@ -376,38 +380,6 @@ export async function setBalances(userID, amount) {
     console.error("Insert error:", error);
     throw new Error("Update balances failed");
   }
-}
-
-export async function getBuyerOrderCount(userId){
-  const supabase = await createClient();
-  const { count,error } = await supabase
-    .from("ORDERS_T")
-    .select("*",{count: 'exact', head:'true'})
-    .eq("buyer_id",userId)
-
-  if (error){
-    console.error("Error fetching count:",error);
-    return 0;
-  }
-
-  return count;
-}
-
-export async function getBuyerTotalSpent(userId){
-  const supabase = await createClient();
-  const { data: orders, error} = await supabase
-  .from("ORDERS_T")
-  .select("total_amount")
-  .eq("buyer_id", userId);
-
-  if (error){
-    console.error("Error fetching prices:", error);
-    return 0;
-  }
-  //This takes the current sum and adds the next order's price to it and starts from 0
-  const totalAmount = orders.reduce((sum, order)=> sum + order.total_amount, 0);
-
-  return totalAmount;
 }
 
 export async function getTop4DiscountProducts() {
