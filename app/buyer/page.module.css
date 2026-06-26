@@ -31,3 +31,9 @@
   text-decoration: none;
   color: var(--color-primary);
 }
+
+.temp {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

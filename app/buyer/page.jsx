@@ -3,6 +3,7 @@ import ProductListing from "../_components/ProductListing/ProductListing";
 import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
 import styles from "./page.module.css";
 import ThemeToggleButton from "../_components/ThemeToggleButton";
+import SignOutButton from "../_components/SignOutButton";
 
 export default async function Home() {
   const dailyDiscover = await getProducts();
@@ -23,7 +24,11 @@ export default async function Home() {
         <ProductListing products={discountProducts} />
       </div>
 
-      <ThemeToggleButton />
+      {/* temp */}
+      <div className={styles.temp}>
+        <ThemeToggleButton />
+        <SignOutButton />
+      </div>
     </main>
   );
 }
