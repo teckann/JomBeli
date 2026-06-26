@@ -383,14 +383,17 @@ export async function getTop4DiscountProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
-    .order("created_at", { ascending: false })
-    .order("discount", { ascending: false })
-    .limit(5);
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
     throw new Error("Could not fetch discount products");
   }
 
-  return data;
+  const result = data
+    .filter((p) => (p.discount ?? 0) > 0)
+    .sort((a, b) => b.discount - a.discount)
+    .slice(0, 5);
+
+  return result;
 }
