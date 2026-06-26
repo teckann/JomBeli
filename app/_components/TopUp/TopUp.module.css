@@ -1,7 +1,7 @@
 .topUpContainer {
-  background-color: var(--color-primary-subtle);
-  border: 1px solid var(--color-text-primary);
-  border-radius: 5px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 10px;
   height: 80%;
   padding: 1rem;
 
@@ -13,7 +13,7 @@
 .title {
   /* font-weight: 600; */
   /* font-size: 18px; */
-  color: var(--color-text-muted);
+  color: var(--color-font-primary);
 }
 
 .form {
@@ -37,8 +37,8 @@
   gap: 10px;
   align-items: first baseline;
   padding: 0.3rem 1.5rem;
-  background-color: #fbd9d9ac;
-  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border-primary);
   border-radius: 10px;
   /* height: 3rem; */
 }
@@ -49,7 +49,7 @@
   font-weight: bold;
   font-size: var(--text-5xl);
   /* background-color: red; */
-  color: #767575;
+  color: var(--color-font-secondary);
   width: 60%;
 }
 
@@ -63,7 +63,7 @@
 
 .inputField p {
   font-size: 20px;
-  color: #1e1e1e;
+  color: var(--color-font-primary);
   /* color: var(--color-primary); */
 }
 
@@ -91,27 +91,28 @@
 .option {
   padding: 0.5rem 2rem;
   border-radius: 10px;
-  border: 1px solid var(--color-border-strong);
-  background-color: #fbd9d9ac;
-  color: #1e1e1e;
+  border: 1px solid var(--color-border-primary);
+  background-color: var(--color-bg-input);
+  color: var(--color-font-secondary);
 }
 
 .option:hover {
-  background-color: var(--color-primary-lighter);
+  background-color: var(--color-bg-hover);
   cursor: pointer;
   font-weight: 550;
 }
 
 .paymenSelectField {
   /* background-color: blue; */
-  background-color: #fbd9d9ac;
+  background-color: var(--color-bg-input);
   display: flex;
   flex-direction: row;
   gap: 10px;
   /* padding: 1rem; */
   width: 100%;
   border-radius: 10px;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-font-secondary);
 }
 
 .paymentLogo {
@@ -131,7 +132,7 @@
   width: 70%;
   /* background-color: red; */
   padding: 2rem 1rem;
-  color: #1e1e1e;
+  color: var(--color-font-secondary);
 }
 
 .select:focus {
@@ -178,7 +179,7 @@
   width: 100%;
   padding: 14px 20px;
   background-color: var(--color-primary);
-  color: var(--color-text-on-primary);
+  color: #fff;
   border: none;
   border-radius: 10px;
   font-size: 16px;

@@ -28,9 +28,8 @@ const FilterTable = ({ changeSearch }) => {
 
 
             <div className={styles.sort}>
-                <button>
-                    Sort By
-                </button>
+
+                <select name="" id=""></select>
                 
                 
             </div>

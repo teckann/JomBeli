@@ -19,7 +19,7 @@ export default function Navbar() {
       </div>
      
       <nav className={styles.nav}>
-        <a href="#" className={styles.navLink}>Overview</a>
+        <a href="/seller" className={styles.navLink}>Overview</a>
         <a href="#" className={styles.navLinkActive}>My Store</a>
         <a href="#" className={styles.navLink}>Orders</a>
         <a href="/seller/refunds" className={styles.navLink}>Refunds</a>

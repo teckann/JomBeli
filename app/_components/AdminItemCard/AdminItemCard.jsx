@@ -6,7 +6,8 @@ export default function AdminItemCard({id, name, category, itemStatus, imageUrl}
     return (
         <div className={ Styles.itemCard }>
             <div>
-                <Image className={Styles.itemImage} src={imageUrl} alt="Product Image" width={300} height={300} />
+                {console.log(imageUrl)}
+                <Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={300} height={300} />
             </div>
             <div className={ Styles.cardDescription }>
                 <div>

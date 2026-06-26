@@ -1,51 +1,47 @@
-import SignOutButton from "../_components/SignOutButton";
-import StarRating from "../_components/StarRating/StarRating";
+import Link from "next/link";
+import ProductListing from "../_components/ProductListing/ProductListing";
+import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
+import styles from "./page.module.css";
 import ThemeToggleButton from "../_components/ThemeToggleButton";
-import { getUser } from "../_lib/auth";
-import { getUserInfo } from "../_lib/data-services";
-import { getWalletBalance } from "@/app/_lib/data-services";
-
-export const revalidate = 0;
+import SignOutButton from "../_components/SignOutButton";
 
 export default async function Home() {
-  const user = await getUser();
-  // console.log(user);
-
-  const userInfo = await getUserInfo(user.id);
-  const balance = await getWalletBalance(user.id);
-  console.log(balance);
+  const dailyDiscover = await getProducts();
+  const discountProducts = await getTop4DiscountProducts();
+  // console.log(dailyDiscover);
 
   return (
-    <div>
-      <h1>[Buyer] Home Page</h1>
+    <main className={styles.main}>
+      <div className={styles.bannerArea}>Banner</div>
 
-      <p>
-        User ID: <span>{user.id}</span>
-      </p>
+      <div className={styles.discountProductsArea}>
+        <div className={styles.titleContainer}>
+          <div className={styles.title}>
+            <svg
+              className={styles.icon}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              preserveAspectRatio="none"
+            >
+              <path d="M13 2L3 14h7l-1 8 12-14h-7l-1-6z" />
+            </svg>
+            <p>Special Offers</p>
+          </div>
 
-      <p>
-        Status: <span>{user.aud}</span>
-      </p>
+          <Link className={styles.link} href="/buyer/category">
+            See all
+          </Link>
+        </div>
 
-      <p>
-        Name: <span>{userInfo.username}</span>
-      </p>
+        <ProductListing products={discountProducts} />
+      </div>
 
-      <p>
-        Email: <span>{user.email}</span>
-      </p>
-
-      <p>
-        Balance: <span>RM{balance.balances}</span>
-      </p>
-
-      <SignOutButton />
-      <br />
-      <ThemeToggleButton />
-      <br />
-
-      {/* testing */}
-      <StarRating />
-    </div>
+      {/* temp */}
+      <div className={styles.temp}>
+        <ThemeToggleButton />
+        <SignOutButton />
+      </div>
+    </main>
   );
 }

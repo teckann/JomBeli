@@ -44,8 +44,24 @@ export default function AddNewProduct () {
             setSKU([]);
             return;
         }
-      
+
+        // Cartesian Product (to generate sku)
         const generateCartesian = (arrays) => {
+            // reduce = gabung eh function
+            // acc = accumulator (edi gabung eh group)
+            // curr = current (now gabunging eh)
+            
+            // S1: first array is [["red", "blue"], {["1TB"]]
+            // now the acc still is a empty []
+            // now i take a = [] this empty basket
+            // and take the "red" and store into a = []
+            // "blue also same"
+            // so now the acc = [["red"], ["blue"]]
+
+            // S2: next loop ["1TB"]
+            // now the acc = [["red"], ["blue"]]
+            // use res.push([...a, b]); to push 1TB into each []
+            // u will get [["red", "1TB"], ["blue", "1TB"]]
             return arrays.reduce((acc, curr) => {
                 const res = [];
                 acc.forEach(a => {
@@ -63,7 +79,7 @@ export default function AddNewProduct () {
             const skuName = combo.join('-'); 
 
             const existing = sku.find(c => c.sku === skuName);
-            
+
             return {
                 sku: skuName,
                 price: existing ? existing.price : '',
@@ -73,8 +89,7 @@ export default function AddNewProduct () {
             });
 
             setSKU(newCombinations);
-            }, [variants, sku]);
-
+        }, [variants, sku]);
         const handleAddOption = () => {
             setVariants([...variants, { option: '', values: '' }]);
         };
@@ -91,7 +106,6 @@ export default function AddNewProduct () {
             setVariants(updated);
         };
 
-        // when seller input price, stock and pic
         const handleComboChange = (index, field, value) => {
             const updated = [...combinations];
             updated[index][field] = value;
@@ -103,7 +117,6 @@ export default function AddNewProduct () {
             setCombinations(combinations.filter((_, i) => i !== index));
         };
 
-        // not done yet
         const handleSubmit = async (e) => {
             e.preventDefault();
             
@@ -113,7 +126,98 @@ export default function AddNewProduct () {
             };
         };
 
+          return (
+            <div className={styles.container}>
+            <button className={styles.backBtn} onClick={() => window.history.back()}>← Back</button>
+            <h1 className={styles.pageTitle}>ADD NEW PRODUCT</h1>
+
+            <form onSubmit={handleSubmit} className={styles.mainForm}>
+                
+                <section className={styles.card}>
+                <h2>Core Specification</h2>
+                <div className={styles.row}>
+                    <div className={styles.inputGroup}>
+                    <label>Product Name :</label>
+                    <input 
+                        type="text" 
+                        value={coreSpec.productName}
+                        onChange={(e) => setCoreSpec({...coreSpec, productName: e.target.value})}
+                        required 
+                    />
+                    </div>
+                    <div className={styles.inputGroup}>
+                    <label>Category :</label>
+                    <input 
+                        type="text" 
+                        value={coreSpec.category}
+                        onChange={(e) => setCoreSpec({...coreSpec, category: e.target.value})}
+                        required 
+                    />
+                    </div>
+                </div>
+                <div className={styles.inputGroup} style={{ marginTop: '15px' }}>
+                    <label>Description :</label>
+                    <textarea 
+                    rows="4" 
+                    value={coreSpec.description}
+                    onChange={(e) => setCoreSpec({...coreSpec, description: e.target.value})}
+                    required
+                    />
+                </div>
+                </section>
+
+                <section className={styles.card}>
+                    <h2>Product Variants</h2>
+                    <p className={styles.tip}>Tip: Separate multiple values with commas (e.g., Red, Blue, Green)</p>
+                    
+                    {variants.map((v, idx) => (
+                        <div key={idx} className={styles.variantRow}>
+                        <div className={styles.inputGroup}>
+                            <label>Option :</label>
+                            <input 
+                            type="text" 
+                            placeholder="e.g., Color" 
+                            value={v.option}
+                            onChange={(e) => handleVariantChange(idx, 'option', e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            <label>Value :</label>
+                            <input 
+                            type="text" 
+                            placeholder="e.g., Red, Blue" 
+                            value={v.values}
+                            onChange={(e) => handleVariantChange(idx, 'values', e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.actionBtns}>
+                            <button type="button" onClick={handleAddOption} className={styles.iconBtn}>＋</button>
+                            <button type="button" onClick={() => handleRemoveOption(idx)} className={styles.iconBtn}>🗑️</button>
+                        </div>
+                        </div>
+                    ))}
+                    
+                    <button type="button" onClick={handleAddOption} className={styles.addMoreLink}>
+                        Add more option
+                    </button>
+                    </section>
+
+               
+
+
+
+
+
+               
+            </form>
+            </div>
+
+            
+        );
+
 
 
 
     }
+
+ 

@@ -35,7 +35,10 @@ export async function initializeNewUser(id, fullName) {
 
 export async function getProducts() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("PRODUCTS_T").select("*");
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
@@ -50,17 +53,17 @@ export async function getBuyerSellerInfo() {
   const { data, error } = await supabase
     .from("USERS_T")
     .select(
-      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)"
+      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)",
     )
-    .in("role",["Buyer","Seller"]);
-    
-    // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
+    .in("role", ["Buyer", "Seller"]);
+
+  // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
 
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
   }
-  
+
   return formatUserData(data);
 }
 
@@ -73,18 +76,18 @@ export function formatUserData(data) {
   // Map through and format the data
   return data.map((user) => {
     let fullAddress = "-";
-    
+
     // String the address together
     if (user.ADDRESSES_T) {
       const addr = user.ADDRESSES_T;
       const addressParts = [
-        addr.street, 
-        addr.city, 
-        addr.state, 
-        addr.postcode, 
-        addr.country
-      ].filter(Boolean); 
-      
+        addr.street,
+        addr.city,
+        addr.state,
+        addr.postcode,
+        addr.country,
+      ].filter(Boolean);
+
       if (addressParts.length > 0) {
         fullAddress = addressParts.join(", ");
       }
@@ -268,10 +271,11 @@ export async function getSellerVoucher(id) {
 export async function getSellerRefund(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
-    .from("VOUCHERS_T")
-    .select("*")
-    .eq("user_id", id)
-    .eq("voucher_type", "shop");
+    .from("REFUNDS_T")
+    .select(
+      "*, ORDERS_T!inner(seller_id), temp_date:created_at::date, temp_time:created_at::time, ref_temp_date:refunded_at::date, ref_temp_time:refunded_at::time",
+    )
+    .eq("ORDERS_T.seller_id", id);
 
   if (error) {
     console.error("Failed to fetch balance:", error.message);
@@ -298,26 +302,28 @@ export async function deactiveProduct(productId) {
   return data;
 }
 
-export async function getBuyerSellerDetails(userId){
+export async function getBuyerSellerDetails(userId) {
   const supabase = await createClient();
 
-  const { data,error } = await supabase
+  const { data, error } = await supabase
     .from("USERS_T")
     .select("*, ADDRESSES_T(street, city, state, postcode, country)")
-    .eq("user_id",userId)
+    .eq("user_id", userId)
     .single();
 
   // console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
 
-  if(error) {
-    console.error("Fetch user data error:", error)
-    throw new Error("Could not find user")
+  if (error) {
+    console.error("Fetch user data error:", error);
+    throw new Error("Could not find user");
   }
   const cleanedData = {
     ...data, // copy all the original user data
-    
+
     // overwrites the created_at field with the cleaned 10-character date
-    created_at: data.created_at ? data.created_at.substring(0, 10) : "No date provided"
+    created_at: data.created_at
+      ? data.created_at.substring(0, 10)
+      : "No date provided",
   };
 
   return cleanedData;
@@ -328,7 +334,8 @@ export async function getProductDetails(productId) {
 
   const { data, error } = await supabase
     .from("PRODUCTS_T")
-    .select(`
+    .select(
+      `
       *,
       USERS_T!PRODUCTS_T_user_id_fkey (
         username
@@ -340,14 +347,15 @@ export async function getProductDetails(productId) {
         product_variant_stock,
         product_variant_status
       )
-    `)
+    `,
+    )
     .eq("product_id", productId)
     .single();
 
   if (error) {
     console.error("Fetch product details error:", error);
     throw new Error("Could not fetch product details");
-  } 
+  }
 
   return data;
 }
@@ -400,4 +408,21 @@ export async function getBuyerTotalSpent(userId){
   const totalAmount = orders.reduce((sum, order)=> sum + order.total_amount, 0);
 
   return totalAmount;
+}
+
+export async function getTop4DiscountProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .order("discount", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch discount products");
+  }
+
+  return data;
 }
