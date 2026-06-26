@@ -15,11 +15,14 @@ export default function AddNewProduct () {
         description: ''
     });
 
+    // for Part 2 and 3 need use [] cuz can have more than 1 set of data
+    // Part 2: Product Variants
     const [variants, setVariants] = useState ([{
         option: '',
         values: '',
     }])
 
+    // Part 3: sku
     const [sku, setSKU] = useState ([])
 
     useEffect(() => {
@@ -44,7 +47,8 @@ export default function AddNewProduct () {
             setSKU([]);
             return;
         }
-      
+
+        // Cartesian Product (to generate sku)
         const generateCartesian = (arrays) => {
             return arrays.reduce((acc, curr) => {
                 const res = [];
@@ -63,7 +67,7 @@ export default function AddNewProduct () {
             const skuName = combo.join('-'); 
 
             const existing = sku.find(c => c.sku === skuName);
-            
+
             return {
                 sku: skuName,
                 price: existing ? existing.price : '',
@@ -73,8 +77,7 @@ export default function AddNewProduct () {
             });
 
             setSKU(newCombinations);
-            }, [variants, sku]);
-
+        }, [variants, sku]);
         const handleAddOption = () => {
             setVariants([...variants, { option: '', values: '' }]);
         };
@@ -84,14 +87,12 @@ export default function AddNewProduct () {
             setVariants(updated.length > 0 ? updated : [{ option: '', values: '' }]);
         };
 
-        // change data
         const handleVariantChange = (index, field, value) => {
             const updated = [...variants];
             updated[index][field] = value;
             setVariants(updated);
         };
 
-        // when seller input price, stock and pic
         const handleComboChange = (index, field, value) => {
             const updated = [...combinations];
             updated[index][field] = value;
@@ -103,7 +104,6 @@ export default function AddNewProduct () {
             setCombinations(combinations.filter((_, i) => i !== index));
         };
 
-        // not done yet
         const handleSubmit = async (e) => {
             e.preventDefault();
             
@@ -113,7 +113,54 @@ export default function AddNewProduct () {
             };
         };
 
+          return (
+            <div className={styles.container}>
+            <button className={styles.backBtn} onClick={() => window.history.back()}>← Back</button>
+            <h1 className={styles.pageTitle}>ADD NEW PRODUCT</h1>
+
+            <form onSubmit={handleSubmit} className={styles.mainForm}>
+                
+                <section className={styles.card}>
+                <h2>Core Specification</h2>
+                <div className={styles.row}>
+                    <div className={styles.inputGroup}>
+                    <label>Product Name :</label>
+                    <input 
+                        type="text" 
+                        value={coreSpec.productName}
+                        onChange={(e) => setCoreSpec({...coreSpec, productName: e.target.value})}
+                        required 
+                    />
+                    </div>
+                    <div className={styles.inputGroup}>
+                    <label>Category :</label>
+                    <input 
+                        type="text" 
+                        value={coreSpec.category}
+                        onChange={(e) => setCoreSpec({...coreSpec, category: e.target.value})}
+                        required 
+                    />
+                    </div>
+                </div>
+                <div className={styles.inputGroup} style={{ marginTop: '15px' }}>
+                    <label>Description :</label>
+                    <textarea 
+                    rows="4" 
+                    value={coreSpec.description}
+                    onChange={(e) => setCoreSpec({...coreSpec, description: e.target.value})}
+                    required
+                    />
+                </div>
+                </section>
+
+               
+            </form>
+            </div>
+        );
+
 
 
 
     }
+
+ 
