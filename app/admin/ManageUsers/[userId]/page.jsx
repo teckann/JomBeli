@@ -1,6 +1,7 @@
 import { getBuyerSellerDetails } from "@/app/_lib/data-services";
 import Styles from "./UserDetail.module.css";
-import Image from "next/image";
+import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
+import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 
 export default async function UserDetail({params}){
     const resolvedParams = await params;
@@ -12,8 +13,8 @@ export default async function UserDetail({params}){
     return(
         <div className={Styles.userDetailsPage}>
             <div className={Styles.upperContainer}>
-                <div classname={Styles.buttonContainer}>
-                    <button className={Styles.backButton}>Back</button>
+                <div className={Styles.buttonContainer}>
+                    <BackButton className={Styles.backButton} />
                 </div>
                 <div className={Styles.pageHeader}>
                     <h1 className={Styles.header}>View User Page</h1>
@@ -23,6 +24,30 @@ export default async function UserDetail({params}){
                         <button className={Styles.btnSecondary}>View order history</button>
                         <button className={Styles.btnSecondary}>View transaction history</button>
                     </div>
+                    <AdminItemCard id={user.user_id} name={user.username} category={user.role} itemStatus={user.user_status} imageUrl={user.avatar}/>
+                </div>
+            </div>
+            <div className={Styles.lowerContainer}>
+                <div className={Styles.leftSide}>
+                    <UserInformation user={user} country={country} />
+                </div>
+                <div className={Styles.rightSide}>
+
+                </div>
+            </div>
+        </div>
+    )
+}
+
+{/* <div className={Styles.upperContainer}>
+                <div classname={Styles.buttonContainer}>
+                    <button className={Styles.backButton}>Back</button>
+                </div>
+                <div className={Styles.pageHeader}>
+                    <h1 className={Styles.header}>View User Page</h1>
+                </div>
+                <div className={Styles.profileContainer}>
+                    
                     <Image className={Styles.avatarCircle} src={user.avatar} width={250} height={250}/>
                     <div className={Styles.userinfo}>
                         <h2 className={Styles.userName}>{user.username}</h2>
@@ -32,43 +57,63 @@ export default async function UserDetail({params}){
                         </div >   
                         <span className={Styles.badgeWide}>{user.user_status}</span>
                     </div>
-                </div>
-            </div>
-            <div className={Styles.lowerContainer}>
-                <div className={Styles.leftSide}>
-                    <div className={Styles.headerWrapper}>
-                        <h3 className={Styles.sectionTitle}>Personal Information</h3>
-                    </div>
-                    <div className={Styles.infoGrid}>
-                        <span className={Styles.label}>User Name</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{user.username}</div>
+                </div> */}
 
-                        <span className={Styles.label}>Gender</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{user.gender}</div>
+export function UserInformation({ user, country }){
+    return(
+    <>
+        <div className={Styles.headerWrapper}>
+            <h3 className={Styles.sectionTitle}>Personal Information</h3>
+        </div>
+        <div className={Styles.infoGrid}>
+            <span className={Styles.label}>User Name</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user.username}</div>
 
-                        <span className={Styles.label}>Nationality</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{country}</div>
+            <span className={Styles.label}>Gender</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user.gender}</div>
 
-                        <span className={Styles.label}>Email</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{user.email}</div>
+            <span className={Styles.label}>Nationality</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{country}</div>
 
-                        <span className={Styles.label}>Contact Number</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{user.contact_number}</div>
+            <span className={Styles.label}>Email</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user.email}</div>
 
-                        <span className={Styles.label}>Registration Date</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.value}>{user.created_at}</div>
-                    </div>
-                </div>
-                <div className={Styles.rightSide}>
+            <span className={Styles.label}>Contact Number</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user.contact_number}</div>
 
-                </div>
+            <span className={Styles.label}>Registration Date</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user.created_at}</div>
+        </div>
+    </>    
+    )
+}
+
+export function AccountActivityMonitoring({ user }){
+    return(
+        <>
+        <div className={Styles.sectionContainer}>
+            <h3 className={Styles.sectionTitle}>User Activity Monitoring</h3>
+        </div>
+        <div>
+            <div className={Styles.listGroup}>
+                <PlaceholderIcon />
+                <span className={Styles.label}>Last Login</span>
+                <span className={Styles.colon}>:</span>
+                <div className={Styles.value}>{user.created_at}</div>
             </div>
         </div>
+        </>
+    )
+}
+
+export function AccountSecurityAnalysis({ user }){
+    return(
+        <></>
     )
 }
