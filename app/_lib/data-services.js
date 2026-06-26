@@ -272,7 +272,9 @@ export async function getSellerRefund(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("REFUNDS_T")
-    .select("*, ORDERS_T!inner(seller_id), temp_date:created_at::date, temp_time:created_at::time, ref_temp_date:refunded_at::date, ref_temp_time:refunded_at::time")
+    .select(
+      "*, ORDERS_T!inner(seller_id), temp_date:created_at::date, temp_time:created_at::time, ref_temp_date:refunded_at::date, ref_temp_time:refunded_at::time",
+    )
     .eq("ORDERS_T.seller_id", id);
 
   if (error) {
@@ -376,6 +378,38 @@ export async function setBalances(userID, amount) {
   }
 }
 
+export async function getBuyerOrderCount(userId){
+  const supabase = await createClient();
+  const { count,error } = await supabase
+    .from("ORDERS_T")
+    .select("*",{count: 'exact', head:'true'})
+    .eq("buyer_id",userId)
+
+  if (error){
+    console.error("Error fetching count:",error);
+    return 0;
+  }
+
+  return count;
+}
+
+export async function getBuyerTotalSpent(userId){
+  const supabase = await createClient();
+  const { data: orders, error} = await supabase
+  .from("ORDERS_T")
+  .select("total_amount")
+  .eq("buyer_id", userId);
+
+  if (error){
+    console.error("Error fetching prices:", error);
+    return 0;
+  }
+  //This takes the current sum and adds the next order's price to it and starts from 0
+  const totalAmount = orders.reduce((sum, order)=> sum + order.total_amount, 0);
+
+  return totalAmount;
+}
+
 export async function getTop4DiscountProducts() {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -383,7 +417,7 @@ export async function getTop4DiscountProducts() {
     .select("*")
     .order("created_at", { ascending: false })
     .order("discount", { ascending: false })
-    .limit(4);
+    .limit(5);
 
   if (error) {
     console.error("Failed to fetch products:", error.message);

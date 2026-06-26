@@ -3,8 +3,10 @@ import styles from "./ProductListing.module.css";
 
 function ProductListing({ products }) {
   return (
-    <div>
-      <ProductCard />
+    <div className={styles.main}>
+      {products.map((product) => (
+        <ProductCard key={product.product_id} product={product} />
+      ))}
     </div>
   );
 }
