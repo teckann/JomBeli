@@ -6,9 +6,24 @@
 }
 
 .searchUserBar{
-
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
 }
 
 .roleDropdown{
-    
+    padding: 10px; 
+    border-radius: 5px;
+    border: none;
+}
+
+.statusDropdown{
+    padding: 10px; 
+    border-radius: 5%;
+    border: none;
+}
+
+.roleAndStatus{
+    display:flex;
+    gap: 16px;
 }

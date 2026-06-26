@@ -1,0 +1,138 @@
+.userDetailsPage{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.header{
+    margin-left: 2%;
+}
+
+.upperContainer{
+    width: 100%;
+    background-color: #e5deca;
+}
+
+.buttonContainer{
+    display: flex;
+    align-items: center; /* Vertically centers the items */
+    gap: 30px;
+}
+
+.backButton{
+    background-color: #f2f2f2;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+    margin: 2% 0 1% 2%;
+}
+
+.profileContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Vertically centers the items */
+    gap: 30px; /* Space between buttons, avatar, and text */
+}
+
+.actionButtons {
+    margin: 2%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between the two buttons */
+}
+
+.btnSecondary {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btnSecondary:hover {
+    background-color: #e6e6e6;
+}
+
+/* --- Middle Column: Avatar --- */
+.avatarCircle {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d9d9d9;
+    border-radius: 50%; /* Makes it a perfect circle */
+    flex-shrink: 0; /* Prevents the circle from squishing */
+    margin-bottom: 1.5%;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between name, top badges, and bottom badge */
+}
+
+.userName {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 1.5%;
+    color: #000;
+}
+
+.badgeRow {
+    display: flex;
+    gap: 10px;
+}
+
+.badge {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 4px 16px;
+    border-radius: 20px; /* High border-radius for the pill shape */
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 20;
+}
+
+.badgeWide {
+    display:flex;
+    background-color: #e0e0e0;
+    justify-content: center;
+    color: #333;
+    padding: 4px 16px;
+    border-radius: 20px; 
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.lowerContainer {
+    display:flex;
+    width:100%;
+    /* background-color: #e5deca; */
+    flex: 1;
+}
+
+.leftSide {
+    width:50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rightSide {
+    width:50%;
+    display: flex;
+    flex-direction: column;
+}

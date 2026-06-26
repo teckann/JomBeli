@@ -140,7 +140,8 @@ export async function getFilterUsers(role, status, username) {
     
     let query = supabase
                 .from("USERS_T")
-                .select("*, ADDRESSES_T(street, city, state, postcode, country)");
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .in("role",["Buyer","Seller"]);
 
     if (username?.trim()){
       query = query.ilike("username", `%${username}%`);
