@@ -61,7 +61,14 @@
     padding: 1em 0;
 }
 
-
+.bottomPart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    flex-direction: column;
+    width: 100%;
+}
 
 
 .informationListFrame {
