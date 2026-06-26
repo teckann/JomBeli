@@ -1,51 +1,26 @@
-import SignOutButton from "../_components/SignOutButton";
-import StarRating from "../_components/StarRating/StarRating";
-import ThemeToggleButton from "../_components/ThemeToggleButton";
-import { getUser } from "../_lib/auth";
-import { getUserInfo } from "../_lib/data-services";
-import { getWalletBalance } from "@/app/_lib/data-services";
-
-export const revalidate = 0;
+import Link from "next/link";
+import ProductListing from "../_components/ProductListing/ProductListing";
+import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
+import styles from "./page.module.css";
 
 export default async function Home() {
-  const user = await getUser();
-  // console.log(user);
-
-  const userInfo = await getUserInfo(user.id);
-  const balance = await getWalletBalance(user.id);
-  console.log(balance);
+  const dailyDiscover = await getProducts();
+  const discountProducts = await getTop4DiscountProducts();
+  // console.log(dailyDiscover);
 
   return (
-    <div>
-      <h1>[Buyer] Home Page</h1>
+    <main className={styles.main}>
+      <div className={styles.bannerArea}>Banner</div>
 
-      <p>
-        User ID: <span>{user.id}</span>
-      </p>
-
-      <p>
-        Status: <span>{user.aud}</span>
-      </p>
-
-      <p>
-        Name: <span>{userInfo.username}</span>
-      </p>
-
-      <p>
-        Email: <span>{user.email}</span>
-      </p>
-
-      <p>
-        Balance: <span>RM{balance.balances}</span>
-      </p>
-
-      <SignOutButton />
-      <br />
-      <ThemeToggleButton />
-      <br />
-
-      {/* testing */}
-      <StarRating />
-    </div>
+      <div className={styles.discountProductsArea}>
+        <div className={styles.titleContainer}>
+          <h2 className={styles.title}>Special Offers</h2>
+          <Link className={styles.link} href="/buyer/category">
+            See all
+          </Link>
+        </div>
+        <ProductListing products={discountProducts} />
+      </div>
+    </main>
   );
 }
