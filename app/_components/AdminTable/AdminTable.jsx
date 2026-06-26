@@ -11,8 +11,9 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
     // name = title name, icon = icon function, handler = handle action, show = precondition for show
     // define icon and actions
     // under {}, object are iterable (kkep object properties), [] only iterable for array
-    const actionMaps = {viewProduct: {name: "View", icon: <InfoIcon />, handler: (product) => router.push(`/admin/ManageProducts/${getdataPath(product, "product_id")}`), show: (data) => true},
-                        viewUsers: {name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true}};
+    const actionMaps = {viewProduct: {name: "View", icon: <InfoIcon />, handler: (product) => router.push(`/admin/ManageProducts/${getdataPath(product, "product_id")}`), show: (product) => true},
+                        viewUsers: {name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true},
+                    viewReviewer: {name: "View Reviewer", icon: <InfoIcon />, handler: (review) => router.push(`/admin/ManageUsers/${getdataPath(review, "user_id")}`), show: (review) => true}};
 
     // console.log(datas);
 

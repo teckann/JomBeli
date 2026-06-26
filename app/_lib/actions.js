@@ -281,17 +281,15 @@ export async function BuyerContactForm(formData) {
     return { error: "All fields are required." };
   }
 
-  const { error } = await supabase
-    .from("SUPPORTS_T")
-    .insert([
-      { 
-        support_id: supportId, 
-        support_type: category,
-        support_description: message,
-        support_status: "pending",
-        reporter_id: userID,
-      },
-    ]);
+  const { error } = await supabase.from("SUPPORTS_T").insert([
+    {
+      support_id: supportId,
+      support_type: category,
+      support_description: message,
+      support_status: "pending",
+      reporter_id: userID,
+    },
+  ]);
 
   if (error) {
     console.error("Supabase Error:", error.message);

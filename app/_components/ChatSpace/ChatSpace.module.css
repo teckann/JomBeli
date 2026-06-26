@@ -50,6 +50,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+  padding: 0 1rem;
   overflow-y: auto;
 }
 
@@ -102,4 +103,28 @@
   width: 20px;
   height: 20px;
   color: white;
+}
+
+@media (max-width: 768px) {
+  .main,
+  .mainNoData {
+    width: calc(100% - 80px);
+    height: 100%;
+  }
+
+  .mainNoData h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .mainNoData p {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .imageContainer {
+    width: 60%;
+    height: 200px;
+    min-height: 200px;
+  }
 }

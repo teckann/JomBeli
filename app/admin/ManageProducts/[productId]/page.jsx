@@ -5,6 +5,7 @@ import Image from "next/image";
 import AdminItemCard from '@/app/_components/AdminItemCard/AdminItemCard';
 import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
 import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
+import AdminTable from '@/app/_components/AdminTable/AdminTable';
 
 export default async function ProductDetails({params}) {
     const resolvedParams = await params;
@@ -13,6 +14,11 @@ export default async function ProductDetails({params}) {
     const product = await getProductDetails(productId);
     const sales = await getProductSales(productId);
     const reviews = await getProductReviews(productId);
+
+    // data for table
+    const titles = ["Review ID", "Reviewer Name", "Comment", "Rating", "Review Date", "status"];
+    const actions = [{type: "viewReviewer"}];
+    const fields = ["review_id", "USERS_T.username", "comment", "product_rating", "created_at", ""];
 
     const informationList = [{field: "Product Name", value: product.product_name}, {field: "Description", value: product.product_description},
         {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : product.discount}`},
@@ -62,6 +68,10 @@ export default async function ProductDetails({params}) {
                     {product.product_status === "Active" ? <AdminDeactiveProductButton productId={productId} /> : <AdminReactiveProductButton productId={productId} />}
                 </div>
             </div>
+        </div>
+        <div className={ Styles.bottomPart }>
+            <h2>{product.product_name}'s Reviews</h2>
+            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} dataIdFormat="review_id" />
         </div>
     </div>);
 }

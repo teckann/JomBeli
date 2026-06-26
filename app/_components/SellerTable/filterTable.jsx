@@ -7,7 +7,6 @@ import styles from './SellerTable.module.css';
 const FilterTable = ({ changeSearch }) => {
 
 
-
     return (
         <div className={styles.finding}>
 
@@ -27,15 +26,41 @@ const FilterTable = ({ changeSearch }) => {
 
             </div>
 
-            <div className={styles.filter}>
-                I am filter
-            </div>
+
             <div className={styles.sort}>
-                I am sort by
+                <button>
+                    Sort By
+                </button>
+                
+                
             </div>
 
         </div>
   )
 }
 
-export default FilterTable
+const FilterBig = ({ changeNav,     
+                     navDetail = [{nav: 'All', navStatus: ''},
+                                {nav: 'Active', navStatus: 'active'},
+                                {nav: 'Expired', navStatus: 'expired'},
+                                {nav: 'Inactive', navStatus: 'inactive'},
+    ] }) => {
+
+    return (
+        <div className={styles.navs}>
+            {navDetail.map((bar) => (
+                <button className={styles.nav} 
+                    onClick={(e) => {
+                        changeNav(bar.navStatus);
+                        e.target.styles.color = 'var(--color-primary)';
+
+                    }}
+                >
+                    {bar.nav} </button>
+                ))}
+        </div>
+  )
+}
+
+export default FilterTable;
+export { FilterBig }

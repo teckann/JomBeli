@@ -82,6 +82,8 @@
     flex-direction: row;
 
     padding: 20px 0 20px 20px;
+
+
 }
 
 .nav{
@@ -90,6 +92,8 @@
     border-bottom: 1px solid black;
     font-size: var(--text-base);
     width: 5%;
+
+    color: var(--color-text-primary);
 
     font-weight: 600;
     padding-bottom: 5px;
