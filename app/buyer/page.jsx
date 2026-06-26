@@ -16,11 +16,24 @@ export default async function Home() {
 
       <div className={styles.discountProductsArea}>
         <div className={styles.titleContainer}>
-          <h2 className={styles.title}>Special Offers</h2>
+          <div className={styles.title}>
+            <svg
+              className={styles.icon}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              preserveAspectRatio="none"
+            >
+              <path d="M13 2L3 14h7l-1 8 12-14h-7l-1-6z" />
+            </svg>
+            <p>Special Offers</p>
+          </div>
+
           <Link className={styles.link} href="/buyer/category">
             See all
           </Link>
         </div>
+
         <ProductListing products={discountProducts} />
       </div>
 

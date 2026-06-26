@@ -17,6 +17,9 @@
   height: auto;
   width: 100%;
   padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .titleContainer {
@@ -27,9 +30,33 @@
   align-items: center;
 }
 
+.title {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.title .icon {
+  color: var(--color-primary);
+  width: 22px;
+  height: 40px;
+}
+
+.title p {
+  font-size: 30px;
+  font-weight: 600;
+}
+
 .link {
   text-decoration: none;
+  color: var(--color-font-secondary);
+}
+
+.link:hover {
   color: var(--color-primary);
+  cursor: pointer;
 }
 
 .temp {

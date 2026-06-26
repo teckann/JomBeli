@@ -272,7 +272,9 @@ export async function getSellerRefund(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("REFUNDS_T")
-    .select("*, ORDERS_T!inner(seller_id), temp_date:created_at::date, temp_time:created_at::time, ref_temp_date:refunded_at::date, ref_temp_time:refunded_at::time")
+    .select(
+      "*, ORDERS_T!inner(seller_id), temp_date:created_at::date, temp_time:created_at::time, ref_temp_date:refunded_at::date, ref_temp_time:refunded_at::time",
+    )
     .eq("ORDERS_T.seller_id", id);
 
   if (error) {
@@ -383,7 +385,7 @@ export async function getTop4DiscountProducts() {
     .select("*")
     .order("created_at", { ascending: false })
     .order("discount", { ascending: false })
-    .limit(4);
+    .limit(5);
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
