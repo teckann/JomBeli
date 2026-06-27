@@ -8,11 +8,8 @@ export default function AdminItemCard({id, name, category, itemStatus, imageUrl}
     return (
         <div className={ Styles.itemCard }>
             <div>
-                {/* {console.log(imageUrl)} */}
-                {activeImage ? (<Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={300} height={300} />
-                ):(
-                    <div className={Styles.itemImage}>No Image Found</div>
-                )}
+                {console.log(imageUrl)}
+                <Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={100} height={100} />
             </div>
             <div className={ Styles.cardDescription }>
                 <div>
