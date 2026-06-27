@@ -4,7 +4,8 @@
   background: var(--color-bg-card);
   border: 1px solid var(--color-border-primary);
   border-radius: 12px;
-  width: 230px;
+  width: 100%;
+  max-width: 230px;
   height: 320px;
 
   display: flex;
@@ -28,6 +29,10 @@
 
   background: var(--color-bg-surface);
   margin-bottom: 12px;
+}
+
+.productImage img {
+  object-fit: cover;
 }
 
 .productInfo {
@@ -105,4 +110,51 @@
 
 .discountColor {
   color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .productCard {
+    width: 100%;
+    max-width: 100%;
+    min-height: 280px;
+    height: auto;
+    padding: 0.8rem;
+  }
+
+  .productImage {
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .productInfo h3 {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tagContainer {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 0.2rem 0.6rem;
+  }
+
+  .tag p {
+    font-size: 10px;
+  }
+
+  .price {
+    gap: 6px;
+  }
+
+  .originalPrice {
+    font-size: 12px;
+  }
+
+  .finalPrice {
+    font-size: 18px;
+  }
 }

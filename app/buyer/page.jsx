@@ -46,6 +46,24 @@ export default async function Home() {
         type="hotselling"
       />
 
+      {/* Discover */}
+      <div className={styles.discover}>
+        <div className={styles.discoverTitle}>
+          <p>Discover Products</p>
+        </div>
+
+        <div className={styles.discoverProducts}>
+          <Suspense fallback={<Spinner />}>
+            <ProductListing type="discover" />
+          </Suspense>
+        </div>
+      </div>
+
+      {/* discover more btn */}
+      <Link className={styles.btnLink} href="/buyer/category">
+        <button className={styles.button}>Discover More</button>
+      </Link>
+
       {/* temp */}
       <div className={styles.temp}>
         <ThemeToggleButton />

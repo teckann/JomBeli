@@ -454,3 +454,19 @@ export async function getHotProducts() {
 
   return data;
 }
+
+export async function getDiscoverProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot products");
+  }
+
+  return data;
+}
