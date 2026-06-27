@@ -57,8 +57,6 @@ export async function getBuyerSellerInfo() {
     )
     .in("role", ["Buyer", "Seller"]);
 
-  // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
-
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
@@ -302,7 +300,7 @@ export async function deactiveProduct(productId) {
   return data;
 }
 
-export async function getBuyerSellerDetails(userId) {
+export async function getUserDetails(userId) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
