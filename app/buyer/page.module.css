@@ -44,6 +44,12 @@
   height: 40px;
 }
 
+.title .icon_hot {
+  color: var(--color-primary);
+  width: 30px;
+  height: 60px;
+}
+
 .title p {
   font-size: 30px;
   font-weight: 600;

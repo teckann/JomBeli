@@ -438,3 +438,19 @@ export async function getDiscountProducts() {
 
   return result;
 }
+
+export async function getHotProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("total_sold", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot products");
+  }
+
+  return data;
+}

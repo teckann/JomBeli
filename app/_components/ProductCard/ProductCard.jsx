@@ -2,13 +2,14 @@ import Image from "next/image";
 import styles from "./ProductCard.module.css";
 import Link from "next/link";
 
-function ProductCard({ product }) {
+function ProductCard({ product, type }) {
   const {
     product_id: productID,
     product_name: productName,
     product_image_url: productImg,
     category,
     stock_quantity: stock,
+    total_sold: sold,
     price,
     discount,
   } = product;
@@ -31,10 +32,11 @@ function ProductCard({ product }) {
 
         <div className={styles.tagContainer}>
           <Tags
-            hasDiscount={hasDiscount}
+            type={type}
             discount={discount}
             stock={stock}
             category={category}
+            sold={sold}
           />
         </div>
 
@@ -53,7 +55,7 @@ function ProductCard({ product }) {
   );
 }
 
-const Tags = ({ hasDiscount, discount, stock, category }) => {
+const Tags = ({ type, discount, stock, category, sold }) => {
   return (
     <>
       <div className={styles.tag}>
@@ -70,7 +72,7 @@ const Tags = ({ hasDiscount, discount, stock, category }) => {
         <p>{category}</p>
       </div>
 
-      {hasDiscount ? (
+      {type === "discountProducts" && (
         <div className={styles.tag}>
           <svg
             className={styles.icon}
@@ -84,7 +86,9 @@ const Tags = ({ hasDiscount, discount, stock, category }) => {
           </svg>
           <p>{discount} %</p>
         </div>
-      ) : (
+      )}
+
+      {type === "hotselling" && (
         <div className={styles.tag}>
           <svg
             className={styles.icon}
@@ -94,9 +98,10 @@ const Tags = ({ hasDiscount, discount, stock, category }) => {
             width="18"
             height="18"
           >
-            <path d="M21 7.5l-9-5-9 5v9l9 5 9-5v-9zm-9-3.3l6.7 3.8-2.7 1.5L9 5.7 12 4.2zm-7.7 4.2L12 3.2l2.7 1.5L6 9.7 4.3 8.4zM4 9.8l8 4.4 8-4.4v7.4l-8 4.4-8-4.4V9.8z" />
+            <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.2 14h9.6c.8 0 1.5-.5 1.8-1.2l3-7.3c.3-.8-.3-1.5-1.1-1.5H6.2L5.7 2H2v2h2l3.6 9.6-1.3 2.3C5.7 16.6 6.6 18 8 18h12v-2H8l1.2-2z" />
+            {/* <path d="M21 7.5l-9-5-9 5v9l9 5 9-5v-9zm-9-3.3l6.7 3.8-2.7 1.5L9 5.7 12 4.2zm-7.7 4.2L12 3.2l2.7 1.5L6 9.7 4.3 8.4zM4 9.8l8 4.4 8-4.4v7.4l-8 4.4-8-4.4V9.8z" /> */}
           </svg>
-          <p>{stock}</p>
+          <p>{sold}</p>
         </div>
       )}
     </>

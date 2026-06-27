@@ -31,19 +31,19 @@ export default async function Home() {
 
       {/* top sales */}
       <SpecialArea
-        title="Special Offers"
+        title="Hot Selling"
         svg={
           <svg
-            className={styles.icon}
+            className={styles.icon_hot}
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 24 24"
             preserveAspectRatio="none"
           >
-            <path d="M13 2L3 14h7l-1 8 12-14h-7l-1-6z" />
+            <path d="M5 16l-3-9 7 4 3-6 3 6 7-4-3 9H5z" />
           </svg>
         }
-        type="discountProducts"
+        type="hotselling"
       />
 
       {/* temp */}
