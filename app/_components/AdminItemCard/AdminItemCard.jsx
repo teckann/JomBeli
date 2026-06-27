@@ -3,6 +3,8 @@ import Image from "next/image";
 
 export default function AdminItemCard({id, name, category, itemStatus, imageUrl}) {
 
+    const activeImage = imageUrl?.length > 0 ? imageUrl[0] : null;
+
     return (
         <div className={ Styles.itemCard }>
             <div>
