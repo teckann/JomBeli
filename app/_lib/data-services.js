@@ -324,6 +324,12 @@ export async function getBuyerSellerDetails(userId) {
     created_at: data.created_at
       ? data.created_at.substring(0, 10)
       : "No date provided",
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar
+        ? [data.avatar]
+        : [],
   };
 
   return cleanedData;

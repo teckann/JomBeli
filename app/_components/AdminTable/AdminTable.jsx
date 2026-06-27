@@ -23,7 +23,7 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
 
     let [pageCounter, setPageCounter] = useState(1);
 
-    const maxRowsForTable = 4;
+    const maxRowsForTable = 5;
 
     const maxPages = Math.ceil(datas.length / maxRowsForTable);
 
@@ -54,6 +54,12 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
 
     let counter = 0;
 
+    // if (datas.length === 0) {
+    //     return <div className={ Styles.noDataContainer }>
+    //         <h3>The table is empty</h3>
+    //     </div>
+    // }
+
     return (
         <div className={ Styles.overallTable}>
             <div className={ Styles.tableWrapper }>
@@ -77,15 +83,17 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                     </tbody>
                 </table>
             </div>
-            <div className={ Styles.showPageTextContainer }>
-                <span className={ Styles.showPageText }>
-                    <button className="btn btn-primary" onClick={() => handleFirstPageCounter()}>{"<<"}</button>
-                    <button className="btn btn-primary" onClick={() => handleDeductPageCounter()}>-</button>
-                    <span>page <span className={ Styles.pageCounterText }>{pageCounter}</span> of {maxPages}</span>
-                    <button className="btn btn-primary" onClick={() => handlePlusPageCounter()}>+</button>
-                    <button className="btn btn-primary" onClick={() => handleEndPageCounter()}>{">>"}</button>
-                </span>
-            </div>
+            {(datas.length !== 0) && 
+                <div className={ Styles.showPageTextContainer }>
+                    <span className={ Styles.showPageText }>
+                        <button className="btn btn-primary" onClick={() => handleFirstPageCounter()}>{"<<"}</button>
+                        <button className="btn btn-primary" onClick={() => handleDeductPageCounter()}>-</button>
+                        <span>page <span className={ Styles.pageCounterText }>{pageCounter}</span> of {maxPages}</span>
+                        <button className="btn btn-primary" onClick={() => handlePlusPageCounter()}>+</button>
+                        <button className="btn btn-primary" onClick={() => handleEndPageCounter()}>{">>"}</button>
+                    </span>
+                </div>
+            }
         </div>
     );
     
