@@ -327,7 +327,9 @@ export async function getBuyerSellerDetails(userId) {
 
     avatar: Array.isArray(data.avatar)
       ? data.avatar
-      : data.avatar ? [data.avatar] : []
+      : data.avatar
+        ? [data.avatar]
+        : [],
   };
 
   return cleanedData;
@@ -382,7 +384,42 @@ export async function setBalances(userID, amount) {
   }
 }
 
-export async function getTop4DiscountProducts() {
+export async function getBuyerOrderCount(userId) {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("ORDERS_T")
+    .select("*", { count: "exact", head: "true" })
+    .eq("buyer_id", userId);
+
+  if (error) {
+    console.error("Error fetching count:", error);
+    return 0;
+  }
+
+  return count;
+}
+
+export async function getBuyerTotalSpent(userId) {
+  const supabase = await createClient();
+  const { data: orders, error } = await supabase
+    .from("ORDERS_T")
+    .select("total_amount")
+    .eq("buyer_id", userId);
+
+  if (error) {
+    console.error("Error fetching prices:", error);
+    return 0;
+  }
+  //This takes the current sum and adds the next order's price to it and starts from 0
+  const totalAmount = orders.reduce(
+    (sum, order) => sum + order.total_amount,
+    0,
+  );
+
+  return totalAmount;
+}
+
+export async function getDiscountProducts() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("PRODUCTS_T")
@@ -400,6 +437,104 @@ export async function getTop4DiscountProducts() {
     .slice(0, 5);
 
   return result;
+}
+
+export async function getHotProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("total_sold", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot products");
+  }
+
+  return data;
+}
+
+export async function getDiscoverProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot selling products");
+  }
+
+  return data;
+}
+
+export async function getBanners() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("BANNERS_T")
+    .select("*")
+    .order("created_at", { ascending: true })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch banners:", error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getHotProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("total_sold", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot products");
+  }
+
+  return data;
+}
+
+export async function getDiscoverProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot selling products");
+  }
+
+  return data;
+}
+
+export async function getBanners() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("BANNERS_T")
+    .select("*")
+    .order("created_at", { ascending: true })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch banners:", error.message);
+    return [];
+  }
+
+  return data;
 }
 
 export async function getYearsMonthsWithNewProduct() {

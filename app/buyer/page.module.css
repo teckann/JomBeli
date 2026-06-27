@@ -7,12 +7,7 @@
   gap: 30px;
 }
 
-.bannerArea {
-  background-color: var(--color-bg-surface);
-  height: 300px;
-}
-
-.discountProductsArea {
+.specialArea {
   background-color: var(--color-bg-surface);
   height: auto;
   width: 100%;
@@ -44,6 +39,12 @@
   height: 40px;
 }
 
+.title .icon_hot {
+  color: var(--color-primary);
+  width: 30px;
+  height: 60px;
+}
+
 .title p {
   font-size: 30px;
   font-weight: 600;
@@ -59,8 +60,87 @@
   cursor: pointer;
 }
 
+.discover {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 1rem;
+}
+
+.discoverTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.discover .discoverTitle p {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .temp {
   display: flex;
   flex-direction: row;
   gap: 10px;
+}
+
+.btnLink {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-size: 15px;
+  font-weight: 500;
+  align-self: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem 0;
+    gap: 20px;
+  }
+
+  .specialArea {
+    padding: 1rem 1rem;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .title .icon {
+    width: 18px;
+    height: 32px;
+  }
+
+  .title .icon_hot {
+    width: 24px;
+    height: 48px;
+  }
+
+  .title p {
+    font-size: 20px;
+  }
+
+  .discover {
+    padding: 0 1rem;
+  }
+
+  .discover .discoverTitle p {
+    font-size: 20px;
+  }
 }
