@@ -475,7 +475,7 @@ export async function getBanners() {
   const { data, error } = await supabase
     .from("BANNERS_T")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: true })
     .limit(10);
 
   if (error) {
@@ -484,4 +484,136 @@ export async function getBanners() {
   }
 
   return data;
+}
+
+export async function getHotProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("total_sold", { ascending: false })
+    .limit(5);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot products");
+  }
+
+  return data;
+}
+
+export async function getDiscoverProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot selling products");
+  }
+
+  return data;
+}
+
+export async function getBanners() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("BANNERS_T")
+    .select("*")
+    .order("created_at", { ascending: true })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch banners:", error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getYearsMonthsWithNewProduct() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("created_at");
+
+  if (error) {
+    console.error("Select error:", error);
+    throw new Error("Get year-month structure failed");
+  }
+
+  const result =[];
+
+  data.forEach((product) => {
+    const date = new Date(product.created_at);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    // find if there are exist year in array or not
+    let item = result.find((r) => r.year === year);
+
+    // create a new object for that
+    if (!item) {
+      item = {year: year, months: []};
+
+      result.push(item);
+    }
+
+    // push month into months if there is not month in the item (Which reference to results) 
+    if (!item.months.includes(month)) {
+      item.months.push(month);
+    }
+  })
+
+  result.forEach((each) => each.months.sort((a, b) => a -b));
+  result.sort((a, b) => b.year - a.year);
+  
+  console.log(result);
+
+  return result;
+}
+
+export async function getProductReportData(startDate, endDate) {
+
+  const supabase = await createClient();
+
+  const { count: total, error } = await supabase
+      .from("PRODUCTS_T")
+      .select("*", { count: "exact", head: true })
+      .lt("created_at", endDate.toISOString());
+    
+  if (error) {
+    console.error("Fetch Total Products error:", error);
+    throw new Error("Could not Fetch Total Products");
+  }
+  
+  const { data: monthlyProducts, error: productError } = await supabase
+  .from("PRODUCTS_T")
+  .select(`
+    product_id,
+    product_name,
+    category,
+    price,
+    stock_quantity,
+    created_at,
+    overall_product_rating,
+    USERS_T (
+      user_id,
+      username
+    )
+  `)
+  .gte("created_at", startDate.toISOString())
+  .lt("created_at", endDate.toISOString());
+  
+  if (productError) {
+    console.error("Fetch Total Products error:", error);
+    throw new Error("Could not Fetch Total Products");
+  }
+
+  return {monthlyProducts, total};
 }
