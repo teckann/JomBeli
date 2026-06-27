@@ -465,7 +465,24 @@ export async function getDiscoverProducts() {
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
-    throw new Error("Could not fetch hot products");
+    throw new Error("Could not fetch hot selling products");
+  }
+
+  return data;
+}
+
+export async function getBanners() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("BANNERS_T")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch banners:", error.message);
+    return [];
   }
 
   return data;

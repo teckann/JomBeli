@@ -1,16 +1,20 @@
 import Link from "next/link";
 import ProductListing from "../_components/ProductListing/ProductListing";
-import { getProducts, getTop4DiscountProducts } from "../_lib/data-services";
 import styles from "./page.module.css";
 import ThemeToggleButton from "../_components/ThemeToggleButton";
 import SignOutButton from "../_components/SignOutButton";
 import { Suspense } from "react";
 import Spinner from "../_components/Spinner/Spinner";
+import Banner from "../_components/Banner/Banner";
+import { getBanners } from "../_lib/data-services";
 
 export default async function Home() {
+  const banners = await getBanners();
+  // console.log(banners);
+
   return (
     <main className={styles.main}>
-      <div className={styles.bannerArea}>Banner</div>
+      <Banner banners={banners} />
 
       {/* discount */}
       <SpecialArea

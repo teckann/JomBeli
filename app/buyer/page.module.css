@@ -7,11 +7,6 @@
   gap: 30px;
 }
 
-.bannerArea {
-  background-color: var(--color-bg-surface);
-  height: 300px;
-}
-
 .specialArea {
   background-color: var(--color-bg-surface);
   height: auto;
@@ -121,12 +116,6 @@
     gap: 20px;
   }
 
-  .bannerArea {
-    height: 180px;
-    width: 100%;
-    border-radius: 0;
-  }
-
   .specialArea {
     padding: 1rem 1rem;
     width: 100%;
@@ -149,5 +138,9 @@
 
   .discover {
     padding: 0 1rem;
+  }
+
+  .discover .discoverTitle p {
+    font-size: 20px;
   }
 }
