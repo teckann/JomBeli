@@ -332,3 +332,35 @@ export async function reactiveProduct(productId) {
 
   return data;
 }
+
+
+export async function getCartItems(currentUserId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('CART_ITEMS_T')
+    .select(`
+      cart_item_id,
+      quantity,
+      PRODUCT_VARIANTS_T (
+        product_variant_price,
+        sku,
+        product_variant_image_url,
+        PRODUCTS_T (
+          user_id,
+          product_name,
+          discount
+        )
+      )
+    `)
+    .eq('user_id', currentUserId);
+
+  if (error) {
+    console.error("Fail to retrieve cart item:", error);
+    throw new Error("Could not fetch cart item");
+  }
+  console.log(data);
+  return data;
+}
+

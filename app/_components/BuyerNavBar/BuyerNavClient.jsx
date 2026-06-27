@@ -9,7 +9,7 @@ const Links = [
   { path: "#", name: "Voucher", position: "L"},
   { path: "/buyer/helpcentre", name: "Help Centre", position: "L"},
   { path: "/buyer/chat", name: "Message", position: "R"},
-  { path: "#", name: "Cart", position: "R"},
+  { path: "/buyer/cart", name: "Cart", position: "R"},
 ]
 
 export default function BuyerNavBarClient({user}){
