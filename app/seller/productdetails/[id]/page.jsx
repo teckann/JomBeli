@@ -37,10 +37,63 @@ export default async function ProductDetailPage({ params }) {
     product = productRes.data;
     variants = variantsRes.data || [];
 
+    if (product && variants.length > 0) {
+      try {
+        const variantIds = variants.map(v => v.product_variant_id).filter(Boolean);
 
+        if (variantIds.length > 0) {
+          const { data: orderItems, error: itemsError } = await supabaseAdmin
+            .from('ORDER_ITEMS_T') 
+            .select('order_id')
+            .in('product_variant_id', variantIds);
 
-    
+          if (!itemsError && orderItems && orderItems.length > 0) {
+            const orderIds = Array.from(new Set(orderItems.map(item => item.order_id).filter(Boolean)));
+
+            if (orderIds.length > 0) {
+              const { data: reviewData, error: reviewError } = await supabaseAdmin
+                .from('REVIEWS_T')
+                .select('*')
+                .in('order_id', orderIds) 
+                .order('created_at', { ascending: false }) 
+                .limit(1)
+                .maybeSingle();
+
+              if (!reviewError && reviewData) {
+                latestReview = reviewData;
+
+                if (latestReview.user_id) {
+                  const { data: userData, error: userError } = await supabaseAdmin
+                    .from('USERS_T') 
+                    .select('username')
+                    .eq('user_id', latestReview.user_id)
+                    .maybeSingle();
+
+                  if (!userError && userData) {
+                    latestReview.reviewer_name = userData.username;
+                  } else {
+                    latestReview.reviewer_name = "Anonymous User";
+                  }
+                }
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Error in relational chained query:", err);
+      }
+    }
   }
 
 
+  
+
+  return (
+    <DynamicProductView 
+      initialProduct={product} 
+      variants={variants} 
+      currentUrlId={currentUrlId} 
+      latestReview={latestReview} 
+    />
+  );
 }
