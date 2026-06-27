@@ -477,7 +477,7 @@ export async function getBanners() {
   const { data, error } = await supabase
     .from("BANNERS_T")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: true })
     .limit(10);
 
   if (error) {
