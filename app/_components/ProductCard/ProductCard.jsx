@@ -14,8 +14,8 @@ function ProductCard({ product }) {
   } = product;
 
   // check got discount or not
-  const finalPrice = discount ? price * ((100 - discount) / 100) : price;
   const hasDiscount = discount ?? false;
+  const finalPrice = hasDiscount ? price * ((100 - discount) / 100) : price;
 
   return (
     <Link
@@ -45,7 +45,7 @@ function ProductCard({ product }) {
             RM {finalPrice.toFixed(2)}
           </span>
           {hasDiscount && (
-            <span className={styles.originalPrice}>RM {price.toFixed(2)}</span>
+            <span className={styles.originalPrice}>RM {price?.toFixed(2)}</span>
           )}
         </div>
       </div>

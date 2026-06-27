@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
-import IDGenerator from "./random-id-generator";
+import { IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
 
 const weakPasswordWarning =

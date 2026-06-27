@@ -378,39 +378,42 @@ export async function setBalances(userID, amount) {
   }
 }
 
-export async function getBuyerOrderCount(userId){
+export async function getBuyerOrderCount(userId) {
   const supabase = await createClient();
-  const { count,error } = await supabase
+  const { count, error } = await supabase
     .from("ORDERS_T")
-    .select("*",{count: 'exact', head:'true'})
-    .eq("buyer_id",userId)
+    .select("*", { count: "exact", head: "true" })
+    .eq("buyer_id", userId);
 
-  if (error){
-    console.error("Error fetching count:",error);
+  if (error) {
+    console.error("Error fetching count:", error);
     return 0;
   }
 
   return count;
 }
 
-export async function getBuyerTotalSpent(userId){
+export async function getBuyerTotalSpent(userId) {
   const supabase = await createClient();
-  const { data: orders, error} = await supabase
-  .from("ORDERS_T")
-  .select("total_amount")
-  .eq("buyer_id", userId);
+  const { data: orders, error } = await supabase
+    .from("ORDERS_T")
+    .select("total_amount")
+    .eq("buyer_id", userId);
 
-  if (error){
+  if (error) {
     console.error("Error fetching prices:", error);
     return 0;
   }
   //This takes the current sum and adds the next order's price to it and starts from 0
-  const totalAmount = orders.reduce((sum, order)=> sum + order.total_amount, 0);
+  const totalAmount = orders.reduce(
+    (sum, order) => sum + order.total_amount,
+    0,
+  );
 
   return totalAmount;
 }
 
-export async function getTop4DiscountProducts() {
+export async function getDiscountProducts() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("PRODUCTS_T")
