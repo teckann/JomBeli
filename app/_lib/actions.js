@@ -332,3 +332,30 @@ export async function reactiveProduct(productId) {
 
   return data;
 }
+
+export async function redirectMonthlyReport(formData) {
+
+  const month = Number(formData.get("reportMonthSelect"));
+  const year = Number(formData.get("reportYearSelect"));
+
+  redirect(`AdminProductReportPage?month=${month}&year=${year}`);
+
+  // const startDate = new Date(year, month, 1);
+  // const endDate = new Date(year, month + 1, 1);
+
+  // const monthlyProducts = await getProductReportData(startDate, endDate);
+
+  // let categoriesCount = {};
+
+  // monthlyProducts.forEach((product) => {
+  //   const category = product.category;
+
+  //   categoriesCount[category] = (categoriesCount[category] || 0) + 1;
+  // })
+
+  // // change object into key value key and sort them by ascending and get the first
+  // const mostCategory = Object.entries(categoriesCount).sort((a, b)  => 
+  //   b[1] - a[1])[0];
+
+        
+}
