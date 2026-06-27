@@ -1,0 +1,117 @@
+.cartComponentWrapper{
+    display: flex;
+    padding: 2rem;
+    gap: 1.5rem;
+}
+
+.cartItemWrapper{
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+}
+
+.cartItemList{
+    background-color: var(--color-bg-card);
+    border: 1px solid;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.cartItemList h2{
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0 0 0.75rem 0;
+}
+
+.cartItemList hr{
+    border: 0;
+    border-top: 1px solid var(--color-border-light);
+    margin-bottom: 1rem;
+}
+
+.cartItem{
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.cartItem:last-child{
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.cartItem input[type="checkbox"]{
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: var(--color-primary); 
+    cursor: pointer;
+}
+
+.cartItemImageContainer{
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.cartItemImageContainer img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.cartItemInfo{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.cartItemInfo p {
+    color: var(--color-text-muted);
+}
+
+.summaryContainer{
+    height: fit-content;
+    padding: 50px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-bg-card);
+}
+
+.summaryContainer h1{
+    font-weight: 400;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.summaryContainer h1:last-of-type{
+    font-weight: 700;
+    color: var(--color-primary);
+    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.summaryContainer button{
+    width: 300px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    margin: 20px auto;
+    padding: 10px 10px;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    border-color: var(--color-primary);
+}
