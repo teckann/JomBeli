@@ -3,11 +3,10 @@ import {
   getDiscountProducts,
   getHotProducts,
   getDiscoverProducts,
+  getFilterProducts,
 } from "@/app/_lib/data-services";
 import ProductCard from "../ProductCard/ProductCard";
 import styles from "./ProductListing.module.css";
-import Link from "next/link";
-import { getFilterProducts } from "@/app/_lib/product-services";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
 
 async function ProductListing({ type, filter }) {
