@@ -13,9 +13,9 @@ async function page({ searchParams }) {
 
   return (
     <main className={styles.main}>
-      <div className={styles.container}>
-        <CategoryFilterBar />
+      <CategoryFilterBar />
 
+      <div className={styles.container}>
         <Suspense fallback={<Spinner />} key={filter}>
           <ProductListing filter={filter} />
         </Suspense>

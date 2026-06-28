@@ -1,12 +1,12 @@
 .categoryContainer {
-  width: 100%;
+  /* width: 100%; */
   height: auto;
   background-color: var(--color-bg-surface);
-  width: 100%;
   padding: 1rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin: 0 3rem;
 }
 
 .title {
