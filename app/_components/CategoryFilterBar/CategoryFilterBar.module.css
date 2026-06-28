@@ -1,0 +1,73 @@
+.categoryContainer {
+  width: 100%;
+  height: auto;
+  background-color: var(--color-bg-surface);
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  color: var(--color-primary);
+}
+
+.title .icon {
+  color: var(--color-primary);
+  width: 22px;
+  height: 40px;
+}
+
+.cardIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.title p {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.categories {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+.categoryCard {
+  background-color: var(--color-bg-input);
+  width: 120px;
+  height: 90px;
+  color: var(--color-font-primary);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid var(--color-border-primary);
+  gap: 8px;
+}
+
+.categoryCard p {
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.categoryCard:hover,
+.active {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px var(--color-border-primary);
+  cursor: pointer;
+  color: var(--color-primary);
+}
+
+.active p {
+  font-weight: 600;
+}
