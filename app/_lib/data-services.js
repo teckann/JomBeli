@@ -57,8 +57,6 @@ export async function getBuyerSellerInfo() {
     )
     .in("role", ["Buyer", "Seller"]);
 
-  // console.log("RAW SUPABASE DATA:", data.map(u => u.role));
-
   if (error) {
     console.error("Failed to fetch users:", error.message);
     throw new Error("Could not fetch users");
@@ -302,7 +300,7 @@ export async function deactiveProduct(productId) {
   return data;
 }
 
-export async function getBuyerSellerDetails(userId) {
+export async function getUserDetails(userId) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -462,6 +460,39 @@ export async function getDiscoverProducts() {
     .select("*")
     .order("created_at", { ascending: false })
     .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch hot selling products");
+  }
+
+  return data;
+}
+
+export async function getBanners() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("BANNERS_T")
+    .select("*")
+    .order("created_at", { ascending: true })
+    .limit(10);
+
+  if (error) {
+    console.error("Failed to fetch banners:", error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getHotProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("total_sold", { ascending: false })
+    .limit(5);
 
   if (error) {
     console.error("Failed to fetch products:", error.message);

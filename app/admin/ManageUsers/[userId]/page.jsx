@@ -1,15 +1,17 @@
-import { getBuyerSellerDetails } from "@/app/_lib/data-services";
+import { getUserDetails } from "@/app/_lib/data-services";
 import { getBuyerOrderCount, getBuyerTotalSpent, getSellerOrderCount, getSellerGrossEarnings } from "@/app/_lib/analysis-serives"
 import Styles from "./UserDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 
+export const revalidate = 0;
+
 export default async function UserDetail({params}){
     const resolvedParams = await params;
     const userId = resolvedParams?.userId ? String (resolvedParams.userId).trim() : ""
 
-    const user = await getBuyerSellerDetails(userId);
+    const user = await getUserDetails(userId);
     const country = user?.ADDRESSES_T?.[0]?.country || "No country provided";
     const OrderCount = await getBuyerOrderCount(userId);
     const TotalSpent = await getBuyerTotalSpent(userId);

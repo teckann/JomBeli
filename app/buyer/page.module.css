@@ -1,15 +1,17 @@
 .main {
   background-color: var(--color-bg-primary);
   height: auto;
-  padding: 1rem 3rem;
+  width: 100%;
+  /* padding-top: 1rem; */
+}
+
+.container {
+  padding: 0 3rem;
   display: flex;
   flex-direction: column;
   gap: 30px;
-}
-
-.bannerArea {
-  background-color: var(--color-bg-surface);
-  height: 300px;
+  height: auto;
+  margin-bottom: 1.5rem;
 }
 
 .specialArea {
@@ -116,15 +118,9 @@
 }
 
 @media (max-width: 768px) {
-  .main {
-    padding: 1rem 0;
+  .container {
+    padding: 0;
     gap: 20px;
-  }
-
-  .bannerArea {
-    height: 180px;
-    width: 100%;
-    border-radius: 0;
   }
 
   .specialArea {
@@ -149,5 +145,9 @@
 
   .discover {
     padding: 0 1rem;
+  }
+
+  .discover .discoverTitle p {
+    font-size: 20px;
   }
 }
