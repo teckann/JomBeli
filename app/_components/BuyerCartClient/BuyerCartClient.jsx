@@ -1,5 +1,6 @@
 "use client"
 
+import { removeCartItems } from "@/app/_lib/actions";
 import Styles from "./BuyerCartClient.module.css";
 import Image from "next/image";
 import { useState } from "react";
@@ -7,7 +8,11 @@ import { useState } from "react";
 
 export default function BuyerCartClient({cartData}){
 
-    const groupedByShop = cartData.reduce((acc, cartitem) => {
+    const [itemList, setItemsList] = useState(cartData);
+    const [checkedItems, setCheckedItems] = useState([]);
+
+    // Group items by shop (seller user id)
+    const groupedByShop = itemList.reduce((acc, cartitem) => {
         const shopId = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.user_id;
 
         if (!acc[shopId]) {
@@ -17,9 +22,7 @@ export default function BuyerCartClient({cartData}){
         acc[shopId].items.push(cartitem);
         return acc;
     }, {});
-
-    const [checkedItems, setCheckedItems] = useState([]);
-
+    
     const handleCheckboxChange = (id) => {
         setCheckedItems((prev) =>
             prev.includes(id)
@@ -28,7 +31,8 @@ export default function BuyerCartClient({cartData}){
         );
     };
 
-    const { totalOriginalPrice, totalDiscountedPrice } = cartData
+    // Calculate price based on checked items
+    const { totalOriginalPrice, totalDiscountedPrice } = itemList
     .filter((item) => checkedItems.includes(item.cart_item_id))
     .reduce(
         (totals, item) => {
@@ -50,6 +54,13 @@ export default function BuyerCartClient({cartData}){
         { totalOriginalPrice: 0, totalDiscountedPrice: 0 }
     );
     const totalSaved = totalOriginalPrice - totalDiscountedPrice;
+
+    // Delete cart item
+    const handleDelete = async (cartItemId) => {
+        await removeCartItems(cartItemId);
+        setItemsList((prev) => prev.filter(item => item.cart_item_id !== cartItemId));
+        setCheckedItems((prev) => prev.filter(id => id !== cartItemId));
+    };        
 
     return(
         <div className={Styles.cartComponentWrapper}>
@@ -79,6 +90,11 @@ export default function BuyerCartClient({cartData}){
                                     <h2>Qty: {cartitem.quantity}</h2>
                                     <h2>RM {cartitem.PRODUCT_VARIANTS_T.product_variant_price.toFixed(2)}</h2>
                                 </div>
+                                <button  
+                                    onClick={() => handleDelete(cartitem.cart_item_id)}
+                                >
+                                    Delete
+                                </button>
                             </div>
                         ))}
                     </div>

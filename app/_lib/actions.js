@@ -361,5 +361,21 @@ export async function redirectMonthlyReport(formData) {
 }
 
 
+export async function removeCartItems(cartItemId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('CART_ITEMS_T')
+    .delete()
+    .eq('cart_item_id', cartItemId);
+
+  if(error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+
+}
 
 
