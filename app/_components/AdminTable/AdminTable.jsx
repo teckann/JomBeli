@@ -4,7 +4,7 @@ import Styles from './AdminTable.module.css';
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
 
-export default function AdminTable({titles, actions, fields, datas, dataIdFormat}) {
+export default function AdminTable({titles, actions, fields, datas, dataIdFormat, slice}) {
 
     const router = useRouter();
 
@@ -72,18 +72,32 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         </tr>
                     </thead>
                     <tbody>
-                            {
+                        {
+                            (!slice ? datas.map((data) => {
+                                    counter++;
+                                    const evenRows = (counter % 2 == 0 ? true : false);
+                                    return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
+                                }) :
+                                datasSliced.map((data) => {
+                                    counter++;
+                                    const evenRows = (counter % 2 == 0 ? true : false);
+                                    return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
+                                }
+                            )
+                            )
+                        }
+                            {/* {
                                 datasSliced.map((data) => {
                                     counter++;
                                     const evenRows = (counter % 2 == 0 ? true : false);
                                     return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
                                 }
                                 )
-                            }
+                            } */}
                     </tbody>
                 </table>
             </div>
-            {(datas.length !== 0) && 
+            {(datas.length !== 0 && slice) && 
                 <div className={ Styles.showPageTextContainer }>
                     <span className={ Styles.showPageText }>
                         <button className="btn btn-primary" onClick={() => handleFirstPageCounter()}>{"<<"}</button>

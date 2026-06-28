@@ -6,6 +6,8 @@ import AdminItemCard from '@/app/_components/AdminItemCard/AdminItemCard';
 import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
 import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
+import ShowItemInformationList from '@/app/_components/AdminShowInformationList/AdminShowInformationList';
+import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
 
 export default async function ProductDetails({params}) {
     const resolvedParams = await params;
@@ -21,15 +23,14 @@ export default async function ProductDetails({params}) {
     const fields = ["review_id", "USERS_T.username", "comment", "product_rating", "created_at", ""];
 
     const informationList = [{field: "Product Name", value: product.product_name}, {field: "Description", value: product.product_description},
-        {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : product.discount}`},
-        {field: "Available Price", value: (product.price * ((100 - product.discount) / 100))}
+        {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : `${product.discount} %`}`},
+        {field: "Available Price", value: parseFloat((product.price * ((100 - product.discount) / 100))).toFixed(2)}
     ]
-
 
     return (<div className={ Styles.productDetailsPage }>
         <div className={ Styles.upperPart }>
             <div className={ Styles.backButtonPart }>
-                <button>back</button>
+                <AdminBackButton />
             </div>
             <div className={ Styles.productDescription }>
                 <h1>Product Details</h1>
@@ -71,31 +72,9 @@ export default async function ProductDetails({params}) {
         </div>
         <div className={ Styles.bottomPart }>
             <h2>{product.product_name}'s Reviews</h2>
-            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} dataIdFormat="review_id" />
+            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} slice={true} dataIdFormat="review_id" />
         </div>
     </div>);
-}
-
-export function ShowItemInformationList({ itemTitle, objectlist }) {
-    
-    return (
-        <div className={ Styles.informationListFrame }>
-            <AdminTitle title={itemTitle} />
-            <div className={ Styles.informationSpace }>
-                {objectlist.map((each) => {
-                    return <div key={each.field} className={ Styles.informationRow }>
-                        <div className={ Styles.informationField }>
-                            {each.field}
-                        </div>
-                        <div className={ Styles.informationMiddleQuote }>:</div>
-                        <div className={ Styles.informationValue}>
-                            {each.value}
-                        </div>
-                    </div>
-                })}
-            </div>
-        </div>
-    )
 }
 
 export function getdataPath(data, path) {

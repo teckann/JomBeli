@@ -1,7 +1,6 @@
 import Styles from './AdminProductReportPage.module.css';
 import { getProductReportData } from '@/app/_lib/data-services';
-import AdminTable from '@/app/_components/AdminTable/AdminTable';
-import html2pdf from 'html2pdf.js';
+import AdminReportClient from '@/app/_components/AdminReportClient/AdminReportClient';
 
 export default async function AdminProductReportPage({searchParams}) {
 
@@ -35,33 +34,8 @@ export default async function AdminProductReportPage({searchParams}) {
         return product;
     })
 
-    const element = document.querySelector("#tableFrame");
 
-
-    return (<div id="tableFrame">
-        <div>
-            <h1>Jombeli Company</h1>
-            <h3>Platform Product Review</h3>
-            <h3>Report for {month}, {year}</h3>
-        </div>
-        <div>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Total Product</td>
-                        <td>{(total || 0)}</td>
-                    </tr>
-                    <tr>
-                        <td>New Product</td>
-                        <td>{monthlyProducts.length}</td>
-                    </tr>
-                    <tr>
-                        <td>Most Popular New Product Category</td>
-                        <td>{mostCategory}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <AdminTable titles={titles} fields={fields} datas={monthlyProducts} dataIdFormat="product_id" />
-    </div>);
+    return (
+        <AdminReportClient month={month} year={year} total={total} monthlyProducts={monthlyProducts} mostCategory={mostCategory} titles={titles} fields={fields} />
+    );
 }

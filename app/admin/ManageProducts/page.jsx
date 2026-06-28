@@ -50,7 +50,7 @@ export default async function manageProductsPage({ searchParams }) {
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat="product_id" />
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={true} dataIdFormat="product_id" />
             </div>
         </div>
     );

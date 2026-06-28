@@ -338,7 +338,7 @@ export async function redirectMonthlyReport(formData) {
   const month = Number(formData.get("reportMonthSelect"));
   const year = Number(formData.get("reportYearSelect"));
 
-  redirect(`AdminProductReportPage?month=${month}&year=${year}`);
+  redirect(`/admin/AdminProductReportPage?month=${month}&year=${year}`);
 
   // const startDate = new Date(year, month, 1);
   // const endDate = new Date(year, month + 1, 1);

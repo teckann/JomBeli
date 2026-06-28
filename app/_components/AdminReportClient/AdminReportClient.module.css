@@ -1,0 +1,52 @@
+.reportFrame {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 1em;
+}
+
+.companyInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.moreInsights {
+    width: 90%;
+    padding: 1em;
+}
+
+.firstCol {
+    width: 50%;
+    padding: 1em;
+}
+
+.secCol {
+    /* width: 50%; */
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+}
+
+.tableWithInfo {
+    width: 100%;
+    background-color: #DDD5D0;
+    border-radius: 10px;
+    /* padding: 1em; */
+}
+
+.adminTable {
+    width: 90%;
+}
+
+.logo {
+    flex: 1;
+    font-size: var(--text-3xl);
+    font-weight: bold;
+    color: var(--color-primary);
+    /* padding: 0.5em; */
+}

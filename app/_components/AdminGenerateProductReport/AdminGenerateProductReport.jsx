@@ -41,31 +41,36 @@ export function ExpandedGenerateReport({handleClick, yearMonths}) {
     }
 
     return(
-        <div>
-            <button className={ Styles.backButton } onClick={() => handleClick()}>
-                Cancel
-            </button>
-            <form action={redirectMonthlyReport}>
-                <div>
-                    <label htmlFor="reportYearSelect">Year:</label>
-                    <select name="reportYearSelect" id="reportYearSelect" onChange={findMonthList}>
-                        {yearMonths.map((eachYear) => {
-                            return <option key={eachYear.year} value={eachYear.year}>{eachYear.year}</option>
-                        })}
-                    </select>
-                </div>
-                <div>
-                    <label htmlFor="reportMonthSelect">Month:</label>
-                    <select name="reportMonthSelect" id="reportMonthSelect">
-                        {monthList.map((eachMonth) => {
-                            return <option key={eachMonth} value={eachMonth}>{monthIndexs[eachMonth]}</option>
-                        })}
-                    </select>
-                </div>
-                <button type="submit">
-                        Generate
+        <div className={ Styles.complete }>
+            <div>
+                <h4 className={ Styles.productReportText }>Product Report Generate Form</h4>
+            </div>
+            <div className={ Styles.inputsContainer }>
+                <button className={ `${Styles.backButton} btn btn-primary` } onClick={() => handleClick()}>
+                    Cancel
                 </button>
-            </form>
+                <form className={ Styles.form } action={redirectMonthlyReport}>
+                    <div className={ Styles.eachInputs }>
+                        <label htmlFor="reportYearSelect">Year:</label>
+                        <select className={ Styles.selectBox } name="reportYearSelect" id="reportYearSelect" onChange={findMonthList}>
+                            {yearMonths.map((eachYear) => {
+                                return <option key={eachYear.year} value={eachYear.year}>{eachYear.year}</option>
+                            })}
+                        </select>
+                    </div>
+                    <div className={ Styles.eachInputs }>
+                        <label htmlFor="reportMonthSelect">Month:</label>
+                        <select className={ Styles.selectBox } name="reportMonthSelect" id="reportMonthSelect">
+                            {monthList.map((eachMonth) => {
+                                return <option key={eachMonth} value={eachMonth}>{monthIndexs[eachMonth]}</option>
+                            })}
+                        </select>
+                    </div>
+                    <button className={` ${Styles.generateButton} btn btn-primary`} type="submit">
+                            Generate Monthly Report
+                    </button>
+                </form>
+            </div>
         </div>
     )
 }

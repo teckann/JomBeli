@@ -1,0 +1,50 @@
+.inputsContainer {
+    display: flex;
+    gap: 0.5em;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    gap: 0.5em;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.backButton {
+    background-color: #CE796B;
+    border: none;
+    height: 100%;
+}
+
+.productReportText {
+    /* color: #ffffff; */
+}
+
+.eachInputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2em;
+}
+
+.selectBox {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.generateButton {
+    color: white;
+    height: 100%;
+}
+
+.complete {
+    background-color: #EEEBD0;
+    padding: 1em;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
