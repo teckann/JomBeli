@@ -71,7 +71,7 @@ export default async function ProductDetails({params}) {
         </div>
         <div className={ Styles.bottomPart }>
             <h2>{product.product_name}'s Reviews</h2>
-            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} dataIdFormat="review_id" />
+            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} slice={true} dataIdFormat="review_id" />
         </div>
     </div>);
 }
