@@ -4,6 +4,8 @@ import { removeCartItems } from "@/app/_lib/actions";
 import Styles from "./BuyerCartClient.module.css";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import OrderItemCard from "../OrderItemCard/OrderItemCard";
 
 
 export default function BuyerCartClient({cartData}){
@@ -60,7 +62,20 @@ export default function BuyerCartClient({cartData}){
         await removeCartItems(cartItemId);
         setItemsList((prev) => prev.filter(item => item.cart_item_id !== cartItemId));
         setCheckedItems((prev) => prev.filter(id => id !== cartItemId));
-    };        
+    };
+    
+    const router = useRouter();
+
+    const handleCheckOut = () => {
+        if(checkedItems.length === 0){
+            alert("Please select at least one item");
+            return;
+        }
+
+        const itemsParam = checkedItems.join(",");
+
+        router.push(`/buyer/payment?items=${itemsParam}`);
+    }
 
     return(
         <div className={Styles.cartComponentWrapper}>
@@ -70,32 +85,15 @@ export default function BuyerCartClient({cartData}){
                         <h2>Shop {shopId}</h2>
                         <hr />
                         {items.map((cartitem) => (
-                            <div key={cartitem.cart_item_id} className={Styles.cartItem}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={checkedItems.includes(cartitem.cart_item_id)}
-                                    onChange={() => handleCheckboxChange(cartitem.cart_item_id)} 
-                                />
-                                <div className={Styles.cartItemImageContainer}>
-                                    <Image
-                                        src={cartitem.PRODUCT_VARIANTS_T.product_variant_image_url}
-                                        width={200}
-                                        height={200}
-                                        alt="Product Image"
-                                    />
-                                </div>
-                                <div className={Styles.cartItemInfo}>
-                                    <h2>{cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.product_name}</h2>
-                                    <p>{cartitem.PRODUCT_VARIANTS_T.sku}</p>
-                                    <h2>Qty: {cartitem.quantity}</h2>
-                                    <h2>RM {cartitem.PRODUCT_VARIANTS_T.product_variant_price.toFixed(2)}</h2>
-                                </div>
-                                <button  
-                                    onClick={() => handleDelete(cartitem.cart_item_id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                            <OrderItemCard 
+                                key={cartitem.cart_item_id}
+                                cartitem={cartitem}
+                                isChecked={checkedItems.includes(cartitem.cart_item_id)}
+                                onCheckboxChange={() => handleCheckboxChange(cartitem.cart_item_id)}
+                                onDelete={() => handleDelete(cartitem.cart_item_id)}
+                                showCheckbox={true}
+                                showDelete={true}
+                            />
                         ))}
                     </div>
                 ))}
@@ -105,7 +103,12 @@ export default function BuyerCartClient({cartData}){
                 <h1>Subtotal: {totalOriginalPrice.toFixed(2)}</h1>
                 <h1>Discount: {totalSaved.toFixed(2)}</h1>
                 <h1>Total: {totalDiscountedPrice.toFixed(2)}</h1>
-                <button>Check Out</button>
+                <button 
+                    onClick={()=>handleCheckOut()}
+                    disabled={checkedItems.length === 0}
+                >
+                    Check Out
+                </button>
             </div>
         </div>
     )
