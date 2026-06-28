@@ -1,0 +1,46 @@
+.informationListFrame {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.informationSpace {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.informationRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.informationField {
+    width: 30%;
+}
+
+.informationMiddleQuote {
+    width: 5%;
+}
+
+.informationValue {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    background-color: pink;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.titleBar {
+    display: flex;
+    /* padding: 1em; */
+    color: grey;
+}
+
+.hrLength {
+    width: 30%;
+    
+}
