@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
-import { IDGenerator } from "./random-id-generator";
+import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
 
 const weakPasswordWarning =
@@ -275,7 +275,7 @@ export async function BuyerContactForm(formData) {
   const category = formData.get("category");
   const message = formData.get("description");
   const userID = formData.get("id");
-  const supportId = await IDGenerator();
+  const supportId = GeneralIDGenerator();
 
   if (!category || !message) {
     return { error: "All fields are required." };

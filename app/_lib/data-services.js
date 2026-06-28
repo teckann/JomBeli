@@ -528,6 +528,35 @@ export async function getCartItems(currentUserId) {
     console.error("Fail to retrieve cart item:", error);
     throw new Error("Could not fetch cart item");
   }
+  return data;
+}
+
+export async function getCartItemsByCartItemID(cartItemId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('CART_ITEMS_T')
+    .select(`
+      cart_item_id,
+      quantity,
+      PRODUCT_VARIANTS_T (
+        product_variant_price,
+        sku,
+        product_variant_image_url,
+        PRODUCTS_T (
+          user_id,
+          product_name,
+          discount
+        )
+      )
+    `)
+    .in('cart_item_id', cartItemId);
+
+  if (error) {
+    console.error("Fail to retrieve cart item:", error);
+    throw new Error("Could not fetch cart item");
+  }
   console.log(data);
   return data;
 }
