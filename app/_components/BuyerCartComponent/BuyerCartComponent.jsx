@@ -1,5 +1,5 @@
 import { getUser } from "@/app/_lib/auth";
-import { getCartItems } from "@/app/_lib/actions";
+import { getCartItems } from "@/app/_lib/data-services";
 import BuyerCartClient from "../BuyerCartClient/BuyerCartClient";
 
 export default async function BuyerCartComponent(){
