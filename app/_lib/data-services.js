@@ -498,11 +498,11 @@ export async function getCartItems(currentUserId) {
       PRODUCT_VARIANTS_T (
         product_variant_price,
         sku,
-        product_variant_image_url,
         PRODUCTS_T (
           user_id,
           product_name,
-          discount
+          discount,
+          product_image_url
         )
       )
     `,
@@ -526,13 +526,14 @@ export async function getCartItemsByCartItemID(cartItemId) {
       cart_item_id,
       quantity,
       PRODUCT_VARIANTS_T (
+        product_variant_id,
         product_variant_price,
         sku,
-        product_variant_image_url,
         PRODUCTS_T (
           user_id,
           product_name,
-          discount
+          discount,
+          product_image_url
         )
       )
     `,
@@ -543,7 +544,6 @@ export async function getCartItemsByCartItemID(cartItemId) {
     console.error("Fail to retrieve cart item:", error);
     throw new Error("Could not fetch cart item");
   }
-  console.log(data);
   return data;
 }
 
@@ -642,6 +642,45 @@ export async function getFilterProducts(category) {
   if (error) {
     console.error("Failed to fetch filter products:", error.message);
     return [];
+  }
+
+  return data;
+}
+
+export async function validateCartItemOwnership(itemIds, userId) {
+  if (!itemIds || itemIds.length === 0) return false;
+
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('CART_ITEMS_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .in('cart_item_id', itemIds);
+
+  if (error) {
+    console.error('Error validating cart ownership:', error.message);
+    throw error;
+  }
+
+  return count === itemIds.length;
+}
+
+export async function getUserAddresses(userId) {
+  if (!userId) return [];
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('ADDRESSES_T')
+    .select('*')
+    .eq('user_id', userId)
+    .order('is_default', { ascending: false }) 
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching user addresses:', error.message);
+    throw error;
   }
 
   return data;

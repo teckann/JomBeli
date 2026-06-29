@@ -11,6 +11,7 @@ import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
+import { processPayment } from "./processpayment";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
