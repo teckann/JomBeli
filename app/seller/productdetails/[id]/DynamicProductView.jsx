@@ -12,7 +12,6 @@ export default function DynamicProductView({ initialProduct, variants, currentUr
   const [storages, setStorages] = useState([]);
   const [colours, setColours] = useState([]);
 
-
   const [selectedStorage, setSelectedStorage] = useState('');
   const [selectedColour, setSelectedColour] = useState('');
 
