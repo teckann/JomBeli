@@ -498,11 +498,11 @@ export async function getCartItems(currentUserId) {
       PRODUCT_VARIANTS_T (
         product_variant_price,
         sku,
-        product_variant_image_url,
         PRODUCTS_T (
           user_id,
           product_name,
-          discount
+          discount,
+          product_image_url
         )
       )
     `,
@@ -526,13 +526,14 @@ export async function getCartItemsByCartItemID(cartItemId) {
       cart_item_id,
       quantity,
       PRODUCT_VARIANTS_T (
+        product_variant_id,
         product_variant_price,
         sku,
-        product_variant_image_url,
         PRODUCTS_T (
           user_id,
           product_name,
-          discount
+          discount,
+          product_image_url
         )
       )
     `,
@@ -543,7 +544,6 @@ export async function getCartItemsByCartItemID(cartItemId) {
     console.error("Fail to retrieve cart item:", error);
     throw new Error("Could not fetch cart item");
   }
-  console.log(data);
   return data;
 }
 

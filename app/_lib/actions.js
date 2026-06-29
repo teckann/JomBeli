@@ -10,6 +10,7 @@ import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
+import { processPayment } from "./processpayment";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -378,4 +379,20 @@ export async function removeCartItems(cartItemId) {
 
 }
 
+export async function checkoutAction(payload) {
+  let orderID = null;
+  let paymentSuccess = false;
+  try {
+    const result = await processPayment(payload);
+    orderID = result.orderId
+    paymentSuccess = true;
+  } catch (err) {
+    console.error("Checkout failed:", err.message);
+    return { success: false, error: err.message };
+  }
+
+  if(paymentSuccess && orderID){
+    redirect(`/buyer/ordercomplete`)
+  }
+}
 
