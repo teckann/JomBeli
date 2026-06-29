@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "./server";
+import { createClient as createSupabaseClient} from "@supabase/supabase-js";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -378,4 +379,91 @@ export async function removeCartItems(cartItemId) {
 
 }
 
+export async function deactivateUser(userId){
+  const supabase = await createClient();
 
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .update({user_status:"Inactive"})
+    .eq("user_id",userId)
+    .select();
+  
+    if(error){
+      console.error("Deactivate user error:",error);
+      throw new Error("Could not deactivate user");
+    }
+
+    return data;
+}
+
+export async function reactivateUser(userId){
+  const supabase = await createClient();
+
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .update({user_status:"Active"})
+    .eq("user_id",userId)
+    .select();
+  
+    if(error){
+      console.error("Deactivate user error:",error);
+      throw new Error("Could not deactivate user");
+    }
+
+    return data;
+}
+
+export async function updateUserData(userId, updatedData){
+  const requiredFields = ['username', 'gender', 'email', 'contact_number'];
+
+  for (const field of requiredFields) {
+    if (!updatedData[field] || updatedData[field].toString().trim() === "") {
+      throw new Error(`The field "${field}" is required and cannot be empty.`);
+    }
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("USERS_T")
+    .update(updatedData)
+    .eq("user_id", userId);
+
+  if (error){
+    console.error("Database update error: ", error);
+    throw new Error("Could not update user profile");
+  }
+}
+
+export async function uploadAvatar(file){
+  const imageFile = file.get('file');
+
+  if (!imageFile) throw new Error("No file uploaded");
+
+  const supabase = createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY  // not the anon key
+    );
+
+  const fileName = `${Date.now()}-${imageFile.name}`;
+
+  const { error } = await supabase
+    .storage
+    .from('avatars')
+    .upload(fileName, imageFile, {
+        cacheControl: '3600',
+        upsert:false
+    });
+
+  if (error) {
+    console.error("SUPABASE UPLOAD ERROR:", error.message, error.statusCode, error);
+    throw new Error("Could not upload image to Bucket");
+  }
+
+  const { data: publicUrlData } = supabase
+    .storage
+    .from('avatars')
+    .getPublicUrl(fileName);
+
+  return publicUrlData.publicUrl;
+}

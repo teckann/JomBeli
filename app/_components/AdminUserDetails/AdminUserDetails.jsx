@@ -48,7 +48,6 @@ export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerIte
             <div className={Styles.value}>{}</div> */}
             {user?.role === 'Buyer' && (
                 <>
-                
                 <span className={Styles.label}>Total Order History</span>
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>{OrderCount}</div>
@@ -56,7 +55,6 @@ export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerIte
                 <span className={Styles.label}>Total Purchase Amount</span>
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>{TotalSpent ? TotalSpent.toFixed(2) : "-"}</div>
-                
                 </>
             )}
             {user?.role === 'Seller' &&(

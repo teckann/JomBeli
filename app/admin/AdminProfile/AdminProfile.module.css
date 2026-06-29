@@ -51,17 +51,4 @@
     flex-direction: column;
 }
 
-.editButton{
-    margin-top: 10%;
-    width: 100px;
-    height: 40px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
-.editButton:hover{
-    cursor: pointer;
-}
-
 

@@ -9,7 +9,10 @@ export default function AdminItemCard({id, name, category, itemStatus, imageUrl}
         <div className={ Styles.itemCard }>
             <div>
                 {console.log(imageUrl)}
-                <Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={100} height={100} />
+                {activeImage ? (<Image className={Styles.itemImage} src={imageUrl[0]} alt="Product Image" width={200} height={200} />
+                ):(
+                    <div className={Styles.noImage}>No Image Found</div>
+                )}
             </div>
             <div className={ Styles.cardDescription }>
                 <div>
