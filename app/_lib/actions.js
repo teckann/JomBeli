@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
 import { getUserInfo, setBalances } from "./data-services";
 import { createMessage } from "./message-services";
-import IDGenerator from "./random-id-generator";
+import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
 
 const weakPasswordWarning =
@@ -275,7 +275,7 @@ export async function BuyerContactForm(formData) {
   const category = formData.get("category");
   const message = formData.get("description");
   const userID = formData.get("id");
-  const supportId = await IDGenerator();
+  const supportId = GeneralIDGenerator();
 
   if (!category || !message) {
     return { error: "All fields are required." };
@@ -332,3 +332,50 @@ export async function reactiveProduct(productId) {
 
   return data;
 }
+
+export async function redirectMonthlyReport(formData) {
+
+  const month = Number(formData.get("reportMonthSelect"));
+  const year = Number(formData.get("reportYearSelect"));
+
+  redirect(`/admin/AdminProductReportPage?month=${month}&year=${year}`);
+
+  // const startDate = new Date(year, month, 1);
+  // const endDate = new Date(year, month + 1, 1);
+
+  // const monthlyProducts = await getProductReportData(startDate, endDate);
+
+  // let categoriesCount = {};
+
+  // monthlyProducts.forEach((product) => {
+  //   const category = product.category;
+
+  //   categoriesCount[category] = (categoriesCount[category] || 0) + 1;
+  // })
+
+  // // change object into key value key and sort them by ascending and get the first
+  // const mostCategory = Object.entries(categoriesCount).sort((a, b)  => 
+  //   b[1] - a[1])[0];
+
+        
+}
+
+
+export async function removeCartItems(cartItemId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('CART_ITEMS_T')
+    .delete()
+    .eq('cart_item_id', cartItemId);
+
+  if(error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+
+}
+
+

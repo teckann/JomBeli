@@ -1,22 +1,27 @@
 .main {
-  /* background-color: red; */
+  background-color: var(--color-bg-primary);
   height: auto;
-  margin: 0 2rem;
+  width: 100%;
+  /* padding-top: 1rem; */
+}
+
+.container {
+  padding: 0 3rem;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  height: auto;
+  margin-bottom: 1.5rem;
 }
 
-.bannerArea {
-  background-color: bisque;
-  height: 300px;
-}
-
-.discountProductsArea {
-  background-color: bisque;
+.specialArea {
+  background-color: var(--color-bg-surface);
   height: auto;
   width: 100%;
   padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .titleContainer {
@@ -27,7 +32,122 @@
   align-items: center;
 }
 
+.title {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.title .icon {
+  color: var(--color-primary);
+  width: 22px;
+  height: 40px;
+}
+
+.title .icon_hot {
+  color: var(--color-primary);
+  width: 30px;
+  height: 60px;
+}
+
+.title p {
+  font-size: 30px;
+  font-weight: 600;
+}
+
 .link {
   text-decoration: none;
+  color: var(--color-font-secondary);
+}
+
+.link:hover {
   color: var(--color-primary);
+  cursor: pointer;
+}
+
+.discover {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 1rem;
+}
+
+.discoverTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.discover .discoverTitle p {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.temp {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.btnLink {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-size: 15px;
+  font-weight: 500;
+  align-self: center;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0;
+    gap: 20px;
+  }
+
+  .specialArea {
+    padding: 1rem 1rem;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .title .icon {
+    width: 18px;
+    height: 32px;
+  }
+
+  .title .icon_hot {
+    width: 24px;
+    height: 48px;
+  }
+
+  .title p {
+    font-size: 20px;
+  }
+
+  .discover {
+    padding: 0 1rem;
+  }
+
+  .discover .discoverTitle p {
+    font-size: 20px;
+  }
 }

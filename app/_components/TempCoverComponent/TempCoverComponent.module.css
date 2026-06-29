@@ -1,6 +1,6 @@
 .mainNoData {
   /* background-color: red; */
-  /* background-color: var(--color-primary-subtle); */
+  /* background-color: var(--color-bg-primary); */
   width: 75%;
   margin: 0 auto;
   height: 100%;
@@ -13,11 +13,11 @@
 
 .mainNoData h2 {
   font-size: 25px;
-  color: var(--color-text-primary);
+  color: var(--color-font-primary);
 }
 
 .mainNoData p {
-  color: var(--color-text-primary);
+  color: var(--color-font-secondary);
 }
 
 .noDataContainer {

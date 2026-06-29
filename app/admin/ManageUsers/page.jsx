@@ -4,11 +4,12 @@ import AdminTable from '@/app/_components/AdminTable/AdminTable'
 import AdminFilterUser from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
 import { getFilterUsers }from '@/app/_lib/analysis-serives';
 
+export const revalidate = 0;
+
 export default async function manageUser({ searchParams }) {
     const { role, status, username } = await searchParams;
 
     const userList = await getFilterUsers(role, status, username);
-
     // console.log(userList);
     const titles = ["Full Name","Email","Contact Number","Address","Role","Balances","Status"];
 

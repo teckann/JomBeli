@@ -1,6 +1,6 @@
 .main,
 .mainNoData {
-  background-color: var(--color-sub);
+  background-color: var(--color-bg-surface);
   width: 25%;
   height: 100%;
   padding: 1rem;
@@ -19,11 +19,11 @@
 
 .mainNoData h2 {
   font-size: 25px;
-  color: var(--color-text-primary);
+  color: var(--color-font-primary);
 }
 
 .mainNoData p {
-  color: var(--color-text-primary);
+  color: var(--color-font-secondary);
 }
 
 .noDataContainer {
@@ -59,7 +59,7 @@
 
 .link:hover {
   /* background-color: var(--color-primary-lighter); */
-  background-color: var(--color-primary-subtle);
+  background-color: var(--color-bg-hover);
 }
 
 .contactInfo {
@@ -87,7 +87,7 @@
 .lastOnline {
   font-weight: lighter;
   font-size: 15px;
-  color: var(--color-text-muted);
+  color: var(--color-font-secondary);
 }
 
 .avatarContainer {
@@ -102,11 +102,10 @@
 }
 
 .hover {
-  background-color: var(--color-primary-subtle);
+  background-color: var(--color-bg-hover);
 }
 
 @media (max-width: 768px) {
-
   .main,
   .mainNoData {
     width: 80px;

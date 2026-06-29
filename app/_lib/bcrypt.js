@@ -1,12 +1,10 @@
 import bcrypt from "bcrypt";
 
-const password = "SDBL";
-const hash = await bcrypt.hash(password, 13);
+export default async function hashValue(input) {
+  const hash = await bcrypt.hash(input, 13);
+  return hash;
+}
 
-// const salt = bcrypt.genSaltSync(10);
-// console.log({ password, salt, hash });
-
-console.log(hash);
-
-const isMatch = await bcrypt.compare("SDBL", hash);
-console.log(isMatch);
+// demo how to compare
+// const isMatch = await bcrypt.compare("SDBL", hash);
+// console.log(isMatch);

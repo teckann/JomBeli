@@ -5,15 +5,15 @@ import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
 
 const Links = [
-  { path: "#", name: "Category", position: "L"},
-  { path: "#", name: "Voucher", position: "L"},
-  { path: "/buyer/helpcentre", name: "Help Centre", position: "L"},
-  { path: "/buyer/chat", name: "Message", position: "R"},
-  { path: "#", name: "Cart", position: "R"},
-]
+  { path: "/buyer/category", name: "Category", position: "L" },
+  { path: "#", name: "Voucher", position: "L" },
+  { path: "/buyer/helpcentre", name: "Help Centre", position: "L" },
+  { path: "/buyer/chat", name: "Message", position: "R" },
+  { path: "/buyer/cart", name: "Cart", position: "R" },
+];
 
-export default function BuyerNavBarClient({user}){
-  const { username, avatar, balances } = user;  
+export default function BuyerNavBarClient({ user }) {
+  const { username, avatar, balances } = user;
   const RouteWithSearch = ["/buyer", "/"];
   const currentPath = usePathname();
 
@@ -22,7 +22,9 @@ export default function BuyerNavBarClient({user}){
       <div className={Styles.wrapper}>
         {/* Top section */}
         <div className={Styles.topContainer}>
-          <Link className={Styles.logo} href="/buyer">JomBeli</Link>
+          <Link className={Styles.logo} href="/buyer">
+            JomBeli
+          </Link>
           <form action="" className={Styles.searchContainer}>
             <input
               className={Styles.searchbar}
@@ -37,39 +39,48 @@ export default function BuyerNavBarClient({user}){
         {/* Bottom section */}
         <div className={Styles.bottomContainer}>
           <div className={Styles.LinkContainer}>
-            {Links.map((item)=>{
-              if(item.position=="L"){
-                return(
-                  <Link 
+            {Links.map((item) => {
+              if (item.position == "L") {
+                return (
+                  <Link
                     className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
-                    href={item.path} 
+                    href={item.path}
                     key={item.name}
                   >
                     {item.name}
                   </Link>
-                )
+                );
               }
             })}
           </div>
           <div className={Styles.LinkContainer}>
-            {Links.map((item)=>{
-              if(item.position=="R"){
-                return(
-                  <Link 
+            {Links.map((item) => {
+              if (item.position == "R") {
+                return (
+                  <Link
                     className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
-                    href={item.path} 
+                    href={item.path}
                     key={item.name}
                   >
                     {item.name}
                   </Link>
-                )
+                );
               }
             })}
-            <Link className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`} href="/buyer/wallet">
+            <Link
+              className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
+              href="/buyer/wallet"
+            >
               RM {balances.toFixed(2)}
             </Link>
             <Link className={Styles.profileLink} href="/buyer/profile">
-              <Image className={Styles.profileImage} src={avatar} width={30} height={30} alt="ProfileImage"/>
+              <Image
+                className={Styles.profileImage}
+                src={avatar}
+                width={30}
+                height={30}
+                alt="ProfileImage"
+              />
               {username}
             </Link>
           </div>
@@ -79,22 +90,33 @@ export default function BuyerNavBarClient({user}){
   } else {
     return (
       <div className={Styles.noSearchWrapper}>
-        <Link className={Styles.logo} href="/buyer">JomBeli</Link>
+        <Link className={Styles.logo} href="/buyer">
+          JomBeli
+        </Link>
         <div className={Styles.LinkContainer}>
-          {Links.map((item)=>(
-            <Link 
+          {Links.map((item) => (
+            <Link
               className={`${Styles.link} ${currentPath === item.path ? Styles.active : ""}`}
-              href={item.path} 
+              href={item.path}
               key={item.name}
             >
               {item.name}
             </Link>
           ))}
-          <Link className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`} href="/buyer/wallet">
+          <Link
+            className={`${Styles.link} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
+            href="/buyer/wallet"
+          >
             RM {balances.toFixed(2)}
           </Link>
           <Link className={Styles.profileLink} href="/buyer/profile">
-            <Image className={Styles.profileImage} src={avatar} width={30} height={30} alt="ProfileImage"/>
+            <Image
+              className={Styles.profileImage}
+              src={avatar}
+              width={30}
+              height={30}
+              alt="ProfileImage"
+            />
             {username}
           </Link>
         </div>

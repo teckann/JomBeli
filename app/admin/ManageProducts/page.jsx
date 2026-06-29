@@ -3,7 +3,9 @@ import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
 import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount, getFilterManageProducts } from '@/app/_lib/analysis-serives';
 import AdminFilterProductsBar from '@/app/_components/AdminFilterProductsBars/AdminFilterProductsBars';
+import { getYearsMonthsWithNewProduct } from '@/app/_lib/data-services';
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
+import GenerateReportButton from '@/app/_components/AdminGenerateProductReport/AdminGenerateProductReport';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
@@ -20,6 +22,8 @@ export default async function manageProductsPage({ searchParams }) {
     const fields = ["product_id", "product_name", "USERS_T.username", "price", "product_description", "category", "product_status"];
     const datas = productList;
 
+    const yearMonthsSelect = await getYearsMonthsWithNewProduct();
+
 
 
     return (
@@ -30,7 +34,7 @@ export default async function manageProductsPage({ searchParams }) {
                     <p>Manage System Products Right Now!</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    <GenerateReportButton />
+                    <GenerateReportButton yearMonths={yearMonthsSelect} />
                 </div>
             </div>
             <div className={Styles.productsOverviewContainer}>
@@ -46,21 +50,21 @@ export default async function manageProductsPage({ searchParams }) {
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} dataIdFormat="product_id" />
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={true} dataIdFormat="product_id" />
             </div>
         </div>
     );
 }
 
-export function GenerateReportButton() {
-    return (
-        <button className="btn btn-primary">
-            <Link className={ Styles.linkText } href="#">
-                Generate Product Report
-            </Link>
-        </button>
-    );
-}
+// export function GenerateReportButton() {
+//     return (
+//         <button className="btn btn-primary">
+//             <Link className={ Styles.linkText } href="#">
+//                 Generate Product Report
+//             </Link>
+//         </button>
+//     );
+// }
 
 // export async function 
 

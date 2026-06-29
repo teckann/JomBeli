@@ -27,7 +27,9 @@ export default async function ProductListingPage() {
 
     // here
     const shopName = sellerData?.username || currentUser.email || "My Store";
-    const displayProducts = products || [];
+    const displayProducts = (products || []).filter(
+        (product) => product.product_status === 'Active'
+    );
 
     const categoriesMap = displayProducts.reduce((acc, product) => {
         const catName = product.category || 'General';
