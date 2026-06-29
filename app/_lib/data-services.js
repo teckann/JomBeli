@@ -486,29 +486,13 @@ export async function getBanners() {
   return data;
 }
 
-// export async function getHotProducts() {
-//   const supabase = await createClient();
-//   const { data, error } = await supabase
-//     .from("PRODUCTS_T")
-//     .select("*")
-//     .order("total_sold", { ascending: false })
-//     .limit(5);
-
-//   if (error) {
-//     console.error("Failed to fetch products:", error.message);
-//     throw new Error("Could not fetch hot products");
-//   }
-
-//   return data;
-// }
-
 export async function getCartItems(currentUserId) {
-
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('CART_ITEMS_T')
-    .select(`
+    .from("CART_ITEMS_T")
+    .select(
+      `
       cart_item_id,
       quantity,
       PRODUCT_VARIANTS_T (
@@ -521,8 +505,9 @@ export async function getCartItems(currentUserId) {
           discount
         )
       )
-    `)
-    .eq('user_id', currentUserId);
+    `,
+    )
+    .eq("user_id", currentUserId);
 
   if (error) {
     console.error("Fail to retrieve cart item:", error);
@@ -532,12 +517,12 @@ export async function getCartItems(currentUserId) {
 }
 
 export async function getCartItemsByCartItemID(cartItemId) {
-
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('CART_ITEMS_T')
-    .select(`
+    .from("CART_ITEMS_T")
+    .select(
+      `
       cart_item_id,
       quantity,
       PRODUCT_VARIANTS_T (
@@ -550,8 +535,9 @@ export async function getCartItemsByCartItemID(cartItemId) {
           discount
         )
       )
-    `)
-    .in('cart_item_id', cartItemId);
+    `,
+    )
+    .in("cart_item_id", cartItemId);
 
   if (error) {
     console.error("Fail to retrieve cart item:", error);
@@ -573,7 +559,7 @@ export async function getYearsMonthsWithNewProduct() {
     throw new Error("Get year-month structure failed");
   }
 
-  const result =[];
+  const result = [];
 
   data.forEach((product) => {
     const date = new Date(product.created_at);
@@ -585,42 +571,42 @@ export async function getYearsMonthsWithNewProduct() {
 
     // create a new object for that
     if (!item) {
-      item = {year: year, months: []};
+      item = { year: year, months: [] };
 
       result.push(item);
     }
 
-    // push month into months if there is not month in the item (Which reference to results) 
+    // push month into months if there is not month in the item (Which reference to results)
     if (!item.months.includes(month)) {
       item.months.push(month);
     }
-  })
+  });
 
-  result.forEach((each) => each.months.sort((a, b) => a -b));
+  result.forEach((each) => each.months.sort((a, b) => a - b));
   result.sort((a, b) => b.year - a.year);
-  
+
   console.log(result);
 
   return result;
 }
 
 export async function getProductReportData(startDate, endDate) {
-
   const supabase = await createClient();
 
   const { count: total, error } = await supabase
-      .from("PRODUCTS_T")
-      .select("*", { count: "exact", head: true })
-      .lt("created_at", endDate.toISOString());
-    
+    .from("PRODUCTS_T")
+    .select("*", { count: "exact", head: true })
+    .lt("created_at", endDate.toISOString());
+
   if (error) {
     console.error("Fetch Total Products error:", error);
     throw new Error("Could not Fetch Total Products");
   }
-  
+
   const { data: monthlyProducts, error: productError } = await supabase
-  .from("PRODUCTS_T")
-  .select(`
+    .from("PRODUCTS_T")
+    .select(
+      `
     product_id,
     product_name,
     category,
@@ -632,16 +618,33 @@ export async function getProductReportData(startDate, endDate) {
       user_id,
       username
     )
-  `)
-  .gte("created_at", startDate.toISOString())
-  .lt("created_at", endDate.toISOString());
-  
+  `,
+    )
+    .gte("created_at", startDate.toISOString())
+    .lt("created_at", endDate.toISOString());
+
   if (productError) {
     console.error("Fetch Total Products error:", error);
     throw new Error("Could not Fetch Total Products");
   }
 
-  return {monthlyProducts, total};
+  return { monthlyProducts, total };
+}
+
+export async function getFilterProducts(category) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .eq("category", category);
+
+  if (error) {
+    console.error("Failed to fetch filter products:", error.message);
+    return [];
+  }
+
+  return data;
 }
 
 export async function validateCartItemOwnership(itemIds, userId) {

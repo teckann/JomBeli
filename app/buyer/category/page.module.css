@@ -1,0 +1,16 @@
+.main {
+  background-color: var(--color-bg-primary);
+  height: auto;
+  width: 100%;
+  padding-top: 2rem;
+}
+
+.container {
+  padding: 0 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  height: auto;
+  margin-bottom: 3rem;
+  margin-top: 50px;
+}
