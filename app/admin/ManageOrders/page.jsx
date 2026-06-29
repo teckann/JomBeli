@@ -1,4 +1,4 @@
-import Styles from './ManageProducts.module.css';
+import Styles from './ManageOrders.module.css';
 import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
 import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount, getFilterManageProducts } from '@/app/_lib/analysis-serives';
@@ -10,13 +10,13 @@ import GenerateReportButton from '@/app/_components/AdminGenerateProductReport/A
 
 
 
-export default async function manageProductsPage({ searchParams }) {
+export default async function manageOrdersPage({ searchParams }) {
 
-    const { category, status, productName } = await searchParams;
+    const { category, status, dateSequence } = await searchParams;
 
-    const productList = await getFilterManageProducts(category, status, productName);
+    const productList = await getFilterManageProducts(category, status, dateSequence);
 
-    const titles = ["Product Id", "Product Name", "Seller Name", "Price (RM)", "Category", "Status"];
+    const titles = ["Order ID", "Seller", "Order Product", "Total Fees", "Category", "Status"];
 
     const actions = [{type: "viewProduct"}];
     const fields = ["product_id", "product_name", "USERS_T.username", "price", "category", "product_status"];
@@ -32,9 +32,6 @@ export default async function manageProductsPage({ searchParams }) {
                 <div className={Styles.pageDescription}>
                     <h1>Manage Products</h1>
                     <p>Manage System Products Right Now!</p>
-                </div>
-                <div className={Styles.generateReportPart}>
-                    <GenerateReportButton yearMonths={yearMonthsSelect} />
                 </div>
             </div>
             <div className={Styles.productsOverviewContainer}>
