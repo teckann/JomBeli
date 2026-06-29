@@ -1,0 +1,201 @@
+.content {
+  /* background-color: blue; */
+  width: 50%;
+  color: var(--color-font-primary);
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.content .title {
+  font-size: 25px;
+  font-weight: 550;
+}
+
+.optionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  color: var(--color-font-primary);
+}
+
+.optionDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.optionName {
+  min-width: 70px;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.button {
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  min-width: 120px;
+  color: var(--color-font-secondary);
+  font-size: 12px;
+}
+
+.button:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-primary);
+  font-weight: 550;
+}
+
+.noOptionCard {
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border-primary);
+  padding: 1rem;
+  color: var(--color-info-text);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.infoIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-info-text);
+}
+
+.header {
+  /* background-color: red; */
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-font-secondary);
+
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 8px;
+}
+
+.starContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 16px;
+  /* background-color: red; */
+}
+
+.starIcon {
+  width: 20px;
+  height: 20px;
+  color: #ffd700;
+}
+
+.reportContainer {
+  display: flex;
+  flex-direction: row;
+  font-size: 15px;
+  background-color: transparent;
+  gap: 5px;
+  color: var(--color-danger);
+  text-decoration: none;
+
+  align-items: center;
+  border: none;
+}
+
+.reportContainer:hover {
+  color: var(--color-primary);
+  font-weight: 550;
+}
+
+.reportIcon {
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+}
+
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  /* background-color: red; */
+}
+
+.price {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+
+  margin-top: auto;
+}
+
+.originalPrice {
+  font-size: 20px;
+  color: var(--color-font-secondary);
+  text-decoration: line-through;
+}
+
+.finalPrice {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-font-primary);
+}
+
+.discountColor {
+  color: var(--color-primary);
+}
+
+.discountContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* background-color: red; */
+  font-size: 14px;
+  gap: 5px;
+
+  background-color: var(--color-bg-card);
+  border: 0.5px solid var(--color-border-primary);
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
+.discountContainer:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.discountIcon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-font-primary);
+}
+
+.quantity:hover {
+  color: var(--color-font-primary);
+  font-weight: normal;
+}
+
+.stock {
+  font-size: 14px;
+  color: var(--color-font-secondary);
+}
+
+.quantity:focus {
+  outline: 1px solid var(--color-border-primary);
+}
