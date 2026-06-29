@@ -380,19 +380,14 @@ export async function removeCartItems(cartItemId) {
 }
 
 export async function checkoutAction(payload) {
-  let orderID = null;
-  let paymentSuccess = false;
   try {
     const result = await processPayment(payload);
-    orderID = result.orderId
-    paymentSuccess = true;
+    
+    return { success: true, orderId: result.orderId };
+
   } catch (err) {
     console.error("Checkout failed:", err.message);
     return { success: false, error: err.message };
-  }
-
-  if(paymentSuccess && orderID){
-    redirect(`/buyer/ordercomplete`)
   }
 }
 

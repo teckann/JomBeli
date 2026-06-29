@@ -2,7 +2,6 @@
 
 import { removeCartItems } from "@/app/_lib/actions";
 import Styles from "./BuyerCartClient.module.css";
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import OrderItemCard from "../OrderItemCard/OrderItemCard";

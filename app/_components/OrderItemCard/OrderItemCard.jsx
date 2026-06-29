@@ -9,8 +9,8 @@ export default function CartItemCard({
     showCheckbox = true, 
     showDelete = true 
 }) {
-    const { product_variant_price: originalPrice, product_variant_image_url, sku } = cartitem.PRODUCT_VARIANTS_T;
-    const { product_name } = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T;
+    const { product_variant_price: originalPrice, sku } = cartitem.PRODUCT_VARIANTS_T;
+    const { product_name, product_image_url} = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T;
 
     return (
         <div className={Styles.cartItem}>
@@ -24,7 +24,7 @@ export default function CartItemCard({
 
             <div className={Styles.cartItemImageContainer}>
                 <Image
-                    src={product_variant_image_url}
+                    src={product_image_url[0]}
                     width={200}
                     height={200}
                     alt={product_name}
