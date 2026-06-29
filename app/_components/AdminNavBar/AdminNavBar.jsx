@@ -7,7 +7,7 @@ import AdminLogOutButton from '../AdminLogOutButton/AdminLogOutButton';
 import ManageServicesNavBar from './AdminManageServices';
 
 export default async function AdminNavBar(){
-
+    
     const user = await getUser();
 
     const userInfo = await getUserInfo(user.id);

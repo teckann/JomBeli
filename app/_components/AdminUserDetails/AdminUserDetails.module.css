@@ -11,7 +11,7 @@
 
 .sectionTitle {
     display: inline-block; 
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 500;
     color: #7a7a7a;
     margin: 0;
@@ -28,13 +28,13 @@
 }
 
 .label {
-    font-size: 14px;
+    font-size: 20px;
     color: #333;
     font-weight: 400;
 }
 
 .colon {
-    font-size: 14px;
+    font-size: 20px;
     color: #333;
 }
 
@@ -45,9 +45,10 @@
     padding: 0 16px;
     display: flex;
     align-items: center; 
-    font-size: 14px;
+    font-size: 20px;
     color: #333;
-    max-width: 250px; 
+    /* width: fit-content;  */
+    max-width: 300px;
 }
 .ASAContainer{
     margin-bottom: 24px;

@@ -4,6 +4,7 @@ import Styles from "./UserDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
+import AdminDeactivateUserButton from "@/app/_components/AdminDeactivateUserButton/AdminDeactivateUserButton"
 
 export const revalidate = 0;
 
@@ -38,6 +39,7 @@ export default async function UserDetail({params}){
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
                     <UserInformation user={user} country={country} />
+                    <AdminDeactivateUserButton userId={user.user_id} userStatus={user.user_status}/>
                 </div>
                 <div className={Styles.rightSide}>
                     <AccountSecurityAnalysis user={user} />

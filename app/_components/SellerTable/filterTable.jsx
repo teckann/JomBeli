@@ -13,9 +13,9 @@ const FilterTable = ({ changeSearch }) => {
             <div className={styles.search}>
                 
 
-                    <div class={styles.searchBar} >
+                    <div className={styles.searchBar} >
                         <input 
-                        autocomplete="off" 
+                        autoComplete="off" 
                         className={styles.searchArea} 
                         type="text" name="search" 
                         placeholder="Search..." 

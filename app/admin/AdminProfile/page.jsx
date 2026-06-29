@@ -3,6 +3,7 @@ import { getUser } from "@/app/_lib/auth";
 import { getUserDetails } from "@/app/_lib/data-services";
 import { UserInformation } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
+import EditProfileWidget from "@/app/_components/EditProfile/EditProfileWidget";
 
 export default async function adminProfile(){
 
@@ -25,7 +26,7 @@ export default async function adminProfile(){
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
                     <UserInformation user={userInfo} country={country} />
-                    <button className={Styles.editButton}>Edit</button>
+                    <EditProfileWidget userInfo={userInfo} country={country}/>
                 </div>
             </div>
         </div>

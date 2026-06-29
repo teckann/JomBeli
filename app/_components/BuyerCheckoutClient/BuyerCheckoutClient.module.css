@@ -1,0 +1,18 @@
+.pageWrapper{
+    display: flex;
+}
+
+.orderSection{
+    flex: 2;
+}
+
+.orderItemWrapper{
+    border: 2px solid var(--color-border);
+    background-color: var(--color-bg-card);
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.paymentSection{
+    flex: 1;
+}
