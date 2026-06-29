@@ -71,10 +71,10 @@ export default async function Home() {
         </Link>
 
         {/* temp */}
-        <div className={styles.temp}>
+        {/* <div className={styles.temp}>
           <ThemeToggleButton />
           <SignOutButton />
-        </div>
+        </div> */}
       </div>
 
       <Footer />
