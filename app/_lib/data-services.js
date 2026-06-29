@@ -685,3 +685,114 @@ export async function getUserAddresses(userId) {
 
   return data;
 }
+
+export async function getAdminRefundRequests() {
+    const supabase = await createClient();
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const { data, error } = await supabase
+        .from("REFUNDS_T")
+        .select(`
+            refund_id,
+            refund_subject,
+            evidences,
+            seller_status,
+            admin_status,
+            created_at,
+            ORDERS_T (
+                order_id,
+                buyer_id,
+                seller_id,
+                total_amount,
+                order_status,
+                created_at
+            )
+        `)
+        .or(
+            `seller_status.eq.Rejected,and(seller_status.eq.Pending,created_at.lte.${oneWeekAgo.toISOString()})`
+        )
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund requests.");
+    }
+
+    return data;
+}
+
+export async function getRejectedBySeller() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("REFUNDS_T")
+        .select(`
+            refund_id,
+            refund_subject,
+            evidences,
+            seller_status,
+            admin_status,
+            created_at,
+            ORDERS_T (
+                buyer_id,
+                seller_id,
+                total_amount,
+                order_status,
+                created_at,
+
+                 BUYER:USERS_T!ORDERS_T_buyer_id_fkey (
+                    username
+                )
+            )
+        `)
+        .eq("seller_status", "Rejected")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        return [];
+    }
+
+    return data;
+}
+
+export async function getNotProcessedBySeller() {
+    const supabase = await createClient();
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const { data, error } = await supabase
+        .from("REFUNDS_T")
+        .select(`
+            refund_id,
+            refund_subject,
+            evidences,
+            seller_status,
+            admin_status,
+            created_at,
+            ORDERS_T (
+                buyer_id,
+                seller_id,
+                total_amount,
+                order_status,
+                created_at,
+
+                 BUYER:USERS_T!ORDERS_T_buyer_id_fkey (
+                    username
+                )
+            )
+        `)
+        .eq("seller_status", "Pending")
+        .lte("created_at", oneWeekAgo.toISOString())
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        return [];
+    }
+
+    return data;
+}

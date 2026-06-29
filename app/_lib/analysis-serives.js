@@ -318,3 +318,24 @@ export async function getSellerGrossEarnings(userId){
 
   return totalAmount;
 }
+
+export async function getTotalWaitingRefundCount() {
+    const supabase = await createClient();
+
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const { count, error } = await supabase
+        .from("REFUNDS_T")
+        .select("*", { count: "exact", head: true })
+        .or(
+            `seller_status.eq.Rejected,and(seller_status.eq.Pending,created_at.lte.${oneWeekAgo.toISOString()})`
+        );
+
+    if (error) {
+        console.error(error);
+        return 0;
+    }
+
+    return count;
+}

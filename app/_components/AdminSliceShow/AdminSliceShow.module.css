@@ -1,0 +1,7 @@
+.revert {
+    transform: scaleX(-1);
+}
+
+.hide {
+    visibility: hidden;
+}
