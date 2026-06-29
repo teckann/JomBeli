@@ -643,3 +643,42 @@ export async function getProductReportData(startDate, endDate) {
 
   return {monthlyProducts, total};
 }
+
+export async function validateCartItemOwnership(itemIds, userId) {
+  if (!itemIds || itemIds.length === 0) return false;
+
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('CART_ITEMS_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .in('cart_item_id', itemIds);
+
+  if (error) {
+    console.error('Error validating cart ownership:', error.message);
+    throw error;
+  }
+
+  return count === itemIds.length;
+}
+
+export async function getUserAddresses(userId) {
+  if (!userId) return [];
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('ADDRESSES_T')
+    .select('*')
+    .eq('user_id', userId)
+    .order('is_default', { ascending: false }) 
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching user addresses:', error.message);
+    throw error;
+  }
+
+  return data;
+}
