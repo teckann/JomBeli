@@ -29,10 +29,6 @@ export default async function UserDetail({params}){
                     <h1 className={Styles.header}>View User Page</h1>
                 </div>
                 <div className={Styles.profileContainer}>
-                    <div className={Styles.actionButtons}>
-                        <button className={Styles.btnSecondary}>View order history</button>
-                        <button className={Styles.btnSecondary}>View transaction history</button>
-                    </div>
                     <AdminItemCard id={user.user_id} name={user.username} category={user.role} itemStatus={user.user_status} imageUrl={user.avatar}/>
                 </div>
             </div>

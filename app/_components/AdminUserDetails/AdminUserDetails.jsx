@@ -1,6 +1,22 @@
-import Styles from "./AdminUserDetails.module.css" 
+'use client';
+
+import { useState } from "react";
+import Styles from "./AdminUserDetails.module.css";
 
 export function UserInformation({ user, country }){
+
+    const addresses = user?.addresses || user?.ADDRESSES_T || [];
+
+    const [selectedAddressIdx, setSelectedAddressIdx] = useState(0);
+    const activeAddress = addresses[selectedAddressIdx];
+
+    const formatAddressString = (addr) => {
+        if (!addr) return "-";
+        return [addr.street, addr.city, addr.state, addr.postcode, addr.country]
+            .filter(Boolean)
+            .join(", ");
+    };
+
     return(
     <>
         <div className={Styles.headerWrapper}>
@@ -30,6 +46,91 @@ export function UserInformation({ user, country }){
             <span className={Styles.label}>Registration Date</span>
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.created_at || "-"}</div>
+
+            <span className={Styles.label}>Select Address</span>
+                <span className={Styles.colon}>:</span>
+                <div className={Styles.value}>
+                    {addresses.length === 0 ? (
+                        <span className={Styles.noAddress}>No addresses saved</span>
+                    ) : (
+                        <select 
+                            className={Styles.addressDropdownSelector}
+                            value={selectedAddressIdx}
+                            onChange={(e) => setSelectedAddressIdx(Number(e.target.value))}
+                        >
+                            {addresses.map((addr, index) => (
+                                <option key={addr.address_id || index} value={index}>
+                                    {`Address ${index + 1}`} ({addr.city || "No City"})
+                                </option>
+                            ))}
+                        </select>
+                    )}
+                </div>
+                
+            {activeAddress && (
+                    <>
+                        <span className={Styles.labelSub}>└ Recipient</span>
+                        <span className={Styles.colon}>:</span>
+                        <div className={Styles.valueSub}>{activeAddress.recipient_name || "-"}</div>
+
+                        <span className={Styles.labelSub}>└ Recipient Contact</span>
+                        <span className={Styles.colon}>:</span>
+                        <div className={Styles.valueSub}>{activeAddress.recipient_contact_number || "-"}</div>
+
+                        <span className={Styles.labelSub}>└ Full Address</span>
+                        <span className={Styles.colon}>:</span>
+                        <div className={Styles.valueSub}>{formatAddressString(activeAddress)}</div>
+                    </>
+                )}
+        </div>
+    </>    
+    )
+}
+
+export function AdminInformation({ user, country }){
+
+    const addresses = user?.addresses || user?.ADDRESSES_T || [];
+
+    const [selectedAddressIdx, setSelectedAddressIdx] = useState(0);
+    const activeAddress = addresses[selectedAddressIdx];
+
+    const formatAddressString = (addr) => {
+        if (!addr) return "-";
+        return [addr.street, addr.city, addr.state, addr.postcode, addr.country]
+            .filter(Boolean)
+            .join(", ");
+    };
+
+    return(
+    <>
+        <div className={Styles.headerWrapper}>
+            <h3 className={Styles.sectionTitle}>Personal Information</h3>
+        </div>
+        <div className={Styles.infoGrid}>
+            <span className={Styles.label}>User Name</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.username || "-"}</div>
+
+            <span className={Styles.label}>Gender</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.gender || "-"}</div>
+
+            <span className={Styles.label}>Nationality</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{country}</div>
+
+            <span className={Styles.label}>Email</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.email || "-"}</div>
+
+            <span className={Styles.label}>Contact Number</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.contact_number || "-"}</div>
+
+            <span className={Styles.label}>Registration Date</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.created_at || "-"}</div>
+
         </div>
     </>    
     )

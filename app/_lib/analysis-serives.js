@@ -368,3 +368,32 @@ export async function getTotalWaitingRefundCount() {
 
     return count;
 }
+
+export async function getFilterCouriers(status, username) {
+
+    const supabase = await createClient();
+    
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .in("role",["Courier"]);
+
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
+    }
+
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
+
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error){
+      console.error(error);
+      return[];
+    }
+
+    return formatUserData(data);
+}
