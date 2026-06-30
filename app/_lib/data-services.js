@@ -65,6 +65,23 @@ export async function getBuyerSellerInfo() {
   return formatUserData(data);
 }
 
+export async function getAdminInfo() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select(
+      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)",
+    )
+    .in("role", ["Admin"]); 
+
+  if (error) {
+    console.error("Failed to fetch users:", error.message);
+    throw new Error("Could not fetch users");
+  }
+
+  return formatUserData(data);
+}
+
 export function formatUserData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
   if (!data || data.length === 0) {
@@ -502,7 +519,10 @@ export async function getCartItems(currentUserId) {
           user_id,
           product_name,
           discount,
-          product_image_url
+          product_image_url,
+          USERS_T (
+            username
+          )
         )
       )
     `,
@@ -533,7 +553,10 @@ export async function getCartItemsByCartItemID(cartItemId) {
           user_id,
           product_name,
           discount,
-          product_image_url
+          product_image_url,
+          USERS_T (
+            username
+          )
         )
       )
     `,
@@ -870,3 +893,71 @@ export async function getNotProcessedBySeller() {
     return data;
 }
 
+export async function getUserVouchers(userId, shopId) {
+
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+
+  if (!userId || userId === 'undefined') {
+      console.error("getUserVouchers aborted: userId is missing.");
+      return [];
+    }
+    if (!shopId || shopId === 'undefined') {
+      console.error("getUserVouchers aborted: shopId is missing.");
+      return [];
+    }
+
+  try {
+    const { data, error } = await supabase
+      .from('USER_VOUCHERS_T')
+      .select(`
+        user_voucher_id,
+        user_voucher_status,
+        claimed_at,
+        used_at,
+        vouchers:VOUCHERS_T!inner (
+          voucher_id,
+          voucher_name,
+          voucher_type,
+          discount_value,
+          max_spend,
+          min_spend,
+          quantity,
+          start_date,
+          end_date,
+          voucher_status,
+          user_id
+        )
+      `)
+      .eq('user_id', userId)
+      .eq('user_voucher_status', 'available')
+      .eq('vouchers.voucher_status', 'active')
+      .lte('vouchers.start_date', now)
+      .gte('vouchers.end_date', now)
+      .or(`voucher_type.eq.platform,and(voucher_type.eq.shop,user_id.eq.${shopId})`, { foreignTable: 'VOUCHERS_T' });
+
+    if (error) throw error;
+
+    return data.map((item) => ({
+      user_voucher_id: item.user_voucher_id,
+      user_voucher_status: item.user_voucher_status,
+      claimed_at: item.claimed_at,
+      used_at: item.used_at,
+      voucher_id: item.vouchers.voucher_id,
+      voucher_name: item.vouchers.voucher_name,
+      voucher_type: item.vouchers.voucher_type,
+      discount_value: item.vouchers.discount_value,
+      max_spend: item.vouchers.max_spend,
+      min_spend: item.vouchers.min_spend,
+      quantity: item.vouchers.quantity,
+      start_date: item.vouchers.start_date,
+      end_date: item.vouchers.end_date,
+      voucher_status: item.vouchers.voucher_status,
+      seller_id: item.vouchers.user_id,
+    }));
+
+  } catch (error) {
+    console.error('Error fetching user vouchers:', error);
+    throw error;
+  }
+}

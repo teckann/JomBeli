@@ -19,10 +19,7 @@ function ProductCard({ product, type }) {
   const finalPrice = hasDiscount ? price * ((100 - discount) / 100) : price;
 
   return (
-    <Link
-      className={styles.productCard}
-      href={`/buyer/products?id=${productID}`}
-    >
+    <Link className={styles.productCard} href={`/buyer/category/${productID}`}>
       <div className={styles.productImage}>
         <Image src={productImg[0]} alt={productName} fill />
       </div>
@@ -105,7 +102,7 @@ const Tags = ({ type, discount, stock, category, sold }) => {
         </div>
       )}
 
-      {(type === "all" || type === "discover") && (
+      {/* {(type === "all" || type === "discover") && (
         <div className={styles.tag}>
           <svg
             className={styles.icon}
@@ -119,7 +116,7 @@ const Tags = ({ type, discount, stock, category, sold }) => {
           </svg>
           <p>{stock}</p>
         </div>
-      )}
+      )} */}
     </>
   );
 };

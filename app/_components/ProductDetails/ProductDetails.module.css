@@ -1,0 +1,13 @@
+.detailsContainer {
+  background-color: var(--color-bg-surface);
+  /* height: 300px; */
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.imageContainer {
+  /* background-color: red; */
+  height: 100%;
+}

@@ -3,7 +3,7 @@
 import Styles from './AdminFilterUsers.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function FilterUser({role}){
+export function FilterUser({role}){
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -28,6 +28,36 @@ export default function FilterUser({role}){
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectRole values={currentUserRole} handleChange={handleChange} role={role}/>
+                <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
+            </div>
+        </div>
+    )
+
+}
+
+export function FilterAdmin(){
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const currentUserStatus = searchParams.get("status") || "Active";
+    const currentUsername = searchParams.get("username") || "";
+
+    const handleChange = (e) => {
+        //make a new copy to edit without touching the original
+        const params = new URLSearchParams(searchParams.toString());
+        //.set() adds the changed name and value user picked 
+        params.set(e.target.name, e.target.value);
+        //.toString() serializes back to a query string 
+        router.push(`?${params.toString()}`);
+    } 
+
+    return(
+        <div className={Styles.filterBar}>
+            <div className={Styles.searchUser}>
+                <SearchUser values={currentUsername} handleChange={handleChange}/>  
+            </div>
+            <div className={Styles.roleAndStatus}>
                 <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
             </div>
         </div>

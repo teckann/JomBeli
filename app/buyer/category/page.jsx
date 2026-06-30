@@ -5,11 +5,15 @@ import ProductListing from "@/app/_components/ProductListing/ProductListing";
 import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner/Spinner";
 
+export const metadata = {
+  title: "Category",
+};
+
 async function page({ searchParams }) {
   const searchItem = await searchParams;
   const filter = searchItem?.category ?? "all";
 
-  console.log(filter);
+  // console.log(filter);
 
   return (
     <main className={styles.main}>
