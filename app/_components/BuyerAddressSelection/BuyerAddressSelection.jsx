@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Styles from "./BuyerAddressSelection.module.css";
  
 export default function AddressSelector({
     addresses = [],
@@ -30,42 +31,45 @@ export default function AddressSelector({
 
     if (!addresses.length) {
         return (
-            <div className="address-section">
-                <h2>Shipping Address</h2>
-                <p>No shipping address found.</p>
+            <div className={Styles.addressSection}>
+                <h2 className={Styles.sectionTitle}>Shipping Address</h2>
+                <p className={Styles.emptyMessage}>No shipping address found.</p>
             </div>
         );
     }
 
     return (
-        <div>
-            <h2>Shipping Address</h2>
-            <div>
+        <div className={Styles.addressSection}>
+            <h2 className={Styles.sectionTitle}>Shipping Address</h2>
+            <div className={Styles.addressGrid}>
                 {addresses.map((address) => {
+                    const isSelected = activeAddressId === address.address_id;
                     return (
                         <div 
                             key={address.address_id} 
                             onClick={() => handleSelectAddress(address.address_id)}
+                            className={`${Styles.addressCard} ${isSelected ? Styles.selected : ""}`}
                         >
-                            <div>
-                                <span>{address.recipient_name}</span>
-                                <span>({address.recipient_contact_number})</span>
-                                {address.is_default && <span>Default</span>}
+                            <div className={Styles.cardHeader}>
+                                <span className={Styles.recipientName}>{address.recipient_name}</span>
+                                <span className={Styles.recipientContact}>({address.recipient_contact_number})</span>
+                                {address.is_default && <span className={Styles.defaultBadge}>Default</span>}
                             </div>
                             
-                            <p>{address.street}</p>
-                            <p>
+                            <p className={Styles.addressLine}>{address.street}</p>
+                            <p className={Styles.addressLine}>
                                 {address.postcode} {address.city}, {address.state}
                             </p>
-                            <p>{address.country}</p>
+                            <p className={Styles.addressLine}>{address.country}</p>
 
                             <input 
                                 type="radio" 
                                 name="shipping_address"
                                 value={address.address_id}
-                                checked={activeAddressId === address.address_id}
+                                checked={isSelected}
                                 onChange={() => handleSelectAddress(address.address_id)}
                                 onClick={(event) => event.stopPropagation()}
+                                className={Styles.radioInput}
                             />
                         </div>
                     );
