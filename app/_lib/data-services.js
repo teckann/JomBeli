@@ -823,6 +823,7 @@ export async function getNotProcessedBySeller() {
 export async function getUserVouchers(userId, shopId) {
 
   const supabase = await createClient();
+  const now = new Date().toISOString();
 
   if (!userId || userId === 'undefined') {
       console.error("getUserVouchers aborted: userId is missing.");
@@ -856,6 +857,10 @@ export async function getUserVouchers(userId, shopId) {
         )
       `)
       .eq('user_id', userId)
+      .eq('user_voucher_status', 'available')
+      .eq('vouchers.voucher_status', 'active')
+      .lte('vouchers.start_date', now)
+      .gte('vouchers.end_date', now)
       .or(`voucher_type.eq.platform,and(voucher_type.eq.shop,user_id.eq.${shopId})`, { foreignTable: 'VOUCHERS_T' });
 
     if (error) throw error;
