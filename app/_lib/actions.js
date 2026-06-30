@@ -468,3 +468,15 @@ export async function uploadAvatar(file){
 
   return publicUrlData.publicUrl;
 }
+
+export async function checkoutAction(payload) {
+  try {
+    const result = await processPayment(payload);
+    
+    return { success: true, orderId: result.orderId };
+
+  } catch (err) {
+    console.error("Checkout failed:", err.message);
+    return { success: false, error: err.message };
+  }
+}
