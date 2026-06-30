@@ -6,6 +6,7 @@ import {
 } from "@/app/_lib/dynamic-services";
 import styles from "./ProductDetails.module.css";
 import ProductClientView from "../ProductClientView/ProductClientView";
+import ProductImageCarousel from "../ProductImageCarousel/ProductImageCarousel";
 
 function generateVariants(options) {
   return options.reduce(
@@ -54,19 +55,24 @@ async function ProductDetails({ productId }) {
   const DBsku = await getSKU(productId);
 
   const skuList = DBsku.map((item) => {
-    const [storage, color] = item.sku.split(" * ");
+    const parts = item.sku.split(" * ");
+
+    const mapped = {};
+
+    productOptions.forEach((opt, index) => {
+      mapped[opt.option_name] = parts[index];
+    });
 
     return {
       ...item,
-      Storage: storage,
-      Color: color,
+      ...mapped,
     };
   });
 
   return (
     <div className={styles.detailsContainer}>
       <div className={styles.imageContainer}>
-        <p>Image</p>
+        <ProductImageCarousel productImages={productInfo.product_image_url} />
       </div>
 
       <ProductClientView

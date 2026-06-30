@@ -4,11 +4,10 @@
   padding: 1rem 2rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .imageContainer {
-  background-color: red;
-  width: 45%;
+  /* background-color: red; */
   height: 100%;
 }

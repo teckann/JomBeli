@@ -11,18 +11,21 @@ export async function generateMetadata({ params }) {
   return { title: `${name}` };
 }
 
-export async function generateStaticParams() {
-  const products = await getProducts();
+// my laptop very hot, so ignore it first
+// export async function generateStaticParams() {
+//   const products = await getProducts();
 
-  const ids = products.map((product) => ({
-    productId: String(product.product_id),
-  }));
+//   const ids = products.map((product) => ({
+//     productId: String(product.product_id),
+//   }));
 
-  return ids;
-}
+//   return ids;
+// }
 
 async function page({ params }) {
   const { productId } = await params;
+
+  const { user_id: sellerId } = await getSingleProduct(productId);
 
   return (
     <main className={styles.main}>
@@ -30,9 +33,19 @@ async function page({ params }) {
 
       <div className={styles.contentContainer}>
         <ProductDetails productId={productId} />
+
+        <SellerInfo userId={sellerId} />
       </div>
     </main>
   );
 }
+
+const SellerInfo = ({ userId }) => {
+  return (
+    <div className={styles.sellerContainer}>
+      <p>{userId}</p>
+    </div>
+  );
+};
 
 export default page;
