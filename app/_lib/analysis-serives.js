@@ -167,6 +167,35 @@ export async function getFilterUsers(role, status, username) {
     return formatUserData(data);
 }
 
+export async function getFilterAdmin(status, username) {
+
+    const supabase = await createClient();
+    
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .in("role",["Admin"]);
+
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
+    }
+
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
+
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error){
+      console.error(error);
+      return[];
+    }
+
+    return formatUserData(data);
+}
+
 export async function getProductSales(productId) {
   const supabase = await createClient();
 

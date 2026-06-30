@@ -65,6 +65,23 @@ export async function getBuyerSellerInfo() {
   return formatUserData(data);
 }
 
+export async function getAdminInfo() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select(
+      "user_id, username, email, contact_number, role, balances, user_status, ADDRESSES_T(street, city, state, postcode, country)",
+    )
+    .in("role", ["Admin"]); 
+
+  if (error) {
+    console.error("Failed to fetch users:", error.message);
+    throw new Error("Could not fetch users");
+  }
+
+  return formatUserData(data);
+}
+
 export function formatUserData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
   if (!data || data.length === 0) {
