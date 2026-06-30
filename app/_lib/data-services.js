@@ -502,7 +502,10 @@ export async function getCartItems(currentUserId) {
           user_id,
           product_name,
           discount,
-          product_image_url
+          product_image_url,
+          USERS_T (
+            username
+          )
         )
       )
     `,
@@ -533,7 +536,10 @@ export async function getCartItemsByCartItemID(cartItemId) {
           user_id,
           product_name,
           discount,
-          product_image_url
+          product_image_url,
+          USERS_T (
+            username
+          )
         )
       )
     `,
