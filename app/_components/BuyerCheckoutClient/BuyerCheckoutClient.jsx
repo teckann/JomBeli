@@ -30,6 +30,7 @@ export default function BuyerCheckoutClient({checkoutItems, addresses, total:{to
                     />
                 </div>
                 <div className={Styles.orderItemWrapper}>
+                    <h2>{checkoutItems[0].PRODUCT_VARIANTS_T.PRODUCTS_T.USERS_T.username}</h2>
                     {checkoutItems.map((item) => (
                         <OrderItemCard 
                             key={item.cart_item_id}

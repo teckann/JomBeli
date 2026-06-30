@@ -1,0 +1,111 @@
+.addressSection {
+    font-family: var(--font-body);
+    width: 100%;
+}
+
+.sectionTitle {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-font-primary);
+    margin: 0 0 1.25rem 0;
+}
+
+.emptyMessage {
+    font-size: var(--text-base);
+    color: var(--color-font-secondary);
+}
+
+.addressGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+    max-height: 280px; 
+    overflow-y: auto;
+    padding-right: 0.5rem; 
+}
+
+.addressGrid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.addressGrid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.addressGrid::-webkit-scrollbar-thumb {
+    background-color: var(--color-border-strong);
+    border-radius: 10px;
+}
+
+.addressCard {
+    position: relative;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-light);
+    border-radius: 10px;
+    padding: 1.25rem;
+    padding-right: 3.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.addressCard:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-muted);
+}
+
+.addressCard.selected {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-subtle);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.recipientName {
+    font-weight: 600;
+    font-size: var(--text-base);
+    color: var(--color-font-primary);
+}
+
+.recipientContact {
+    font-size: var(--text-sm);
+    color: var(--color-font-secondary);
+}
+
+.defaultBadge {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-danger-text);
+    background-color: var(--color-sub);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+
+.addressLine {
+    font-size: var(--text-sm);
+    color: var(--color-font-secondary);
+    margin: 0.15rem 0;
+    line-height: 1.4;
+}
+
+.addressCard.selected .addressLine {
+    color: var(--color-font-primary);
+}
+
+.radioInput {
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    margin: 0;
+}

@@ -15,9 +15,13 @@ export default function BuyerCartClient({cartData}){
     // Group items by shop (seller user id)
     const groupedByShop = itemList.reduce((acc, cartitem) => {
         const shopId = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.user_id;
+        const shopName = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.USERS_T.username;
 
         if (!acc[shopId]) {
-            acc[shopId] = { items: [] };
+            acc[shopId] = { 
+                shopName: shopName,
+                items: []
+            };
         }
 
         acc[shopId].items.push(cartitem);
@@ -79,9 +83,9 @@ export default function BuyerCartClient({cartData}){
     return(
         <div className={Styles.cartComponentWrapper}>
             <div className={Styles.cartItemWrapper}>
-                {Object.entries(groupedByShop).map(([shopId, { items }]) => (
+                {Object.entries(groupedByShop).map(([shopId, { shopName, items }]) => (
                     <div key={shopId} className={Styles.cartItemList}>
-                        <h2>Shop {shopId}</h2>
+                        <h2>{shopName}</h2>
                         <hr />
                         {items.map((cartitem) => (
                             <OrderItemCard 
@@ -99,11 +103,26 @@ export default function BuyerCartClient({cartData}){
             </div>
 
             <div className={Styles.summaryContainer}>
-                <h1>Subtotal: {totalOriginalPrice.toFixed(2)}</h1>
-                <h1>Discount: {totalSaved.toFixed(2)}</h1>
-                <h1>Total: {totalDiscountedPrice.toFixed(2)}</h1>
+                <h2 className={Styles.summaryTitle}>Order Summary</h2>
+                
+                <div className={Styles.summaryRow}>
+                    <span>Subtotal</span>
+                    <span>${totalOriginalPrice.toFixed(2)}</span>
+                </div>
+                
+                <div className={`${Styles.summaryRow} ${Styles.discount}`}>
+                    <span>Discount</span>
+                    <span>-${totalSaved.toFixed(2)}</span>
+                </div>
+                
+                <div className={`${Styles.summaryRow} ${Styles.total}`}>
+                    <span>Total</span>
+                    <span>${totalDiscountedPrice.toFixed(2)}</span>
+                </div>
+                
                 <button 
-                    onClick={()=>handleCheckOut()}
+                    className={Styles.checkoutBtn}
+                    onClick={() => handleCheckOut()}
                     disabled={checkedItems.length === 0}
                 >
                     Check Out
