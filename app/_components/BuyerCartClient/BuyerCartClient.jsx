@@ -107,17 +107,17 @@ export default function BuyerCartClient({cartData}){
                 
                 <div className={Styles.summaryRow}>
                     <span>Subtotal</span>
-                    <span>${totalOriginalPrice.toFixed(2)}</span>
+                    <span>RM{totalOriginalPrice.toFixed(2)}</span>
                 </div>
                 
                 <div className={`${Styles.summaryRow} ${Styles.discount}`}>
                     <span>Discount</span>
-                    <span>-${totalSaved.toFixed(2)}</span>
+                    <span>-RM{totalSaved.toFixed(2)}</span>
                 </div>
                 
                 <div className={`${Styles.summaryRow} ${Styles.total}`}>
                     <span>Total</span>
-                    <span>${totalDiscountedPrice.toFixed(2)}</span>
+                    <span>RM{totalDiscountedPrice.toFixed(2)}</span>
                 </div>
                 
                 <button 

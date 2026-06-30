@@ -4,20 +4,7 @@ import Styles from "./BuyerVoucherSelection.module.css";
 
 export default function VoucherSelection({ vouchers = [], selectedVoucherId, onSelectVoucher, subtotal = 0,}){
   function getVoucherDiscount(voucher) {
-    const discountType = voucher.discount_type;
     const discountValue = Number(voucher.discount_value || 0);
-    const maxDiscount = Number(voucher.max_spend || 0);
-
-    if (discountType === "percentage") {
-      const calculatedDiscount = subtotal * (discountValue / 100);
-
-      if (maxDiscount > 0) {
-        return Math.min(calculatedDiscount, maxDiscount);
-      }
-
-      return calculatedDiscount;
-    }
-
     return discountValue;
   }
 

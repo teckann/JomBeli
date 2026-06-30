@@ -95,9 +95,9 @@
 }
 
 .voucherApplied {
-    color: var(--color-info-text);
-    background-color: var(--color-info-bg);
-    font-size: var(--text-xs);
+    color: var(--color-success-text);
+    background-color: var(--color-success-bg);
+    font-size: var(--text-sm);
     font-weight: 600;
     padding: 0.15rem 0.5rem;
     border-radius: 4px;

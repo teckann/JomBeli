@@ -114,7 +114,7 @@ export default function PaymentForm({ checkoutData }) {
                 <div className={Styles.summaryRow}>
                     <span>Voucher Applied:</span>
                     <span className={checkoutData.userVoucherID ? Styles.voucherApplied : Styles.voucherNone}>
-                        {checkoutData.userVoucherID ? `-${voucherDiscount.toFixed(2)}` : "None"}
+                        {checkoutData.userVoucherID ? `-RM ${voucherDiscount.toFixed(2)}` : "None"}
                     </span>
                 </div>
                 <div className={`${Styles.summaryRow} ${Styles.totalRow}`}>

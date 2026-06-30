@@ -49,9 +49,27 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  
+  max-height: 360px;          
+  overflow-y: auto;           
+  padding-right: 4px;
+  
+  -webkit-overflow-scrolling: touch; 
 }
 
-/* Base style for the interactive Voucher Card label */
+.voucherList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.voucherList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.voucherList::-webkit-scrollbar-thumb {
+  background-color: var(--color-border-primary);
+  border-radius: 3px;
+}
+
 .voucherCard {
   display: flex;
   align-items: flex-start;
@@ -67,17 +85,14 @@
 
 .voucherCard:hover:not(.disabled) {
   border-color: var(--color-primary);
-  background-color: var(--color-bg-hover);
 }
 
-/* Custom visual feedback when selected */
 .voucherCard.selected {
-  border-color: var(--color-success);
-  background-color: var(--color-success-bg);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
   box-shadow: 0 0 0 2px rgba(30, 158, 107, 0.1);
 }
 
-/* Ineligible voucher handling */
 .voucherCard.disabled {
   border-color: var(--color-border-primary);
   background-color: var(--color-bg-input);
@@ -85,10 +100,9 @@
   opacity: 0.65;
 }
 
-/* Hide or restyle standard radio input safely */
 .radioInput {
   margin-top: 4px;
-  accent-color: var(--color-success);
+  accent-color: var(--color-primary);
   cursor: pointer;
 }
 
