@@ -66,9 +66,10 @@ export async function getSKU(productId) {
   const { data, error } = await supabase
     .from("PRODUCT_VARIANTS_T")
     .select(
-      "sku, product_variant_price, product_variant_stock, product_variant_status",
+      "product_variant_id, sku, product_variant_price, product_variant_stock, product_variant_status",
     )
-    .eq("product_id", productId);
+    .eq("product_id", productId)
+    .eq("product_variant_status", "Active");
 
   if (error) {
     console.error("Failed to fetch sku:", error.message);

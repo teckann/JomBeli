@@ -102,7 +102,7 @@ const Tags = ({ type, discount, stock, category, sold }) => {
         </div>
       )}
 
-      {(type === "all" || type === "discover") && (
+      {/* {(type === "all" || type === "discover") && (
         <div className={styles.tag}>
           <svg
             className={styles.icon}
@@ -116,7 +116,7 @@ const Tags = ({ type, discount, stock, category, sold }) => {
           </svg>
           <p>{stock}</p>
         </div>
-      )}
+      )} */}
     </>
   );
 };

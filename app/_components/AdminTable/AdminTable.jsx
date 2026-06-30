@@ -13,9 +13,9 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
     // under {}, object are iterable (kkep object properties), [] only iterable for array
     const actionMaps = {viewProduct: {name: "View", icon: <InfoIcon />, handler: (product) => router.push(`/admin/ManageProducts/${getdataPath(product, "product_id")}`), show: (product) => true},
                         viewUsers: {name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true},
-                        viewReviewer: {name: "View Reviewer", icon: <InfoIcon />, handler: (review) => router.push(`/admin/ManageUsers/${getdataPath(review, "user_id")}`), show: (review) => true},
-                        viewAdmins:{name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageAdmins/${getdataPath(user, "user_id")}`), show: (data) => true},
-                        viewCouriers:{name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageCouriers/${getdataPath(user, "user_id")}`), show: (data) => true}};
+                    viewReviewer: {name: "View Reviewer", icon: <InfoIcon />, handler: (review) => router.push(`/admin/ManageUsers/${getdataPath(review, "user_id")}`), show: (review) => true},
+                viewRefund: {name: "View Refund", icon: <InfoIcon />, handler: (refund) => router.push(`/admin/ManageRefunds/RefundsTable/${getdataPath(refund, "refund_id")}`), show: (refund) => true}};
+
     // console.log(datas);
 
     // action = [{}, {}]
@@ -74,15 +74,15 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                     </thead>
                     <tbody>
                         {
-                            (!slice ? datas.map((data) => {
+                            (!slice ? datas.map((data, index) => {
                                     counter++;
                                     const evenRows = (counter % 2 == 0 ? true : false);
-                                    return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
+                                    return <InsertData key={index} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
                                 }) :
-                                datasSliced.map((data) => {
+                                datasSliced.map((data, index) => {
                                     counter++;
                                     const evenRows = (counter % 2 == 0 ? true : false);
-                                    return <InsertData key={getdataPath(data, dataIdFormat)} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
+                                    return <InsertData key={index} evenRows={evenRows} fields={fields} data={data} actions={actions} actionMaps={actionMaps} />
                                 }
                             )
                             )

@@ -1,6 +1,7 @@
 .content {
   /* background-color: blue; */
-  width: 50%;
+  min-width: 45%;
+  max-width: 50%;
   color: var(--color-font-primary);
 
   display: flex;
@@ -49,10 +50,24 @@
   font-size: 12px;
 }
 
-.button:hover {
+.button:not(:disabled):hover {
   background-color: var(--color-bg-hover);
   color: var(--color-primary);
   font-weight: 550;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-bg-input);
+  color: var(--color-font-secondary);
+}
+
+.active {
+  color: var(--color-primary);
+  font-weight: 550;
+  border-color: 1px solid var(--color-primary);
 }
 
 .noOptionCard {
@@ -198,4 +213,42 @@
 
 .quantity:focus {
   outline: 1px solid var(--color-border-primary);
+}
+
+.buyNowButton,
+.addCartButton {
+  padding: 0.7rem 3rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  border: 0.5px solid var(--color-border-primary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  margin-top: 8px;
+  font-family: var(--font-body);
+}
+
+.addCartButton {
+  background-color: var(--color-bg-input);
+  color: var(--color-font-primary);
+  font-weight: normal;
+}
+
+.buyNowButton:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.addCartButton:hover {
+  background-color: var(--color-bg-hover);
+  font-weight: 550;
+}
+
+.buyNowButton:disabled,
+.addCartButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }

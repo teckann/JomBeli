@@ -3,11 +3,12 @@
 import { useState } from "react";
 import styles from "./ProductClientView.module.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function ProductClientView({ product, optionValues, sku }) {
-  console.log(product);
-  console.log(optionValues);
-  console.log(sku);
+  // console.log(product);
+  // console.log(optionValues);
+  // console.log(sku);
 
   const {
     product_name: name,
@@ -21,10 +22,110 @@ function ProductClientView({ product, optionValues, sku }) {
   const [currentSku, setCurrentSku] = useState(null);
   const [price, setPrice] = useState(productPrice);
   const [stock, setStock] = useState(productStock);
+  const [quantity, setQuantity] = useState(1);
+
+  const router = useRouter();
 
   // check got discount or not
   const hasDiscount = discount ?? false;
   const finalPrice = hasDiscount ? price * ((100 - discount) / 100) : price;
+
+  // check if the selection match with the sku
+  const matchSku = (selectedOptions, skuList) => {
+    return skuList.find((item) => {
+      return Object.keys(selectedOptions).every((key) => {
+        return item[key] === selectedOptions[key];
+      });
+    });
+  };
+
+  const isValidOption = (optionName, value, selectedOptions, skuList) => {
+    const temp = {
+      ...selectedOptions,
+      [optionName]: value,
+    };
+
+    return skuList.some((sku) => {
+      return Object.keys(temp).every((key) => {
+        return sku[key] === temp[key];
+      });
+    });
+  };
+
+  const handleSelectOption = (optionName, value) => {
+    const isSame = selectedOptions[optionName] === value;
+
+    const newSelected = {
+      ...selectedOptions,
+      [optionName]: isSame ? undefined : value,
+    };
+
+    // clean undefined
+    Object.keys(newSelected).forEach((key) => {
+      if (!newSelected[key]) delete newSelected[key];
+    });
+
+    setSelectedOptions(newSelected);
+
+    const matched = matchSku(newSelected, sku);
+
+    const isFullMatch =
+      matched && Object.keys(newSelected).length === optionValues.length;
+
+    if (isFullMatch) {
+      setCurrentSku(matched);
+      setPrice(matched.product_variant_price);
+      setStock(matched.product_variant_stock);
+    } else {
+      setCurrentSku(null);
+      setPrice(productPrice);
+      setStock(productStock);
+    }
+
+    // console.log(currentSku);
+  };
+
+  const fetchAPI = async () => {
+    const res = await fetch("/api/addtocart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        variantId: currentSku.product_variant_id,
+        quantity,
+      }),
+    });
+
+    const data = await res.json();
+
+    return { res, data };
+  };
+
+  const handleAddToCart = async () => {
+    if (!currentSku) return;
+
+    const { res } = await fetchAPI();
+
+    if (res.ok) {
+      router.push("/buyer/cart");
+    }
+  };
+
+  const handleBuyNow = async () => {
+    if (!currentSku) return;
+
+    const { res, data } = await fetchAPI();
+
+    if (res.ok) {
+      const cartItemId = data.cartItemId;
+
+      router.push(`/buyer/payment?items=${cartItemId}`);
+    }
+  };
+
+  // check the sku is ready or not (for activate buy now button & add to cart button)
+  const isSkuReady = !!currentSku;
 
   return (
     <div className={styles.content}>
@@ -41,7 +142,14 @@ function ProductClientView({ product, optionValues, sku }) {
         {optionValues.length > 0 ? (
           <>
             {optionValues.map((item) => (
-              <Options key={item.option_id} optionValues={item} />
+              <Options
+                key={item.option_id}
+                optionValues={item}
+                selectedOptions={selectedOptions}
+                sku={sku}
+                onSelect={handleSelectOption}
+                isValidOption={isValidOption}
+              />
             ))}
 
             <div className={styles.optionDiv}>
@@ -52,12 +160,31 @@ function ProductClientView({ product, optionValues, sku }) {
                   type="number"
                   min="1"
                   max={stock}
-                  defaultValue={1}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
                   className={`${styles.button} ${styles.quantity}`}
                 />
 
                 <p className={styles.stock}>Stock: {stock}</p>
               </div>
+            </div>
+
+            <div className={styles.optionDiv}>
+              <button
+                className={styles.buyNowButton}
+                disabled={!isSkuReady}
+                onClick={handleBuyNow}
+              >
+                Buy Now
+              </button>
+
+              <button
+                className={styles.addCartButton}
+                disabled={!isSkuReady}
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </button>
             </div>
           </>
         ) : (
@@ -68,7 +195,13 @@ function ProductClientView({ product, optionValues, sku }) {
   );
 }
 
-const Options = ({ optionValues }) => {
+const Options = ({
+  optionValues,
+  selectedOptions,
+  sku,
+  onSelect,
+  isValidOption,
+}) => {
   const { option_name: option, values } = optionValues;
 
   return (
@@ -77,7 +210,14 @@ const Options = ({ optionValues }) => {
 
       <div className={styles.options}>
         {values.map((value, index) => (
-          <button className={styles.button} key={index}>
+          <button
+            key={index}
+            className={`${styles.button} ${
+              selectedOptions[option] === value ? styles.active : ""
+            }`}
+            onClick={() => onSelect(option, value)}
+            disabled={!isValidOption(option, value, selectedOptions, sku)}
+          >
             {value}
           </button>
         ))}
