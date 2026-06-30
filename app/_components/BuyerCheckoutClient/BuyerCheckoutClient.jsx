@@ -3,12 +3,22 @@
 import OrderItemCard from "@/app/_components/OrderItemCard/OrderItemCard";
 import AddressSelection from "@/app/_components/BuyerAddressSelection/BuyerAddressSelection";
 import PaymentForm from "@/app/_components/PaymentForm/PaymentForm";
+import BuyerVoucherSelection from "@/app/_components/BuyerVoucherSelection/BuyerVoucherSelection"
 import Styles from "./BuyerCheckoutClient.module.css";
 import { useState } from "react";
 
-export default function BuyerCheckoutClient({checkoutItems, addresses, total:{totalOriginalPrice, totalSaved}, userID}) {
+export default function BuyerCheckoutClient({checkoutItems, addresses, total:{totalOriginalPrice, totalSaved}, userID, vouchers}) {
 
     const [selectedAddressId, setSelectedAddressId] = useState();
+    const [selectedVoucherId, setSelectedVoucherId] = useState(null);
+    const selectedVoucher = vouchers.find(
+        (voucher) => voucher.user_voucher_id === selectedVoucherId
+    );
+    const subtotalAfterProductDiscount = totalOriginalPrice - totalSaved;
+    const voucherDiscount = selectedVoucher
+        ? Math.min(Number(selectedVoucher.discount_value || 0), subtotalAfterProductDiscount)
+        : 0;
+    const totalDiscount = totalSaved + voucherDiscount;
 
     const CheckoutData = {
         userID: userID,
@@ -16,7 +26,10 @@ export default function BuyerCheckoutClient({checkoutItems, addresses, total:{to
         addressID : selectedAddressId,
         originalPrice : totalOriginalPrice,
         discount : totalSaved,
+        voucherDiscount,
+        totalDiscount,
         orderItems : checkoutItems,
+        userVoucherID: selectedVoucherId,
     }
 
     return (
@@ -43,6 +56,12 @@ export default function BuyerCheckoutClient({checkoutItems, addresses, total:{to
             </div>
 
             <div className={Styles.paymentSection}>
+                <BuyerVoucherSelection 
+                    vouchers={vouchers} 
+                    selectedVoucherId={selectedVoucherId}
+                    onSelectVoucher={setSelectedVoucherId}
+                    subtotal={totalOriginalPrice}
+                />
                 <PaymentForm checkoutData={CheckoutData}/>
             </div>
         </div>

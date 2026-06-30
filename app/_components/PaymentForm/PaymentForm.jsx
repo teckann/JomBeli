@@ -17,7 +17,9 @@ export default function PaymentForm({ checkoutData }) {
     const currentDelivery = deliveryConfig[deliveryMethod];
 
     const itemsSubtotal = checkoutData.originalPrice;
-    const discountAmount = checkoutData.discount;
+    const productDiscount = checkoutData.discount;
+    const voucherDiscount = checkoutData.voucherDiscount || 0;
+    const discountAmount = checkoutData.totalDiscount;
     const shippingFee = currentDelivery.fee;
     const grandTotal = itemsSubtotal - discountAmount + shippingFee;
 
@@ -103,7 +105,7 @@ export default function PaymentForm({ checkoutData }) {
                 </div>
                 <div className={`${Styles.summaryRow} ${Styles.discount}`}>
                     <span>Discounts Saved:</span>
-                    <span>-RM {discountAmount.toFixed(2)}</span>
+                    <span>-RM {productDiscount.toFixed(2)}</span>
                 </div>
                 <div className={Styles.summaryRow}>
                     <span>Shipping Fee:</span>
@@ -112,10 +114,10 @@ export default function PaymentForm({ checkoutData }) {
                 <div className={Styles.summaryRow}>
                     <span>Voucher Applied:</span>
                     <span className={checkoutData.userVoucherID ? Styles.voucherApplied : Styles.voucherNone}>
-                        {checkoutData.userVoucherID ? "Applied" : "None"}
+                        {checkoutData.userVoucherID ? `-${voucherDiscount.toFixed(2)}` : "None"}
                     </span>
                 </div>
-                <div className={`${Styles.summaryRow} Styles.totalRow`}>
+                <div className={`${Styles.summaryRow} ${Styles.totalRow}`}>
                     <strong>Grand Total:</strong>
                     <strong>RM {grandTotal}</strong>
                 </div>
