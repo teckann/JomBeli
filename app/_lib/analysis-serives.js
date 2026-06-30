@@ -339,3 +339,50 @@ export async function getTotalWaitingRefundCount() {
 
     return count;
 }
+
+export async function getFilterManageRefunds(date, adminStatus, sellerStatus) {
+    const supabase = await createClient();
+
+    const dateState = !(date === "true");
+
+    console.log(dateState);
+    console.log(dateState, typeof dateState);
+
+    let query = supabase
+        .from("REFUNDS_T")
+        .select(`
+            *,
+            ORDERS_T (
+                order_id,
+                total_amount,
+                buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+                    username
+                ),
+                seller:USERS_T!ORDERS_T_seller_id_fkey (
+                    username
+                )
+            )
+        `);
+
+    if (adminStatus && adminStatus !== "All") {
+        query = query.eq("admin_status", adminStatus);
+    }
+
+    if (sellerStatus && sellerStatus !== "All") {
+        query = query.eq("seller_status", sellerStatus);
+    }
+
+    query = query.order("created_at", {
+        ascending: dateState // let the status contrast
+    });
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records");
+    }
+    console.log(data);
+
+    return data;
+}

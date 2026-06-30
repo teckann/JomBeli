@@ -723,6 +723,79 @@ export async function getAdminRefundRequests() {
     return data;
 }
 
+export async function getRefund() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .select(`
+      refund_id,
+      refund_subject,
+      seller_status,
+      admin_status,
+      created_at,
+
+      ORDERS_T (
+        order_id,
+        total_amount,
+
+        buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+          username
+        ),
+
+        seller:USERS_T!ORDERS_T_seller_id_fkey (
+          username
+        )
+      )
+    `);
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records.");
+    }
+
+    return data;
+}
+
+export async function getRefundDetails() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .select(`
+      refund_id,
+      refund_subject,
+      seller_status,
+      evidences,
+      refund_description,
+      seller_remarks,
+      admin_remarks,
+      refunded_at,
+      admin_status,
+      created_at,
+
+      ORDERS_T (
+        order_id,
+        total_amount,
+
+        buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+          username
+        ),
+
+        seller:USERS_T!ORDERS_T_seller_id_fkey (
+          username
+        )
+      )
+    `);
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records.");
+    }
+
+    return data;
+}
+
 export async function getRejectedBySeller() {
     const supabase = await createClient();
 
@@ -796,3 +869,4 @@ export async function getNotProcessedBySeller() {
 
     return data;
 }
+
