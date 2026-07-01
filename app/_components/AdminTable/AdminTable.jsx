@@ -15,8 +15,9 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         viewUsers: {name: "View", icon: <InfoIcon />, handler: (user) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true},
                         viewReviewer: {name: "View Reviewer", icon: <InfoIcon />, handler: (review) => router.push(`/admin/ManageUsers/${getdataPath(review, "user_id")}`), show: (review) => true},
                         viewRefund: {name: "View Refund", icon: <InfoIcon />, handler: (refund) => router.push(`/admin/ManageRefunds/RefundsTable/${getdataPath(refund, "refund_id")}`), show: (refund) => true},
-                        viewAdmins: {name: "View", icon: <InfoIcon />, handler: (admin) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true},
-                        viewCouriers: {name: "View", icon: <InfoIcon />, handler: (courier) => router.push(`/admin/ManageUsers/${getdataPath(user, "user_id")}`), show: (data) => true}};
+                        viewAdmins: {name: "View", icon: <InfoIcon />, handler: (admin) => router.push(`/admin/ManageAdmins/${getdataPath(admin, "user_id")}`), show: (data) => true},
+                        viewCouriers: {name: "View", icon: <InfoIcon />, handler: (courier) => router.push(`/admin/ManageCouriers/${getdataPath(courier, "user_id")}`), show: (data) => true},
+                        viewVouchers: {name: "View", icon: <InfoIcon />, handler: (voucher) => router.push(`/admin/ManageVoucher/${getdataPath(voucher, "voucher_id")}`), show: (data) => true}};
 
     // console.log(datas);
 

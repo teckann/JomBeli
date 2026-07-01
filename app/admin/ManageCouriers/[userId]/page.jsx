@@ -1,6 +1,6 @@
 import { getUserDetails } from "@/app/_lib/data-services";
 import { getBuyerOrderCount, getBuyerTotalSpent, getSellerOrderCount, getSellerGrossEarnings } from "@/app/_lib/analysis-serives"
-import Styles from "./UserDetail.module.css";
+import Styles from "./CourierDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
@@ -26,13 +26,9 @@ export default async function UserDetail({params}){
                     <BackButton className={Styles.backButton} />
                 </div>
                 <div className={Styles.pageHeader}>
-                    <h1 className={Styles.header}>View User Page</h1>
+                    <h1 className={Styles.header}>Courier details</h1>
                 </div>
                 <div className={Styles.profileContainer}>
-                    <div className={Styles.actionButtons}>
-                        <button className={Styles.btnSecondary}>View order history</button>
-                        <button className={Styles.btnSecondary}>View transaction history</button>
-                    </div>
                     <AdminItemCard id={user.user_id} name={user.username} category={user.role} itemStatus={user.user_status} imageUrl={user.avatar}/>
                 </div>
             </div>

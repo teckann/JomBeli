@@ -88,19 +88,42 @@ export function UserInformation({ user, country }){
 }
 
 export function AdminInformation({ user, country }){
+    return(
+    <>
+        <div className={Styles.headerWrapper}>
+            <h3 className={Styles.sectionTitle}>Personal Information</h3>
+        </div>
+        <div className={Styles.infoGrid}>
+            <span className={Styles.label}>User Name</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.username || "-"}</div>
 
-    const addresses = user?.addresses || user?.ADDRESSES_T || [];
+            <span className={Styles.label}>Gender</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.gender || "-"}</div>
 
-    const [selectedAddressIdx, setSelectedAddressIdx] = useState(0);
-    const activeAddress = addresses[selectedAddressIdx];
+            <span className={Styles.label}>Nationality</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{country}</div>
 
-    const formatAddressString = (addr) => {
-        if (!addr) return "-";
-        return [addr.street, addr.city, addr.state, addr.postcode, addr.country]
-            .filter(Boolean)
-            .join(", ");
-    };
+            <span className={Styles.label}>Email</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.email || "-"}</div>
 
+            <span className={Styles.label}>Contact Number</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.contact_number || "-"}</div>
+
+            <span className={Styles.label}>Registration Date</span>
+            <span className={Styles.colon}>:</span>
+            <div className={Styles.value}>{user?.created_at || "-"}</div>
+
+        </div>
+    </>    
+    )
+}
+
+export function ProfileInformation({ user, country }){
     return(
     <>
         <div className={Styles.headerWrapper}>
@@ -140,7 +163,7 @@ export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerIte
     return(
         <>
         <div className={Styles.headerWrapper}>
-            <h3 className={Styles.sectionTitle}>User Activity Monitoring</h3>
+            <h3 className={Styles.sectionTitle}>Account Activity Monitoring</h3>
         </div>
         <div className={Styles.infoGrid}>
             {/* <PlaceholderIcon />
@@ -167,6 +190,13 @@ export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerIte
                 <span className={Styles.label}>Gross Earnings</span>
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>{GrossEarnings}</div>
+                </>
+            )}
+            {user?.role === 'Courier' &&(
+                <>
+                <span className={Styles.label}>Total Items Delivered</span>
+                <span className={Styles.colon}>:</span>
+                <div className={Styles.value}>{SellerItemsSold}</div>
                 </>
             )}
             <span className={Styles.label}>Current Balance</span>
