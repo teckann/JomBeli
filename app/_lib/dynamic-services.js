@@ -78,3 +78,71 @@ export async function getSKU(productId) {
 
   return data;
 }
+
+export async function getSellerInfo(userId) {
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    console.error("Failed to fetch seller info:", error.message);
+    throw new Error("Could not fetch seller info");
+  }
+
+  return data;
+}
+
+export async function getSellerRating(userId) {
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("overall_product_rating")
+    .eq("user_id", userId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data || data.length === 0) {
+    return "No rating yet";
+  }
+
+  const sum = data.reduce((acc, item) => {
+    return acc + (Number(item.overall_product_rating) || 0);
+  }, 0);
+
+  const avg = sum / data.length;
+
+  return Number(avg.toFixed(1));
+}
+
+export async function getSellerTotalReviews(sellerId) {
+  // all the seller products
+  const { data: products, error: productError } = await supabase
+    .from("PRODUCTS_T")
+    .select("product_id")
+    .eq("user_id", sellerId);
+
+  if (productError) {
+    throw new Error(productError.message);
+  }
+
+  if (!products || products.length === 0) {
+    return 0;
+  }
+
+  const productIds = products.map((product) => product.product_id);
+
+  // retrieve all the review records
+  const { data: reviews, error: reviewError } = await supabase
+    .from("REVIEWS_T")
+    .select("review_id")
+    .in("product_id", productIds);
+
+  if (reviewError) {
+    throw new Error(reviewError.message);
+  }
+
+  return reviews.length;
+}
