@@ -11,15 +11,13 @@ import AdminSliceShow from '@/app/_components/AdminSliceShow/AdminSlideShow';
 
 
 
-export default async function manageReduns() {
+export default async function manageRefuns() {
 
     const rejectedBySeller = await getRejectedBySeller();
     const notProcessBySeller = await getNotProcessedBySeller();
     
     const rejectedBySellerCount = rejectedBySeller.length;
     const notProcessBySellerCount = notProcessBySeller.length;
-
-    const actions = [{type: "viewProduct"}];
 
     return (
         <div className={ Styles.contentPage}>
@@ -29,14 +27,13 @@ export default async function manageReduns() {
                     <p>Admin are able to manage the request that are rejected from seller or is not response from seller within certain period.</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    {/* <GenerateReportButton yearMonths={yearMonthsSelect} /> */}
+                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable">View Refund Records</Link></button>
                 </div>
             </div>
             <div className={Styles.refundsOverviewContainer}>
                 <RefundOverViewBar rejectedBySellerCount={rejectedBySellerCount} notProcessBySellerCount={notProcessBySellerCount} />
             </div>
-            <br />
-            <div className={Styles.showTablePart}>
+            <div className={Styles.showSlicePart}>
                 <div className={Styles.listingText}>
                     <h2>Refund Rejected by Seller {"("}{rejectedBySellerCount}{")"}</h2>
                     <p>Monitor and ensure that sellers provide reasonable justifications when rejecting refund requests.</p>
@@ -45,7 +42,7 @@ export default async function manageReduns() {
                     <AdminSliceShow datas={rejectedBySeller} />
                 </div>
             </div>
-            <div className={Styles.showTablePart}>
+            <div className={Styles.showSlicePart}>
                 <div className={Styles.listingText}>
                     <h2>Not Process by Seller {"("}{notProcessBySellerCount}{")"}</h2>
                     <p>Manage refund requests that have not been processed by sellers within 7 days.</p>

@@ -1,0 +1,119 @@
+.upperPart {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    align-items: center;
+}
+
+.productDetailsPage {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+}
+
+.backButtonPart, .productDescription {
+    width: 100%;
+}
+
+.informationLeft {
+    width: 50%;
+}
+
+.middlePart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.productInformationContainer {
+    display: flex;
+    width: 80%;
+    background-color: bisque;
+    border-radius: 2em;
+    flex-direction: column;
+    padding: 0.3em;
+}
+
+.informationUpper {
+    display: flex;
+}
+
+.informationRight {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    gap: 1em;
+}
+
+.relatedInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.buttonPart {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em 0;
+}
+
+.bottomPart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.informationListFrame {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.informationSpace {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.informationRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.informationField {
+    width: 30%;
+}
+
+.informationMiddleQuote {
+    width: 5%;
+}
+
+.informationValue {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    background-color: pink;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.titleBar {
+    display: flex;
+    /* padding: 1em; */
+    color: grey;
+}
+
+.hrLength {
+    width: 30%;
+    
+}
