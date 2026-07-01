@@ -93,18 +93,12 @@ export function formatUserData(data) {
     let fullAddress = "-";
 
     // String the address together
-    if (user.ADDRESSES_T) {
-      const addr = user.ADDRESSES_T;
-      const addressParts = [
-        addr.street,
-        addr.city,
-        addr.state,
-        addr.postcode,
-        addr.country,
-      ].filter(Boolean);
-
-      if (addressParts.length > 0) {
-        fullAddress = addressParts.join(", ");
+    if (user.ADDRESSES_T && Array.isArray(user.ADDRESSES_T) && user.ADDRESSES_T.length > 0) {
+      const count = user.ADDRESSES_T.length; //shows the first address
+      if (count === 1) {
+        fullAddress = "1 Address Saved";
+      } else if (count > 1){
+        fullAddress = `${count} Address Saved`;
       }
     }
 
@@ -114,6 +108,10 @@ export function formatUserData(data) {
     delete cleanedUser.ADDRESSES_T;
 
     cleanedUser.full_address = fullAddress;
+
+    cleanedUser.hub_name = user.HUBS_T?.hub_name;
+    cleanedUser.hub_location = user.HUBS_T?.hub_location;
+    delete cleanedUser.HUBS_T;
 
     // Replace any null values with dashes
     for (const key in cleanedUser) {
@@ -322,7 +320,7 @@ export async function getUserDetails(userId) {
 
   const { data, error } = await supabase
     .from("USERS_T")
-    .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+    .select("*, ADDRESSES_T(*)")
     .eq("user_id", userId)
     .single();
 
@@ -746,6 +744,79 @@ export async function getAdminRefundRequests() {
     return data;
 }
 
+export async function getRefund() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .select(`
+      refund_id,
+      refund_subject,
+      seller_status,
+      admin_status,
+      created_at,
+
+      ORDERS_T (
+        order_id,
+        total_amount,
+
+        buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+          username
+        ),
+
+        seller:USERS_T!ORDERS_T_seller_id_fkey (
+          username
+        )
+      )
+    `);
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records.");
+    }
+
+    return data;
+}
+
+export async function getRefundDetails() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .select(`
+      refund_id,
+      refund_subject,
+      seller_status,
+      evidences,
+      refund_description,
+      seller_remarks,
+      admin_remarks,
+      refunded_at,
+      admin_status,
+      created_at,
+
+      ORDERS_T (
+        order_id,
+        total_amount,
+
+        buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+          username
+        ),
+
+        seller:USERS_T!ORDERS_T_seller_id_fkey (
+          username
+        )
+      )
+    `);
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records.");
+    }
+
+    return data;
+}
+
 export async function getRejectedBySeller() {
     const supabase = await createClient();
 
@@ -887,4 +958,28 @@ export async function getUserVouchers(userId, shopId) {
     console.error('Error fetching user vouchers:', error);
     throw error;
   }
+}
+
+export async function getCourierInfo() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select(
+       `user_id, 
+        username, 
+        email, 
+        contact_number, 
+        role, balances, 
+        user_status, 
+        ADDRESSES_T(street, city, state, postcode, country), 
+        HUBS_T(hub_location, hubname)`,
+    )
+    .in("role", ["Courier"]); 
+
+  if (error) {
+    console.error("Failed to fetch users:", error.message);
+    throw new Error("Could not fetch users");
+  }
+
+  return formatUserData(data);
 }

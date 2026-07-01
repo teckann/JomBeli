@@ -368,3 +368,80 @@ export async function getTotalWaitingRefundCount() {
 
     return count;
 }
+
+export async function getFilterCouriers(status, username) {
+
+    const supabase = await createClient();
+    
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .in("role",["Courier"]);
+
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
+    }
+
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
+
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error){
+      console.error(error);
+      return[];
+    }
+
+    return formatUserData(data);
+  
+}
+
+export async function getFilterManageRefunds(date, adminStatus, sellerStatus) {
+    const supabase = await createClient();
+
+    const dateState = !(date === "true");
+
+    console.log(dateState);
+    console.log(dateState, typeof dateState);
+
+    let query = supabase
+        .from("REFUNDS_T")
+        .select(`
+            *,
+            ORDERS_T (
+                order_id,
+                total_amount,
+                buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+                    username
+                ),
+                seller:USERS_T!ORDERS_T_seller_id_fkey (
+                    username
+                )
+            )
+        `);
+
+    if (adminStatus && adminStatus !== "All") {
+        query = query.eq("admin_status", adminStatus);
+    }
+
+    if (sellerStatus && sellerStatus !== "All") {
+        query = query.eq("seller_status", sellerStatus);
+    }
+
+    query = query.order("created_at", {
+        ascending: dateState // let the status contrast
+    });
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch refund records");
+    }
+    console.log(data);
+
+    return data;
+}

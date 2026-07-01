@@ -15,7 +15,7 @@ export default async function manageUser({ searchParams }) {
 
     const actions = [{type:"viewUsers"}];
 
-    const fields = ["username", "ADDRESSES_T", "email", "contact_number","role", "balances", "user_status"];
+    const fields = ["username", "email", "contact_number", "full_address", "role", "balances", "user_status"];
 
     const datas = userList;
     

@@ -56,18 +56,6 @@ export default async function manageProductsPage({ searchParams }) {
     );
 }
 
-// export function GenerateReportButton() {
-//     return (
-//         <button className="btn btn-primary">
-//             <Link className={ Styles.linkText } href="#">
-//                 Generate Product Report
-//             </Link>
-//         </button>
-//     );
-// }
-
-// export async function 
-
 export async function ProductOverViewBar() {
 
     const totalProductsCount = await getTotalProductsCount();

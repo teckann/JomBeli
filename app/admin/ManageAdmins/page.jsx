@@ -6,17 +6,14 @@ import { getFilterAdmin }from '@/app/_lib/analysis-serives';
 
 export const revalidate = 0;
 
-export default async function manageUser({ searchParams }) {
+export default async function manageAdmins({ searchParams }) {
     const { status, username } = await searchParams;
 
     const userList = await getFilterAdmin(status, username);
     // console.log(userList);
-    const titles = ["Full Name","Email","Contact Number","Address","Role","Status"];
-
-    const actions = [{type:"viewUsers"}];
-
-    const fields = ["username", "ADDRESSES_T", "email", "contact_number","role","user_status"];
-
+    const titles = ["Full Name","Email","Contact Number","Role","Status"];
+    const actions = [{type:"viewAdmins"}];
+    const fields = ["username", "email", "contact_number","role","user_status"];
     const datas = userList;
     
     return (

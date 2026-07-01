@@ -2,6 +2,99 @@
     transform: scaleX(-1);
 }
 
+.revert:hover {
+    transform: scale(-1.5, 1.5);
+}
+
 .hide {
     visibility: hidden;
+}
+
+.navContainer {
+    display: flex;
+    border-radius: 10px;
+    transition: all 0.4s;
+}
+
+.button {
+    background-color: var(--color-bg-hover);
+}
+
+.sliceContainer {
+    display: flex;
+    gap: 1em;
+    width: 100%;
+}
+
+.componentFrame {
+    display: flex;
+    gap: 1em;
+    /* width: 80%; */
+}
+
+.icon, .revert {
+    transition: all 0.4s;
+    color: var(--color-primary-light);
+}
+
+.icon:hover {
+    transform: scale(1.5); 
+}
+
+.sliceComponent {
+    display: flex;
+    flex-direction: column;
+    gap:0.5em;
+    padding: 0.5em;
+    background-color: var(--color-bg-card);
+    min-width: 14em;
+    font-size: 1.2em;
+    border-radius: 15px;
+    border-color: var(--color-border-strong);
+    padding: 0.5em;
+}
+
+.sliceTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+.titleText {
+    color: var(--color-primary-darker);
+}
+
+.button {
+    background-color: var(--color-bg-surface);
+    opacity: 0.8;
+    border-color: var(--color-border-light);
+    border-radius: 10px;
+}
+
+.refundReason {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.componentBottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+}
+
+.linkText {
+    color: white;
+    text-decoration: none;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.daysText {
+    color: var(--color-text-secondary);
+    color: grey;
 }
