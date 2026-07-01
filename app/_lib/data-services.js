@@ -1034,3 +1034,46 @@ export async function getOrdersItems(buyerId, statusFilter) {
     return null
   }
 }
+
+export async function getOrder(orderId, userId) {
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+      .from('ORDERS_T')
+      .select(`
+        order_id,
+        buyer_id,
+        seller_id,
+        address_id,
+        delivery_id,
+        original_price,
+        discount_amount,
+        total_amount,
+        payment_status,
+        order_status,
+        created_at,
+        ORDER_ITEMS_T (
+          order_item_id,
+          product_variant_id,
+          quantity,
+          subtotal,
+          PRODUCT_VARIANTS_T (
+            product_id,
+            sku,
+            PRODUCTS_T (
+              product_name,
+              product_image_url
+            )
+          )
+        )
+      `)
+      .eq('order_id' , orderId)
+      .eq('buyer_id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching orders:', error.message)
+      throw error
+    }
+    return data
+}

@@ -11,8 +11,7 @@ export default async function myOrderPage({ searchParams }){
     const statusFilter = param.status;
 
     const order = await getOrdersItems(user.id, statusFilter);
-
-    console.log(order);
+    
     return(
         <div>
             
