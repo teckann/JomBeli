@@ -35,10 +35,13 @@ export async function initializeNewUser(id, fullName) {
 
 export async function getProducts() {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .eq('user_id', user.id); 
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
