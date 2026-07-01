@@ -21,7 +21,7 @@ export default async function UserDetail({params}){
                     <BackButton className={Styles.backButton} />
                 </div>
                 <div className={Styles.pageHeader}>
-                    <h1 className={Styles.header}>View Admin Page</h1>
+                    <h1 className={Styles.header}>Admin details</h1>
                 </div>
                 <div className={Styles.profileContainer}>
                     <AdminItemCard id={admin.user_id} name={admin.username} category={admin.role} itemStatus={admin.user_status} imageUrl={admin.avatar}/>
