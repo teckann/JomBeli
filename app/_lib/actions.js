@@ -511,3 +511,87 @@ export async function submitReviews(formData) {
   
   return { success: true };
 }
+
+export async function addCourier(formData){
+
+  const username = formData.get("username");
+  const gender = formData.get("gender");
+  const email = formData.get("email");
+  const contactNumber = formData.get("contact_number");
+
+  const supabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+
+  const temporaryPassword = "CourierDefault@123456";
+
+  const { data,error } = await supabase.auth.admin.createUser({ 
+    email,
+    password:temporaryPassword })
+  
+  if(error){
+    console.error("Courier authentication generation error:". error.message);
+    return redirect("/admin/ManageCouriers?error=This email is already registered.");
+  }
+
+  const user = data.user;
+  if (!user){
+    return redirect("/admin/ManageCouriers?error=Courier authentication creation failed.");
+  }
+
+  const{ error:insertError } = await supabase.from("USERS_T").insert([
+    {
+      user_id: user.id,
+      username: username,
+      gender: gender,
+      email: email,
+      contact_number: contactNumber,
+      role: "Courier",
+      user_status: "Active",
+      balances: 0.00,
+    },
+  ]);
+  
+  if(insertError){
+    console.error("Insert USER_T error for courier: ", insertError.message);
+    return redirect("/admin/ManageCouriers?error=Failed to populate database row")
+  }
+
+  revalidatePath("/admin/ManageCouriers");
+  return redirect("/admin/ManageCouriers?message=Courier account successfully added.")
+}
+
+export async function deactivateVoucher(voucherId){
+  const supabase = await createClient();
+
+  const { data,error } = await supabase
+    .from("VOUCHERS_T")
+    .update({voucher_status:"Inactive"})
+    .eq("voucher_id",voucherId)
+    .select();
+  
+    if(error){
+      console.error("Deactivate voucher error:",error);
+      throw new Error("Could not deactivate voucher");
+    }
+
+    return data;
+}
+
+export async function reactivateVoucher(voucherId){
+  const supabase = await createClient();
+
+  const { data,error } = await supabase
+    .from("VOUCHERS_T")
+    .update({voucher_status:"Active"})
+    .eq("voucher_id",voucherId)
+    .select();
+  
+    if(error){
+      console.error("Deactivate voucher error:",error);
+      throw new Error("Could not deactivate voucher");
+    }
+
+    return data;
+}

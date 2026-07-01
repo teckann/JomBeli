@@ -1,6 +1,7 @@
 'use client';
 
 import Styles from './AdminFilterUsers.module.css';
+import { AdminAddCourierForm } from '../AdminAddUsers/AdminAddUsersWidget';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export function FilterUser({role}){
@@ -35,13 +36,11 @@ export function FilterUser({role}){
 
 }
 
-export function FilterCourier({role}){
+export function FilterCourier(){
 
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const currentHubLocation = searchParams.get("hubLocation") || "";
-    const currentHubName = searchParams.get("hubName") || "";
     const currentUserStatus = searchParams.get("status") || "Active";
     const currentUsername = searchParams.get("username") || "";
 
@@ -58,9 +57,9 @@ export function FilterCourier({role}){
         <div className={Styles.filterBar}>
             <div className={Styles.searchUser}>
                 <SearchUser values={currentUsername} handleChange={handleChange}/>  
+                <AdminAddCourierForm />
             </div>
             <div className={Styles.roleAndStatus}>
-                <SelectRole values={currentUserRole} handleChange={handleChange} role={role}/>
                 <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
             </div>
         </div>
@@ -106,7 +105,7 @@ export function SearchUser({ handleChange }){
     )
 }
 
-export function SelectRole({role,handleChange,values}){
+export function SelectRole({ role,handleChange,values }){
     return(
         <div>
             <label className={Styles.selectText} htmlFor='role'/>
