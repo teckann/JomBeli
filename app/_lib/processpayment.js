@@ -92,7 +92,7 @@ export async function processPayment({
     discount_amount: discountAmount,
     total_amount: totalAmount,
     payment_status: "Paid",
-    order_status: "Pending",
+    order_status: "Ordered",
   });
 
   if (orderError) {

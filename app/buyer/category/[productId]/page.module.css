@@ -1,10 +1,89 @@
 .main {
   background-color: var(--color-bg-primary);
-  padding: 1.5rem 3rem;
+  /* padding: 1.5rem 3rem; */
 }
 
 .contentContainer {
   display: flex;
   flex-direction: column;
+  margin: 1.5rem 3rem;
   gap: 20px;
+}
+
+.sellerContainer {
+  background-color: var(--color-bg-surface);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem 3rem;
+}
+
+.sellerMain {
+  /* background-color: red; */
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.sellerSub {
+  background-color: blue;
+}
+
+.avatarContainer {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.avatar {
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.shopInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* background-color: aqua; */
+}
+
+.actions {
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.shopName {
+  color: var(--color-primary);
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.shopInfo {
+  color: var(--color-font-secondary);
+  font-size: 16px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.buttonContainer button {
+  padding: 0.3rem 1rem;
+  background-color: var(--color-bg-card);
+  color: var(--color-font-primary);
+  border: none;
+  border-radius: 5px;
+  border: 0.5px solid var(--color-border-primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.buttonContainer button:hover {
+  background-color: var(--color-bg-hover);
 }
