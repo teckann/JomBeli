@@ -1,0 +1,82 @@
+.formWrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: var(--font-body);
+}
+
+.title {
+  font-size: var(--text-xl);
+  color: var(--color-font-primary);
+  margin-bottom: 1.5rem;
+}
+
+.reviewCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.productName {
+  font-size: var(--text-base);
+  color: var(--color-font-primary);
+}
+
+.ratingSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+  font-size: var(--text-sm);
+  color: var(--color-font-secondary);
+}
+
+.commentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-sm);
+  color: var(--color-font-secondary);
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-primary);
+  background-color: var(--color-bg-input);
+  color: var(--color-font-primary);
+  font-family: var(--font-body);
+  resize: vertical;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  background-color: var(--color-border-primary);
+  cursor: not-allowed;
+}
+
+.productImage{
+    object-fit: cover;
+    height: 200px;
+    width: 200px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.sku{
+    font-size: var(--text-sm);
+    color: var(--color-font-secondary);
+    margin: 0.2rem 0 1rem 0;
+}

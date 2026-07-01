@@ -9,14 +9,15 @@ export default function StarRating({
   size = 24,
   messages = [],
   defaultRating = 0,
-  // onMovieRating,
+  onRateChange,
 }) {
   const [rating, setRating] = useState(defaultRating);
   const [tempRating, setTempRating] = useState(0); // for hover
 
   const handleRating = (rating) => {
-    setRating(rating);
-    // onMovieRating(rating);
+    const decimalRating = parseFloat(rating.toFixed(1));
+    setRating(decimalRating);
+    onRateChange?.(decimalRating);
   };
 
   const textStyle = {
@@ -45,7 +46,7 @@ export default function StarRating({
       <p style={textStyle}>
         {messages.length === maxRating
           ? messages[tempRating ? tempRating - 1 : rating - 1]
-          : tempRating || rating || ""}
+          : (tempRating || rating) ? Number(tempRating || rating).toFixed(1) : ""}
       </p>
     </div>
   );

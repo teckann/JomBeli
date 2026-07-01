@@ -12,6 +12,7 @@ import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
 import { processPayment } from "./processpayment";
+import { getUser } from "./auth";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -479,6 +480,36 @@ export async function checkoutAction(payload) {
     console.error("Checkout failed:", err.message);
     return { success: false, error: err.message };
   }
+}
+
+export async function submitReviews(formData) {
+  const supabase = await createClient();
+
+  const { reviewsArray } = formData;
+
+  if (!Array.isArray(reviewsArray) || reviewsArray.length === 0) {
+    return { success: false, error: "No review items provided." };
+  }
+
+  const reviewsToInsert = reviewsArray.map((review) => ({
+    review_id: GeneralIDGenerator(), 
+    user_id: String(review.userId),               
+    order_id: String(review.orderId),
+    product_id: String(review.productId),
+    product_rating: Number(review.rating.toFixed(1)),
+    comment: review.comment,
+  }));
+
+  const { error } = await supabase
+    .from("REVIEWS_T")
+    .insert(reviewsToInsert);
+
+  if (error) {
+    console.error("review insert failed:", error.message);
+    return { success: false, error: "Failed to submit reviews to the database." };
+  }
+  
+  return { success: true };
 }
 
 export async function addCourier(formData){
