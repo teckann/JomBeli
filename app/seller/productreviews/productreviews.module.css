@@ -1,0 +1,260 @@
+.container {
+  min-height: 100vh;
+  background-color: var(--color-bg, #f9f9f9);
+  color: var(--color-text-primary, #333);
+}
+
+.main {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 24px 16px; 
+  box-sizing: border-box;
+}
+
+.backBtnText {
+  display: inline-block;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--color-text-muted, #666);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.backBtnText:hover {
+  color: var(--color-text-primary, #111);
+}
+
+.productTitle {
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.topPartWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; 
+  gap: 32px;
+  width: 100%;
+  margin-bottom: 23px;
+}
+
+.topLeftColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.topRightColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.filterLink {
+  font-size: 14px;
+  color: var(--color-text-primary, #111);
+  text-decoration: underline;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--color-border-light, #e5e5e5);
+  margin: 0 0 32px 0;
+}
+
+.summaryCard {
+  border: 1px solid var(--color-border, #ddd);
+  border-radius: 16px;
+  padding: 32px 40px;
+  display: flex;
+  gap: 64px;
+  align-items: center;
+  background-color: var(--color-surface, #fff);
+  margin-bottom: 48px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ratingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+}
+
+.bigRatingRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.ratingBig {
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.ratingTotal {
+  font-size: 14px;
+  color: var(--color-text-muted, #777);
+  margin-bottom: 6px;
+}
+
+.reviewCount {
+  font-size: 14px;
+  color: var(--color-text-primary, #111);
+  margin-left: 12px;
+  margin-bottom: 6px;
+}
+
+.ratingSince {
+  font-size: 12px;
+  color: var(--color-text-muted, #777);
+}
+
+.ratingStats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 500px;
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--color-text-primary, #111);
+  width: 50px;
+  text-align: right;
+}
+
+.barTrack {
+  flex: 1;
+  height: 10px;
+  background-color: var(--color-border-light, #eee);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background-color: #ff2020; 
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.percentageText {
+  font-size: 11px;
+  color: var(--color-text-muted, #888);
+  width: 35px;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.reviewCard {
+  display: flex;
+  gap: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--color-border-light, #eee);
+}
+
+.reviewCard:last-child {
+  border-bottom: none; 
+}
+
+.userInfoSide {
+  display: flex;
+  gap: 16px;
+  width: 250px;
+  flex-shrink: 0;
+}
+
+
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  font-size: 12px;
+  color: var(--color-text-muted, #777);
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-text-primary, #111);
+  margin: 0 0 4px 0;
+}
+
+.contentSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.starRating {
+  font-size: 14px;
+  font-weight: bold;
+  color: #e67e22;
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.commentDate {
+  font-size: 12px;
+  color: var(--color-text-muted, #777);
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  padding: 4px;
+  text-decoration: underline;
+}
+
+.deleteBtn:hover {
+  opacity: 1;
+}
+
+.commentText {
+  font-size: 13px;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--color-text-secondary, #555);
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-weight: bold;
+}
