@@ -62,7 +62,7 @@ export async function getBuyerSellerInfo() {
     throw new Error("Could not fetch users");
   }
 
-  return formatUserData(data);
+  return formatData(data);
 }
 
 export async function getAdminInfo() {
@@ -79,46 +79,53 @@ export async function getAdminInfo() {
     throw new Error("Could not fetch users");
   }
 
-  return formatUserData(data);
+  return formatData(data);
 }
 
-export function formatUserData(data) {
+export function formatData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
   if (!data || data.length === 0) {
     return [];
   }
 
   // Map through and format the data
-  return data.map((user) => {
+  return data.map((data) => {
     let fullAddress = "-";
 
     // String the address together
-    if (user.ADDRESSES_T && Array.isArray(user.ADDRESSES_T) && user.ADDRESSES_T.length > 0) {
-      const count = user.ADDRESSES_T.length; //shows the first address
+    if (data.ADDRESSES_T && Array.isArray(data.ADDRESSES_T) && data.ADDRESSES_T.length > 0) {
+      const count = data.ADDRESSES_T.length; //shows the first address
       if (count === 1) {
         fullAddress = "1 Address Saved";
       } else if (count > 1){
-        fullAddress = `${count} Address Saved`;
+        fullAddress = `${count} Addresses Saved`;
       }
     }
 
     // Flatten the object to remove nested objects and assign the new address string
-    const cleanedUser = { ...user };
+    const cleanedData = { ...data };
 
-    delete cleanedUser.ADDRESSES_T;
+    delete cleanedData.ADDRESSES_T;
+    cleanedData.full_address = fullAddress;
 
-    cleanedUser.full_address = fullAddress;
+    cleanedData.created_at = data.created_at
+      ? data.created_at.substring(0, 10)
+      : "No date provided";
 
-    cleanedUser.hub_name = user.HUBS_T?.hub_name;
-    cleanedUser.hub_location = user.HUBS_T?.hub_location;
-    delete cleanedUser.HUBS_T;
+      cleanedData.start_date = data.start_date
+      ? data.start_date.substring(0, 10)
+      : "No date provided";
+      
+      cleanedData.end_date = data.end_date
+      ? data.end_date.substring(0, 10)
+      : "No date provided";
 
     // Replace any null values with dashes
-    for (const key in cleanedUser) {
-      cleanedUser[key] = cleanedUser[key] === null ? "-" : cleanedUser[key];
+    for (const key in cleanedData) {
+      cleanedData[key] = cleanedData[key] === null ? "-" : cleanedData[key];
     }
 
-    return cleanedUser;
+    return cleanedData;
   });
 }
 
@@ -971,8 +978,7 @@ export async function getCourierInfo() {
         contact_number, 
         role, balances, 
         user_status, 
-        ADDRESSES_T(street, city, state, postcode, country), 
-        HUBS_T(hub_location, hubname)`,
+        ADDRESSES_T(street, city, state, postcode, country)`,
     )
     .in("role", ["Courier"]); 
 
@@ -981,5 +987,46 @@ export async function getCourierInfo() {
     throw new Error("Could not fetch users");
   }
 
-  return formatUserData(data);
+  return formatData(data);
+}
+
+export async function getVoucherInfo(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("VOUCHERS_T")
+    .select("*");
+
+  if (error){
+    console.error("Failed to fetch vouchers: ", error.message);
+    throw new Error("Could not fetch vouchers!");
+  };
+
+  return formatData(data);
+}
+
+export async function getVoucherDetails(voucherId){
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("VOUCHERS_T")
+    .select("*")
+    .eq("voucher_id", voucherId)
+    .single();
+
+  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+
+  if (error) {
+    console.error("Fetch voucher data error:", error);
+    throw new Error("Could not find voucher");
+  }
+  const cleanedData = {
+    ...data, // copy all the original user data
+
+    // overwrites the created_at field with the cleaned 10-character date
+    created_at: data.created_at
+      ? data.created_at.substring(0, 10)
+      : "No date provided",
+  };
+
+  return cleanedData;
 }

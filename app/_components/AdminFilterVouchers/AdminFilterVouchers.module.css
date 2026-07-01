@@ -5,10 +5,11 @@
     padding: 2em 1em;
 }
 
-.searchUserBar{
+.searchVoucherBar{
+    border: none;
     padding: 10px;
     border-radius: 5px;
-    border: none;
+    
 }
 
 .searchUser{
@@ -16,7 +17,7 @@
     gap: 20px;
 }
 
-.roleDropdown{
+.typeDropdown{
     padding: 10px; 
     border-radius: 5px;
     border: none;

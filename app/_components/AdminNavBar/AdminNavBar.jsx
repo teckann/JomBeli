@@ -52,7 +52,7 @@ export default async function AdminNavBar(){
                             </svg>
                             Manage Finance
                         </Link>
-                        <Link className={Styles.link} href="/admin">
+                        <Link className={Styles.link} href="/admin/ManageVoucher">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className={Styles.svg}>
                                 <g data-name="Layer 2">
                                 <path fill="none" d="M0 0h48v48H0z" data-name="invisible box" />
