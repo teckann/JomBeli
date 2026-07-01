@@ -1127,3 +1127,20 @@ export async function getOrder(orderId, userId) {
     }
     return data
 }
+
+export async function getProductReviews(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("REVIEWS_T") 
+    .select("*")
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch reviews:", error.message);
+    return [];
+  }
+
+  return data;
+}
