@@ -983,3 +983,54 @@ export async function getCourierInfo() {
 
   return formatUserData(data);
 }
+
+export async function getOrdersItems(buyerId, statusFilter) {
+
+  const supabase = await createClient();
+  try {
+    let query = supabase
+      .from('ORDERS_T')
+      .select(`
+        order_id,
+        buyer_id,
+        seller_id,
+        address_id,
+        delivery_id,
+        original_price,
+        discount_amount,
+        total_amount,
+        payment_status,
+        order_status,
+        created_at,
+        ORDER_ITEMS_T (
+          order_item_id,
+          product_variant_id,
+          quantity,
+          subtotal,
+          PRODUCT_VARIANTS_T (
+            product_id,
+            sku,
+            PRODUCTS_T (
+              product_name,
+              product_image_url
+            )
+          )
+        )
+      `)
+      .eq('buyer_id' , buyerId)
+      if (statusFilter) {
+        query = query.eq('order_status', statusFilter);
+      }
+
+    const { data, error } = await query.order('created_at', { ascending: false })
+
+    if (error) {
+      throw error
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error fetching grouped orders:', error.message)
+    return null
+  }
+}
