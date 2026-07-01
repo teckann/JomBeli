@@ -1,6 +1,7 @@
 'use client';
 
 import Styles from './AdminFilterUsers.module.css';
+import { AdminAddCourierForm } from '../AdminAddUsers/AdminAddUsersWidget';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export function FilterUser({role}){
@@ -28,6 +29,37 @@ export function FilterUser({role}){
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectRole values={currentUserRole} handleChange={handleChange} role={role}/>
+                <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
+            </div>
+        </div>
+    )
+
+}
+
+export function FilterCourier(){
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const currentUserStatus = searchParams.get("status") || "Active";
+    const currentUsername = searchParams.get("username") || "";
+
+    const handleChange = (e) => {
+        //make a new copy to edit without touching the original
+        const params = new URLSearchParams(searchParams.toString());
+        //.set() adds the changed name and value user picked 
+        params.set(e.target.name, e.target.value);
+        //.toString() serializes back to a query string 
+        router.push(`?${params.toString()}`);
+    } 
+
+    return(
+        <div className={Styles.filterBar}>
+            <div className={Styles.searchUser}>
+                <SearchUser values={currentUsername} handleChange={handleChange}/>  
+                <AdminAddCourierForm />
+            </div>
+            <div className={Styles.roleAndStatus}>
                 <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
             </div>
         </div>
@@ -73,7 +105,7 @@ export function SearchUser({ handleChange }){
     )
 }
 
-export function SelectRole({role,handleChange,values}){
+export function SelectRole({ role,handleChange,values }){
     return(
         <div>
             <label className={Styles.selectText} htmlFor='role'/>

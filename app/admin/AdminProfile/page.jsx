@@ -1,9 +1,9 @@
 import Styles from "./AdminProfile.module.css";
 import { getUser } from "@/app/_lib/auth";
 import { getUserDetails } from "@/app/_lib/data-services";
-import { UserInformation } from "@/app/_components/AdminUserDetails/AdminUserDetails";
+import { ProfileInformation } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
-import EditProfileWidget from "@/app/_components/EditProfile/EditProfileWidget";
+import EditProfileWidget from "@/app/_components/AdminEditProfile/EditProfileWidget";
 
 export default async function adminProfile(){
 
@@ -25,7 +25,7 @@ export default async function adminProfile(){
             </div>
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
-                    <UserInformation user={userInfo} country={country} />
+                    <ProfileInformation user={userInfo} country={country} />
                     <EditProfileWidget userInfo={userInfo} country={country}/>
                 </div>
             </div>

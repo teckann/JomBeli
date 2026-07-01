@@ -35,10 +35,13 @@ export async function initializeNewUser(id, fullName) {
 
 export async function getProducts() {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .eq('user_id', user.id); 
 
   if (error) {
     console.error("Failed to fetch products:", error.message);
@@ -62,7 +65,7 @@ export async function getBuyerSellerInfo() {
     throw new Error("Could not fetch users");
   }
 
-  return formatUserData(data);
+  return formatData(data);
 }
 
 export async function getAdminInfo() {
@@ -79,48 +82,53 @@ export async function getAdminInfo() {
     throw new Error("Could not fetch users");
   }
 
-  return formatUserData(data);
+  return formatData(data);
 }
 
-export function formatUserData(data) {
+export function formatData(data) {
   //to return an empty array so .map() function in table doesn't crash if supabase returns absolutely nothing
   if (!data || data.length === 0) {
     return [];
   }
 
   // Map through and format the data
-  return data.map((user) => {
+  return data.map((data) => {
     let fullAddress = "-";
 
     // String the address together
-    if (user.ADDRESSES_T) {
-      const addr = user.ADDRESSES_T;
-      const addressParts = [
-        addr.street,
-        addr.city,
-        addr.state,
-        addr.postcode,
-        addr.country,
-      ].filter(Boolean);
-
-      if (addressParts.length > 0) {
-        fullAddress = addressParts.join(", ");
+    if (data.ADDRESSES_T && Array.isArray(data.ADDRESSES_T) && data.ADDRESSES_T.length > 0) {
+      const count = data.ADDRESSES_T.length; //shows the first address
+      if (count === 1) {
+        fullAddress = "1 Address Saved";
+      } else if (count > 1){
+        fullAddress = `${count} Addresses Saved`;
       }
     }
 
     // Flatten the object to remove nested objects and assign the new address string
-    const cleanedUser = { ...user };
+    const cleanedData = { ...data };
 
-    delete cleanedUser.ADDRESSES_T;
+    delete cleanedData.ADDRESSES_T;
+    cleanedData.full_address = fullAddress;
 
-    cleanedUser.full_address = fullAddress;
+    cleanedData.created_at = data.created_at
+      ? data.created_at.substring(0, 10)
+      : "No date provided";
+
+    cleanedData.start_date = data.start_date
+    ? data.start_date.substring(0, 10)
+    : "No date provided";
+    
+    cleanedData.end_date = data.end_date
+    ? data.end_date.substring(0, 10)
+    : "No date provided";
 
     // Replace any null values with dashes
-    for (const key in cleanedUser) {
-      cleanedUser[key] = cleanedUser[key] === null ? "-" : cleanedUser[key];
+    for (const key in cleanedData) {
+      cleanedData[key] = cleanedData[key] === null ? "-" : cleanedData[key];
     }
 
-    return cleanedUser;
+    return cleanedData;
   });
 }
 
@@ -322,7 +330,7 @@ export async function getUserDetails(userId) {
 
   const { data, error } = await supabase
     .from("USERS_T")
-    .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+    .select("*, ADDRESSES_T(*)")
     .eq("user_id", userId)
     .single();
 
@@ -1014,4 +1022,171 @@ export async function updateAdminRemarksRefund(refundId, adminRemarks) {
   }
 
   return { success: true, data };
+}
+
+export async function getCourierInfo() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("USERS_T")
+    .select(
+       `user_id, 
+        username, 
+        email, 
+        contact_number, 
+        role, balances, 
+        user_status, 
+        ADDRESSES_T(street, city, state, postcode, country)`,
+    )
+    .in("role", ["Courier"]); 
+
+  if (error) {
+    console.error("Failed to fetch users:", error.message);
+    throw new Error("Could not fetch users");
+  }
+
+  return formatData(data);
+}
+
+export async function getVoucherInfo(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("VOUCHERS_T")
+    .select("*");
+
+  if (error){
+    console.error("Failed to fetch vouchers: ", error.message);
+    throw new Error("Could not fetch vouchers!");
+  };
+
+  return formatData(data);
+}
+
+export async function getVoucherDetails(voucherId){
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("VOUCHERS_T")
+    .select("*")
+    .eq("voucher_id", voucherId)
+    .single();
+
+  // console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+
+  if (error) {
+    console.error("Fetch voucher data error:", error);
+    throw new Error("Could not find voucher");
+  }
+  const [formatted] = formatData([data])
+  return formatted
+}
+
+export async function getOrdersItems(buyerId, statusFilter) {
+
+  const supabase = await createClient();
+  try {
+    let query = supabase
+      .from('ORDERS_T')
+      .select(`
+        order_id,
+        buyer_id,
+        seller_id,
+        address_id,
+        delivery_id,
+        original_price,
+        discount_amount,
+        total_amount,
+        payment_status,
+        order_status,
+        created_at,
+        ORDER_ITEMS_T (
+          order_item_id,
+          product_variant_id,
+          quantity,
+          subtotal,
+          PRODUCT_VARIANTS_T (
+            product_id,
+            sku,
+            PRODUCTS_T (
+              product_name,
+              product_image_url
+            )
+          )
+        )
+      `)
+      .eq('buyer_id' , buyerId)
+      if (statusFilter) {
+        query = query.eq('order_status', statusFilter);
+      }
+
+    const { data, error } = await query.order('created_at', { ascending: false })
+
+    if (error) {
+      throw error
+    }
+
+    return data
+  } catch (error) {
+    console.error('Error fetching grouped orders:', error.message)
+    return null
+  }
+}
+
+export async function getOrder(orderId, userId) {
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+      .from('ORDERS_T')
+      .select(`
+        order_id,
+        buyer_id,
+        seller_id,
+        address_id,
+        delivery_id,
+        original_price,
+        discount_amount,
+        total_amount,
+        payment_status,
+        order_status,
+        created_at,
+        ORDER_ITEMS_T (
+          order_item_id,
+          product_variant_id,
+          quantity,
+          subtotal,
+          PRODUCT_VARIANTS_T (
+            product_id,
+            sku,
+            PRODUCTS_T (
+              product_name,
+              product_image_url
+            )
+          )
+        )
+      `)
+      .eq('order_id' , orderId)
+      .eq('buyer_id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching orders:', error.message)
+      throw error
+    }
+    return data
+}
+
+export async function getProductReviews(productId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("REVIEWS_T") 
+    .select("*")
+    .eq("product_id", productId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch reviews:", error.message);
+    return [];
+  }
+
+  return data;
 }

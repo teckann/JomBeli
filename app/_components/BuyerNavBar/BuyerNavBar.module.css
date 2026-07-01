@@ -28,29 +28,62 @@
 
 .link:hover{
     color: var(--color-primary);
-    font-weight: bold;
 }
 
 .link.active{
     color: var(--color-primary);
-    font-weight: bold;
     border-bottom: 2px solid var(--color-primary);
     border-radius: 0;
 }
 
-.profileLink{
+.walletLink {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    font-weight: 600;
     text-decoration: none;
     color: var(--color-text-primary);
-    border: 1px solid;
-    padding: 0 10px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 6px 14px;
     border-radius: 50px;
+    transition: all 0.2s ease;
 }
 
-.profileImage{
-    border-radius: 999px;
+.walletLink:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.walletLink.active {
+    background-color: var(--color-primary-subtle);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.profileLink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    padding: 4px 12px 4px 4px;
+    border-radius: 20px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    transition: all 0.15s ease;
+}
+
+.profileLink:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface-hover);
+}
+
+.profileImage {
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* 

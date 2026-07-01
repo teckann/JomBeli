@@ -45,15 +45,10 @@ export default async function ProductListingPage() {
     return (
         <div className={styles.container}>
             <main className={styles.main}>
-                {/* Shop Header Section */}
-                <section className={styles.shopHeader}>
-                    {sellerData?.avatar ? (
-                        <div className={styles.shopAvatarContainer}>
-                            <img src={sellerData.avatar} alt={shopName} className={styles.shopAvatarImg} />
-                        </div>
-                    ) : (
-                        <div className={styles.shopAvatar}></div>
-                    )}
+                    <section className={styles.shopHeader}>
+                    <div className={styles.shopAvatarContainer}>
+                        <img src={sellerData.avatar} alt={shopName} className={styles.shopAvatarImg} />
+                    </div>
 
                     <div className={styles.shopInfo}>
                         <h1 className={styles.shopNameRow}>
@@ -67,14 +62,11 @@ export default async function ProductListingPage() {
                     </div>
                 </section>
 
-                <div className={styles.searchBarRow}>
-                    <input type="text" placeholder="Search..." className={styles.searchInput} />
-                    <div className={styles.actionButtons}>
-                        <button className="btn btn-outline">Manage Category</button>
-                        <button className="btn btn-primary">Add New Product</button>
-                    </div>
+                <div className={styles.actionButtons}>
+                    <button className="btn btn-outline">Manage Category</button>
+                    <button className="btn btn-primary">Add New Product</button>
                 </div>
-
+                
                 <hr className={styles.divider} />
                 
                 {categoryList.length > 0 ? (

@@ -1,0 +1,35 @@
+.filterBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em 1em;
+}
+
+.searchVoucherBar{
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    
+}
+
+.searchUser{
+    display: flex;
+    gap: 20px;
+}
+
+.typeDropdown{
+    padding: 10px; 
+    border-radius: 5px;
+    border: none;
+}
+
+.statusDropdown{
+    padding: 10px; 
+    border-radius: 5%;
+    border: none;
+}
+
+.roleAndStatus{
+    display:flex;
+    gap: 16px;
+}

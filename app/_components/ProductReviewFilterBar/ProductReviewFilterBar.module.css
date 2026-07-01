@@ -1,0 +1,77 @@
+.filterContainer {
+  /* background-color: blue; */
+  color: var(--color-font-primary);
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  gap: 100px;
+  margin-top: 1rem;
+}
+
+.container1 {
+  padding: 2rem 4rem;
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 8px;
+}
+
+.container1:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.overallRating {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 8px;
+  color: var(--color-font-primary);
+}
+
+.overallStar {
+  font-size: 35px;
+  font-weight: 550;
+}
+
+.totalStar {
+  color: var(--color-font-secondary);
+  font-size: 18px;
+}
+
+.starIcon {
+  height: 20px;
+  width: 20px;
+  color: #ffd700;
+}
+
+.ratingFilterBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 70%;
+  justify-content: space-between;
+}
+
+.filterButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-bg-card);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border-primary);
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.filterButton:hover {
+  /* background-color: var(--color-bg-hover); */
+  color: var(--color-primary);
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.active {
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  font-weight: 550;
+}

@@ -1,0 +1,171 @@
+/* Card Container */
+.orderCard {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: var(--font-body);
+    max-width: 80%;
+    margin: 10 auto 24 auto;
+}
+
+/* Header styling */
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: var(--color-surface-muted);
+    border-bottom: 1px solid var(--color-border-primary);
+}
+
+.orderLabel {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-font-secondary);
+    font-weight: 600;
+}
+
+.orderIdText {
+    margin: 2px 0 0 0;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-font-primary);
+    font-family: var(--font-mono);
+}
+
+.statusBadge {
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.statusOrdered { 
+    background-color: var(--color-info-bg); 
+    color: var(--color-info-text); 
+}
+.statusShipped { 
+    background-color: var(--color-warning-bg); 
+    color: var(--color-warning-text); 
+}
+.statusOutForDelivery { 
+    background-color: var(--color-primary-subtle); 
+    color: var(--color-primary); 
+}
+.statusCompleted { 
+    background-color: var(--color-success-bg); 
+    color: var(--color-success-text); 
+}
+
+/* Items list layout */
+.itemsContainer {
+    padding: 8px 24px;
+    background-color: var(--color-bg-surface);
+}
+
+.itemRow {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-bg-primary);
+    gap: 16px;
+}
+
+.itemRow:last-child {
+    border-bottom: none;
+}
+
+/* Product images */
+.imageWrapper {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border: 1px solid var(--color-border-primary);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--color-bg-input);
+}
+
+.productImage {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    color: var(--color-font-secondary);
+}
+
+/* text & prices layout */
+.itemDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.itemMainInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.productName {
+    margin: 0;
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-font-primary);
+}
+
+.skuText {
+    margin: 0;
+    font-size: var(--text-sm);
+    color: var(--color-font-secondary);
+}
+
+.qtyText {
+    font-size: var(--text-sm);
+    color: var(--color-font-primary);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.priceText {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-font-primary);
+}
+
+/* Totals */
+.orderFooter {
+    padding: 16px 24px;
+    background-color: var(--color-surface-muted);
+    border-top: 1px solid var(--color-border-primary);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.totalWrapper {
+    text-align: right;
+}
+
+.totalLabel {
+    font-size: var(--text-sm);
+    color: var(--color-font-secondary);
+    margin-right: 12px;
+}
+
+.totalPrice {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-primary);
+}

@@ -1,7 +1,7 @@
 import { createClient } from "./server";
 import {} from "./data-services";
 import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
-import { formatUserData } from "./data-services"
+import { formatData } from "./data-services"
 
 export async function getTotalProductsCount() {
     const supabase = await createClient();
@@ -164,7 +164,7 @@ export async function getFilterUsers(role, status, username) {
       return[];
     }
 
-    return formatUserData(data);
+    return formatData(data);
 }
 
 export async function getFilterAdmin(status, username) {
@@ -193,7 +193,7 @@ export async function getFilterAdmin(status, username) {
       return[];
     }
 
-    return formatUserData(data);
+    return formatData(data);
 }
 
 export async function getProductSales(productId) {
@@ -369,6 +369,36 @@ export async function getTotalWaitingRefundCount() {
     return count;
 }
 
+export async function getFilterCouriers(status, username) {
+
+    const supabase = await createClient();
+    
+    let query = supabase
+                .from("USERS_T")
+                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .in("role",["Courier"]);
+
+    if (username?.trim()){
+      query = query.ilike("username", `%${username}%`);
+    }
+
+    if (status && status !== "All"){
+      query = query.eq("user_status",status);
+    }
+
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error){
+      console.error(error);
+      return[];
+    }
+
+    return formatData(data);
+  
+}
+
 export async function getFilterManageRefunds(date, adminStatus, sellerStatus) {
     const supabase = await createClient();
 
@@ -414,4 +444,35 @@ export async function getFilterManageRefunds(date, adminStatus, sellerStatus) {
     console.log(data);
 
     return data;
+}
+
+export async function getFilterVoucher(voucher_type, voucher, status){
+  const supabase = await createClient();
+  let query = supabase
+    .from("VOUCHERS_T")
+    .select("*");
+
+    if (voucher?.trim()){
+      query = query.ilike("voucher_name", `%${voucher}%`);
+    }
+
+    if (voucher_type && voucher_type !== "All"){
+      query = query.eq("voucher_type",voucher_type)
+    }
+
+    if (status && status !== "All"){
+      query = query.eq("voucher_status",status);
+    }
+
+    query = query.order("created_at", { ascending: true });
+
+    const { data, error } = await query;
+
+    if (error){
+      console.error(error);
+      return[]; // to prevent the whole app from crashing by passing an empty list to the table
+    }
+
+    return formatData(data);
+    
 }

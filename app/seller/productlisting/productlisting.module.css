@@ -83,14 +83,10 @@
     margin-bottom: 30px;
 }
 
-
-.shopAvatar {
-    width: 100px;
-    height: 100px;
+.shopAvatarImg {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background-color: var(--color-surface-muted);
-    border: 1px solid var(--color-border);
-    flex-shrink: 0;
 }
 
 .shopInfo {
@@ -153,6 +149,7 @@
     display: flex;
     gap: 8px;
     margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
 .divider {

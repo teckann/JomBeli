@@ -1,10 +1,170 @@
 .main {
   background-color: var(--color-bg-primary);
-  padding: 1.5rem 3rem;
+  /* padding: 1.5rem 3rem; */
 }
 
 .contentContainer {
   display: flex;
   flex-direction: column;
+  margin: 1.5rem 3rem;
   gap: 20px;
+}
+
+.sellerContainer {
+  background-color: var(--color-bg-surface);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 1rem 3rem;
+}
+
+.sellerMain {
+  /* background-color: red; */
+  max-width: 45%;
+  min-width: 40%;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.sellerSub {
+  /* border: 1px solid var(--color-border-primary); */
+  border-radius: 10px;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avatarContainer {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.avatar {
+  object-fit: cover;
+  border-radius: 999px;
+}
+
+.shopInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* background-color: aqua; */
+}
+
+.actions {
+  /* background-color: blue; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.shopName {
+  color: var(--color-font-primary);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.shopInfo {
+  color: var(--color-font-secondary);
+  font-size: 16px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.buttonContainer button {
+  padding: 0.3rem 1rem;
+  background-color: var(--color-bg-card);
+  color: var(--color-font-primary);
+  border: none;
+  border-radius: 5px;
+  border: 0.5px solid var(--color-border-primary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.buttonContainer button:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.subElement {
+  display: flex;
+  flex-direction: row;
+  /* background-color: red; */
+  align-items: center;
+  gap: 5px;
+}
+
+.starIcon,
+.productIcon,
+.discountIcon {
+  width: 25px;
+  height: 25px;
+  color: var(--color-font-primary);
+}
+
+.starIcon {
+  color: #ffd700;
+}
+
+.descContainer {
+  background-color: var(--color-bg-surface);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerTitle {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.headerTitle p {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.headerTitle .headerIcon {
+  color: var(--color-primary);
+  width: 30px;
+  height: 60px;
+}
+
+.descText {
+  margin-top: 0.9rem;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--color-font-secondary);
+
+  white-space: pre-wrap;
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.reviewContainer {
+  background-color: var(--color-bg-surface);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .reviewContent {
+  display: flex;
+  flex-direction:;
+} */
+
+.tempCoverCon {
+  height: 480px;
 }

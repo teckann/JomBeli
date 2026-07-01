@@ -11,6 +11,11 @@
     border: none;
 }
 
+.searchUser{
+    display: flex;
+    gap: 20px;
+}
+
 .roleDropdown{
     padding: 10px; 
     border-radius: 5px;
