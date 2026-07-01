@@ -37,6 +37,9 @@ export default async function UserDetail({params}){
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
                     <AdminShowInformationList itemTitle="Voucher details" objectlist={voucherInfo}/>
+                    {voucher?.voucher_type == "platform" && (
+                        <EditVoucher/>
+                    )}
                     <AdminDeactivateVoucherButton voucherId={voucher.voucher_id} voucherStatus={voucher.voucher_status}/>
                 </div>
             </div>

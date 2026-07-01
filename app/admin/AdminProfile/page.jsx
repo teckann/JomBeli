@@ -3,7 +3,7 @@ import { getUser } from "@/app/_lib/auth";
 import { getUserDetails } from "@/app/_lib/data-services";
 import { ProfileInformation } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
-import EditProfileWidget from "@/app/_components/EditProfile/EditProfileWidget";
+import EditProfileWidget from "@/app/_components/AdminEditProfile/EditProfileWidget";
 
 export default async function adminProfile(){
 

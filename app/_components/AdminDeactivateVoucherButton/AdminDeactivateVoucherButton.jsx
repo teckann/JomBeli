@@ -8,7 +8,7 @@ export default function AdminDeactivatteVoucherButton({ voucherId,voucherStatus 
     
     const router = useRouter();
     
-    const isActive = voucherStatus === "Active"
+    const isActive = voucherStatus === "active"
 
     const handleClick = async () => {
         if (isActive){

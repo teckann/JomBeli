@@ -112,13 +112,13 @@ export function formatData(data) {
       ? data.created_at.substring(0, 10)
       : "No date provided";
 
-      cleanedData.start_date = data.start_date
-      ? data.start_date.substring(0, 10)
-      : "No date provided";
-      
-      cleanedData.end_date = data.end_date
-      ? data.end_date.substring(0, 10)
-      : "No date provided";
+    cleanedData.start_date = data.start_date
+    ? data.start_date.substring(0, 10)
+    : "No date provided";
+    
+    cleanedData.end_date = data.end_date
+    ? data.end_date.substring(0, 10)
+    : "No date provided";
 
     // Replace any null values with dashes
     for (const key in cleanedData) {
@@ -1013,22 +1013,14 @@ export async function getVoucherDetails(voucherId){
     .eq("voucher_id", voucherId)
     .single();
 
-  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+  // console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
 
   if (error) {
     console.error("Fetch voucher data error:", error);
     throw new Error("Could not find voucher");
   }
-  const cleanedData = {
-    ...data, // copy all the original user data
-
-    // overwrites the created_at field with the cleaned 10-character date
-    created_at: data.created_at
-      ? data.created_at.substring(0, 10)
-      : "No date provided",
-  };
-
-  return cleanedData;
+  const [formatted] = formatData([data])
+  return formatted
 }
 
 export async function getOrdersItems(buyerId, statusFilter) {
