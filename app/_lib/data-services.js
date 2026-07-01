@@ -115,13 +115,13 @@ export function formatData(data) {
       ? data.created_at.substring(0, 10)
       : "No date provided";
 
-      cleanedData.start_date = data.start_date
-      ? data.start_date.substring(0, 10)
-      : "No date provided";
-      
-      cleanedData.end_date = data.end_date
-      ? data.end_date.substring(0, 10)
-      : "No date provided";
+    cleanedData.start_date = data.start_date
+    ? data.start_date.substring(0, 10)
+    : "No date provided";
+    
+    cleanedData.end_date = data.end_date
+    ? data.end_date.substring(0, 10)
+    : "No date provided";
 
     // Replace any null values with dashes
     for (const key in cleanedData) {
@@ -788,7 +788,7 @@ export async function getRefund() {
     return data;
 }
 
-export async function getRefundDetails() {
+export async function getRefundDetails(refundId) {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -805,19 +805,54 @@ export async function getRefundDetails() {
       admin_status,
       created_at,
 
-      ORDERS_T (
+      ORDERS_T!REFUNDS_T_order_id_fkey (
         order_id,
         total_amount,
+        buyer_id,
+        seller_id,
+        order_status,
+        created_at,
 
         buyer:USERS_T!ORDERS_T_buyer_id_fkey (
-          username
+        user_id,
+        username,
+        email
         ),
 
         seller:USERS_T!ORDERS_T_seller_id_fkey (
-          username
+          user_id,
+          username,
+          email
+        ),
+
+        delivery:DELIVERY_T!ORDERS_T_delivery_id_fkey (
+          delivery_id,
+          delivery_option
+        ),
+
+        ORDER_ITEMS_T!ORDER_ITEMS_T_order_id_fkey (
+          order_item_id,
+          quantity,
+          unit_price,
+          subtotal,
+
+          PRODUCT_VARIANTS_T!ORDER_ITEMS_T_product_variant_id_fkey (
+            product_variant_id,
+            sku,
+            product_variant_price,
+
+            PRODUCTS_T!PRODUCT_VARIANTS_T_product_id_fkey (
+              product_id,
+              product_name,
+              product_image_url,
+              category
+            )
+          )
         )
       )
-    `);
+    `)
+    .eq("refund_id", refundId)
+    .single();
 
     if (error) {
         console.error(error);
@@ -970,6 +1005,25 @@ export async function getUserVouchers(userId, shopId) {
   }
 }
 
+export async function updateAdminRemarksRefund(refundId, adminRemarks) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .update({
+      admin_remarks: adminRemarks,
+    })
+    .eq("refund_id", refundId)
+    .select();
+
+  if (error) {
+    console.error("Update admin remarks failed:", error);
+    return { success: false, error };
+  }
+
+  return { success: true, data };
+}
+
 export async function getCourierInfo() {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -1016,22 +1070,14 @@ export async function getVoucherDetails(voucherId){
     .eq("voucher_id", voucherId)
     .single();
 
-  console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
+  // console.log("Raw Supabase Data:", JSON.stringify(data, null, 2))
 
   if (error) {
     console.error("Fetch voucher data error:", error);
     throw new Error("Could not find voucher");
   }
-  const cleanedData = {
-    ...data, // copy all the original user data
-
-    // overwrites the created_at field with the cleaned 10-character date
-    created_at: data.created_at
-      ? data.created_at.substring(0, 10)
-      : "No date provided",
-  };
-
-  return cleanedData;
+  const [formatted] = formatData([data])
+  return formatted
 }
 
 export async function getOrdersItems(buyerId, statusFilter) {

@@ -1,78 +1,188 @@
-import { getProductDetails } from "@/app/_lib/data-services";
+import { getRefundDetails } from "@/app/_lib/data-services";
 import Styles from './RefundDetails.module.css';
-import { getProductSales, getProductReviews } from "@/app/_lib/analysis-serives";
-import Image from "next/image";
-import AdminItemCard from '@/app/_components/AdminItemCard/AdminItemCard';
 import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
 import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
 import ShowItemInformationList from '@/app/_components/AdminShowInformationList/AdminShowInformationList';
 import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
+import EvidencesPhoto from '@/app/_components/EvidencesPhoto/EvidencesPhoto';
+import AdminRemarks from '@/app/_components/AdminRemarks/AdminRemarks';
+import Link from 'next/link';
 
-export default async function ProductDetails({params}) {
+export default async function reportDetails({params}) {
     const resolvedParams = await params;
-    const productId = resolvedParams?.refundId? String(resolvedParams.refundId).trim() : "";
+    const refundId = resolvedParams?.refundId? String(resolvedParams.refundId).trim() : "";
 
-    // const product = await getProductDetails(productId);
-    // const sales = await getProductSales(productId);
-    // const reviews = await getProductReviews(productId);
+    const refund = await getRefundDetails(refundId);
+    const skus = refund.ORDERS_T.ORDER_ITEMS_T.map((item) => {
+        return item;
+    })
 
+    const requestDate = new Date(refund.created_at).getDate() + "/" + (new Date(refund.created_at).getMonth() + 1) + "/" + new Date(refund.created_at).getFullYear();
+    const isOverOneWeek = (new Date() - new Date(refund.ORDERS_T.created_at)) / (1000 * 60 * 60 * 24) > 7;
+    let refundStatus = "";
+    let refundStatusColor = "";
+    const adminStatus = refund.admin_status;
+    const sellerStatus = refund.seller_status;
+
+    const buyerSubject = `Refund Request Related Question (${refund.refund_id})`
+    const sellerSubject = `Buyer's Refund Request Related Question (${refund.refund_id})`
+    const emailBuyerBody = 
+    `Hello ${refund.ORDERS_T.buyer.username},`;
+
+    const emailSellerBody = 
+    `Hello ${refund.ORDERS_T.seller.username},`;
+    
+    if (sellerStatus === "Approved") {
+    refundStatus = "Refund Approved";
+    refundStatusColor = "green";
+    }
+    else if (sellerStatus === "Rejected") {
+
+    if (adminStatus === "Approved") {
+        refundStatus = "Refund Approved After Review";
+        refundStatusColor = "green";
+    } 
+    else if (adminStatus === "Rejected") {
+        refundStatus = "Refund Rejected";
+        refundStatusColor = "red";
+    } 
+    else {
+        refundStatus = "Under Admin Review";
+        refundStatusColor = "orange";
+    }
+    }
+    else if (sellerStatus === "Pending") {
+
+    if (isOverOneWeek) {
+        refundStatus = "Escalated To Admin";
+        refundStatusColor = "red";
+    } 
+    else {
+            refundStatus = "Waiting For Seller Response";
+            refundStatusColor = "gray";
+        }
+    }
+    else {
+    refundStatus = "Unknown Status";
+    refundStatusColor = "black";
+    }
+    
     // data for table
-    const titles = ["Review ID", "Reviewer Name", "Comment", "Rating", "Review Date", "status"];
-    const actions = [{type: "viewReviewer"}];
-    const fields = ["review_id", "USERS_T.username", "comment", "product_rating", "created_at", ""];
+    const titles = ["Product ID", "Product Name", "Product Varient", "Quantity"];
+    // const actions = [{type: "viewReviewer"}];
+    const fields = ["PRODUCT_VARIANTS_T.PRODUCTS_T.product_id", "PRODUCT_VARIANTS_T.PRODUCTS_T.product_name", "PRODUCT_VARIANTS_T.sku", "quantity"];
 
-    const informationList = [{field: "Product Name", value: product.product_name}, {field: "Description", value: product.product_description},
-        {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : `${product.discount} %`}`},
-        {field: "Available Price", value: parseFloat((product.price * ((100 - product.discount) / 100))).toFixed(2)}
-    ]
+    const orderDate = new Date (refund.ORDERS_T.created_at).getDate() + "/" + (new Date (refund.ORDERS_T.created_at).getMonth() + 1) + "/" + new Date (refund.ORDERS_T.created_at).getFullYear();
 
-    return (<div className={ Styles.productDetailsPage }>
+    const generalList1 = [{field: "Seller ID", value: refund.ORDERS_T.seller.user_id}, {field: "Total Paid", value: `RM ${parseFloat(refund.ORDERS_T.total_amount).toFixed(2)}`}];
+    const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
+    const generalList3 = [{field: "Order Status", value: refund.ORDERS_T.delivery.delivery_option}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
+
+    const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
+    const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
+    const refundList3 = [{field: "Request Date", value: requestDate}];
+
+    return (<div className={ Styles.refundDetailsPage }>
         <div className={ Styles.upperPart }>
             <div className={ Styles.backButtonPart }>
                 <AdminBackButton />
             </div>
-            <div className={ Styles.productDescription }>
-                <h1>Product Details</h1>
-                <p>View product details here</p>
+            <div className={ Styles.refundUp}>
+                <div className={ Styles.productDescription }>
+                    <h1>Refund Details</h1>
+                    <p>View and manage refund request here</p>
+                </div>
+                <div className={ Styles.refundStatusContainer}>
+                    <h4 className={ Styles.refundStatusTextS }>
+                        <span style={{color: refundStatusColor}}>
+                            {refundStatus}
+                        </span>
+                    </h4>
+                </div>
             </div>
-            <AdminItemCard id={productId} name={product.product_name} category={product.product_status} itemStatus={product.product_status} imageUrl={product.product_image_url} />
         </div>
         <div className={ Styles.middlePart }>
-            <div className={ Styles.productInformationContainer }>
-                <div className={ Styles.informationUpper }>
-                    <div className={ Styles.informationLeft }>
-                        <ShowItemInformationList itemTitle="Product Information" objectlist={informationList} />
+            <div className={ Styles.evidencesShow}>
+                <div className={ Styles.evidenceContainer}>
+                    <EvidencesPhoto evidences={refund.evidences} />
+                </div>
+            </div>
+            <div className={ Styles.generalInformation }>
+                <div className={ Styles.generalInformationTitle }>
+                    <AdminTitle title="General Information" />
+                </div>
+                <div className={ Styles.generalInformationList }>
+                    <ShowItemInformationList objectlist={generalList1} />
+                    <ShowItemInformationList objectlist={generalList2} />
+                    <ShowItemInformationList objectlist={generalList3} />
+                </div>
+            </div>
+            <div className={ Styles.refundTable }>
+                <div className={ Styles.showProductSku }>
+                    <div>
+                        <h3>Order Review</h3>
                     </div>
-                    <div className={ Styles.informationRight }>
-                        <AdminTitle title="Product Related Information" />
-                        <div className={ Styles.relatedInformation }>
-                            <div>
-                                ⭐Rating: {product.overall_product_rating}
-                            </div>
-                            <div>
-                                ⌛Created at: {product.created_at}
-                            </div>
-                            <div>
-                                🧑🏻Created by: {product.USERS_T.username}
-                            </div>
-                            <div>
-                                📜Total Orders: {sales.totalOrders}
-                            </div>
-                            <div>
-                                💵Total Sales: {sales.totalSales}
-                            </div>
-                        </div>
+                    <AdminTable titles={titles} fields={fields} datas={skus} slice={true} dataIdFormat="" />
+                </div>
+            </div>
+            <div className={ Styles.refundInformation }>
+                <div className={ Styles.generalInformationTitle }>
+                    <AdminTitle title="Refund Details" />
+                </div>
+                <div className={ Styles.generalInformationList }>
+                    <ShowItemInformationList objectlist={refundList1} />
+                    <ShowItemInformationList objectlist={refundList2} />
+                    <ShowItemInformationList objectlist={refundList3} />
+                </div>
+                <div className={ Styles.refundDescription }>
+                    <h4>Description</h4>
+                    <div className={ Styles.refundDescriptionText }>
+                        <p>{refund.refund_description}</p>
                     </div>
                 </div>
-                <div className={ Styles.buttonPart }>
-                    {product.product_status === "Active" ? <AdminDeactiveProductButton productId={productId} /> : <AdminReactiveProductButton productId={productId} />}
+            </div>
+            <div className={ Styles.showRemarks}>
+                <div className={ Styles.sellerRemarks}>
+                    <h4>Seller Remarks</h4>
+                    <div className={ Styles.remarksContainer } >
+                        <p>
+                            {refund.seller_remarks ? refund.seller_remarks : "No remarks from seller"}
+                        </p>
+                    </div>
                 </div>
+                <AdminRemarks remarks={refund.admin_remarks} refundId={refund.refund_id} />
             </div>
         </div>
         <div className={ Styles.bottomPart }>
-            <h2>{product.product_name}'s Reviews</h2>
-            <AdminTable titles={titles} fields={fields} actions={actions} datas={reviews} slice={true} dataIdFormat="review_id" />
+            <div className={Styles.redirectPart}>
+                <div>
+                    <div>
+                        <AdminTitle title="View Refund Product Further" />
+                    </div>
+                    <div>
+                        <span className={Styles.linkText}><Link href={`/admin/ManageOrders/${refund.ORDERS_T.order_id}`}>Order Page</Link></span>
+                        <span className={Styles.linkText}><Link href={`/admin/ManageUsers/${refund.ORDERS_T.seller.user_id}`}>Seller Page</Link></span>
+                        <span className={Styles.linkText}><Link href={`/admin/ManageUsers/${refund.ORDERS_T.buyer.user_id}`}>Buyer Page</Link></span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <AdminTitle title="Contact Info" />
+                    </div>
+                    <div>
+                        <a href={`mailto:${refund.ORDERS_T.buyer.email}?subject=${buyerSubject}&body=${emailBuyerBody}`}>
+                            Email Buyer
+                        </a>
+                        <a href={`mailto:${refund.ORDERS_T.seller.email}?subject=${sellerSubject}&body=${emailSellerBody}`}>
+                            Email Seller
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div className={Styles.redirectPart}>
+
+            </div>
         </div>
     </div>);
 }

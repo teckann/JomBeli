@@ -28,18 +28,6 @@ export default async function manageProductsPage({ searchParams }) {
     return (
         <div className={ Styles.contentPage}>
             <AdminBackButton />
-            {/* <div className={Styles.upperPart}>
-                <div className={Styles.pageDescription}>
-                    <h1>System Refund Table</h1>
-                    <p>Manage System Refund here</p>
-                </div>
-                <div className={Styles.generateReportPart}>
-                    <GenerateReportButton yearMonths={yearMonthsSelect} />
-                </div>
-            </div> */}
-            {/* <div className={Styles.productsOverviewContainer}>
-                <ProductOverViewBar />
-            </div> */}
             <div className={Styles.showTablePart}>
                 <div className={Styles.listingText}>
                     <h2>Product Listing</h2>

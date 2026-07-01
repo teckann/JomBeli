@@ -5,14 +5,18 @@ import styles from "./ProductClientView.module.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function ProductClientView({ product, optionValues, sku }) {
+function ProductClientView({
+  product,
+  optionValues,
+  sku,
+  productOverallRating,
+}) {
   // console.log(product);
   // console.log(optionValues);
   // console.log(sku);
 
   const {
     product_name: name,
-    overall_product_rating: star,
     price: productPrice,
     stock_quantity: productStock,
     discount,
@@ -129,7 +133,7 @@ function ProductClientView({ product, optionValues, sku }) {
 
   return (
     <div className={styles.content}>
-      <Header name={name} star={star} />
+      <Header name={name} star={productOverallRating} />
 
       <FinalPrice
         finalPrice={finalPrice}
@@ -259,9 +263,9 @@ const Header = ({ name, star }) => {
             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
           </svg>
 
-          {star ? (
+          {star != null ? (
             <p>
-              {star} <span>overall rating</span>
+              {star.toFixed(1)} <span>overall rating</span>
             </p>
           ) : (
             <p>

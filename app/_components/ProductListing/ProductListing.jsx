@@ -1,10 +1,10 @@
 import {
-  getProducts,
   getDiscountProducts,
   getHotProducts,
   getDiscoverProducts,
   getFilterProducts,
 } from "@/app/_lib/data-services";
+import { getAllProducts } from "@/app/_lib/buyer-products-services";
 import ProductCard from "../ProductCard/ProductCard";
 import styles from "./ProductListing.module.css";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
@@ -15,7 +15,7 @@ async function ProductListing({ type, filter }) {
   if (type === "discountProducts") products = await getDiscountProducts();
   if (type === "hotselling") products = await getHotProducts();
   if (type === "discover") products = await getDiscoverProducts();
-  if (filter) products = await getProducts();
+  if (filter) products = await getAllProducts();
 
   let displayProducts;
 
