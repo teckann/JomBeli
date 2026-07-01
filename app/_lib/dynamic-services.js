@@ -95,24 +95,44 @@ export async function getSellerInfo(userId) {
 }
 
 export async function getSellerRating(userId) {
-  const { data, error } = await supabase
+  const { data: products, error: productError } = await supabase
     .from("PRODUCTS_T")
-    .select("overall_product_rating")
+    .select("product_id")
     .eq("user_id", userId);
 
-  if (error) {
-    throw new Error(error.message);
+  if (productError) {
+    throw new Error(productError.message);
   }
 
-  if (!data || data.length === 0) {
-    return "No rating yet";
+  if (!products || products.length === 0) {
+    return 0;
   }
 
-  const sum = data.reduce((acc, item) => {
-    return acc + (Number(item.overall_product_rating) || 0);
-  }, 0);
+  const productIds = products.map((p) => p.product_id);
 
-  const avg = sum / data.length;
+  const { data: reviews, error: reviewError } = await supabase
+    .from("REVIEWS_T")
+    .select("product_rating")
+    .in("product_id", productIds);
+
+  if (reviewError) {
+    throw new Error(reviewError.message);
+  }
+
+  if (!reviews || reviews.length === 0) {
+    return 0;
+  }
+
+  const ratings = reviews
+    .map((r) => Number(r.product_rating))
+    .filter((r) => !isNaN(r));
+
+  if (ratings.length === 0) {
+    return 0;
+  }
+
+  const sum = ratings.reduce((acc, r) => acc + r, 0);
+  const avg = sum / ratings.length;
 
   return Number(avg.toFixed(1));
 }
@@ -145,4 +165,182 @@ export async function getSellerTotalReviews(sellerId) {
   }
 
   return reviews.length;
+}
+
+export async function getSellerTotalProduct(sellerId) {
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("product_id")
+    .eq("user_id", sellerId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.length || 0;
+}
+
+export async function getSellerTotalDiscountProduct(sellerId) {
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("product_id")
+    .eq("user_id", sellerId)
+    .not("discount", "is", null);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.length || 0;
+}
+
+export default async function getProductOverallRating(productId) {
+  const { data, error } = await supabase
+    .from("REVIEWS_T")
+    .select("product_rating")
+    .eq("product_id", productId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  const sum = data.reduce((acc, review) => {
+    return acc + (Number(review.product_rating) || 0);
+  }, 0);
+
+  const average = sum / data.length;
+
+  return Number(average.toFixed(1));
+}
+
+export async function getTotalRatingRecords(productId) {
+  const { data, error } = await supabase
+    .from("REVIEWS_T")
+    .select("product_rating")
+    .eq("product_id", productId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const records = {
+    all: 0,
+    5: 0,
+    4: 0,
+    3: 0,
+    2: 0,
+    1: 0,
+  };
+
+  if (!data || data.length === 0) {
+    return records;
+  }
+
+  records.all = data.length;
+
+  data.forEach((review) => {
+    const rating = Number(review.product_rating);
+
+    if (rating >= 1 && rating <= 5) {
+      records[rating]++;
+    }
+  });
+
+  return records;
+}
+
+export async function getProductReviews(productId) {
+  const { data: reviews, error: reviewError } = await supabase
+    .from("REVIEWS_T")
+    .select("*")
+    .eq("product_id", productId);
+
+  if (reviewError) {
+    throw new Error(reviewError.message);
+  }
+
+  if (!reviews || reviews.length === 0) {
+    return [];
+  }
+
+  const userIds = [...new Set(reviews.map((r) => r.user_id))];
+
+  const { data: users, error: userError } = await supabase
+    .from("USERS_T")
+    .select("user_id, username, avatar")
+    .in("user_id", userIds);
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
+
+  // map users by id
+  const userMap = {};
+  users.forEach((user) => {
+    userMap[user.user_id] = user;
+  });
+
+  // combine the data
+  const result = reviews.map((review) => {
+    const user = userMap[review.user_id] || {};
+
+    return {
+      ...review,
+      username: user.username || "Unknown",
+      avatar: user.avatar || null,
+    };
+  });
+
+  return result;
+}
+
+export async function getFilterReviews(productId, star) {
+  const rating = Number(star || 0);
+
+  const { data: reviews, error: reviewError } = await supabase
+    .from("REVIEWS_T")
+    .select("*")
+    .eq("product_id", productId)
+    .eq("product_rating", rating);
+
+  if (reviewError) {
+    console.error("Failed to fetch filter reviews:", reviewError.message);
+    return [];
+  }
+
+  if (!reviews || reviews.length === 0) {
+    return [];
+  }
+
+  const userIds = [...new Set(reviews.map((r) => r.user_id))];
+
+  const { data: users, error: userError } = await supabase
+    .from("USERS_T")
+    .select("user_id, username, avatar")
+    .in("user_id", userIds);
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
+
+  const userMap = {};
+  users.forEach((user) => {
+    userMap[user.user_id] = user;
+  });
+
+  const result = reviews.map((review) => {
+    const user = userMap[review.user_id] || {};
+
+    return {
+      ...review,
+      username: user.username || "Unknown",
+      avatar: user.avatar || null,
+    };
+  });
+
+  return result;
 }
