@@ -1,13 +1,13 @@
 import Styles from './AdminShowInformationList.module.css';
 
-export default function ShowItemInformationList({ itemTitle, objectlist }) {
+export default function ShowItemInformationList({ objectlist }) {
     
     return (
         <div className={ Styles.informationListFrame }>
-            <AdminTitle title={itemTitle} />
+            {/* <AdminTitle title={itemTitle} /> */}
             <div className={ Styles.informationSpace }>
-                {objectlist.map((each) => {
-                    return <div key={each.field} className={ Styles.informationRow }>
+                {objectlist.map((each, index) => {
+                    return <div key={index} className={ Styles.informationRow }>
                         <div className={ Styles.informationField }>
                             {each.field}
                         </div>
