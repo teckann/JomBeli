@@ -1095,7 +1095,6 @@ export async function getOrdersItems(buyerId, statusFilter) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
