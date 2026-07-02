@@ -1,0 +1,81 @@
+.success {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--color-bg-surface);
+  gap: 1.5rem;
+  min-height: 90vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 250px;
+  margin: 0;
+  padding: 0;
+}
+
+.image {
+  object-fit: contain;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.titleContainer h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--color-font-primary);
+}
+
+.titleContainer p {
+  font-size: 1.125rem;
+  color: var(--color-font-secondary);
+  max-width: 500px;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .imageContainer {
+    max-width: 350px;
+    height: 180px;
+  }
+
+  .titleContainer h2 {
+    font-size: 1.5rem;
+  }
+
+  .titleContainer p {
+    font-size: 1rem;
+  }
+
+  .button {
+    width: 100%;
+    max-width: 300px;
+  }
+}

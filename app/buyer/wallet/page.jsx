@@ -6,7 +6,7 @@ import TransactionRecords from "@/app/_components/TransactionRecords/Transaction
 import TopUp from "@/app/_components/TopUp/TopUp";
 
 export const metadata = {
-  title: "Wallet",
+  title: "My Wallet",
 };
 
 async function page({ searchParams }) {

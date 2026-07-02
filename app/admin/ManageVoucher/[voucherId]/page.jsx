@@ -1,8 +1,10 @@
 import { getVoucherDetails } from "@/app/_lib/data-services";
+import EditVoucherWidget from "@/app/_components/AdminEditVoucher/EditVoucherWidget";
 import Styles from "./VoucherDetails.module.css";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import AdminDeactivateVoucherButton from "@/app/_components/AdminDeactivateVoucherButton/AdminDeactivateVoucherButton"
 import AdminShowInformationList from "@/app/_components/AdminShowInformationList/AdminShowInformationList";
+
 export const revalidate = 0;
 
 export default async function UserDetail({params}){
@@ -38,7 +40,7 @@ export default async function UserDetail({params}){
                 <div className={Styles.leftSide}>
                     <AdminShowInformationList itemTitle="Voucher details" objectlist={voucherInfo}/>
                     {voucher?.voucher_type == "platform" && (
-                        <EditVoucher/>
+                        <EditVoucherWidget voucher={voucher}/>
                     )}
                     <AdminDeactivateVoucherButton voucherId={voucher.voucher_id} voucherStatus={voucher.voucher_status}/>
                 </div>

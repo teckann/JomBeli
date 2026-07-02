@@ -1,0 +1,93 @@
+.openFormBtn {
+    display: flex;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-light)
+}
+
+.openFormBtn:hover {
+    background-color: var(--color-primary-darker);
+    color: var(--color-primary-subtle);
+    cursor: pointer;
+}
+
+.formContainer {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.formGroup {
+
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+}
+
+.formActions {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.formGroup label{
+    font-size: 16px;
+    color: var(--color-text-primary);
+}
+
+.formGroup input{
+    display: flex;
+    font-size: 16px;
+    width: 80%;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 20px;
+    background-color: #e0eec6;
+    padding: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.cancelBtn {
+    background-color: #eaeaea;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cancelBtn:hover{
+    background-color: var(--color-danger);
+    color: var(--color-primary-subtle);
+    cursor: pointer;
+}
+
+.submitBtn {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submitBtn:hover{
+    background-color: var(--color-info-text);
+    cursor: pointer;
+}

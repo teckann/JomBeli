@@ -1075,9 +1075,15 @@ export async function getVoucherDetails(voucherId){
   if (error) {
     console.error("Fetch voucher data error:", error);
     throw new Error("Could not find voucher");
-  }
-  const [formatted] = formatData([data])
-  return formatted
+  };
+
+  const [formatted] = formatData([data]);
+  
+  return {
+    ...formatted,
+    raw_start_date: data.start_date,
+    raw_end_date: data.end_date
+  };
 }
 
 export async function getOrdersItems(buyerId, statusFilter) {
