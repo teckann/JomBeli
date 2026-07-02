@@ -1,16 +1,72 @@
 'use client'; 
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/app/_lib/supabase'; 
 import SellerDashboardStatisticCard from "@/app/_components/SellerDashboardStatisticCard/SellerDashboardStatisticCard.jsx";
 import SellerGenerateReportButton from '@/app/_components/SellerGenerateReportButton/SellerGenerateReportButton.jsx';
 import styles from './dashboard.module.css';
+import SellerRevenueSection from '@/app/_components/SellerTotalRevenue/SellerTotalRevenue.jsx';
 
 const DashboardPage = () => {
+  const [sellerId, setSellerId] = useState(null); 
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [pendingOrders, setPendingOrders] = useState(0);
+  const [totalVouchers, setTotalVouchers] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setLoading(true);
+
+        const { data: { session }, error: authError } = await supabase.auth.getSession();
+        if (authError) throw authError;
+
+        if (session?.user) {
+          const currentUserId = session.user.id; 
+          setSellerId(currentUserId); 
+
+          const [productsResult, ordersResult, vouchersResult] = await Promise.all([
+            supabase
+              .from('PRODUCTS_T')
+              .select('*', { count: 'exact', head: true })
+              .eq('user_id', currentUserId),
+
+            supabase
+              .from('ORDERS_T') 
+              .select('*', { count: 'exact', head: true })
+              .eq('seller_id', currentUserId) 
+              .eq('order_status', 'ordered'),
+
+            supabase
+              .from('VOUCHERS_T') 
+              .select('*', { count: 'exact', head: true })
+              .eq('user_id', currentUserId)
+          ]);
+
+          if (productsResult.error) throw productsResult.error;
+          if (ordersResult.error) throw ordersResult.error;
+          if (vouchersResult.error) throw vouchersResult.error;
+
+          setTotalProducts(productsResult.count || 0);
+          setPendingOrders(ordersResult.count || 0);
+          setTotalVouchers(vouchersResult.count || 0); 
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   const statsData = [
-    { id: 1, title: 'Total Products', value: 17 },
-    { id: 2, title: 'Total Orders', value: 183 },
-    { id: 3, title: 'Pending Orders', value: 5 },
-    { id: 4, title: 'Total Vouchers', value: 10 },
+    { id: 1, title: 'Total Products', value: loading ? '...' : totalProducts },
+    { id: 2, title: 'Total Orders', value: loading ? '...' : 183 }, 
+    { id: 3, title: 'Pending Orders', value: loading ? '...' : pendingOrders }, 
+    { id: 4, title: 'Total Vouchers', value: loading ? '...' : totalVouchers }, 
   ];
 
   return (
@@ -38,6 +94,9 @@ const DashboardPage = () => {
             />
           ))}
         </div>
+        
+        <div className={styles.space}></div>
+        <SellerRevenueSection currentUserId={sellerId} />
 
       </main>
     </div>
