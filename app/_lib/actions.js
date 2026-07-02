@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo, setBalances } from "./data-services";
+import { getUserInfo, setBalances, updateAdminRemarksRefund } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
@@ -482,6 +482,13 @@ export async function checkoutAction(payload) {
   }
 }
 
+export async function handleRemarksChange(formData) {
+  const remark = formData.get("adminRemarks");
+  const refundId = formData.get("refundId");
+
+  await updateAdminRemarksRefund(refundId, remark);
+}
+
 export async function submitReviews(formData) {
   const supabase = await createClient();
 
@@ -540,7 +547,9 @@ export async function addCourier(formData){
     return redirect("/admin/ManageCouriers?error=Courier authentication creation failed.");
   }
 
-  const{ error:insertError } = await supabase.from("USERS_T").insert([
+  const{ error:insertError } = await supabase
+  .from("USERS_T")
+  .insert([
     {
       user_id: user.id,
       username: username,
@@ -567,7 +576,7 @@ export async function deactivateVoucher(voucherId){
 
   const { data,error } = await supabase
     .from("VOUCHERS_T")
-    .update({voucher_status:"Inactive"})
+    .update({voucher_status:"inactive"})
     .eq("voucher_id",voucherId)
     .select();
   
@@ -584,7 +593,7 @@ export async function reactivateVoucher(voucherId){
 
   const { data,error } = await supabase
     .from("VOUCHERS_T")
-    .update({voucher_status:"Active"})
+    .update({voucher_status:"active"})
     .eq("voucher_id",voucherId)
     .select();
   
@@ -594,4 +603,112 @@ export async function reactivateVoucher(voucherId){
     }
 
     return data;
+}
+
+export async function adminUpdateVoucher(voucherId,saveData){
+  const requiredFields = ['voucherName', 'discountValue', 'maximumSpend', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
+
+  if (Number(saveData.minimumSpend) < Number(saveData.discountValue)) {
+    throw new Error("Minimum spend cannot be less than the discount value.");
+  }
+
+  const startDate = new Date(saveData.startDate);
+  const endDate = new Date(saveData.endDate);
+
+  if (isNaN(startDate) || isNaN(endDate)){
+    throw new Error("Invalid start or end date");
+  }
+
+  if (endDate <= startDate){
+    throw new Error("Please ensure that the end date is later than start date");
+  }
+
+  for (const field of requiredFields) {
+    if (!saveData[field] || saveData[field].toString().trim() === "") {
+      throw new Error(`The field "${field}" is required and cannot be empty.`);
+    }
+  }
+
+  const dbData = {
+    voucher_name: saveData.voucherName,
+    discount_value: saveData.discountValue,
+    max_spend: saveData.maximumSpend,
+    min_spend: saveData.minimumSpend,
+    quantity: saveData.quantity,
+    start_date: saveData.startDate,
+    end_date: saveData.endDate,
+  };
+
+  const supabase = await createClient();
+
+  const {error} = await supabase
+    .from("VOUCHERS_T")
+    .update(dbData)
+    .eq("voucher_id",voucherId);
+
+  if (error){
+    console.error("Error saving data: ", error);
+    throw new Error("Could not save data.");
+  }
+
+  revalidatePath(`/damin/ManageVoucher/${voucherId}`);
+  revalidatePath('/admin/ManageVoucher')
+}
+
+export async function adminAddVoucher(formData){
+  const requiredFields = ['voucherName', 'discountValue', 'maximumSpend', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
+
+  if (Number(formData.minimumSpend) < Number(formData.discountValue)) {
+    throw new Error("Minimum spend cannot be less than the discount value.");
+  }
+
+  const startDate = new Date(formData.startDate);
+  const endDate = new Date(formData.endDate);
+
+  if (isNaN(startDate) || isNaN(endDate)){
+    throw new Error("Invalid start or end date");
+  }
+
+  if (endDate <= startDate){
+    throw new Error("Please ensure that the end date is later than start date");
+  }
+
+  const user = getUser();
+  if (!user) {
+    throw new Error("You must be logged in to create a voucher.")
+  }
+  for (const field of requiredFields) {
+    if (!formData[field] || formData[field].toString().trim() === "") {
+      throw new Error(`The field "${field}" is required and cannot be empty.`);
+    }
+  }
+
+  const newVoucherId = GeneralIDGenerator().toString();
+
+  const dbData = {
+    voucher_id: newVoucherId,
+    user_id: user.id,
+    voucher_name: formData.voucherName,
+    discount_value: formData.discountValue,
+    max_spend: formData.maximumSpend,
+    min_spend: formData.minimumSpend,
+    quantity: formData.quantity,
+    start_date: formData.startDate,
+    end_date: formData.endDate,
+    voucher_status: "active",
+    voucher_type: "platform",
+  };
+
+  const supabase = await createClient();
+
+  const {error} = await supabase
+    .from("VOUCHERS_T")
+    .insert(dbData)
+    
+  if (error){
+    console.error("Error saving data: ", error);
+    throw new Error("Could not save data.");
+  }
+
+  revalidatePath('/admin/ManageVoucher')
 }

@@ -1,0 +1,45 @@
+"use client";
+
+// import { useRouter, useSearchParams } from "next/navigation";
+import Styles from './AdminRemarks.module.css';
+import {useState} from 'react';
+import { handleRemarksChange } from '@/app/_lib/actions';
+
+export default function Adminremarks({remarks, refundId}) {
+
+    let [remarksState, setRemarksState] = useState(remarks);
+    let [editState, setEditState] = useState(false);
+    
+    const handleChange = (e) => {
+        setRemarksState(e.target.value);
+    }
+
+    const handleClick = () => {
+        setEditState(!editState);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        await handleRemarksChange(new FormData(e.target));
+
+        setEditState(false);
+    };
+    
+
+    return(
+        <div className={ Styles.adminRemarks}>
+            <div>
+                <h4>Admin Remarks</h4>
+            </div>
+            <div className={ Styles.remarksContainer }>
+                <form onSubmit={handleSubmit}>
+                    <textarea rows={6} cols={40} name="adminRemarks" onChange={handleChange} className={ Styles.adminRemarksTextArea } value={remarksState ? remarksState : ""} placeholder="Write somethig here." disabled={!editState} />
+                    <input type="hidden" value={refundId} name="refundId" />
+                    <div className={ Styles.buttonParts }>{editState && <button className={`btn btn-primary ${Styles.green}`} type="submit">Save</button>}</div>
+                </form>
+                <div className={ Styles.buttonParts }>{!editState && <button className={`btn btn-primary ${Styles.yellow}`} onClick={handleClick} type="button">Edit</button>}</div>
+            </div>
+        </div>
+    )
+}

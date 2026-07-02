@@ -6,16 +6,17 @@
     align-items: center;
 }
 
-.productDetailsPage {
+.refundDetailsPage {
     display: flex;
     flex-direction: column;
     padding: 1em;
     align-items: center;
     width: 100%;
     gap: 1em;
+    margin-bottom: 1em;
 }
 
-.backButtonPart, .productDescription {
+.backButtonPart, .refundUp {
     width: 100%;
 }
 
@@ -25,8 +26,11 @@
 
 .middlePart {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    gap: 2em;
 }
 
 .productInformationContainer {
@@ -116,4 +120,113 @@
 .hrLength {
     width: 30%;
     
+}
+
+.evidencesShow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.evidenceContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 30%; */
+}
+
+.generalInformation, .refundInformation {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1em; */
+    width: 80%;
+    background-color: var(--color-bg-card);
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.generalInformationList {
+    display: flex;
+}
+
+.refundUp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1em;
+}
+
+.refundStatusContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+    background-color: var(--color-bg-primary);
+}
+
+.generalInformationTitle {
+    padding: 0 1em;
+}
+
+.showProductSku {
+    display:flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+.refundTable {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.refundDescription {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+}
+
+.refundDescriptionText {
+    display: flex;
+    justify-content: center;
+    padding: 0.5em;
+    border-radius: 10px;
+    background-color: pink;
+    width: 80%;
+}
+
+.showRemarks {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    width: 80%;
+}
+
+.sellerRemarks, .adminRemarks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+    background-color: var(--color-bg-card);
+    width: 100%;
+    border-radius: 10px;
+}
+
+.remarksContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    min-height: 5em;
+    padding: 2em;
 }

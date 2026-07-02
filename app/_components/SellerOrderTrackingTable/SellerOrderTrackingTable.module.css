@@ -1,0 +1,103 @@
+.updateStatusButton {
+    text-decoration: underline;
+    border: none;
+}
+
+.skuTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.skuTable tr {
+    display: table-row; 
+}
+
+.skuTable th, .skuTable td {
+    display: table-cell;
+    padding: 10px;
+    text-align: left; 
+    border-bottom: 1px solid #eee;
+}
+
+.orderTable {
+  padding: 24px;
+  margin-top: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  
+}
+
+
+.status h2 {
+  font-family: var(--font-body);
+  font-size: var(--text-2xl);                 
+  font-weight: 700;
+  color: var(--color-font-primary);           
+  margin-bottom: 24px;
+}
+
+
+.orderTable table {
+  width: 100%;
+  border-collapse: separate;                
+  border-spacing: 0;                     
+  font-family: var(--font-body);
+  
+  border: 1px solid rgb(158, 158, 158);
+  border-radius: 10px;                 
+  overflow: hidden;
+  display: table;
+}
+
+.orderTable tr {
+    display: table-row;
+}
+
+.orderTable th,
+.orderTable td {
+  padding: 16px 20px;                        
+  font-size: var(--text-sm);   
+  display: table-cell;              
+  line-height: 1.5;
+}
+
+
+.orderTable th {
+  color: var(--color-font-secondary);      
+  font-weight: 600;
+  text-align: center;
+}
+
+.orderTable td {
+  color: var(--color-font-primary);
+
+  text-align: center;
+}
+
+.orderTable tbody tr:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.updateStatusButton {
+  background: none;
+  border: none;
+  padding: 0;
+  
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--color-font-primary);          
+  
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.updateStatusButton:hover {
+  color: var(--color-primary);
+}
+
+.tableHeader th{
+  background-color: var(--color-primary);
+  color: white;
+}
