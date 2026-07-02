@@ -1,0 +1,32 @@
+.reportBtnWrapper {
+  display: inline-flex;
+  align-items: center;    
+  margin-left: auto;   
+}
+
+.reportBtn {
+  background-color: transparent;
+  border: none;
+  padding: 8px 0px; 
+  
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-font-primary);
+  
+  text-decoration: underline;
+  text-underline-offset: 4px; 
+  
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.reportBtn:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.reportBtn:active {
+  transform: scale(0.98);
+}
+
