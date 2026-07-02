@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo, setBalances } from "./data-services";
+import { getUserInfo, setBalances, updateAdminRemarksRefund } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
@@ -480,6 +480,13 @@ export async function checkoutAction(payload) {
     console.error("Checkout failed:", err.message);
     return { success: false, error: err.message };
   }
+}
+
+export async function handleRemarksChange(formData) {
+  const remark = formData.get("adminRemarks");
+  const refundId = formData.get("refundId");
+
+  await updateAdminRemarksRefund(refundId, remark);
 }
 
 export async function submitReviews(formData) {

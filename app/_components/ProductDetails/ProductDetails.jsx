@@ -1,4 +1,4 @@
-import {
+import getProductOverallRating, {
   getOptionValues,
   getProductOptions,
   getSingleProduct,
@@ -7,26 +7,6 @@ import {
 import styles from "./ProductDetails.module.css";
 import ProductClientView from "../ProductClientView/ProductClientView";
 import ProductImageCarousel from "../ProductImageCarousel/ProductImageCarousel";
-
-function generateVariants(options) {
-  return options.reduce(
-    (acc, option) => {
-      const result = [];
-
-      for (const item of acc) {
-        for (const value of option.values) {
-          result.push({
-            ...item,
-            [option.name]: value,
-          });
-        }
-      }
-
-      return result;
-    },
-    [{}],
-  );
-}
 
 async function ProductDetails({ productId }) {
   // general info
@@ -69,6 +49,8 @@ async function ProductDetails({ productId }) {
     };
   });
 
+  const productOverallRating = await getProductOverallRating(productId);
+
   return (
     <div className={styles.detailsContainer}>
       <div className={styles.imageContainer}>
@@ -79,6 +61,7 @@ async function ProductDetails({ productId }) {
         product={productInfo}
         optionValues={merged}
         sku={skuList}
+        productOverallRating={productOverallRating}
       />
     </div>
   );

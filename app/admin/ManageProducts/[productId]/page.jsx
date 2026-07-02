@@ -42,7 +42,8 @@ export default async function ProductDetails({params}) {
             <div className={ Styles.productInformationContainer }>
                 <div className={ Styles.informationUpper }>
                     <div className={ Styles.informationLeft }>
-                        <ShowItemInformationList itemTitle="Product Information" objectlist={informationList} />
+                        <AdminTitle title="Product Information" />
+                        <ShowItemInformationList objectlist={informationList} />
                     </div>
                     <div className={ Styles.informationRight }>
                         <AdminTitle title="Product Related Information" />
