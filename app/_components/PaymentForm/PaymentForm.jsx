@@ -30,9 +30,7 @@ export default function PaymentForm({ checkoutData }) {
             sellerId: checkoutData.sellerID,
             addressId: checkoutData.addressID,
             deliveryOption: currentDelivery.option,
-            deliveryDescription: `${currentDelivery.option} home delivery`,
             deliveryFee: shippingFee,
-            estimatedDays: currentDelivery.days,
             originalPrice: itemsSubtotal,
             discountAmount: discountAmount,
             totalAmount: grandTotal,
@@ -49,7 +47,7 @@ export default function PaymentForm({ checkoutData }) {
             const response = await checkoutAction(paymentPayload);
             if (response.success) {
                 alert(`Order created successfully! ID: ${response.orderId}`);
-                router.push('/buyer/ordercomplete')
+                router.push(`/buyer/payment/success?order=${response.orderId}`)
             } else {
                 alert(`Payment failed: ${response.error}`);
             }

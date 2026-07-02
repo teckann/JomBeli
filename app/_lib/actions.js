@@ -299,7 +299,7 @@ export async function BuyerContactForm(formData) {
     throw new Error("Failed to submit form. Please try again.");
   }
 
-  redirect("/buyer/helpcentre");
+  redirect("/buyer/contactus/submitted");
 }
 
 export async function deactiveProduct(productId) {

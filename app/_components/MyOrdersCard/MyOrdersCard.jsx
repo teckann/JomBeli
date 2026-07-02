@@ -53,10 +53,9 @@ export default function MyOrdersCard({
                                 <div className={Styles.itemMainInfo}>
                                     <h3 className={Styles.productName}>{product_name || "Unnamed Product"}</h3>
                                     {sku && <p className={Styles.skuText}>SKU: {sku}</p>}
-                                    <span className={Styles.qtyText}>Qty: {quantity}</span>
                                 </div>
                                 <div className={Styles.itemPriceInfo}>
-                                    <span className={Styles.priceText}>RM {Number(subtotal).toFixed(2)}</span>
+                                    <span className={Styles.qtyText}>Qty: {quantity}</span>
                                 </div>
                             </div>
                         </div>

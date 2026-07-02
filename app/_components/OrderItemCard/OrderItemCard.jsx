@@ -11,6 +11,9 @@ export default function CartItemCard({
 }) {
     const { product_variant_price: originalPrice, sku } = cartitem.PRODUCT_VARIANTS_T;
     const { product_name, product_image_url} = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T;
+    const discount = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.discount;
+    const hasDiscount = discount ?? false;
+    const finalPrice = hasDiscount ? originalPrice * ((100 - discount) / 100) : originalPrice;
 
     return (
         <div className={Styles.cartItem}>
@@ -35,7 +38,16 @@ export default function CartItemCard({
                 <h2>{product_name}</h2>
                 <p>{sku}</p>
                 <h2>Qty: {cartitem.quantity}</h2>
-                <h2>RM {originalPrice.toFixed(2)}</h2>
+                <div className={Styles.price}>
+                    <span
+                        className={`${Styles.finalPrice} ${hasDiscount && Styles.discountColor}`}
+                    >
+                        RM {finalPrice.toFixed(2)}
+                    </span>
+                    {hasDiscount && (
+                        <span className={Styles.originalPrice}>RM {originalPrice?.toFixed(2)}</span>
+                    )}
+                </div>
             </div>
 
             {showDelete && (

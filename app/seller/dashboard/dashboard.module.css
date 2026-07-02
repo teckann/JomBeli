@@ -1,0 +1,49 @@
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0px 24px; 
+  box-sizing: border-box;
+}
+
+.topPartWrapper {
+  display: flex;
+  align-items: center; 
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.productTitle {
+  font-family: var(--font-body);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--color-font-primary);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--color-border-light, #eef2f7);
+  margin: 0 0 16px 0;
+}
+
+.buttonRightAligner {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-top: 4px;
+  margin-bottom: 24px;
+}
+
+.statisticCardsContainer {
+  display: flex;
+  flex-wrap: nowrap; 
+  width: 100%;       
+  gap: 20px;         
+  background-color: transparent; 
+  margin: 0;
+}
+
+.space {
+  margin-top: 25px;
+}

@@ -8,7 +8,7 @@ export default function Footer() {
     { name: "Category", path: "/buyer/category" },
     { name: "Message", path: "/buyer/chat" },
     { name: "My Wallet", path: "/buyer/wallet" },
-    { name: "My Order", path: "/buyer/order" },
+    { name: "My Order", path: "/buyer/orders" },
   ];
 
   const info = [

@@ -966,7 +966,6 @@ export async function getUserVouchers(userId, shopId) {
           voucher_name,
           voucher_type,
           discount_value,
-          max_spend,
           min_spend,
           quantity,
           start_date,
@@ -976,7 +975,7 @@ export async function getUserVouchers(userId, shopId) {
         )
       `)
       .eq('user_id', userId)
-      .eq('user_voucher_status', 'available')
+      .eq('user_voucher_status', 'Available')
       .eq('vouchers.voucher_status', 'active')
       .lte('vouchers.start_date', now)
       .gte('vouchers.end_date', now)
@@ -993,7 +992,6 @@ export async function getUserVouchers(userId, shopId) {
       voucher_name: item.vouchers.voucher_name,
       voucher_type: item.vouchers.voucher_type,
       discount_value: item.vouchers.discount_value,
-      max_spend: item.vouchers.max_spend,
       min_spend: item.vouchers.min_spend,
       quantity: item.vouchers.quantity,
       start_date: item.vouchers.start_date,
@@ -1100,7 +1098,6 @@ export async function getOrdersItems(buyerId, statusFilter) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
