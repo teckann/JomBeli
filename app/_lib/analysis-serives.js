@@ -358,7 +358,7 @@ export async function getTotalWaitingRefundCount() {
         .from("REFUNDS_T")
         .select("*", { count: "exact", head: true })
         .or(
-            `seller_status.eq.Rejected,and(seller_status.eq.Pending,created_at.lte.${oneWeekAgo.toISOString()})`
+            `and(seller_status.eq.Rejected,admin_status.eq.Pending),and(seller_status.eq.Pending,admin_status.eq.Pending,created_at.lte.${oneWeekAgo.toISOString()})`
         );
 
     if (error) {
@@ -403,9 +403,6 @@ export async function getFilterManageRefunds(date, adminStatus, sellerStatus) {
     const supabase = await createClient();
 
     const dateState = !(date === "true");
-
-    console.log(dateState);
-    console.log(dateState, typeof dateState);
 
     let query = supabase
         .from("REFUNDS_T")
@@ -475,4 +472,56 @@ export async function getFilterVoucher(voucher_type, voucher, status){
 
     return formatData(data);
     
+}
+
+export async function getFilterOrders(date, orderStatus) {
+    const supabase = await createClient();
+
+    const ascending = date !== "true";
+
+    let query = supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+
+            seller:USERS_T!ORDERS_T_seller_id_fkey (
+                username
+            ),
+
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey (
+                username
+            ),
+
+            ORDER_ITEMS_T (
+                quantity,
+                PRODUCT_VARIANTS_T (
+                    PRODUCTS_T (
+                        product_name,
+                        category
+                    )
+                )
+            )
+        `);
+
+    // Filter order status
+    if (orderStatus && orderStatus !== "All") {
+        query = query.eq("order_status", orderStatus);
+    }
+
+    // Sort by date
+    query = query.order("created_at", {
+        ascending,
+    });
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch orders");
+    }
+
+    return data;
 }

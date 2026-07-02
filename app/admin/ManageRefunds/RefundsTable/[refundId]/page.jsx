@@ -8,6 +8,7 @@ import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
 import EvidencesPhoto from '@/app/_components/EvidencesPhoto/EvidencesPhoto';
 import AdminRemarks from '@/app/_components/AdminRemarks/AdminRemarks';
 import Link from 'next/link';
+import AdminRefundActionButtons from '@/app/_components/AdminRefundActionButtons/AdminRefundActionButtons';
 
 export default async function reportDetails({params}) {
     const resolvedParams = await params;
@@ -24,6 +25,7 @@ export default async function reportDetails({params}) {
     let refundStatusColor = "";
     const adminStatus = refund.admin_status;
     const sellerStatus = refund.seller_status;
+    let adminEditState = false;
 
     const buyerSubject = `Refund Request Related Question (${refund.refund_id})`
     const sellerSubject = `Buyer's Refund Request Related Question (${refund.refund_id})`
@@ -50,6 +52,7 @@ export default async function reportDetails({params}) {
     else {
         refundStatus = "Under Admin Review";
         refundStatusColor = "orange";
+        adminEditState = true;
     }
     }
     else if (sellerStatus === "Pending") {
@@ -57,6 +60,7 @@ export default async function reportDetails({params}) {
     if (isOverOneWeek) {
         refundStatus = "Escalated To Admin";
         refundStatusColor = "red";
+        adminEditState = true;
     } 
     else {
             refundStatus = "Waiting For Seller Response";
@@ -77,7 +81,7 @@ export default async function reportDetails({params}) {
 
     const generalList1 = [{field: "Seller ID", value: refund.ORDERS_T.seller.user_id}, {field: "Total Paid", value: `RM ${parseFloat(refund.ORDERS_T.total_amount).toFixed(2)}`}];
     const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
-    const generalList3 = [{field: "Order Status", value: refund.ORDERS_T.delivery.delivery_option}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
+    const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping.delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
 
     const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
     const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
@@ -123,7 +127,7 @@ export default async function reportDetails({params}) {
                     <div>
                         <h3>Order Review</h3>
                     </div>
-                    <AdminTable titles={titles} fields={fields} datas={skus} slice={true} dataIdFormat="" />
+                    <AdminTable titles={titles} fields={fields} datas={skus} slice={false} dataIdFormat="" />
                 </div>
             </div>
             <div className={ Styles.refundInformation }>
@@ -151,37 +155,37 @@ export default async function reportDetails({params}) {
                         </p>
                     </div>
                 </div>
-                <AdminRemarks remarks={refund.admin_remarks} refundId={refund.refund_id} />
+                <AdminRemarks remarks={refund.admin_remarks} refundId={refund.refund_id} isAbleEdit={adminEditState} />
             </div>
         </div>
         <div className={ Styles.bottomPart }>
             <div className={Styles.redirectPart}>
-                <div>
+                <div className={ Styles.navComponent }>
                     <div>
                         <AdminTitle title="View Refund Product Further" />
                     </div>
-                    <div>
-                        <span className={Styles.linkText}><Link href={`/admin/ManageOrders/${refund.ORDERS_T.order_id}`}>Order Page</Link></span>
-                        <span className={Styles.linkText}><Link href={`/admin/ManageUsers/${refund.ORDERS_T.seller.user_id}`}>Seller Page</Link></span>
-                        <span className={Styles.linkText}><Link href={`/admin/ManageUsers/${refund.ORDERS_T.buyer.user_id}`}>Buyer Page</Link></span>
+                    <div className={ Styles.navContainer }>
+                        <span><Link className={Styles.linkText} href={`/admin/ManageOrders/${refund.ORDERS_T.order_id}`}>Order Page</Link></span>
+                        <span><Link className={Styles.linkText} href={`/admin/ManageUsers/${refund.ORDERS_T.seller.user_id}`}>Seller Page</Link></span>
+                        <span><Link className={Styles.linkText} href={`/admin/ManageUsers/${refund.ORDERS_T.buyer.user_id}`}>Buyer Page</Link></span>
                     </div>
                 </div>
-                <div>
+                <div className={ Styles.navComponent }>
                     <div>
                         <AdminTitle title="Contact Info" />
                     </div>
-                    <div>
-                        <a href={`mailto:${refund.ORDERS_T.buyer.email}?subject=${buyerSubject}&body=${emailBuyerBody}`}>
+                    <div className={ Styles.navContainer }>
+                        <a className={ Styles.linkText } href={`mailto:${refund.ORDERS_T.buyer.email}?subject=${buyerSubject}&body=${emailBuyerBody}`}>
                             Email Buyer
                         </a>
-                        <a href={`mailto:${refund.ORDERS_T.seller.email}?subject=${sellerSubject}&body=${emailSellerBody}`}>
+                        <a className={ Styles.linkText } href={`mailto:${refund.ORDERS_T.seller.email}?subject=${sellerSubject}&body=${emailSellerBody}`}>
                             Email Seller
                         </a>
                     </div>
                 </div>
             </div>
-            <div className={Styles.redirectPart}>
-
+            <div className={Styles.actionButtonPart}>
+                <AdminRefundActionButtons isAble={adminEditState} refundId={refund.refund_id} />
             </div>
         </div>
     </div>);
