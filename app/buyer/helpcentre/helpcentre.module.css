@@ -1,59 +1,67 @@
-.linkContainer{
-    margin: 50 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-    max-width: 1200px;
+.linkContainer {
+  margin: 50px auto; 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
 }
 
-.linkCard{
-    position: relative;
-    width: 350px;
-    height: 200px;
-    border: 1px solid;
-    background-color: var(--color-surface);
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid var(--color-border);
-    flex-grow: 1;
+.linkCard {
+  position: relative;
+  flex: 1 1 350px; 
+  min-height: 200px; 
+  background-color: var(--color-surface);
+  padding: 20px;
+  padding-bottom: 60px; 
+  border-radius: 8px;
+  border: 1px solid var(--color-border); 
+  box-sizing: border-box;
 }
 
-.linkCard a{
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background-color: var(--color-primary);
-    color: var(--color-text-on-primary);
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-
+.linkCard a {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-primary);
+  color: #ffffff; 
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease; 
 }
 
-.faqContainer{
-    margin: 50 auto;
-    display: flex;
-    max-width: 1200px;
-    justify-content: space-between;
-    background-color: var(--color-surface);
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid var(--color-border);
+.linkCard a:hover {
+  background-color: var(--color-primary-dark); 
 }
 
-.faqBanner{
-    flex: 1;
+.faqContainer {
+  margin: 50px auto; 
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 30px;
+  max-width: 1200px;
+  width: 100%;
+  background-color: var(--color-surface);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-sizing: border-box;
 }
 
-.faqContent{
-    display: flex;
-    flex: 1 ;
-    flex-direction: column;
-    gap: 20px;
-
+.faqBanner {
+  flex: 1 1 300px;
 }
 
-.faqContent p{
-    color: var(--color-text-muted);
+.faqContent {
+  display: flex;
+  flex: 2 1 400px; 
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faqContent p {
+  color: var(--color-font-secondary); 
+  line-height: 1.6; 
 }
