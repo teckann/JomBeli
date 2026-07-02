@@ -58,7 +58,7 @@ export function AdminCategorySelect({categories, handleChange, values}) {
     
     return (
         <div className={ Styles.selectBox }>
-            <label className={ Styles.selectText } htmlFor="adminStatus">Seller Category</label>
+            <label className={ Styles.selectText } htmlFor="adminStatus">Admin Status</label>
             <select className={ Styles.inputs } value={values} name="adminStatus" id="adminStatus" onChange={handleChange}>
                 <option value="All">All</option>
                 {categories.map((category) => {

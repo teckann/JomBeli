@@ -1,11 +1,7 @@
 import Styles from './ManageRefunds.module.css';
-import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
 import { getTotalWaitingRefundCount } from '@/app/_lib/analysis-serives';
-import AdminFilterProductsBar from '@/app/_components/AdminFilterProductsBars/AdminFilterProductsBars';
 import { getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
-import AdminTable from '@/app/_components/AdminTable/AdminTable';
-import GenerateReportButton from '@/app/_components/AdminGenerateProductReport/AdminGenerateProductReport';
 import AdminSliceShow from '@/app/_components/AdminSliceShow/AdminSlideShow';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
@@ -39,7 +35,7 @@ export default async function manageRefuns() {
                     <p>Monitor and ensure that sellers provide reasonable justifications when rejecting refund requests.</p>
                 </div>
                 <div>
-                    <AdminSliceShow datas={rejectedBySeller} />
+                    <AdminSliceShow datas={rejectedBySeller} purpose="refund" />
                 </div>
             </div>
             <div className={Styles.showSlicePart}>
@@ -48,7 +44,7 @@ export default async function manageRefuns() {
                     <p>Manage refund requests that have not been processed by sellers within 7 days.</p>
                 </div>
                 <div>
-                    <AdminSliceShow datas={notProcessBySeller} />
+                    <AdminSliceShow datas={notProcessBySeller} purpose="refund" />
                 </div>
             </div>
             <div>
@@ -57,18 +53,6 @@ export default async function manageRefuns() {
         </div>
     );
 }
-
-// export function GenerateReportButton() {
-//     return (
-//         <button className="btn btn-primary">
-//             <Link className={ Styles.linkText } href="#">
-//                 Generate Product Report
-//             </Link>
-//         </button>
-//     );
-// }
-
-// export async function 
 
 export async function RefundOverViewBar({rejectedBySellerCount, notProcessBySellerCount}) {
 

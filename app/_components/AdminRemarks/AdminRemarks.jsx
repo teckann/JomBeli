@@ -5,10 +5,10 @@ import Styles from './AdminRemarks.module.css';
 import {useState} from 'react';
 import { handleRemarksChange } from '@/app/_lib/actions';
 
-export default function Adminremarks({remarks, refundId}) {
+export default function Adminremarks({remarks, refundId, isAbleEdit}) {
 
     let [remarksState, setRemarksState] = useState(remarks);
-    let [editState, setEditState] = useState(false);
+    let [editState, setEditState] = useState(isAbleEdit);
     
     const handleChange = (e) => {
         setRemarksState(e.target.value);
@@ -36,9 +36,9 @@ export default function Adminremarks({remarks, refundId}) {
                 <form onSubmit={handleSubmit}>
                     <textarea rows={6} cols={40} name="adminRemarks" onChange={handleChange} className={ Styles.adminRemarksTextArea } value={remarksState ? remarksState : ""} placeholder="Write somethig here." disabled={!editState} />
                     <input type="hidden" value={refundId} name="refundId" />
-                    <div className={ Styles.buttonParts }>{editState && <button className={`btn btn-primary ${Styles.green}`} type="submit">Save</button>}</div>
+                    <div className={ Styles.buttonParts }>{!editState && <button disabled={!isAbleEdit} className={`btn btn-primary ${Styles.green}`} type="submit">Save</button>}</div>
                 </form>
-                <div className={ Styles.buttonParts }>{!editState && <button className={`btn btn-primary ${Styles.yellow}`} onClick={handleClick} type="button">Edit</button>}</div>
+                <div className={ Styles.buttonParts }>{editState && <button disabled={!isAbleEdit} className={`btn btn-primary ${Styles.yellow}`} onClick={handleClick} type="button">Edit</button>}</div>
             </div>
         </div>
     )
