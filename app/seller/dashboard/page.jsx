@@ -7,6 +7,7 @@ import SellerGenerateReportButton from '@/app/_components/SellerGenerateReportBu
 import styles from './dashboard.module.css';
 import SellerRevenueSection from '@/app/_components/SellerTotalRevenue/SellerTotalRevenue.jsx';
 import SellerSalesOverview from '@/app/_components/SellerSalesOverview/SellerSalesOverview';
+import SellerProductReview from '@/app/_components/SellerProductReviews/SellerProductReviews';
 
 const DashboardPage = () => {
   const [sellerId, setSellerId] = useState(null); 
@@ -91,7 +92,7 @@ const DashboardPage = () => {
         <hr className={styles.divider} />
         
         <div className={styles.buttonRightAligner}>
-          <SellerGenerateReportButton />
+          <SellerGenerateReportButton sellerId={sellerId} />
         </div>
         
         <div className={styles.statisticCardsContainer}>
@@ -106,14 +107,13 @@ const DashboardPage = () => {
         
         <div className={styles.space}></div>
         <SellerRevenueSection currentUserId={sellerId} />
+        
         <div className={styles.space}></div>
-
         <SellerSalesOverview currentUserId={sellerId}/>
-        <div className={styles.space}></div>
-
-       
-
-
+        
+        <div className={styles.space} ></div>
+        <SellerProductReview sellerId={sellerId}/>
+        
       </main>
     </div>
   );
