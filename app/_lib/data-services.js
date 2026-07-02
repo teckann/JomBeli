@@ -972,7 +972,7 @@ export async function getUserVouchers(userId, shopId) {
         )
       `)
       .eq('user_id', userId)
-      .eq('user_voucher_status', 'available')
+      .eq('user_voucher_status', 'Available')
       .eq('vouchers.voucher_status', 'active')
       .lte('vouchers.start_date', now)
       .gte('vouchers.end_date', now)
