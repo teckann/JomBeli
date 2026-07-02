@@ -2,6 +2,7 @@
 
 import Styles from "./AdminFilterVouchers.module.css";
 import { useRouter,useSearchParams } from 'next/navigation';
+import { AdminAddVoucherForm } from "../AdminAddVouchers/AdminAddVoucherWidget";
 
 export default function FilterVouchers({ type }){
 
@@ -25,7 +26,7 @@ export default function FilterVouchers({ type }){
         <div className={Styles.filterBar}>
             <div className={Styles.searchUser}>
                 <SearchVoucher className={Styles.searchUser} values={currentVoucher} handleChange={handleChange}/>  
-
+                <AdminAddVoucherForm />
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectType type={type} values={currentVoucherType} handleChange={handleChange}/>
