@@ -9,7 +9,12 @@ import { useState } from "react";
 
 export default function BuyerCheckoutClient({checkoutItems, addresses, total:{totalOriginalPrice, totalSaved}, userID, vouchers}) {
 
-    const [selectedAddressId, setSelectedAddressId] = useState();
+    const defaultAddressId =
+        addresses.find((address) => address.is_default)?.address_id ??
+        addresses[0]?.address_id ??
+        null;
+
+    const [selectedAddressId, setSelectedAddressId] = useState(defaultAddressId);
     const [selectedVoucherId, setSelectedVoucherId] = useState(null);
     const selectedVoucher = vouchers.find(
         (voucher) => voucher.user_voucher_id === selectedVoucherId
@@ -24,11 +29,11 @@ export default function BuyerCheckoutClient({checkoutItems, addresses, total:{to
         userID: userID,
         sellerID: checkoutItems[0].PRODUCT_VARIANTS_T.PRODUCTS_T.user_id,
         addressID : selectedAddressId,
-        originalPrice : totalOriginalPrice,
-        discount : totalSaved,
+        originalPrice: totalOriginalPrice,
+        discount: totalSaved,
         voucherDiscount,
         totalDiscount,
-        orderItems : checkoutItems,
+        orderItems: checkoutItems,
         userVoucherID: selectedVoucherId,
     }
 
