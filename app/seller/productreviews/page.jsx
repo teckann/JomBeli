@@ -19,7 +19,7 @@ export default async function ReviewsPage({ searchParams }) {
     starsBreakdown: { 5: "0%", 4: "0%", 3: "0%", 2: "0%", 1: "0%" }
   };
 
-  if (productId) {
+  if (productId) {  
     try {
       const { data: dbReviews } = await supabaseAdmin
         .from('REVIEWS_T')

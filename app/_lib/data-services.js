@@ -1,4 +1,5 @@
 import { createClient } from "./server";
+import { formatDateTime } from "./useful-func";
 
 export async function getUserInfo(id) {
   const supabase = await createClient();
@@ -99,9 +100,9 @@ export function formatData(data) {
     if (data.ADDRESSES_T && Array.isArray(data.ADDRESSES_T) && data.ADDRESSES_T.length > 0) {
       const count = data.ADDRESSES_T.length; //shows the first address
       if (count === 1) {
-        fullAddress = "1 Address Saved";
+        fullAddress = "1 Address Used";
       } else if (count > 1){
-        fullAddress = `${count} Addresses Saved`;
+        fullAddress = `${count} Addresses Used`;
       }
     }
 
@@ -789,9 +790,9 @@ export async function getRefund() {
 }
 
 export async function getRefundDetails(refundId) {
-    const supabase = await createClient();
+  const supabase = await createClient();
 
-    const { data, error } = await supabase
+  const { data, error } = await supabase
     .from("REFUNDS_T")
     .select(`
       refund_id,
@@ -805,7 +806,7 @@ export async function getRefundDetails(refundId) {
       admin_status,
       created_at,
 
-      ORDERS_T!REFUNDS_T_order_id_fkey (
+      ORDERS_T!order_id (
         order_id,
         total_amount,
         buyer_id,
@@ -813,35 +814,36 @@ export async function getRefundDetails(refundId) {
         order_status,
         created_at,
 
-        buyer:USERS_T!ORDERS_T_buyer_id_fkey (
-        user_id,
-        username,
-        email
-        ),
-
-        seller:USERS_T!ORDERS_T_seller_id_fkey (
+        buyer:USERS_T!buyer_id (
           user_id,
           username,
           email
         ),
 
-        delivery:DELIVERY_T!ORDERS_T_delivery_id_fkey (
-          delivery_id,
-          delivery_option
+        seller:USERS_T!seller_id (
+          user_id,
+          username,
+          email
         ),
 
-        ORDER_ITEMS_T!ORDER_ITEMS_T_order_id_fkey (
+        shipping:SHIPPING_T!SHIPPING_T_order_id_fkey (
+          shipping_id,
+          delivery_type,
+          shipping_status
+        ),
+
+        ORDER_ITEMS_T!order_id (
           order_item_id,
           quantity,
           unit_price,
           subtotal,
 
-          PRODUCT_VARIANTS_T!ORDER_ITEMS_T_product_variant_id_fkey (
+          PRODUCT_VARIANTS_T!product_variant_id (
             product_variant_id,
             sku,
             product_variant_price,
 
-            PRODUCTS_T!PRODUCT_VARIANTS_T_product_id_fkey (
+            PRODUCTS_T!product_id (
               product_id,
               product_name,
               product_image_url,
@@ -852,14 +854,14 @@ export async function getRefundDetails(refundId) {
       )
     `)
     .eq("refund_id", refundId)
-    .single();
+    .maybeSingle();
 
-    if (error) {
-        console.error(error);
-        throw new Error("Could not fetch refund records.");
-    }
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
 
-    return data;
+  return data;
 }
 
 export async function getRejectedBySeller() {
@@ -887,6 +889,7 @@ export async function getRejectedBySeller() {
             )
         `)
         .eq("seller_status", "Rejected")
+        .eq("admin_status", "Pending")
         .order("created_at", { ascending: false });
 
     if (error) {
@@ -925,6 +928,7 @@ export async function getNotProcessedBySeller() {
             )
         `)
         .eq("seller_status", "Pending")
+        .eq("admin_status", "Pending")
         .lte("created_at", oneWeekAgo.toISOString())
         .order("created_at", { ascending: false });
 
@@ -1095,7 +1099,6 @@ export async function getOrdersItems(buyerId, statusFilter) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
@@ -1145,7 +1148,6 @@ export async function getOrder(orderId, userId) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
@@ -1193,4 +1195,115 @@ export async function getProductReviews(productId) {
   }
 
   return data;
+}
+
+export async function getTransactionInfo(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*,USERS_T(username)");
+
+  if (error){
+    console.error("Failed to fetch transactions: ", error.message);
+    throw new Error("Could not fetch transactions!");
+  }  
+
+  return data;
+}
+
+export async function getTransactionDetails(transactionId){
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*, USERS_T(username)")
+    .eq("wallet_transaction_id", transactionId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching transaction details:", error);
+    return null;
+  }
+
+  return {
+      ... data,
+      created_at: formatDateTime(data.created_at),
+    };
+}
+
+export async function getOrders() {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select(`
+      order_id,
+      total_amount,
+      order_status,
+
+      seller:USERS_T!ORDERS_T_seller_id_fkey (
+        username
+      ),
+
+      ORDER_ITEMS_T (
+        PRODUCT_VARIANTS_T (
+          PRODUCTS_T (
+            category
+          )
+        )
+      )
+    `);
+
+    if (error) {
+      console.error("Failed to fetch orders:", error.message);
+      return [];
+    }
+
+    return data;
+}
+
+export async function getPendingSupport() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .select(`
+      *,
+      reporter:USERS_T!SUPPORTS_T_reporter_id_fkey (
+        username
+      ),
+      targetSeller:USERS_T!SUPPORTS_T_target_seller_id_fkey (
+        username
+      ),
+      targetProduct:PRODUCTS_T!SUPPORTS_T_target_product_id_fkey (
+        product_name
+      )
+    `)
+    .eq("support_status", "Pending");
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
+export async function checkProductReview(userId, orderId) {
+
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('REVIEWS_T')
+    .select('review_id')
+    .eq('user_id', userId)
+    .eq('order_id', orderId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching review status:', error.message);
+    throw error;
+  }
+
+  return !!data;
 }

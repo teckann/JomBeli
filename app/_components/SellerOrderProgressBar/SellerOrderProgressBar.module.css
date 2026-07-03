@@ -1,0 +1,99 @@
+.container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stepperWrapper {
+  border: 1px solid var(--color-border-primary, #d1d5db);
+  border-radius: 16px;
+  padding: 2.5rem 2rem 1.5rem 2rem;
+  background-color: var(--color-bg-card, #ffffff);
+  position: relative;
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.progressLineTrack {
+  position: absolute;
+  top: 70px; 
+  left: 10%;
+  right: 10%;
+  height: 4px;
+  background-color: var(--color-primary-lighter);
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.progressLineFill {
+  height: 100%;
+  background-color: var(--color-primary);
+  width: 0%;
+  transition: width 0.4s ease;
+  border-radius: 2px;
+}
+
+.stepsContainer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.stepNode {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 130px;
+  padding: 0;
+  outline: none;
+  user-select: none;
+}
+
+.circle {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 3px solid var(--color-primary-lighter);
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+}
+
+.stepNode:active .circle {
+  transform: scale(0.9);
+}
+
+.stepLabel {
+  font-family: var(--font-body);
+  font-size: var(--text-sm, 0.8125rem);
+  font-weight: 500;
+  color: var(--color-font-secondary, #6b7280);
+  text-align: center;
+  transition: color 0.25s ease, font-weight 0.2s ease;
+}
+
+
+.stepNode.activeNode .circle {
+  background-color: var(--color-primary); 
+  border-color: var(--color-primary); 
+}
+
+.stepNode.activeNode .stepLabel {
+  color: var(--color-font-primary, #111827);
+  font-weight: 700;
+}
+
+.stepNode:hover:not(.activeNode) .circle {
+  border-color: var(--color-primary-light, #e86364);
+}
+
+.stepNode:hover:not(.activeNode) .stepLabel {
+  color: var(--color-primary, #df3b3c);
+}

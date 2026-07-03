@@ -5,10 +5,8 @@ export async function processPayment({
   buyerId,
   sellerId,
   addressId,
-  deliveryOption, 
-  deliveryDescription,
-  deliveryFee,
-  estimatedDays,
+  deliveryOption, //express, standard
+  deliveryFee, //shipping fee
   originalPrice,
   discountAmount,
   totalAmount,
@@ -59,34 +57,13 @@ export async function processPayment({
     }
   }
 
-  // Create the delivery data
-  const generatedDeliveryId = GeneralIDGenerator();
-
-  const { error: deliveryError } = await supabase
-    .from("DELIVERY_T")
-    .insert({
-      delivery_id: generatedDeliveryId,
-      delivery_option: deliveryOption,
-      delivery_description: deliveryDescription,
-      delivery_fee: deliveryFee,
-      estimated_days: estimatedDays,
-      delivery_status: "Pending",
-    });
-
-  if (deliveryError) {
-    console.error("Failed to create delivery record:", deliveryError);
-    throw new Error(`Could not create delivery row: ${deliveryError.message}`);
-  }
-
-
-  const generatedOrderId = GeneralIDGenerator()
   //Create the order
+  const generatedOrderId = GeneralIDGenerator()
   const { error: orderError } = await supabase.from("ORDERS_T").insert({
     order_id: generatedOrderId,
     buyer_id: buyerId,
     seller_id: sellerId,
     address_id: addressId,
-    delivery_id: generatedDeliveryId,
     user_voucher_id: userVoucherId,
     original_price: originalPrice,
     discount_amount: discountAmount,
@@ -116,6 +93,24 @@ export async function processPayment({
   if (orderItemsError) {
     console.error("Failed to insert order items:", orderItemsError);
     throw new Error("Could not insert order items");
+  }
+
+  // Create the shipping data
+  const generatedShippingId = GeneralIDGenerator();
+
+  const { error: shippingError } = await supabase
+    .from("SHIPPING_T")
+    .insert({
+      shipping_id: generatedShippingId,
+      order_id: generatedOrderId,
+      delivery_type: deliveryOption,
+      delivery_fee: deliveryFee,
+      shipping_status: "Created"
+    });
+
+  if (shippingError) {
+    console.error("Failed to create shipping record:", shippingError);
+    throw new Error(`Could not create shipping row: ${shippingError.message}`);
   }
 
   //Deduct buyer wallet balance 

@@ -1,112 +1,43 @@
 import Styles from './ManageOrders.module.css';
 import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
-import { getTotalProductsCount, getMonthlyProductCreatedCount, getTotalAvailableProductsCount, getTotalCategoryCount, getFilterManageProducts } from '@/app/_lib/analysis-serives';
-import AdminFilterProductsBar from '@/app/_components/AdminFilterProductsBars/AdminFilterProductsBars';
-import { getYearsMonthsWithNewProduct } from '@/app/_lib/data-services';
+import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
+import { getFilterOrders } from '@/app/_lib/analysis-serives';
+import AdminFilterOrderBar from '@/app/_components/AdminFIlterOrdersBars/AdminFilterOrderBars';
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
-import GenerateReportButton from '@/app/_components/AdminGenerateProductReport/AdminGenerateProductReport';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
 
-export default async function manageOrdersPage({ searchParams }) {
+export default async function manageProductsPage({ searchParams }) {
 
-    const { category, status, dateSequence } = await searchParams;
+    const { date, orderStatus } = await searchParams;
 
-    const productList = await getFilterManageProducts(category, status, dateSequence);
+    const orderList = await getFilterOrders(date, orderStatus);
 
-    const titles = ["Order ID", "Seller", "Order Product", "Total Fees", "Category", "Status"];
+    const titles = ["Order ID", "Seller Name", "Buyer Name", "Total Fee", "Order Date", "Status"];
 
-    const actions = [{type: "viewProduct"}];
-    const fields = ["product_id", "product_name", "USERS_T.username", "price", "category", "product_status"];
-    const datas = productList;
+    const actions = [{type: "viewOrder"}];
+    const fields = ["order_id", "seller.username", "buyer.username", "total_amount", "created_at", "order_status"];
+    const datas = orderList;
 
-    const yearMonthsSelect = await getYearsMonthsWithNewProduct();
+    // const yearMonthsSelect = await getYearsMonthsWithNewProduct();
 
 
 
     return (
         <div className={ Styles.contentPage}>
-            <div className={Styles.upperPart}>
-                <div className={Styles.pageDescription}>
-                    <h1>Manage Products</h1>
-                    <p>Manage System Products Right Now!</p>
-                </div>
-            </div>
-            <div className={Styles.productsOverviewContainer}>
-                <ProductOverViewBar />
-            </div>
             <div className={Styles.showTablePart}>
                 <div className={Styles.listingText}>
-                    <h2>Product Listing</h2>
-                    <p>View and manage system products through this table</p>
+                    <h2>Manage Order</h2>
+                    <p>Manage System Order here</p>
                 </div>
                 <div>
-                    <AdminFilterProductsBar />
+                    <AdminFilterOrderBar />
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={true} dataIdFormat="product_id" />
-            </div>
-        </div>
-    );
-}
-
-// export function GenerateReportButton() {
-//     return (
-//         <button className="btn btn-primary">
-//             <Link className={ Styles.linkText } href="#">
-//                 Generate Product Report
-//             </Link>
-//         </button>
-//     );
-// }
-
-// export async function 
-
-export async function ProductOverViewBar() {
-
-    const totalProductsCount = await getTotalProductsCount();
-    const monthlyCreatedProductsCount = await getMonthlyProductCreatedCount();
-    const totalAvailableProductsCount = await getTotalAvailableProductsCount();
-    const totalCategoryCount = await getTotalCategoryCount();
-
-    const overviewData = [
-        {title: "Total Products", count: totalProductsCount}, 
-        {title: "New Products (Monthly)", count: monthlyCreatedProductsCount},
-        {title: "Total Active Products", count: totalAvailableProductsCount},
-        {title: "Product Category", count: totalCategoryCount}
-    ]
-
-    return (
-        <div className={Styles.analyticsBar}>
-            <div className={Styles.analyticsBarTitle}>
-                <h3>System Product Overview</h3>
-            </div>
-
-            <div className={Styles.analyticsBarDatas}>
-                {overviewData.map((data) => (
-                    <ProductDataAnalyticsComponent key={data.title} title={data.title} count={data.count}  />
-                ))}
-                
-            </div>
-        </div>
-    );
-
-}
-
-export function ProductDataAnalyticsComponent({title, count}) {
-    
-    return (
-        <div className={Styles.analyticsComponent}>
-            <div className={Styles.analyticsTitle}>
-                {title}
-            </div>
-            <div className={Styles.countContainer}>
-                <span className={Styles.countWrapper}>
-                    {count}
-                </span>
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={false} dataIdFormat="order_id" />
             </div>
         </div>
     );

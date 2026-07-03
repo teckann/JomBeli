@@ -1,0 +1,30 @@
+.transactionDetailsPage{
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.buttonContainer{
+    display: flex;
+    align-items: center; /* Vertically centers the items */
+    gap: 30px;
+}
+
+.lowerContainer {
+    display:flex;
+    width:100%;
+    /* background-color: #e5deca; */
+    flex: 1;
+}
+
+.leftSide {
+    width:50%;
+    margin: 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+
