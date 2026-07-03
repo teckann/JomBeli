@@ -1,7 +1,10 @@
 import Image from 'next/image';
 import Styles from './MyOrdersCard.module.css';
+import Link from 'next/link';
+import { checkProductReview } from '@/app/_lib/data-services';
+import { getUser } from '@/app/_lib/auth';
 
-export default function MyOrdersCard({
+export default async function MyOrdersCard({
     orderID,
     orderItems = [], 
     totalAmount,
@@ -12,10 +15,20 @@ export default function MyOrdersCard({
             case 'Ordered': return Styles.statusOrdered;
             case 'Shipped': return Styles.statusShipped;
             case 'OutForDelivery': return Styles.statusOutForDelivery;
+            case 'Delivered': return Styles.statusOutForDelivery;
+            case 'Refunded': return Styles.statusRefunded;
             case 'Completed': return Styles.statusCompleted;
             default: return Styles.statusDefault;
         }
     };
+
+    const user = await getUser();
+    const userId = user?.id;
+
+    let hasReviewed = false; 
+    if (order_status === "Completed" && userId) {
+        hasReviewed = await checkProductReview(userId, orderID);
+    }
 
     return (
         <div className={Styles.orderCard}>
@@ -68,6 +81,28 @@ export default function MyOrdersCard({
                     <span className={Styles.totalLabel}>Total Amount</span>
                     <span className={Styles.totalPrice}>RM {Number(totalAmount).toFixed(2)}</span>
                 </div>
+                {order_status === "Delivered" ? (
+                <div className={Styles.actionContainer}>
+                    <form>
+                    <input type="hidden" name="orderId" value={orderID} />
+                    <button type="submit" className={Styles.actionButton}>
+                        Complete Order
+                    </button>
+                    </form>
+                    <Link className={Styles.actionLink} href={`/buyer/refund/${orderID}`} >Refund</Link>
+                </div>
+                ) : null}
+                {order_status === "Completed" && (
+                    <div className={Styles.actionContainer}>
+                        {hasReviewed ? (
+                            <p className={Styles.productReviewed}>Product Reviewed</p>
+                        ) : (
+                            <Link className={Styles.actionLink} href={`/buyer/review/${orderID}`}>
+                                Rate Product
+                            </Link>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

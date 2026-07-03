@@ -516,7 +516,7 @@ export async function submitReviews(formData) {
     return { success: false, error: "Failed to submit reviews to the database." };
   }
   
-  return { success: true };
+  redirect('/buyer/review/success')
 }
 
 export async function addCourier(formData){
@@ -740,4 +740,67 @@ export async function handleAdminRefundAction(formData) {
   }
 
   return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
+}
+
+export async function createRefundAction(formData) {
+
+  const orderId = formData.get('order_id');
+  const refundSubject = formData.get('refund_subject');
+  const refundDescription = formData.get('refund_description');
+  const sellerStatus = formData.get('seller_status');
+  const adminStatus = formData.get('admin_status');
+
+  const fileEntries = formData.getAll('evidences'); 
+  const evidenceUrls = [];
+
+  const supabase = await createClient();
+
+  try {
+    for (const file of fileEntries) {
+      if (file && file.size > 0) {
+        const fileExt = file.name.split('.').pop();
+        const uniqueFileName = `${orderId}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('refund-evidences')
+          .upload(uniqueFileName, file);
+
+        if (uploadError) {
+          console.error('Storage Upload Error:', uploadError);
+          throw new Error(`Failed to upload file: ${file.name}`);
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('refund-evidences')
+          .getPublicUrl(uniqueFileName);
+          
+        evidenceUrls.push(publicUrl);
+      }
+    }
+
+    const { error: dbError } = await supabase
+      .from('REFUNDS_T')
+      .insert([
+        {
+          order_id: orderId,
+          refund_subject: refundSubject,
+          refund_description: refundDescription,
+          seller_status: sellerStatus,
+          admin_status: adminStatus,
+          evidences: evidenceUrls 
+        }
+      ]);
+
+    if (dbError) {
+      console.error('Database Error:', dbError);
+      throw new Error('Could not save refund request to database.');
+    }
+
+  } catch (error) {
+    console.error('Action failure:', error);
+    return { error: error.message || 'An unexpected error occurred.' };
+  }
+
+  revalidatePath('/buyer/orders');
+  redirect('/buyer/orders');
 }
