@@ -51,7 +51,7 @@ export function UserInformation({ user, country }){
                 <span className={Styles.colon}>:</span>
                 <div className={Styles.value}>
                     {addresses.length === 0 ? (
-                        <span className={Styles.noAddress}>No addresses saved</span>
+                        <span className={Styles.noAddress}>No addresses used</span>
                     ) : (
                         <select 
                             className={Styles.addressDropdownSelector}

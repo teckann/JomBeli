@@ -29,7 +29,7 @@ export function FilterUser({role}){
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectRole values={currentUserRole} handleChange={handleChange} role={role}/>
-                <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
+                <SelectStatus values={currentUserStatus} handleChange={handleChange}/>
             </div>
         </div>
     )

@@ -1,4 +1,5 @@
 import { createClient } from "./server";
+import { formatDateTime } from "./useful-func";
 
 export async function getUserInfo(id) {
   const supabase = await createClient();
@@ -99,9 +100,9 @@ export function formatData(data) {
     if (data.ADDRESSES_T && Array.isArray(data.ADDRESSES_T) && data.ADDRESSES_T.length > 0) {
       const count = data.ADDRESSES_T.length; //shows the first address
       if (count === 1) {
-        fullAddress = "1 Address Saved";
+        fullAddress = "1 Address Used";
       } else if (count > 1){
-        fullAddress = `${count} Addresses Saved`;
+        fullAddress = `${count} Addresses Used`;
       }
     }
 
@@ -1195,6 +1196,39 @@ export async function getProductReviews(productId) {
   }
 
   return data;
+}
+
+export async function getTransactionInfo(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*,USERS_T(username)");
+
+  if (error){
+    console.error("Failed to fetch transactions: ", error.message);
+    throw new Error("Could not fetch transactions!");
+  }  
+
+  return data;
+}
+
+export async function getTransactionDetails(transactionId){
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*, USERS_T(username)")
+    .eq("wallet_transaction_id", transactionId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching transaction details:", error);
+    return null;
+  }
+
+  return {
+      ... data,
+      created_at: formatDateTime(data.created_at),
+    };
 }
 
 export async function getOrders() {

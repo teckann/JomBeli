@@ -2,6 +2,7 @@ import { createClient } from "./server";
 import {} from "./data-services";
 import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
 import { formatData } from "./data-services"
+import { getMalaysianDate,formatDateTime } from "./useful-func";
 
 export async function getTotalProductsCount() {
     const supabase = await createClient();
@@ -472,6 +473,128 @@ export async function getFilterVoucher(voucher_type, voucher, status){
 
     return formatData(data);
     
+}
+
+export async function getDailyTransactionCount(){
+  const supabase = await createClient();
+
+  // const testDate = new Date("2026-07-02")
+  
+  const { startDate, endDate } = getMalaysianDate();
+
+  // console.log("Testing range:", startOfDay.toISOString(), "to", endOfDay.toISOString());
+
+  const {count,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*",{count: 'exact', head:true}) //count is to return precise number of rows, head is to not return the data itself.
+    .gte("created_at", startDate)
+    .lte("created_at", endDate);
+
+  if (error){
+    console.error("Error fetching count:", error);
+    return 0;
+  }
+
+  return count ?? 0;
+}
+
+export async function getDailyInflowAmount(){
+  const supabase = await createClient();
+  
+  const { startDate, endDate } = getMalaysianDate();
+  
+  const {data,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("amount")
+    .gte("created_at", startDate)
+    .lte("created_at", endDate)
+    .eq("direction","Credit")
+    .ilike("payment_method","Online Banking%");
+
+  if (error){
+    console.error("Error fetching inflow amount:", error);
+    return 0;}
+  
+  const totalInflow = data.reduce((sum, transaction) => sum + transaction.amount, 0);
+
+  return totalInflow ?? 0;
+}
+
+export async function getDailyOutflowAmount(){
+  const supabase = await createClient();
+  
+  const { startDate, endDate } = getMalaysianDate();
+
+  const {data,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("amount")
+    .gte("created_at", startDate)
+    .lte("created_at", endDate)
+    .eq("direction","Debit");
+
+  if (error){
+    console.error("Error fetching inflow amount:", error);
+    return 0;}
+  
+  const totalOutflow = data.reduce((sum, transaction) => sum + transaction.amount, 0);
+
+  return totalOutflow ?? 0;
+}
+
+export async function getFilterTransactions({ transaction, transactionType, transactionStatus}) {
+
+  const supabase = await createClient();
+
+  let matchingUserIds = null;
+
+  if (transaction?.trim()){
+    const { data: matchedUsers, error: userError } = await supabase
+      .from("USERS_T")
+      .select("user_id")
+      .ilike("username", `%${transaction}%`);
+
+      if (userError){
+        console.error("Error fetching matching users:", userError);
+        return [];
+      }
+
+      matchingUserIds = matchedUsers.map(user => user.user_id);
+
+      if (matchingUserIds.length === 0) {
+        return [];
+      }
+  }
+
+  let query = supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*, USERS_T(username)");
+
+  if (transactionType && transactionType !== "All") {
+    query = query.eq("transaction_type", transactionType);
+  }
+
+  if (transactionStatus && transactionStatus !== "All") {
+    query = query.eq("wallet_transaction_status", transactionStatus);
+  }
+
+  if (matchingUserIds) {
+    query = query.in("user_id", matchingUserIds);
+  }
+
+  query = query.order("created_at", { ascending: false });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Error fetching transactions:", error);
+    return []; // prevents the whole app from crashing
+  }
+
+  return data.map((row) => ({
+    ... row,
+    created_at: formatDateTime(row.created_at),
+  }));
+
 }
 
 export async function getFilterOrders(date, orderStatus) {
