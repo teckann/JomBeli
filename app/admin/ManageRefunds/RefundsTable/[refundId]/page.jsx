@@ -1,7 +1,5 @@
 import { getRefundDetails } from "@/app/_lib/data-services";
 import Styles from './RefundDetails.module.css';
-import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
-import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
 import ShowItemInformationList from '@/app/_components/AdminShowInformationList/AdminShowInformationList';
 import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
@@ -20,7 +18,7 @@ export default async function reportDetails({params}) {
     })
 
     const requestDate = new Date(refund.created_at).getDate() + "/" + (new Date(refund.created_at).getMonth() + 1) + "/" + new Date(refund.created_at).getFullYear();
-    const isOverOneWeek = (new Date() - new Date(refund.ORDERS_T.created_at)) / (1000 * 60 * 60 * 24) > 7;
+    const isOverOneWeek = (new Date() - new Date(refund.created_at)) / (1000 * 60 * 60 * 24) > 7;
     let refundStatus = "";
     let refundStatusColor = "";
     const adminStatus = refund.admin_status;
@@ -155,7 +153,7 @@ export default async function reportDetails({params}) {
                         </p>
                     </div>
                 </div>
-                <AdminRemarks remarks={refund.admin_remarks} refundId={refund.refund_id} isAbleEdit={adminEditState} />
+                <AdminRemarks remarks={refund.admin_remarks} modifyId={refund.refund_id} isAbleEdit={adminEditState} remarksFor="refund" />
             </div>
         </div>
         <div className={ Styles.bottomPart }>
@@ -185,7 +183,7 @@ export default async function reportDetails({params}) {
                 </div>
             </div>
             <div className={Styles.actionButtonPart}>
-                <AdminRefundActionButtons isAble={adminEditState} refundId={refund.refund_id} />
+                <AdminRefundActionButtons isAble={adminEditState} modifyId={refund.refund_id} remarkdsFor="refund" />
             </div>
         </div>
     </div>);

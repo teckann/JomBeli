@@ -1,0 +1,139 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #333;
+}
+
+.backBtn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+}
+
+.orderIdSub {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.overviewCard {
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 40px;
+    background-color: #fff;
+}
+
+.cardTitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+}
+
+.rowItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eeeeee;
+    font-size: 14px;
+}
+
+.rowItem:last-child {
+    border-bottom: none;
+}
+
+.hubSelect {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.productsList {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-bottom: 40px;
+}
+
+.productCard {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.imagePlaceholder {
+    width: 140px;
+    height: 160px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    object-fit: cover;
+    background-color: #fafafa;
+    flex-shrink: 0;
+}
+
+.productSpecsTable {
+    flex-grow: 1;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.productSpecsTable tr {
+    border-bottom: 1px solid #eaeaea;
+}
+
+.specLabel {
+    padding: 10px 0;
+    color: #555;
+    font-size: 14px;
+    width: 30%;
+}
+
+.specValue {
+    padding: 10px 0;
+    font-size: 14px;
+    color: #000;
+}
+
+.actionArea {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.packedBtn {
+    background-color: #fff;
+    border: 1px solid #333;
+    color: #333;
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.packedBtn:hover:not(:disabled) {
+    background-color: #333;
+    color: #fff;
+}
+
+.packedBtn:disabled {
+    border-color: #ccc;
+    color: #999;
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
