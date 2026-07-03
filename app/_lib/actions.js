@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo, setBalances, updateAdminRemarksRefund } from "./data-services";
+import { getUserInfo, setBalances, updateAdminRemarksRefund, updateAdminRemarksSupport } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
@@ -482,11 +482,18 @@ export async function checkoutAction(payload) {
   }
 }
 
-export async function handleRemarksChange(formData) {
+export async function handleRefundRemarksChange(formData) {
   const remark = formData.get("adminRemarks");
-  const refundId = formData.get("refundId");
+  const modifyId = formData.get("modifyId");
 
-  await updateAdminRemarksRefund(refundId, remark);
+  await updateAdminRemarksRefund(modifyId, remark);
+}
+
+export async function handleSupportRemarksChange(formData) {
+  const remark = formData.get("adminRemarks");
+  const modifyId = formData.get("modifyId");
+
+  await updateAdminRemarksSupport(modifyId, remark);
 }
 
 export async function submitReviews(formData) {
@@ -740,6 +747,28 @@ export async function handleAdminRefundAction(formData) {
   }
 
   return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
+}
+
+export async function updateSystemSupportSolved(supportId, adminId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .update({
+      support_status: "Solved",
+      handle_admin_id: adminId,
+      solved_at: new Date().toISOString(), // or use a database trigger if preferred
+    })
+    .eq("support_id", supportId)
+    .select();
+
+  if (error) {
+    console.error("Failed to solve support:", error);
+    return { success: false, error };
+  }
+
+  return { success: true, data };
 }
 
 export async function createRefundAction(formData) {
