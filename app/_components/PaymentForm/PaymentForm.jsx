@@ -33,7 +33,7 @@ export default function PaymentForm({ checkoutData }) {
             deliveryFee: shippingFee,
             originalPrice: itemsSubtotal,
             discountAmount: discountAmount,
-            totalAmount: grandTotal,
+            totalAmount: grandTotal.toFixed(2),
             userVoucherId: checkoutData.userVoucherID || null,     
             items: checkoutData.orderItems.map(item => ({
                 product_variant_id: item.PRODUCT_VARIANTS_T.product_variant_id, 

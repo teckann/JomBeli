@@ -3,6 +3,7 @@ import Styles from './MyOrdersCard.module.css';
 import Link from 'next/link';
 import { checkProductReview } from '@/app/_lib/data-services';
 import { getUser } from '@/app/_lib/auth';
+import { confirmOrder } from '@/app/_lib/actions';
 
 export default async function MyOrdersCard({
     orderID,
@@ -16,6 +17,7 @@ export default async function MyOrdersCard({
             case 'Shipped': return Styles.statusShipped;
             case 'OutForDelivery': return Styles.statusOutForDelivery;
             case 'Delivered': return Styles.statusOutForDelivery;
+            case 'Applied For Refund': return Styles.statusRefunded;
             case 'Refunded': return Styles.statusRefunded;
             case 'Completed': return Styles.statusCompleted;
             default: return Styles.statusDefault;
@@ -83,8 +85,8 @@ export default async function MyOrdersCard({
                 </div>
                 {order_status === "Delivered" ? (
                 <div className={Styles.actionContainer}>
-                    <form>
-                    <input type="hidden" name="orderId" value={orderID} />
+                    <form action={confirmOrder}>
+                    <input type="hidden" name="orderID" value={orderID} />
                     <button type="submit" className={Styles.actionButton}>
                         Complete Order
                     </button>

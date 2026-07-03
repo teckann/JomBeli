@@ -17,6 +17,7 @@ export default function OrderFilter() {
         { label: "Out For Delivery", value: "Out For Delivery" },
         { label: "Delivered", value: "Delivered" },
         { label: "Completed", value: "Completed" },
+        { label: "Applied For Refund", value: "Applied For Refund" },
         { label: "Refunded", value: "Refunded" }
     ];
 
