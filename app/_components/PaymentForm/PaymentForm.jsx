@@ -41,7 +41,6 @@ export default function PaymentForm({ checkoutData }) {
                 unit_price: item.PRODUCT_VARIANTS_T.product_variant_price
             }))
         };
-        console.log("Sending Payload:", paymentPayload);
 
         try {
             const response = await checkoutAction(paymentPayload);
