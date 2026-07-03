@@ -644,7 +644,6 @@ export async function getProductReportData(startDate, endDate) {
     price,
     stock_quantity,
     created_at,
-    overall_product_rating,
     USERS_T (
       user_id,
       username
@@ -1018,7 +1017,26 @@ export async function updateAdminRemarksRefund(refundId, adminRemarks) {
     .select();
 
   if (error) {
-    console.error("Update admin remarks failed:", error);
+    console.error("Update admin refund remarks failed:", error);
+    return { success: false, error };
+  }
+
+  return { success: true, data };
+}
+
+export async function updateAdminRemarksSupport(supportId, adminRemarks) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .update({
+      admin_remarks: adminRemarks,
+    })
+    .eq("support_id", supportId)
+    .select();
+
+  if (error) {
+    console.error("Update admin support remarks failed:", error);
     return { success: false, error };
   }
 
@@ -1255,3 +1273,138 @@ export async function getPendingSupport() {
 
   return data;
 }
+
+export async function getSystemSupports() {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .select(`
+      support_id,
+      support_type,
+      support_status,
+      created_at,
+
+      reporter:USERS_T!SUPPORTS_T_reporter_id_fkey (
+        username
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getSupportDetails(supportId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .select(`
+      support_id,
+      support_type,
+      support_description,
+      support_status,
+      admin_remarks,
+      solved_at,
+      created_at,
+
+      reporter:USERS_T!reporter_id (
+        user_id,
+        username,
+        email
+      ),
+
+      seller:USERS_T!target_seller_id (
+        user_id,
+        username,
+        email,
+        created_at,
+        user_status,
+        avatar
+      ),
+
+      admin:USERS_T!handle_admin_id (
+        user_id,
+        username,
+        email
+      ),
+
+      product:PRODUCTS_T!target_product_id (
+      product_id,
+      product_name,
+      product_image_url,
+      product_status,
+      category,
+
+      seller:USERS_T!user_id (
+        user_id,
+        username,
+        avatar
+      ),
+
+      REVIEWS_T (
+        product_rating
+      )
+    )
+    `)
+    .eq("support_id", supportId)
+    .maybeSingle();
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  const sellerCountPromise = data.seller?.user_id
+    ? supabase
+        .from("SUPPORTS_T")
+        .select("*", { count: "exact", head: true })
+        .eq("target_seller_id", data.seller.user_id)
+    : Promise.resolve({ count: 0 });
+
+  const productCountPromise = data.product?.product_id
+    ? supabase
+        .from("SUPPORTS_T")
+        .select("*", { count: "exact", head: true })
+        .eq("target_product_id", data.product.product_id)
+    : Promise.resolve({ count: 0 });
+
+  const [
+    { count: sellerReportCount },
+    { count: productReportCount }
+  ] = await Promise.all([
+    sellerCountPromise,
+    productCountPromise
+  ]);
+
+  return {data, sellerReportCount, productReportCount};
+}
+
+// export async function updateSystemSupportSolved(supportId, adminId) {
+
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from("SUPPORTS_T")
+//     .update({
+//       support_status: "Solved",
+//       handle_admin_id: adminId,
+//       solved_at: new Date().toISOString(), // or use a database trigger if preferred
+//     })
+//     .eq("support_id", supportId)
+//     .select();
+
+//   if (error) {
+//     console.error("Failed to solve support:", error);
+//     return { success: false, error };
+//   }
+
+//   return { success: true, data };
+// }

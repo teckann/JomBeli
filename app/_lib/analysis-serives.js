@@ -525,3 +525,66 @@ export async function getFilterOrders(date, orderStatus) {
 
     return data;
 }
+
+export async function getFilterSupport(date, supportType, supportStatus) {
+  const supabase = await createClient();
+
+  const dateState = !(date === "true");
+
+    let query = supabase
+        .from("SUPPORTS_T")
+        .select(`
+            support_id,
+            support_description,
+            support_type,
+            support_status,
+            created_at,
+
+            reporter:USERS_T!SUPPORTS_T_reporter_id_fkey (
+                username
+            )
+        `);
+
+    if (supportType && supportType !== "All") {
+        query = query.eq("support_type", supportType);
+    }
+
+    if (supportStatus && supportStatus !== "All") {
+        query = query.eq("support_status", supportStatus);
+    }
+
+    query = query.order("created_at", {
+        ascending: dateState
+    });
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error(error);
+        throw new Error("Could not fetch support records");
+    }
+
+    return data;
+  }
+
+  export async function getReportedSellerInfo(sellerId) {
+
+    const supabase = await createClient();
+
+    const { count: totalProducts } = await supabase
+    .from("PRODUCTS_T")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", sellerId);
+
+    const { data: reviews } = await supabase
+    .from("REVIEWS_T")
+    .select(`
+      product_rating,
+      PRODUCTS_T!inner (
+        user_id
+      )
+    `)
+    .eq("PRODUCTS_T.user_id", sellerId);
+    
+    return {totalProducts, reviews};
+  }

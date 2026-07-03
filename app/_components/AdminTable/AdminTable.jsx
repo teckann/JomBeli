@@ -18,7 +18,8 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         viewAdmins: {name: "View", icon: <InfoIcon />, handler: (admin) => router.push(`/admin/ManageAdmins/${getdataPath(admin, "user_id")}`), show: (data) => true},
                         viewCouriers: {name: "View", icon: <InfoIcon />, handler: (courier) => router.push(`/admin/ManageCouriers/${getdataPath(courier, "user_id")}`), show: (data) => true},
                         viewVouchers: {name: "View", icon: <InfoIcon />, handler: (voucher) => router.push(`/admin/ManageVoucher/${getdataPath(voucher, "voucher_id")}`), show: (data) => true},
-                        viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true}
+                        viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true},
+                        viewSupport: {name: "View Support", icon: <InfoIcon />, handler: (support) => router.push(`/admin/ManageSystemSupport/SupportTable/${getdataPath(support, "support_id")}`), show: (order) => true}
                     };
 
     // console.log(datas);
