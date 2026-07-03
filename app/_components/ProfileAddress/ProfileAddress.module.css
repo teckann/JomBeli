@@ -1,0 +1,127 @@
+.profileAddressContainer {
+  background-color: var(--color-bg-surface);
+  padding: 1.5rem 2.5rem;
+  border-radius: 12px;
+  width: 100%;
+  border: 1px solid var(--color-border-primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header h3 {
+  font-size: 20px;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.updateButton,
+.saveButton {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: 10px;
+  background: var(--color-bg-card);
+  color: var(--color-font-primary);
+  cursor: pointer;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.addressList {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+}
+
+.addressCard {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.div1 {
+  width: 280px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  /* background-color: red; */
+  gap: 5px;
+}
+
+.addressCardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.recipientDetails {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.recipientName {
+  color: var(--color-font-primary);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.contactNumber {
+  color: var(--color-font-secondary);
+  font-size: 13px;
+}
+
+.addressDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  font-size: 13px;
+  color: var(--color-font-secondary);
+  line-height: 1.4;
+}
+
+.default {
+  padding: 0.1rem 0.5rem;
+  font-size: 11px;
+  background-color: var(--color-border-light);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 999px;
+  color: var(--color-primary);
+}
+
+.div2 {
+  border-radius: 0 10px 10px 0;
+  border: none;
+  border-left: 1px solid var(--color-border-primary);
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.div2:hover {
+  background-color: var(--color-bg-input);
+}
