@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./Success.module.css";
 import { useRouter } from "next/navigation";
 
-function Success({ alt, title, desc }) {
+function Success({ alt, title, desc, specificRoute}) {
   const router = useRouter();
 
   return (
@@ -18,9 +18,17 @@ function Success({ alt, title, desc }) {
         <p>{desc}</p>
       </div>
 
-      <button className={styles.button} onClick={() => router.back()}>
-        Go Back
-      </button>
+      {!specificRoute
+      ?
+        <button className={styles.button} onClick={() => router.back()}>
+          Go Back
+        </button>
+      :
+        <button className={styles.button} onClick={() => router.replace(specificRoute)}>
+          Confirm
+        </button>
+      }
+
     </div>
   );
 }

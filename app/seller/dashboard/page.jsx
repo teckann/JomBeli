@@ -6,10 +6,13 @@ import SellerDashboardStatisticCard from "@/app/_components/SellerDashboardStati
 import SellerGenerateReportButton from '@/app/_components/SellerGenerateReportButton/SellerGenerateReportButton.jsx';
 import styles from './dashboard.module.css';
 import SellerRevenueSection from '@/app/_components/SellerTotalRevenue/SellerTotalRevenue.jsx';
+import SellerSalesOverview from '@/app/_components/SellerSalesOverview/SellerSalesOverview';
+import SellerProductReview from '@/app/_components/SellerProductReviews/SellerProductReviews';
 
 const DashboardPage = () => {
   const [sellerId, setSellerId] = useState(null); 
   const [totalProducts, setTotalProducts] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0); 
   const [pendingOrders, setPendingOrders] = useState(0);
   const [totalVouchers, setTotalVouchers] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,7 @@ const DashboardPage = () => {
           const currentUserId = session.user.id; 
           setSellerId(currentUserId); 
 
-          const [productsResult, ordersResult, vouchersResult] = await Promise.all([
+          const [productsResult, pendingOrdersResult, totalOrdersResult, vouchersResult] = await Promise.all([
             supabase
               .from('PRODUCTS_T')
               .select('*', { count: 'exact', head: true })
@@ -39,17 +42,24 @@ const DashboardPage = () => {
               .eq('order_status', 'ordered'),
 
             supabase
+              .from('ORDERS_T')
+              .select('*', { count: 'exact', head: true })
+              .eq('seller_id', currentUserId),
+
+            supabase
               .from('VOUCHERS_T') 
               .select('*', { count: 'exact', head: true })
               .eq('user_id', currentUserId)
           ]);
 
           if (productsResult.error) throw productsResult.error;
-          if (ordersResult.error) throw ordersResult.error;
+          if (pendingOrdersResult.error) throw pendingOrdersResult.error;
+          if (totalOrdersResult.error) throw totalOrdersResult.error;
           if (vouchersResult.error) throw vouchersResult.error;
 
           setTotalProducts(productsResult.count || 0);
-          setPendingOrders(ordersResult.count || 0);
+          setPendingOrders(pendingOrdersResult.count || 0);
+          setTotalOrders(totalOrdersResult.count || 0); 
           setTotalVouchers(vouchersResult.count || 0); 
         }
       } catch (error) {
@@ -64,7 +74,7 @@ const DashboardPage = () => {
 
   const statsData = [
     { id: 1, title: 'Total Products', value: loading ? '...' : totalProducts },
-    { id: 2, title: 'Total Orders', value: loading ? '...' : 183 }, 
+    { id: 2, title: 'Total Orders', value: loading ? '...' : totalOrders }, 
     { id: 3, title: 'Pending Orders', value: loading ? '...' : pendingOrders }, 
     { id: 4, title: 'Total Vouchers', value: loading ? '...' : totalVouchers }, 
   ];
@@ -82,7 +92,7 @@ const DashboardPage = () => {
         <hr className={styles.divider} />
         
         <div className={styles.buttonRightAligner}>
-          <SellerGenerateReportButton />
+          <SellerGenerateReportButton sellerId={sellerId} />
         </div>
         
         <div className={styles.statisticCardsContainer}>
@@ -97,7 +107,13 @@ const DashboardPage = () => {
         
         <div className={styles.space}></div>
         <SellerRevenueSection currentUserId={sellerId} />
-
+        
+        <div className={styles.space}></div>
+        <SellerSalesOverview currentUserId={sellerId}/>
+        
+        <div className={styles.space} ></div>
+        <SellerProductReview sellerId={sellerId}/>
+        
       </main>
     </div>
   );

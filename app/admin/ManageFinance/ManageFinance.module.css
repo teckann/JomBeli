@@ -1,0 +1,15 @@
+.contentPage {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.upperPart {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* padding: 1em; */
+}
+

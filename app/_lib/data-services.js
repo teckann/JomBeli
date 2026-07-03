@@ -1,4 +1,5 @@
 import { createClient } from "./server";
+import { formatDateTime } from "./useful-func";
 
 export async function getUserInfo(id) {
   const supabase = await createClient();
@@ -99,9 +100,9 @@ export function formatData(data) {
     if (data.ADDRESSES_T && Array.isArray(data.ADDRESSES_T) && data.ADDRESSES_T.length > 0) {
       const count = data.ADDRESSES_T.length; //shows the first address
       if (count === 1) {
-        fullAddress = "1 Address Saved";
+        fullAddress = "1 Address Used";
       } else if (count > 1){
-        fullAddress = `${count} Addresses Saved`;
+        fullAddress = `${count} Addresses Used`;
       }
     }
 
@@ -676,6 +677,22 @@ export async function getFilterProducts(category) {
 
   return data;
 }
+export async function getFilterProductsBySellerID(category, sellerID) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .eq("category", category)
+    .eq("user_id", sellerID);
+
+  if (error) {
+    console.error("Failed to fetch filter products:", error.message);
+    return [];
+  }
+
+  return data;
+}
 
 export async function validateCartItemOwnership(itemIds, userId) {
   if (!itemIds || itemIds.length === 0) return false;
@@ -1165,7 +1182,6 @@ export async function getOrder(orderId, userId) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
@@ -1213,6 +1229,39 @@ export async function getProductReviews(productId) {
   }
 
   return data;
+}
+
+export async function getTransactionInfo(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*,USERS_T(username)");
+
+  if (error){
+    console.error("Failed to fetch transactions: ", error.message);
+    throw new Error("Could not fetch transactions!");
+  }  
+
+  return data;
+}
+
+export async function getTransactionDetails(transactionId){
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("*, USERS_T(username)")
+    .eq("wallet_transaction_id", transactionId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching transaction details:", error);
+    return null;
+  }
+
+  return {
+      ... data,
+      created_at: formatDateTime(data.created_at),
+    };
 }
 
 export async function getOrders() {
@@ -1408,3 +1457,22 @@ export async function getSupportDetails(supportId) {
 
 //   return { success: true, data };
 // }
+
+export async function checkProductReview(userId, orderId) {
+
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('REVIEWS_T')
+    .select('review_id')
+    .eq('user_id', userId)
+    .eq('order_id', orderId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching review status:', error.message);
+    throw error;
+  }
+
+  return !!data;
+}

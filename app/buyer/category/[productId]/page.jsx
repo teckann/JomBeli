@@ -161,7 +161,7 @@ const SellerInfo = async ({
               <button>Chat Now</button>
             </Link>
 
-            <Link href="#">
+            <Link href={`/buyer/shopProfile/${sellerId}`}>
               <button>View Shop</button>
             </Link>
           </div>
