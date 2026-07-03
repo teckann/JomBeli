@@ -1,0 +1,14 @@
+.green {
+    background-color: green;
+    border: none;
+}
+
+.green:hover {
+    background-color: darkgreen;
+}
+
+.grey {
+    background-color: grey;
+    border: none;
+}
+
