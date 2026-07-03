@@ -1148,7 +1148,6 @@ export async function getOrder(orderId, userId) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
@@ -1288,4 +1287,23 @@ export async function getPendingSupport() {
   }
 
   return data;
+}
+
+export async function checkProductReview(userId, orderId) {
+
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('REVIEWS_T')
+    .select('review_id')
+    .eq('user_id', userId)
+    .eq('order_id', orderId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching review status:', error.message);
+    throw error;
+  }
+
+  return !!data;
 }

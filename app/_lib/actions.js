@@ -516,7 +516,7 @@ export async function submitReviews(formData) {
     return { success: false, error: "Failed to submit reviews to the database." };
   }
   
-  return { success: true };
+  redirect('/buyer/review/success')
 }
 
 export async function addCourier(formData){
@@ -740,4 +740,156 @@ export async function handleAdminRefundAction(formData) {
   }
 
   return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
+}
+
+export async function createRefundAction(formData) {
+
+  const orderId = formData.get('order_id');
+  const refundSubject = formData.get('refund_subject');
+  const refundDescription = formData.get('refund_description');
+  const sellerStatus = formData.get('seller_status');
+  const adminStatus = formData.get('admin_status');
+
+  const fileEntries = formData.getAll('evidences'); 
+  const evidenceUrls = [];
+
+  const supabase = await createClient();
+
+  try {
+    for (const file of fileEntries) {
+      if (file && file.size > 0) {
+        const fileExt = file.name.split('.').pop();
+        const uniqueFileName = `${orderId}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('refund-evidences')
+          .upload(uniqueFileName, file);
+
+        if (uploadError) {
+          console.error('Storage Upload Error:', uploadError);
+          throw new Error(`Failed to upload file: ${file.name}`);
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('refund-evidences')
+          .getPublicUrl(uniqueFileName);
+          
+        evidenceUrls.push(publicUrl);
+      }
+    }
+
+    const { error: dbError } = await supabase
+      .from('REFUNDS_T')
+      .insert([
+        {
+          order_id: orderId,
+          refund_subject: refundSubject,
+          refund_description: refundDescription,
+          seller_status: sellerStatus,
+          admin_status: adminStatus,
+          evidences: evidenceUrls 
+        }
+      ]);
+
+    if (dbError) {
+      console.error('Database Error:', dbError);
+      throw new Error('Could not save refund request to database.');
+    }
+    const { error: orderUpdateError } = await supabase
+          .from('ORDERS_T')
+          .update({ order_status: 'Applied For Refund' })
+          .eq('order_id', orderId);
+
+    if (orderUpdateError) {
+      console.error('Order Update Error:', orderUpdateError);
+      throw new Error('Failed to update order status to Applied For Refund.');
+    }
+  } catch (error) {
+    console.error('Action failure:', error);
+    return { error: error.message || 'An unexpected error occurred.' };
+  }
+
+  revalidatePath('/buyer/orders');
+  redirect('/buyer/orders');
+}
+
+
+export async function confirmOrder(formData) {
+
+  const order_id = formData.get('orderID');
+
+  const supabase = await createClient();
+
+  try {
+    const { data: order, error: orderError } = await supabase
+      .from('ORDERS_T')
+      .update({ order_status: 'Completed' })
+      .eq('order_id', order_id)
+      .select('seller_id', 'total_amount')
+      .single();
+
+    if (orderError) throw new Error(`Failed to update order status: ${orderError.message}`);
+    if (!order) throw new Error('Order not found.');
+
+    const { seller_id, total_amount } = order;
+
+    const { data: shipping, error: shippingError } = await supabase
+      .from('SHIPPING_T')
+      .select('delivery_fee')
+      .eq('order_id', order_id)
+      .single();
+
+    if (shippingError && shippingError.code !== 'PGRST116') {
+      throw new Error(`Failed to fetch shipping fee: ${shippingError.message}`);
+    }
+    
+    const deliveryFee = shipping?.delivery_fee ? Number(shipping.delivery_fee) : 0;
+
+    const sellerEarn = Number(total_amount) - deliveryFee;
+
+    const { data: seller, error: sellerFetchError } = await supabase
+      .from('USERS_T')
+      .select('balances')
+      .eq('user_id', seller_id)
+      .single();
+
+    if (sellerFetchError) throw new Error(`Failed to fetch seller balance: ${sellerFetchError.message}`);
+
+    const currentBalance = seller.balances ? Number(seller.balances) : 0;
+    const newBalance = currentBalance + sellerEarn;
+
+    const { error: balanceUpdateError } = await supabase
+      .from('USERS_T')
+      .update({ balances: newBalance })
+      .eq('user_id', seller_id);
+
+    if (balanceUpdateError) throw new Error(`Failed to update seller balance: ${balanceUpdateError.message}`);
+
+    const transactionID = await IDGenerator();
+
+    const { error: transactionError } = await supabase
+      .from('WALLET_TRANSACTIONS_T')
+      .insert({
+        wallet_transaction_id: transactionID,
+        user_id: seller_id,
+        transaction_type: `Payment for order: #${order_id}`,
+        direction: 'Debit',
+        payment_method: 'Wallet Balance',
+        amount: sellerEarn,
+        wallet_transaction_status: 'Success'
+      });
+
+    if (transactionError) throw new Error(`Failed to log wallet transaction: ${transactionError.message}`);
+
+    revalidatePath('/buyer/orders')
+
+    return {
+      success: true,
+      message: 'Order confirmed',
+    };
+
+  } catch (error) {
+    console.error('Error executing confirmOrder:', error.message);
+    return { success: false, error: error.message };
+  }
 }
