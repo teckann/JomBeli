@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { supabase } from '@/app/_lib/supabase';
 import SellerOrderTrackingTable from "@/app/_components/SellerOrderTrackingTable/SellerOrderTrackingTable";
@@ -85,7 +85,7 @@ export default function OrderTrackingPage() {
                         productName: productData?.product_name || 'Unknown Product', 
                         variant: variantData?.sku || 'Standard', 
                         amount: firstItem?.quantity || 0, 
-                        date: new Date(order.created_at).toLocaleDateString('en-GB'), // DD-MM-YYYY
+                        date: new Date(order.created_at).toLocaleDateString('en-GB'),
                         status: getDisplayStatus(order.order_status)
                     };
                 });
@@ -134,6 +134,8 @@ export default function OrderTrackingPage() {
                         />
                     )}
                 </div>
+
+                
             </main>
         </div>
     );

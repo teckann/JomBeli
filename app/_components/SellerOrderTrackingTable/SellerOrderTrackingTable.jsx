@@ -1,8 +1,13 @@
 "use client"
 import React from 'react';
 import styles from './SellerOrderTrackingTable.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function SellerOrderTrackingTable({ status, orders, onUpdateClick }) {
+    const router = useRouter();
+    const handleMoreClick = (orderId) => {
+        router.push(`/seller/ordertracking/details?order_id=${orderId}`);
+    };
     return (
         <section className={styles.orderTable}> 
             <div className={styles.status}>
@@ -17,7 +22,7 @@ export default function SellerOrderTrackingTable({ status, orders, onUpdateClick
                         <th>Product Variant</th>
                         <th>Amount</th>
                         <th>Date</th>
-                        <th style={{ textAlign: 'center' }}>Update Status</th>
+                        <th style={{ textAlign: 'center' }}>Order Details</th>
                     </tr>
                 </thead>
                 <tbody className={styles.tableBody}>
@@ -33,9 +38,9 @@ export default function SellerOrderTrackingTable({ status, orders, onUpdateClick
                                 <td style={{ textAlign: 'center' }}>
                                     <button 
                                         className={styles.updateStatusButton}
-                                        onClick={() => onUpdateClick?.(order.id)}
+                                        onClick={() => handleMoreClick(order.id)}
                                     >
-                                        DONE
+                                        More
                                     </button>
                                 </td>
                             </tr>
