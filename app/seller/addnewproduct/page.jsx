@@ -4,6 +4,21 @@ import React, { useState, useEffect } from 'react';
 import styles from './addnewproduct.module.css'; 
 import { supabase } from '@/app/_lib/supabase'; 
 
+const CATEGORIES = [
+    'Devices',
+    'Audio',
+    'Charging',
+    'Accessories',
+    'Gaming',
+    'Smart Home',
+    'Fashion',
+    'Lifestyle',
+    'Sports',
+    'Health',
+    'Office',
+    'Others'
+];
+
 export default function AddProductPage() {
  
     const [currentUser, setCurrentUser] = useState(null);    
@@ -12,7 +27,7 @@ export default function AddProductPage() {
 
     const [coreSpec, setCoreSpec] = useState({
         productName: '',
-        category: '',
+        category: '', 
         description: '',
         price: '',
         discount: '' 
@@ -249,9 +264,29 @@ export default function AddProductPage() {
                             <label>Product Name :</label>
                             <input type="text" value={coreSpec.productName} onChange={(e) => setCoreSpec({...coreSpec, productName: e.target.value})} required />
                         </div>
+                        
                         <div className={styles.inputGroup}>
                             <label>Category :</label>
-                            <input type="text" value={coreSpec.category} onChange={(e) => setCoreSpec({...coreSpec, category: e.target.value})} required />
+                            <select 
+                                value={coreSpec.category} 
+                                onChange={(e) => setCoreSpec({...coreSpec, category: e.target.value})} 
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '8px',
+                                    borderRadius: '4px',
+                                    border: '1px solid #ccc',
+                                    backgroundColor: '#fff',
+                                    height: '40px'
+                                }}
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {CATEGORIES.map((cat) => (
+                                    <option key={cat} value={cat}>
+                                        {cat}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className={styles.inputGroup}>
