@@ -678,6 +678,22 @@ export async function getFilterProducts(category) {
 
   return data;
 }
+export async function getFilterProductsBySellerID(category, sellerID) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .eq("category", category)
+    .eq("user_id", sellerID);
+
+  if (error) {
+    console.error("Failed to fetch filter products:", error.message);
+    return [];
+  }
+
+  return data;
+}
 
 export async function validateCartItemOwnership(itemIds, userId) {
   if (!itemIds || itemIds.length === 0) return false;
