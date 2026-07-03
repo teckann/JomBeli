@@ -56,7 +56,7 @@ export function RefundNavBar() {
 
 export function SystemSupportNavBar() {
     return (
-        <Link className={Styles.smallLink} href="#">
+        <Link className={Styles.smallLink} href="/admin/ManageSystemSupport">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="-0.5 0 25 25" className={Styles.svg}>
                 <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} >
                     <path fill="currentColor" d="M6.723 5.48a5.251 5.251 0 1 1 8.265 4.802" />

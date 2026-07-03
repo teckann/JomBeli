@@ -1,0 +1,35 @@
+.buttonFrame {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.formStyle {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+    display: felx;
+    padding: 0.6em;
+    font-size: 1em;
+    color: white;
+    border-radius: 10px;
+}
+
+.rejectButton {
+    background-color: red;
+}
+
+.approveButton {
+    background-color: green;
+}
+
+.disable {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+

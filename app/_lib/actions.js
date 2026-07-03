@@ -299,7 +299,7 @@ export async function BuyerContactForm(formData) {
     throw new Error("Failed to submit form. Please try again.");
   }
 
-  redirect("/buyer/helpcentre");
+  redirect("/buyer/contactus/submitted");
 }
 
 export async function deactiveProduct(productId) {
@@ -711,4 +711,33 @@ export async function adminAddVoucher(formData){
   }
 
   revalidatePath('/admin/ManageVoucher')
+}
+
+export async function handleAdminRefundAction(formData) {
+
+  
+  const action = formData.get("action");
+  const refundId = formData.get("refundId");
+
+  const supabase = await createClient();
+
+  const updateData = {
+    admin_status: action,
+  };
+
+  if (action === "Approved") {
+    updateData.refunded_at = new Date().toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from("REFUNDS_T")
+    .update(updateData)
+    .eq("refund_id", refundId);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Failed to update refund status.");
+  }
+
+  return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
 }

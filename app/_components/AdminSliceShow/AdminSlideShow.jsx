@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Styles from "./AdminSliceShow.module.css";
 import Link from 'next/link'
 
-export default function AdminSliceShow({datas}) {
+export default function AdminSliceShow({datas, purpose}) {
 
     let [pageCounter, setPageCounter] = useState(1);
 
@@ -34,16 +34,37 @@ export default function AdminSliceShow({datas}) {
     
     return (
         <div className={ Styles.sliceContainer }>
-            <div className={ Styles.navContainer }>
+            {expandable && <div className={ Styles.navContainer }>
                 <button className={ `${!expandable && Styles.hide} ${Styles.button}` } onClick={handleDeduct}>
                     <BackIcon />
                 </button>
-            </div>
+            </div> }
+            {purpose ==="refund" && 
             <div className={ Styles.componentFrame }>
                 {datasSliced.map((data, index) => 
                     <AdminRefundSliceComponent key={index} data={data} />
                 )}
-            </div>
+            </div> }
+
+            {purpose === "reportProduct" && 
+            <div className={ Styles.componentFrame }>
+                {datasSliced.map((data, index) => 
+                    <AdminSystemSupportSliceComponent key={index} data={data} purpose={purpose} reportItemName={data.targetProduct.product_name} />
+                )}
+            </div> }
+            {purpose === "reportSeller" && 
+            <div className={ Styles.componentFrame }>
+                {datasSliced.map((data, index) => 
+                    <AdminSystemSupportSliceComponent key={index} data={data} purpose={purpose} reportItemName={data.targetSeller.username} />
+                )}
+            </div> }
+            {purpose === "reportGeneral" && 
+            <div className={ Styles.componentFrame }>
+                {datasSliced.map((data, index) => 
+                    <AdminSystemSupportSliceComponent key={index} data={data} purpose={purpose} reportItemName={data.support_type} />
+                )}
+            </div> }
+
             <div className={ Styles.navContainer }>
                 <button className={ `${!expandable && Styles.hide} ${Styles.button}` } onClick={handleAdd}>
                     <NextIcon />
@@ -113,4 +134,44 @@ export function AdminRefundSliceComponent({data}) {
 
 export function getdataPath(data, path) {
     return path.split(".").reduce((acc, cur) => acc?.[cur], data);
+}
+
+
+export function AdminSystemSupportSliceComponent({data, purpose, reportItemName}) {
+
+    let navLink = "";
+    let reportTitle = "";
+    if (purpose === "reportProduct") {
+        reportTitle = "Reported Product"
+        // navLink = `/admin/ManageSystemSupport/${data.target_product_id}`;
+    } else if (purpose === "reportSeller") {
+        reportTitle = "Reported Seller"
+        // navLink = `/admin/ManageSystemSupport/${data.target_seller_id}`;
+    } else if (purpose === "reportGeneral") {
+        reportTitle = "Report Title"
+        // navLink = `/admin/ManageSystemSupport/${data.support_id}`;
+    }
+
+    const createdDate = new Date(data.created_at);
+    // compare date format
+    const afterDays = Math.floor((Date.now() - createdDate.getTime())/ (1000 * 60 * 60 * 24));
+
+    return(
+        <div className={ Styles.sliceComponent }>
+            <div className={ Styles.sliceTitle }>
+                <h5 className={ Styles.titleText }>Support ID: {data.support_id}</h5>
+                <p>Requested by {data.reporter.username}</p>
+            </div>
+            <div>
+                <small>{reportTitle}:</small>
+                <div className={ Styles.refundReason }>{reportItemName}</div>
+            </div>
+            <div className={ Styles.componentBottom}>
+                <div className={ Styles.daysText }><i>{afterDays} days ago</i></div>
+                <div className={ Styles.buttonContainer }>
+                    <button className="btn btn-primary"><Link className={ Styles.linkText } title="view report details" href={`/admin/ManageSystemSupport/${data.support_id}`}>View</Link></button>
+                </div>
+            </div>
+        </div>
+    )
 }

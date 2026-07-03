@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import styles from "./not-found.module.css";
@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function NotFound() {
-
   const router = useRouter();
 
   return (
@@ -24,7 +23,12 @@ export default function NotFound() {
       {/* <Link href="/signin" className={styles.button}>
         Go back home
       </Link> */}
-      <button className={styles.button} onClick={()=>{router.back()}}>
+      <button
+        className={styles.button}
+        onClick={() => {
+          router.back();
+        }}
+      >
         Go back
       </button>
     </main>

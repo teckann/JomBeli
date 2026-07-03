@@ -1,0 +1,155 @@
+.container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stepperWrapper {
+  border-radius: 12px;
+  padding: 40px 32px 24px 32px;
+  background-color: transparent;
+  position: relative;
+  margin-bottom: 32px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.progressLineTrack {
+  position: absolute;
+  top: 65px; 
+  left: 10%;
+  right: 10%;
+  height: 5px;
+  background-color: var(--color-primary-lighter);
+  z-index: 2;
+
+}
+
+.progressLineFill {
+  height: 100%;
+  background-color: var(--color-primary);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.stepsContainer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.stepNode {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 120px;
+  padding: 0;
+  outline: none;
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 3px solid var(--color-primary);
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+.stepLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333333;
+  text-align: center;
+  transition: font-weight 0.2s;
+}
+
+.stepNode.activeNode .circle {
+  background-color: var(--color-primary-light);
+  border: 3px solid var(--color-primary);
+  transform: scale(1.05);
+}
+
+.stepNode.activeNode .stepLabel {
+  font-weight: bold;
+}
+
+.tableCard {
+  border: 1px solid #111111;
+  border-radius: 12px;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tableHeaderZone {
+  padding: 16px 24px;
+  border-bottom: 1px solid #111111;
+}
+
+.tableTitle {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111111;
+  margin: 0;
+}
+
+.tableResponsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ordersTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ordersTable th {
+  background-color: #dedede; 
+  color: #111111;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 24px;
+  border-bottom: 1px solid #111111;
+}
+
+.ordersTable td {
+  padding: 16px 24px;
+  font-size: 14px;
+  color: #333333;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ordersTable tr:last-child td {
+  border-bottom: none;
+}
+
+.moreLink {
+  font-size: 18px;
+  text-decoration: none;
+  color: #111111;
+  font-weight: bold;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.moreLink:hover {
+  transform: translate(2px, -2px);
+}
+
+.tableMessage {
+  text-align: center;
+  padding: 48px 0;
+  color: #777777;
+  font-style: italic;
+  font-size: 14px;
+}

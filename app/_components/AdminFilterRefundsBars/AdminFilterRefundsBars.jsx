@@ -4,7 +4,7 @@ import Styles from "./AdminFilterRefundsBars.module.css"
 import { getRefund } from "@/app/_lib/data-services";
 import FilterRefundsBar from "./AdminFilterRefundsClient";
 
-export  default async function AdminFilterReportsBar() {
+export  default async function AdminFilterRefundsBar() {
 
     const refunds = await getRefund();
 

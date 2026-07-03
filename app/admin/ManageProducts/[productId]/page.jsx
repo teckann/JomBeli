@@ -17,6 +17,15 @@ export default async function ProductDetails({params}) {
     const sales = await getProductSales(productId);
     const reviews = await getProductReviews(productId);
 
+    let productOverallReview = 0;
+    if (reviews.length > 0) {
+        const sumOfReviews = reviews.reduce((acc, cur) => {
+            return acc + Number(cur.product_rating);
+        }, 0);
+
+        productOverallReview = (sumOfReviews / reviews.length).toFixed(1);
+    }
+
     // data for table
     const titles = ["Review ID", "Reviewer Name", "Comment", "Rating", "Review Date", "status"];
     const actions = [{type: "viewReviewer"}];
@@ -49,7 +58,7 @@ export default async function ProductDetails({params}) {
                         <AdminTitle title="Product Related Information" />
                         <div className={ Styles.relatedInformation }>
                             <div>
-                                ⭐Rating: {product.overall_product_rating}
+                                ⭐Rating: {productOverallReview}
                             </div>
                             <div>
                                 ⌛Created at: {product.created_at}
