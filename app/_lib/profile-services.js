@@ -34,3 +34,19 @@ export async function getAccountSecurityLevel(userId) {
     bgColor: "#FFFDEF",
   };
 }
+
+export async function getAddresses(userId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ADDRESSES_T")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Failed to fetch addresses:", error.message);
+    throw new Error("Could not fetch addresses");
+  }
+
+  return data;
+}
