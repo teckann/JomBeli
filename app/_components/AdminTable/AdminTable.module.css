@@ -1,5 +1,6 @@
 .icons {
     width: 2em;
+    cursor: pointer;
     height: 2em;
     color: black;
 }

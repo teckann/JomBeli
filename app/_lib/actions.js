@@ -1076,7 +1076,7 @@ export async function adminApproveRefundAction(orderID) {
         wallet_transaction_id: transactionID,
         user_id: buyer_id,
         transaction_type: `Refund for order: #${orderID}`,
-        direction: 'Debit',
+        direction: 'Credit',
         payment_method: 'Wallet Balance',
         amount: Number(total_amount),
         wallet_transaction_status: 'Success'
