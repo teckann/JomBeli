@@ -147,7 +147,10 @@ function ProfileSecurity({ user }) {
         <input type="hidden" name="redirectPath" value={pathname} />
 
         <div className={styles.field}>
-          <label>New Password *</label>
+          <label>
+            New Password{" "}
+            {isActive && <span className={styles.required}>*</span>}
+          </label>
 
           {!isActive ? (
             <p className={styles.readOnly}>{mask}</p>
@@ -200,7 +203,10 @@ function ProfileSecurity({ user }) {
         <input type="hidden" name="redirectPath" value={pathname} />
 
         <div className={styles.field}>
-          <label>Security Question 1 *</label>
+          <label>
+            Security Question 1{" "}
+            {isActive && <span className={styles.required}>*</span>}
+          </label>
 
           {!isActive ? (
             <p className={styles.readOnly}>{q1 ? mask : "Set Now"}</p>
@@ -232,7 +238,10 @@ function ProfileSecurity({ user }) {
         </div>
 
         <div className={styles.field}>
-          <label>Security Question 2 *</label>
+          <label>
+            Security Question 2{" "}
+            {isActive && <span className={styles.required}>*</span>}
+          </label>
 
           {!isActive ? (
             <p className={styles.readOnly}>{q2 ? mask : "Set Now"}</p>
