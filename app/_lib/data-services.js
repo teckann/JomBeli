@@ -1580,8 +1580,79 @@ export async function getOrderDetails(orderId) {
 
     console.error(error);
     throw error;
-    return [];
   }
 
   return data;
+}
+
+export async function getTotalActiveHubCount() {
+
+  const supabase = await createClient();
+
+  const { data, error, count } = await supabase
+  .from('HUBS_T')
+  .select('*', { count: 'exact', head: true })
+  .eq('hub_status', 'Active');
+
+  if (error) {
+
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getWaitingAssignParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Created');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getOutOfDeliveryParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Out Of Delivery');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getAssignedParcelsByAdminThisMonth(adminId) {
+  const supabase = await createClient();
+
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('admin_id', adminId)
+    .neq('shipping_status', 'Created')
+    .gte('created_at', startOfMonth.toISOString());
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
 }

@@ -1,13 +1,16 @@
-import Styles from './ManageRefunds.module.css';
+import Styles from './ManageDelivery.module.css';
 import Link from 'next/link';
 import { getTotalWaitingRefundCount } from '@/app/_lib/analysis-serives';
-import { getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
+import { getTotalActiveHubCount, getWaitingAssignParcelCount, getOutOfDeliveryParcelCount, getAssignedParcelsByAdminThisMonth, getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
 import AdminSliceShow from '@/app/_components/AdminSliceShow/AdminSlideShow';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
 
-export default async function manageRefunds() {
+export default async function ManageDelivery() {
+
+    const totalActiveHubs = await getTotalActiveHubCount();
+    // const totalWaiting
 
     const rejectedBySeller = await getRejectedBySeller();
     const notProcessBySeller = await getNotProcessedBySeller();

@@ -165,7 +165,7 @@ export default async function reportDetails({params}) {
                                 <div className={ Styles.calculateTitle }>Sum of Total</div>
                                 <div className={ Styles.numberInput}>
                                     {hasVoucher ? 
-                                    Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) - Number(order.voucher.VOUCHERS_T.discount_value)
+                                    Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) + Number(order.voucher.VOUCHERS_T.discount_value)
                                 : Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) }
                                 </div>
                             </div>
@@ -179,7 +179,9 @@ export default async function reportDetails({params}) {
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }></div>
                                 <div className={ Styles.numberInput}>
-                                    {Number(order.total_amount)}
+                                    {hasVoucher ? 
+                                        Number(order.total_amount) + Number(order.voucher.VOUCHERS_T.discount_value)
+                                    : Number(order.total_amount) }
                                 </div>
                             </div>
                             <div className={ Styles.calculateRow}>
@@ -224,135 +226,6 @@ export default async function reportDetails({params}) {
                 </div>
             </div>
         </div>
-        {/* <div className={ Styles.upperPart }>
-            <div className={ Styles.refundUp}>
-                <div className={ Styles.productDescription }>
-                    <h2>#{order.order_id}</h2>
-                    <p>Purchased by {order.buyer.username}</p>
-                </div>
-                <div className={ Styles.refundStatusContainer} style={{backgroundColor: statusColor}}>
-                    <h4 className={ Styles.refundStatusText }>
-                        <span className={ Styles.orderStatusText }>
-                            {orderStatus}
-                        </span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div className={ Styles.middlePart }>
-            <div className={ Styles.tableShow}>
-                <h3>Order Overview</h3>
-                <AdminTable titles={titles} fields={fields} datas={skuDatas} slice={true} dataIdFormat="" />
-            </div>
-            <div className={ Styles.generalInformation }>
-                <div className={ Styles.generalInformationTitle }>
-                    <AdminTitle title="Order Information" />
-                </div>
-                <div className={ Styles.generalInformationList }>
-                    <ShowItemInformationList objectlist={generalList1} />
-                    <ShowItemInformationList objectlist={generalList2} />
-                </div>
-            </div>
-            <div className={ Styles.feesAndMoreInfo}>
-                <div className={ Styles.orderFeeCalculation }>
-                    <AdminTitle title="Order Fees Calculation" />
-                    <div className={ Styles.calculationContainer}>
-                        <div className={ Styles.calculateHeader}>
-                            <div className={ Styles.calculateTitle }></div>
-                            <div className={ Styles.numberInput}>RM</div>
-                        </div>
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }>Sum of Total</div>
-                            <div className={ Styles.numberInput}>
-                                {hasVoucher ? 
-                                Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) - Number(order.voucher.VOUCHERS_T.discount_value)
-                            : Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) }
-                            </div>
-                        </div>
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }>Delivery Fee</div>
-                            <div className={ Styles.numberInput}>
-                                {Number(order.shipping[0]?.delivery_fee)}
-                                <div className={Styles.divider}></div>
-                            </div>
-                        </div>
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }></div>
-                            <div className={ Styles.numberInput}>
-                                {Number(order.total_amount)}
-                            </div>
-                        </div>
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }><small>Applied Voucher</small></div>
-                            <div className={ Styles.numberInput}>
-                            </div>
-                        </div>
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }>{hasVoucher ? `${order.voucher.VOUCHERS_T.voucher_name} (${order.voucher.VOUCHERS_T.voucher_type} voucher)` : "-"}</div>
-                            <div className={ Styles.numberInput}>
-                                {hasVoucher ? `- ${order.voucher.VOUCHERS_T.discount_value}` : "0"}
-                                <div className={Styles.divider}></div>
-                            </div>
-                        </div> 
-                        <div className={ Styles.calculateRow}>
-                            <div className={ Styles.calculateTitle }>Total Paid</div>
-                            <div className={ Styles.numberInput}>
-                                {Number(order.total_amount)}
-                                <div className={Styles.divider}></div>
-                                <div className={Styles.divider}></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={ Styles.moreInfo}>
-                    <div className={ Styles.moreInfoComponent }>
-                        <AdminTitle title="Delivery Details" />
-                        <div className={ Styles.infoMore}>
-                            <span>🚚 Delivery Status: {order.shipping[0]?.shipping_status}</span>
-                            <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.user_id : "-"}</span>
-                            <span>👤 Assigned by: {order.shipping[0]?.courier?.admin ? order.shipping[0].courier.admin.username : "-"}</span>
-                        </div>
-                    </div>
-                    <div className={ Styles.moreInfoComponent }>
-                        <AdminTitle title="Transactions Details" />
-                        <div className={ Styles.infoMore}>
-                            <span>💵 Transaction ID: {order.transaction[0].order_transaction_id}</span>
-                            <span>🏦 Transaction Status: {order.transaction[0].order_transaction_status}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> */}
-        {/* <div className={ Styles.bottomPart }>
-            <div className={Styles.redirectPart}>
-                <div className={ Styles.navComponent }>
-                    <div>
-                        <AdminTitle title="View Refund Product Further" />
-                    </div>
-                    <div className={ Styles.navContainer }>
-                        <span><Link className={Styles.linkText} href={`/admin/ManageOrders/${refund.ORDERS_T.order_id}`}>Order Page</Link></span>
-                        <span><Link className={Styles.linkText} href={`/admin/ManageUsers/${refund.ORDERS_T.seller.user_id}`}>Seller Page</Link></span>
-                        <span><Link className={Styles.linkText} href={`/admin/ManageUsers/${refund.ORDERS_T.buyer.user_id}`}>Buyer Page</Link></span>
-                    </div>
-                </div>
-                <div className={ Styles.navComponent }>
-                    <div>
-                        <AdminTitle title="Contact Info" />
-                    </div>
-                    <div className={ Styles.navContainer }>
-                        <a className={ Styles.linkText } href={`mailto:${refund.ORDERS_T.buyer.email}?subject=${buyerSubject}&body=${emailBuyerBody}`}>
-                            Email Buyer
-                        </a>
-                        <a className={ Styles.linkText } href={`mailto:${refund.ORDERS_T.seller.email}?subject=${sellerSubject}&body=${emailSellerBody}`}>
-                            Email Seller
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div className={Styles.actionButtonPart}>
-                <AdminRefundActionButtons isAble={adminEditState} modifyId={refund.refund_id} remarkdsFor="refund" />
-            </div>
-        </div> */}
     </div>);
 }
 
