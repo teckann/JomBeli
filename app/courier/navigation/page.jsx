@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -8,11 +8,16 @@ const CourierMapView = dynamic(
   { ssr: false }
 );
 
-export default function NavigationPage(){
-    return(
-        <div>
-            <Link href="/">Back to home</Link>
-            <CourierMapView/>
-        </div>
-    );
+export default function NavigationPage() {
+  return (
+    <div>
+      <Link 
+        href="/courier" 
+      >
+        ← Back to Courier Home
+      </Link>
+
+      <CourierMapView />
+    </div>
+  );
 }

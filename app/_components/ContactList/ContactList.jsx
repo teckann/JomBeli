@@ -20,6 +20,7 @@ async function ContactList({ paramID }) {
             user_id={contact.user_id}
             username={contact.username}
             avatar={contact.avatar}
+            lastMessage={contact.last_message}
             selected={paramID === contact.user_id}
           />
           <div className={styles.line}></div>
@@ -28,7 +29,7 @@ async function ContactList({ paramID }) {
     </div>
   );
 }
-const Contact = ({ user_id, username, avatar, selected }) => {
+const Contact = ({ user_id, username, avatar, selected, lastMessage }) => {
   return (
     <Link
       href={`/buyer/chat?id=${user_id}`}
@@ -40,7 +41,7 @@ const Contact = ({ user_id, username, avatar, selected }) => {
 
       <div className={styles.contactInfo}>
         <p className={styles.username}>{username}</p>
-        <p className={styles.lastOnline}>Last Online: xxx</p>
+        <p className={styles.lastMessage}>{lastMessage}</p>
       </div>
     </Link>
   );

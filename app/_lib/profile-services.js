@@ -41,7 +41,10 @@ export async function getAddresses(userId) {
   const { data, error } = await supabase
     .from("ADDRESSES_T")
     .select("*")
-    .eq("user_id", userId);
+    .eq("user_id", userId)
+    .eq("address_status", "Active")
+    .order("is_default", { ascending: false })
+    .order("created_at", { ascending: true });
 
   if (error) {
     console.error("Failed to fetch addresses:", error.message);
