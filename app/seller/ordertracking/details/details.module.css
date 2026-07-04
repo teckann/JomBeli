@@ -127,7 +127,7 @@
 }
 
 .packedBtn:hover:not(:disabled) {
-    background-color: #333;
+    background-color: var(--color-primary);
     color: #fff;
 }
 

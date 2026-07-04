@@ -48,14 +48,13 @@ export default async function ProductListingPage() {
                     </div>
 
                     <div className={styles.shopInfo}>
-                        <h1 className={styles.shopNameRow}>
-                            {shopName} 
-                        </h1>
-                        <p className={styles.shopDescription}>
-                            Welcome to {shopName}. Every item in this collection represents our commitment to excellence. 
+                      
+                        <div className={styles.shopDescription}>
+                            <h2>Welcome to {shopName}</h2> 
+                            <div>Every item in this collection represents our commitment to excellence. 
                             We source only premium-grade products to ensure maximum reliability and satisfaction. 
-                            Explore a curated world crafted exclusively to elevate your lifestyle, with inventory synchronized live.
-                        </p>
+                            Explore a curated world crafted exclusively to elevate your lifestyle, with inventory synchronized live.</div>
+                        </div>
                     </div>
                 </section>
 

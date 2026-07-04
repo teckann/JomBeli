@@ -12,7 +12,6 @@
   background-color: var(--color-surface-muted);
   padding: 0 60px;
   height: 65px;
-
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -22,19 +21,16 @@
   justify-content: flex-start;
   height: 48px;
   width: 180px;
-
   flex-shrink: 0;
 }
 
 .logoImg {
-  
   width: 100% !important;
   height: 100% !important;
   object-fit: contain;
 }
 
 .nav {
-
   display: flex;
   gap: 32px;
   font-size: var(--text-sm);
@@ -148,18 +144,82 @@
   margin-bottom: 48px;
 }
 
+.imageGalleryContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .imagePlaceholder {
+  position: relative; 
   background-color: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: 16px;
   height: 350px;
   width: 80%;
+  overflow: hidden;
+}
+
+.slideBtnLeft, .slideBtnRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.2s ease, transform 0.2s ease;
+  user-select: none;
+  z-index: 10;
+}
+
+.slideBtnLeft:hover, .slideBtnRight:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.slideBtnLeft:active, .slideBtnRight:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.slideBtnLeft { left: 12px; }
+.slideBtnRight { right: 12px; }
+
+.carouselDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  width: 80%;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-border-strong, #ccc);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.dot:hover {
+  background-color: var(--color-text-secondary);
+}
+
+.activeDot {
+  background-color: #ff2323 !important;
+  transform: scale(1.2);
 }
 
 .infoTableContainer {
   display: flex;
   flex-direction: column;
-
 }
 
 .infoTable {
@@ -211,18 +271,12 @@
   margin-bottom: 16px;
 }
 
-.variantGroup,.variantGroup {
+.variantGroup {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  flex-direction: rows;
+  flex-direction: row;
   gap: 30px;
-}
-
-.optionTag{
-  display: flex;
-  gap: 12px;
-  align-items: flex-end;
 }
 
 .variantLabel {
@@ -258,15 +312,9 @@
   font-size: var(--text-xs);
 }
 
-
-
-
-
 .reviewHeaderRow {
   display: flex;
   justify-content: space-between;
-
-
   align-items: center;
 }
 
@@ -281,8 +329,6 @@
   align-items: center;
   background-color: var(--color-surface-muted);
   padding: 16px 24px;
-
-
   border-radius: 16px;
   margin-bottom: 16px;
 }
@@ -293,7 +339,6 @@
 
 .ratingNumber { 
   font-size: 36px; 
-
   font-weight: bold; 
 }
 
@@ -362,6 +407,7 @@
 .commentDate { 
   color: var(--color-text-muted); 
 }
+
 .commentText { 
   font-size: var(--text-xs); 
   line-height: 1.6; 

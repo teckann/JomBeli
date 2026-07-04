@@ -31,11 +31,10 @@ const SellerSalesOverview = ({ currentUserId }) => {
         const oneYearAgo = new Date(now.getFullYear(), now.getMonth() - 11, 1);
 
         const { data: orders, error } = await supabase
-          .from('ORDERS_T')
-          .select('*') 
-          .eq('seller_id', currentUserId)
-          .eq('order_status', 'Active')
-          .gte('created_at', oneYearAgo.toISOString()); 
+        .from('ORDERS_T')
+        .select('*') 
+        .eq('seller_id', currentUserId)
+        .gte('created_at', oneYearAgo.toISOString());
 
         if (error) throw error;
 
