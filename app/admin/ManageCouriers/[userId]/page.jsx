@@ -14,10 +14,6 @@ export default async function UserDetail({params}){
 
     const user = await getUserDetails(userId);
     const country = user?.ADDRESSES_T?.[0]?.country || "No country provided";
-    const OrderCount = await getBuyerOrderCount(userId);
-    const TotalSpent = await getBuyerTotalSpent(userId);
-    const SellerOrderCount = await getSellerOrderCount(userId); 
-    const GrossEarnings = await getSellerGrossEarnings(userId);
 
     return(
         <div className={Styles.userDetailsPage}>
@@ -39,7 +35,6 @@ export default async function UserDetail({params}){
                 </div>
                 <div className={Styles.rightSide}>
                     <AccountSecurityAnalysis user={user} />
-                    <AccountActivityMonitoring user={user} OrderCount={OrderCount} TotalSpent={TotalSpent} SellerItemsSold={SellerOrderCount} GrossEarnings={GrossEarnings}/>
                 </div>
             </div>
         </div>

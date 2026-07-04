@@ -376,7 +376,7 @@ export async function getFilterCouriers(status, username) {
     
     let query = supabase
                 .from("USERS_T")
-                .select("*, ADDRESSES_T(street, city, state, postcode, country)")
+                .select("*, HUBS_T(hub_id,hub_location)")
                 .in("role",["Courier"]);
 
     if (username?.trim()){

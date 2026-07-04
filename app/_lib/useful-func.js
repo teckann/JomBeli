@@ -46,3 +46,17 @@ export function formatDateTime(isoString) {
     minute: "2-digit"
   });
 }
+
+export function getMalaysianDayRange(day, month, year) {
+  const paddedDay = String(day).padStart(2, "0");
+  const paddedMonth = String(month).padStart(2, "0");
+  const dateStr = `${year}-${paddedMonth}-${paddedDay}`;
+
+  const start = new Date(`${dateStr}T00:00:00+08:00`);
+  const end = new Date(`${dateStr}T23:59:59+08:00`);
+
+  return {
+    startDate: start.toISOString(),
+    endDate: end.toISOString(),
+  };
+}

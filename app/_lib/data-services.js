@@ -117,18 +117,18 @@ export function formatData(data) {
       : "No date provided";
 
     cleanedData.start_date = data.start_date
-    ? data.start_date.substring(0, 10)
-    : "No date provided";
+      ? data.start_date.substring(0, 10)
+      : "No date provided";
     
     cleanedData.end_date = data.end_date
-    ? data.end_date.substring(0, 10)
-    : "No date provided";
-
-    // Replace any null values with dashes
+      ? data.end_date.substring(0, 10)
+      : "No date provided";
+    
     for (const key in cleanedData) {
-      cleanedData[key] = cleanedData[key] === null ? "-" : cleanedData[key];
+      if (cleanedData[key] === null) {
+        cleanedData[key] = "-";
+      }
     }
-
     return cleanedData;
   });
 }

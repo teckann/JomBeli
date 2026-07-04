@@ -1,0 +1,17 @@
+.downloadButton{
+    width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 20px;
+    color: var(--color-font-primary);
+    background-color: var(--color-danger-bg);
+}
+
+.downloadButton:hover{
+    cursor: pointer;
+    transform: scale(0.97);
+}
+
+.downloadButton:active{
+    transform: scale(0.92);
+}
