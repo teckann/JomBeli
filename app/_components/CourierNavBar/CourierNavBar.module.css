@@ -1,0 +1,31 @@
+.navContainer{
+    display: flex;
+    height: 12vh;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border-primary);
+    justify-content: space-between;
+    padding: 1rem 2rem 1rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo{
+    font-weight: 800;
+    font-size: 38px;
+    color: var(--color-primary);
+    align-self: center;
+}
+
+.profileContainer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--color-border-primary);
+    padding: 4px 8px;
+    border-radius: 999px;
+}
+
+.username{
+    font-weight: 550;
+}

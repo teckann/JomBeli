@@ -11,7 +11,7 @@ export default function StopSequenceList({ stops, isLoading, onDelivered}) {
 
   return (
     <div className="stopList">
-      <p className="stopListHeader">DELIVERY SEQUENCE</p>
+      <p className="stopListHeader">Delivery Sequence</p>
       {stops?.map((stop, index) => (
         <div key={stop.orderId ?? index}>
           <div className="stopListItem">
