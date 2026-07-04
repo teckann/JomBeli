@@ -10,9 +10,12 @@ import { getUser } from "@/app/_lib/auth";
 
 export default async function ManageDelivery() {
 
+    const user = await getUser();
+
     const totalActiveHubs = await getTotalActiveHubCount();
     const totalWaiting = await getWaitingAssignParcelCount();
     const totalOutOfDeliveryParcel = await getOutOfDeliveryParcelCount();
+    const totalAssignedParcelMonth = await getAssignedParcelsByAdminThisMonth(user.id);
     
 
     const rejectedBySeller = await getRejectedBySeller();
@@ -25,11 +28,11 @@ export default async function ManageDelivery() {
         <div className={ Styles.contentPage}>
             <div className={Styles.upperPart}>
                 <div className={Styles.pageDescription}>
-                    <h1>Admin Refund Process</h1>
-                    <p>Admin are able to manage the request that are rejected from seller or is not response from seller within certain period.</p>
+                    <h1>Manage Delivery & Hubs</h1>
+                    <p>Manage system delivery and hubs here.</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable">View Refund Records</Link></button>
+                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable">Manage Hubs</Link></button>
                 </div>
             </div>
             <div className={Styles.refundsOverviewContainer}>
