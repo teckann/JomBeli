@@ -94,7 +94,6 @@ export async function getOptimizedBatchRoute(courierPosition, deliveryStops) {
 
 /**
  * Reverse geocode a coordinate to a readable address.
- * Call once when the delivery is assigned — not on every GPS update.
  */
 export async function getAddressLabel(lat, lng) {
   try {
