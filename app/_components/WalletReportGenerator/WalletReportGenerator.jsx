@@ -9,11 +9,11 @@ export default function WalletReportGenerator({
   transactions,
   userInfo,
   currentMonth,
-  currentType
+  currentType,
 }) {
   const [logoBase64, setLogoBase64] = useState(null);
 
-  // Preload logo as Base64 on component mount
+  // logo
   useEffect(() => {
     const loadLogo = async () => {
       try {
@@ -34,7 +34,7 @@ export default function WalletReportGenerator({
   const generateReport = () => {
     const doc = new jsPDF();
 
-    // Add Logo
+    // add logo
     if (logoBase64) {
       try {
         doc.addImage(logoBase64, "PNG", 14, 14, 30, 30);
@@ -46,10 +46,9 @@ export default function WalletReportGenerator({
       drawPlaceholderLogo(doc);
     }
 
-    // Continue with the rest of the PDF
+    // reset pdf
     addContent(doc);
 
-    // Helper function to draw placeholder logo
     function drawPlaceholderLogo(docInstance) {
       docInstance.setFillColor(223, 59, 60);
       docInstance.roundedRect(14, 14, 30, 30, 5, 5, "F");
@@ -59,20 +58,16 @@ export default function WalletReportGenerator({
       docInstance.text("JB", 24, 34);
     }
 
-    // Define the function that adds all the content
     function addContent(docInstance) {
-      // Header - System Name
       docInstance.setTextColor(223, 59, 60);
       docInstance.setFontSize(24);
       docInstance.setFont("helvetica", "bold");
       docInstance.text("JomBeli", 50, 25);
 
-      // Header - Report Title
       docInstance.setTextColor(51, 51, 51);
       docInstance.setFontSize(18);
       docInstance.text("Transaction Report", 50, 35);
 
-      // Header - Date
       docInstance.setFontSize(10);
       docInstance.setTextColor(150, 150, 150);
       docInstance.text(
@@ -84,14 +79,13 @@ export default function WalletReportGenerator({
           minute: "2-digit",
         })}`,
         50,
-        42
+        42,
       );
 
-      // Line separator
       docInstance.setDrawColor(220, 220, 220);
       docInstance.line(14, 50, 195, 50);
 
-      // User Information Section
+      // user info
       docInstance.setTextColor(51, 51, 51);
       docInstance.setFontSize(12);
       docInstance.setFont("helvetica", "bold");
@@ -103,10 +97,10 @@ export default function WalletReportGenerator({
       docInstance.text(
         `Current Balance: RM ${userInfo?.balances?.toFixed(2) || "0.00"}`,
         14,
-        77
+        77,
       );
 
-      // Filter Information
+      // filter info
       docInstance.setFont("helvetica", "bold");
       docInstance.text("Filter Applied", 14, 89);
 
@@ -120,7 +114,7 @@ export default function WalletReportGenerator({
       }
       docInstance.text(filterText, 14, 96);
 
-      // Transactions Table
+      // trans table
       const tableData = (transactions || []).map((tx) => [
         new Date(tx.created_at).toLocaleDateString("en-MY", {
           year: "numeric",
@@ -136,7 +130,6 @@ export default function WalletReportGenerator({
 
       let finalY = 105;
 
-      // Add table using jspdf-autotable v5
       autoTable(docInstance, {
         head: [["Date & Time", "Description", "Type", "Amount"]],
         body: tableData,
@@ -161,18 +154,19 @@ export default function WalletReportGenerator({
           3: { cellWidth: 30, halign: "right" },
         },
         willDrawCell: (data) => {
-          // Skip header
+          // skip header
           if (data.row.section === "head") return;
 
-          // Only modify Type (column 2) and Amount (column 3)
+          // edit type and amount column
           if (data.column.index === 2 || data.column.index === 3) {
-            const transactionType = (transactions || [])[data.row.index]?.direction;
+            const transactionType = (transactions || [])[data.row.index]
+              ?.direction;
 
             if (transactionType === "Debit") {
-              // Red color for Debit
+              // red
               data.cell.textColor = [220, 53, 69];
             } else if (transactionType === "Credit") {
-              // Teal/Cyan color for Credit
+              // green
               data.cell.textColor = [32, 201, 151];
             }
           }
@@ -182,7 +176,7 @@ export default function WalletReportGenerator({
         },
       });
 
-      // Calculate totals
+      // calc total
       finalY = finalY + 10;
       const totalCredit = (transactions || [])
         .filter((tx) => tx.direction === "Credit")
@@ -193,14 +187,22 @@ export default function WalletReportGenerator({
 
       docInstance.setFont("helvetica", "bold");
       docInstance.setFontSize(10);
-      // Total Credit - Teal color
+      // total credit
       docInstance.setTextColor(32, 201, 151);
-      docInstance.text(`Total Credit: RM ${totalCredit.toFixed(2)}`, 14, finalY);
-      // Total Debit - Red color
+      docInstance.text(
+        `Total Credit: RM ${totalCredit.toFixed(2)}`,
+        14,
+        finalY,
+      );
+      // total debit
       docInstance.setTextColor(220, 53, 69);
-      docInstance.text(`Total Debit: RM ${totalDebit.toFixed(2)}`, 14, finalY + 7);
+      docInstance.text(
+        `Total Debit: RM ${totalDebit.toFixed(2)}`,
+        14,
+        finalY + 7,
+      );
 
-      // Footer
+      // footer
       const pageCount = docInstance.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
         docInstance.setPage(i);
@@ -209,20 +211,20 @@ export default function WalletReportGenerator({
         docInstance.text(
           `Copyright 2026 © JomBeli. All rights reserved.`,
           14,
-          docInstance.internal.pageSize.height - 10
+          docInstance.internal.pageSize.height - 10,
         );
         docInstance.text(
           `Page ${i} of ${pageCount}`,
           docInstance.internal.pageSize.width - 30,
           docInstance.internal.pageSize.height - 10,
-          { align: "right" }
+          { align: "right" },
         );
       }
 
-      // Download the PDF
-      const fileName = `JomBeli_Transaction_Report_${new Date()
-        .toISOString()
-        .split("T")[0]}.pdf`;
+      // download
+      const fileName = `JomBeli_Transaction_Report_${
+        new Date().toISOString().split("T")[0]
+      }.pdf`;
       docInstance.save(fileName);
     }
   };
