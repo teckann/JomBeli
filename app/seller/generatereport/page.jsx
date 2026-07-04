@@ -20,7 +20,7 @@ export default function SellerGenerateReport() {
     });
 
     useEffect(() => {
-        async function fetchTodayReport() {
+        async function fetchAllTimeReport() {
             try {
                 setLoading(true);
 
@@ -30,14 +30,6 @@ export default function SellerGenerateReport() {
                     router.push('/login');
                     return;
                 }
-
-                const startOfToday = new Date();
-                startOfToday.setHours(0, 0, 0, 0);
-                const endOfToday = new Date();
-                endOfToday.setHours(23, 59, 59, 999);
-
-                const startISO = startOfToday.toISOString();
-                const endISO = endOfToday.toISOString();
 
                 const { data: products, error: prodErr } = await supabase
                     .from('PRODUCTS_T')
@@ -56,8 +48,10 @@ export default function SellerGenerateReport() {
 
                 let totalProductsCount = products?.length || 0;
                 let inventoryStreams = [];
+                let productIds = [];
 
                 products?.forEach(p => {
+                    productIds.push(p.product_id);
                     p.PRODUCT_VARIANTS_T?.forEach(v => {
                         inventoryStreams.push({
                             name: `${p.product_name} (${v.sku || 'Default'})`,
@@ -70,26 +64,23 @@ export default function SellerGenerateReport() {
                 const { data: orders, error: orderErr } = await supabase
                     .from('ORDERS_T')
                     .select('order_id, order_status, created_at')
-                    .gte('created_at', startISO)
-                    .lte('created_at', endISO);
+                    .eq('seller_id', user.id); 
 
                 if (orderErr) throw orderErr;
 
-                const todayOrdersCount = orders?.length || 0;
-                const todayPendingCount = orders?.filter(o => o.order_status === 'Ordered' || o.order_status === 'Pending').length || 0;
+                const totalOrdersCount = orders?.length || 0;
+                
+                const pendingCount = orders?.filter(o => o.order_status === 'Ordered').length || 0;
 
-                let todayRevenueSum = 0;
-                if (orders && orders.length > 0) {
-                    const orderIds = orders.map(o => o.order_id);
-                    const { data: transactions, error: transErr } = await supabase
-                        .from('ORDER_TRANSACTIONS_T')
-                        .select('amount, order_transaction_status')
-                        .in('order_id', orderIds)
-                        .eq('order_transaction_status', 'Success');
+                let totalRevenueSum = 0;
+                const { data: walletTransactions, error: walletErr } = await supabase
+                    .from('WALLET_TRANSACTIONS_T')
+                    .select('amount, wallet_transaction_status')
+                    .eq('user_id', user.id)
+                    .eq('wallet_transaction_status', 'Success');
 
-                    if (!transErr && transactions) {
-                        todayRevenueSum = transactions.reduce((acc, curr) => acc + (curr.amount || 0), 0);
-                    }
+                if (!walletErr && walletTransactions) {
+                    totalRevenueSum = walletTransactions.reduce((acc, curr) => acc + (curr.amount || 0), 0);
                 }
 
                 let trendingList = [];
@@ -111,30 +102,38 @@ export default function SellerGenerateReport() {
                             const pName = it.PRODUCT_VARIANTS_T?.PRODUCTS_T?.product_name || 'Unknown Product';
                             counts[pName] = (counts[pName] || 0) + (it.quantity || 0);
                         });
+                        
                         trendingList = Object.keys(counts).map(name => ({
                             name,
                             sold: counts[name]
-                        })).sort((a, b) => b.sold - a.sold).slice(0, 5); 
+                        })).sort((a, b) => b.sold - a.sold).slice(0, 5);
+                    }
+                }
+               
+                let currentSellerReviewCount = 0;
+                if (productIds.length > 0) {
+                    const { count: reviewCount, error: revErr } = await supabase
+                        .from('REVIEWS_T')
+                        .select('*', { count: 'exact', head: true })
+                        .in('product_id', productIds);
+                    
+                    if (!revErr) {
+                        currentSellerReviewCount = reviewCount || 0;
                     }
                 }
 
-                const { count: reviewCount } = await supabase
-                    .from('REVIEWS_T')
-                    .select('*', { count: 'exact', head: true })
-                    .gte('created_at', startISO)
-                    .lte('created_at', endISO);
-
                 const { count: voucherCount } = await supabase
                     .from('VOUCHERS_T')
-                    .select('*', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true })
+                    .eq('user_id', user.id); 
 
                 setReportData({
                     totalProducts: totalProductsCount,
-                    totalOrders: todayOrdersCount,
-                    pendingOrders: todayPendingCount,
+                    totalOrders: totalOrdersCount,
+                    pendingOrders: pendingCount,
                     totalVouchers: voucherCount || 0,
-                    totalRevenue: todayRevenueSum.toFixed(2),
-                    totalReviews: reviewCount || 0,
+                    totalRevenue: totalRevenueSum.toFixed(2),
+                    totalReviews: currentSellerReviewCount,
                     topTrendingProducts: trendingList,
                     inventoryList: inventoryStreams.slice(0, 8)
                 });
@@ -146,7 +145,7 @@ export default function SellerGenerateReport() {
             }
         }
 
-        fetchTodayReport();
+        fetchAllTimeReport();
     }, [router]);
 
     if (loading) {
@@ -182,13 +181,8 @@ export default function SellerGenerateReport() {
                 </div>
 
                 <p className={styles.summaryParagraph}>
-                    This report provides an overview of your store's sales performance, revenue, orders, and customer engagement during the selected period.
+                    This report provides an overview of your store's overall performance, including total orders, pending orders, vouchers, revenue, customer reviews, top trending products  and current inventory levels.
                 </p>
-
-                <div className={styles.dataRow}>
-                    <span className={styles.fieldLabel}>Total Products</span>
-                    <span className={styles.fieldValue}>{reportData.totalProducts}</span>
-                </div>
 
                 <div className={styles.dataRow}>
                     <span className={styles.fieldLabel}>Total Orders</span>
@@ -225,12 +219,12 @@ export default function SellerGenerateReport() {
                                 </div>
                             ))
                         ) : (
-                            <div className={styles.stackItem}>No sales recorded today</div>
+                            <div className={styles.stackItem}>No sales recorded yet</div>
                         )}
                     </div>
                 </div>
 
-                <div className={styles.dataBlockRow}>
+                <div className={styles.lastdataBlockRow}>
                     <span className={styles.fieldLabel}>Inventory</span>
                     <div className={styles.alignedStackList}>
                         {reportData.inventoryList.length > 0 ? (
