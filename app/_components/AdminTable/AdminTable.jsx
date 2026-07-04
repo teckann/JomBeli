@@ -18,7 +18,7 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         viewAdmins: {name: "View", icon: <InfoIcon />, handler: (admin) => router.push(`/admin/ManageAdmins/${getdataPath(admin, "user_id")}`), show: (data) => true},
                         viewCouriers: {name: "View", icon: <InfoIcon />, handler: (courier) => router.push(`/admin/ManageCouriers/${getdataPath(courier, "user_id")}`), show: (data) => true},
                         viewVouchers: {name: "View", icon: <InfoIcon />, handler: (voucher) => router.push(`/admin/ManageVoucher/${getdataPath(voucher, "voucher_id")}`), show: (data) => true},
-                        viewTransaction: {name: "View", icon: <InfoIcon />, handler: (transaction) => router.push(`/admin/ManageFinance/${getdataPath(transaction, "wallet_transaction_id")}`), show: (data) => true}};
+                        viewTransaction: {name: "View", icon: <InfoIcon />, handler: (transaction) => router.push(`/admin/ManageFinance/${getdataPath(transaction, "wallet_transaction_id")}`), show: (data) => true},
                         viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true}
                     };
 
