@@ -1,4 +1,4 @@
-import { getRefundDetails } from "@/app/_lib/data-services";
+import { getRefundDetails, getOrderDetails } from "@/app/_lib/data-services";
 import Styles from './OrderDetailsPage.module.css';
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
 import ShowItemInformationList from '@/app/_components/AdminShowInformationList/AdminShowInformationList';
@@ -10,153 +10,320 @@ import AdminRefundActionButtons from '@/app/_components/AdminRefundActionButtons
 
 export default async function reportDetails({params}) {
     const resolvedParams = await params;
-    const orderId = resolvedParams?.refundId? String(resolvedParams.refundId).trim() : "";
+    const orderId = resolvedParams?.orderId? String(resolvedParams.orderId).trim() : "";
 
-    const refund = await getRefundDetails(refundId);
-    const skus = refund.ORDERS_T.ORDER_ITEMS_T.map((item) => {
-        return item;
-    })
+    const order = await getOrderDetails(orderId);
 
-    const requestDate = new Date(refund.created_at).getDate() + "/" + (new Date(refund.created_at).getMonth() + 1) + "/" + new Date(refund.created_at).getFullYear();
-    const isOverOneWeek = (new Date() - new Date(refund.created_at)) / (1000 * 60 * 60 * 24) > 7;
-    let refundStatus = "";
-    let refundStatusColor = "";
-    const adminStatus = refund.admin_status;
-    const sellerStatus = refund.seller_status;
-    let adminEditState = false;
+    const orderStatus = order.order_status;
 
-    const buyerSubject = `Refund Request Related Question (${refund.refund_id})`
-    const sellerSubject = `Buyer's Refund Request Related Question (${refund.refund_id})`
-    const emailBuyerBody = 
-    `Hello ${refund.ORDERS_T.buyer.username},`;
+    let statusColor;
 
-    const emailSellerBody = 
-    `Hello ${refund.ORDERS_T.seller.username},`;
+    if (orderStatus === "Ordered") {
+    statusColor = "#3B82F6"; 
+    } else if (orderStatus === "Packed By Seller") {
+    statusColor = "#6366F1"; 
+    } else if (orderStatus === "Shipped") {
+    statusColor = "#8B5CF6"; 
+    } else if (orderStatus === "Out For Delivery") {
+    statusColor = "#F59E0B"; 
+    } else if (orderStatus === "Delivered") {
+    statusColor = "#22C55E"; 
+    } else if (orderStatus === "Completed") {
+    statusColor = "#15803D"; 
+    } else if (orderStatus === "Applied For Refund") {
+    statusColor = "#F97316"; 
+    } else if (orderStatus === "Refunded") {
+    statusColor = "#6B7280"; 
+    } else {
+    statusColor = "#6B7280"; 
+    }
+
+
+
+    // const requestDate = new Date(refund.created_at).getDate() + "/" + (new Date(refund.created_at).getMonth() + 1) + "/" + new Date(refund.created_at).getFullYear();
+    // const isOverOneWeek = (new Date() - new Date(refund.created_at)) / (1000 * 60 * 60 * 24) > 7;
+    // let refundStatus = "";
+    // let refundStatusColor = "";
+    // const adminStatus = refund.admin_status;
+    // const sellerStatus = refund.seller_status;
+    // let adminEditState = false;
+
+    // const buyerSubject = `Refund Request Related Question (${refund.refund_id})`
+    // const sellerSubject = `Buyer's Refund Request Related Question (${refund.refund_id})`
+    // const emailBuyerBody = 
+    // `Hello ${refund.ORDERS_T.buyer.username},`;
+
+    // const emailSellerBody = 
+    // `Hello ${refund.ORDERS_T.seller.username},`;
     
-    if (sellerStatus === "Approved") {
-    refundStatus = "Refund Approved";
-    refundStatusColor = "green";
-    }
-    else if (sellerStatus === "Rejected") {
+    // if (sellerStatus === "Approved") {
+    // refundStatus = "Refund Approved";
+    // refundStatusColor = "green";
+    // }
+    // else if (sellerStatus === "Rejected") {
 
-    if (adminStatus === "Approved") {
-        refundStatus = "Refund Approved After Review";
-        refundStatusColor = "green";
-    } 
-    else if (adminStatus === "Rejected") {
-        refundStatus = "Refund Rejected";
-        refundStatusColor = "red";
-    } 
-    else {
-        refundStatus = "Under Admin Review";
-        refundStatusColor = "orange";
-        adminEditState = true;
-    }
-    }
-    else if (sellerStatus === "Pending") {
+    // if (adminStatus === "Approved") {
+    //     refundStatus = "Refund Approved After Review";
+    //     refundStatusColor = "green";
+    // } 
+    // else if (adminStatus === "Rejected") {
+    //     refundStatus = "Refund Rejected";
+    //     refundStatusColor = "red";
+    // } 
+    // else {
+    //     refundStatus = "Under Admin Review";
+    //     refundStatusColor = "orange";
+    //     adminEditState = true;
+    // }
+    // }
+    // else if (sellerStatus === "Pending") {
 
-    if (isOverOneWeek) {
-        refundStatus = "Escalated To Admin";
-        refundStatusColor = "red";
-        adminEditState = true;
-    } 
-    else {
-            refundStatus = "Waiting For Seller Response";
-            refundStatusColor = "gray";
-        }
-    }
-    else {
-    refundStatus = "Unknown Status";
-    refundStatusColor = "black";
-    }
-    
+    // if (isOverOneWeek) {
+    //     refundStatus = "Escalated To Admin";
+    //     refundStatusColor = "red";
+    //     adminEditState = true;
+    // } 
+    // else {
+    //         refundStatus = "Waiting For Seller Response";
+    //         refundStatusColor = "gray";
+    //     }
+    // }
+    // else {
+    // refundStatus = "Unknown Status";
+    // refundStatusColor = "black";
+    // }
+
+    const hubAssigned = order.shipping[0]?.hub ? order.shipping[0].hub.hub_name : "-";
+
+    const skuDatas = order.ORDER_ITEMS_T;
+
+    const hasVoucher = order.voucher?.VOUCHERS_T;
     // data for table
-    const titles = ["Product ID", "Product Name", "Product Varient", "Quantity"];
-    // const actions = [{type: "viewReviewer"}];
-    const fields = ["PRODUCT_VARIANTS_T.PRODUCTS_T.product_id", "PRODUCT_VARIANTS_T.PRODUCTS_T.product_name", "PRODUCT_VARIANTS_T.sku", "quantity"];
+    const titles = ["Product ID", "Product Name", "Product Varient", "unitPrice", "Quantity", "Total (RM)"];
+    const fields = ["PRODUCT_VARIANTS_T.PRODUCTS_T.product_id", "PRODUCT_VARIANTS_T.PRODUCTS_T.product_name", "PRODUCT_VARIANTS_T.sku", "unit_price", "quantity", "subtotal"];
 
-    const orderDate = new Date (refund.ORDERS_T.created_at).getDate() + "/" + (new Date (refund.ORDERS_T.created_at).getMonth() + 1) + "/" + new Date (refund.ORDERS_T.created_at).getFullYear();
+    const orderDate = new Date (order.created_at).getDate() + "/" + (new Date (order.created_at).getMonth() + 1) + "/" + new Date (order.created_at).getFullYear();
 
-    const generalList1 = [{field: "Seller ID", value: refund.ORDERS_T.seller.user_id}, {field: "Total Paid", value: `RM ${parseFloat(refund.ORDERS_T.total_amount).toFixed(2)}`}];
-    const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
-    const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping.delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
+    const generalList1 = [{field: "Buyer ID", value: order.buyer.user_id}, {field: "Seller ID", value: order.buyer.user_id}, {field: "Ordered Date", value: orderDate}, {field: "Address Area", value: order.address.city}, {field: "Shipping ID", value: order.shipping[0]?.shipping_id}];
+    const generalList2 = [{field: "Buyer Name", value: order.buyer.username}, {field: "Seller Name", value: order.seller.username}, {field: "Total Product Type", value: skuDatas?.length}, {field: "Hub", value: hubAssigned}, {field: "Shipping Type", value: order.shipping[0]?.delivery_type}];
+    // const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
+    // const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping.delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
 
-    const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
-    const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
-    const refundList3 = [{field: "Request Date", value: requestDate}];
+    // const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
+    // const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
+    // const refundList3 = [{field: "Request Date", value: requestDate}];
 
     return (<div className={ Styles.refundDetailsPage }>
         <div className={ Styles.upperPart }>
             <div className={ Styles.backButtonPart }>
                 <AdminBackButton />
             </div>
+            <div className={ Styles.productDescription }>
+                <h1>Order Details</h1>
+                <p>View order details here</p>
+            </div>
+        </div>
+        <div className={ Styles.orderCard}>
+            <div className={ Styles.upperPart }>
+                <div className={ Styles.refundUp}>
+                    <div className={ Styles.productDescription }>
+                        <h2>#{order.order_id}</h2>
+                        <p>Purchased by {order.buyer.username}</p>
+                    </div>
+                    <div className={ Styles.refundStatusContainer} style={{backgroundColor: statusColor}}>
+                        <h4 className={ Styles.refundStatusText }>
+                            <span className={ Styles.orderStatusText }>
+                                {orderStatus}
+                            </span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div className={ Styles.middlePart }>
+                <div className={ Styles.tableShow}>
+                    <h3>Order Overview</h3>
+                    <AdminTable titles={titles} fields={fields} datas={skuDatas} slice={true} dataIdFormat="" />
+                </div>
+                <div className={ Styles.generalInformation }>
+                    <div className={ Styles.generalInformationTitle }>
+                        <AdminTitle title="Order Information" />
+                    </div>
+                    <div className={ Styles.generalInformationList }>
+                        <ShowItemInformationList objectlist={generalList1} />
+                        <ShowItemInformationList objectlist={generalList2} />
+                    </div>
+                </div>
+                <div className={ Styles.feesAndMoreInfo}>
+                    <div className={ Styles.orderFeeCalculation }>
+                        <AdminTitle title="Order Fees Calculation" />
+                        <div className={ Styles.calculationContainer}>
+                            <div className={ Styles.calculateHeader}>
+                                <div className={ Styles.calculateTitle }></div>
+                                <div className={ Styles.numberInput}>RM</div>
+                            </div>
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }>Sum of Total</div>
+                                <div className={ Styles.numberInput}>
+                                    {hasVoucher ? 
+                                    Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) - Number(order.voucher.VOUCHERS_T.discount_value)
+                                : Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) }
+                                </div>
+                            </div>
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }>Delivery Fee</div>
+                                <div className={ Styles.numberInput}>
+                                    {Number(order.shipping[0]?.delivery_fee)}
+                                    <div className={Styles.divider}></div>
+                                </div>
+                            </div>
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }></div>
+                                <div className={ Styles.numberInput}>
+                                    {Number(order.total_amount)}
+                                </div>
+                            </div>
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }><small>Applied Voucher</small></div>
+                                <div className={ Styles.numberInput}>
+                                </div>
+                            </div>
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }>{hasVoucher ? `${order.voucher.VOUCHERS_T.voucher_name} (${order.voucher.VOUCHERS_T.voucher_type} voucher)` : "-"}</div>
+                                <div className={ Styles.numberInput}>
+                                    {hasVoucher ? `- ${order.voucher.VOUCHERS_T.discount_value}` : "0"}
+                                    <div className={Styles.divider}></div>
+                                </div>
+                            </div> 
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }>Total Paid</div>
+                                <div className={ Styles.numberInput}>
+                                    {Number(order.total_amount)}
+                                    <div className={Styles.divider}></div>
+                                    <div className={Styles.divider}></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={ Styles.moreInfo}>
+                        <div className={ Styles.moreInfoComponent }>
+                            <AdminTitle title="Delivery Details" />
+                            <div className={ Styles.infoMore}>
+                                <span>🚚 Delivery Status: {order.shipping[0]?.shipping_status}</span>
+                                <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.user_id : "-"}</span>
+                                <span>👤 Assigned by: {order.shipping[0]?.courier?.admin ? order.shipping[0].courier.admin.username : "-"}</span>
+                            </div>
+                        </div>
+                        <div className={ Styles.moreInfoComponent }>
+                            <AdminTitle title="Transactions Details" />
+                            <div className={ Styles.infoMore}>
+                                <span>💵 Transaction ID: {order.transaction[0].order_transaction_id}</span>
+                                <span>🏦 Transaction Status: {order.transaction[0].order_transaction_status}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/* <div className={ Styles.upperPart }>
             <div className={ Styles.refundUp}>
                 <div className={ Styles.productDescription }>
-                    <h1>Refund Details</h1>
-                    <p>View and manage refund request here</p>
+                    <h2>#{order.order_id}</h2>
+                    <p>Purchased by {order.buyer.username}</p>
                 </div>
-                <div className={ Styles.refundStatusContainer}>
-                    <h4 className={ Styles.refundStatusTextS }>
-                        <span style={{color: refundStatusColor}}>
-                            {refundStatus}
+                <div className={ Styles.refundStatusContainer} style={{backgroundColor: statusColor}}>
+                    <h4 className={ Styles.refundStatusText }>
+                        <span className={ Styles.orderStatusText }>
+                            {orderStatus}
                         </span>
                     </h4>
                 </div>
             </div>
         </div>
         <div className={ Styles.middlePart }>
-            <div className={ Styles.evidencesShow}>
-                <div className={ Styles.evidenceContainer}>
-                    <EvidencesPhoto evidences={refund.evidences} />
-                </div>
+            <div className={ Styles.tableShow}>
+                <h3>Order Overview</h3>
+                <AdminTable titles={titles} fields={fields} datas={skuDatas} slice={true} dataIdFormat="" />
             </div>
             <div className={ Styles.generalInformation }>
                 <div className={ Styles.generalInformationTitle }>
-                    <AdminTitle title="General Information" />
+                    <AdminTitle title="Order Information" />
                 </div>
                 <div className={ Styles.generalInformationList }>
                     <ShowItemInformationList objectlist={generalList1} />
                     <ShowItemInformationList objectlist={generalList2} />
-                    <ShowItemInformationList objectlist={generalList3} />
                 </div>
             </div>
-            <div className={ Styles.refundTable }>
-                <div className={ Styles.showProductSku }>
-                    <div>
-                        <h3>Order Review</h3>
+            <div className={ Styles.feesAndMoreInfo}>
+                <div className={ Styles.orderFeeCalculation }>
+                    <AdminTitle title="Order Fees Calculation" />
+                    <div className={ Styles.calculationContainer}>
+                        <div className={ Styles.calculateHeader}>
+                            <div className={ Styles.calculateTitle }></div>
+                            <div className={ Styles.numberInput}>RM</div>
+                        </div>
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }>Sum of Total</div>
+                            <div className={ Styles.numberInput}>
+                                {hasVoucher ? 
+                                Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) - Number(order.voucher.VOUCHERS_T.discount_value)
+                            : Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) }
+                            </div>
+                        </div>
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }>Delivery Fee</div>
+                            <div className={ Styles.numberInput}>
+                                {Number(order.shipping[0]?.delivery_fee)}
+                                <div className={Styles.divider}></div>
+                            </div>
+                        </div>
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }></div>
+                            <div className={ Styles.numberInput}>
+                                {Number(order.total_amount)}
+                            </div>
+                        </div>
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }><small>Applied Voucher</small></div>
+                            <div className={ Styles.numberInput}>
+                            </div>
+                        </div>
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }>{hasVoucher ? `${order.voucher.VOUCHERS_T.voucher_name} (${order.voucher.VOUCHERS_T.voucher_type} voucher)` : "-"}</div>
+                            <div className={ Styles.numberInput}>
+                                {hasVoucher ? `- ${order.voucher.VOUCHERS_T.discount_value}` : "0"}
+                                <div className={Styles.divider}></div>
+                            </div>
+                        </div> 
+                        <div className={ Styles.calculateRow}>
+                            <div className={ Styles.calculateTitle }>Total Paid</div>
+                            <div className={ Styles.numberInput}>
+                                {Number(order.total_amount)}
+                                <div className={Styles.divider}></div>
+                                <div className={Styles.divider}></div>
+                            </div>
+                        </div>
                     </div>
-                    <AdminTable titles={titles} fields={fields} datas={skus} slice={false} dataIdFormat="" />
                 </div>
-            </div>
-            <div className={ Styles.refundInformation }>
-                <div className={ Styles.generalInformationTitle }>
-                    <AdminTitle title="Refund Details" />
-                </div>
-                <div className={ Styles.generalInformationList }>
-                    <ShowItemInformationList objectlist={refundList1} />
-                    <ShowItemInformationList objectlist={refundList2} />
-                    <ShowItemInformationList objectlist={refundList3} />
-                </div>
-                <div className={ Styles.refundDescription }>
-                    <h4>Description</h4>
-                    <div className={ Styles.refundDescriptionText }>
-                        <p>{refund.refund_description}</p>
+                <div className={ Styles.moreInfo}>
+                    <div className={ Styles.moreInfoComponent }>
+                        <AdminTitle title="Delivery Details" />
+                        <div className={ Styles.infoMore}>
+                            <span>🚚 Delivery Status: {order.shipping[0]?.shipping_status}</span>
+                            <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.user_id : "-"}</span>
+                            <span>👤 Assigned by: {order.shipping[0]?.courier?.admin ? order.shipping[0].courier.admin.username : "-"}</span>
+                        </div>
+                    </div>
+                    <div className={ Styles.moreInfoComponent }>
+                        <AdminTitle title="Transactions Details" />
+                        <div className={ Styles.infoMore}>
+                            <span>💵 Transaction ID: {order.transaction[0].order_transaction_id}</span>
+                            <span>🏦 Transaction Status: {order.transaction[0].order_transaction_status}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className={ Styles.showRemarks}>
-                <div className={ Styles.sellerRemarks}>
-                    <h4>Seller Remarks</h4>
-                    <div className={ Styles.remarksContainer } >
-                        <p>
-                            {refund.seller_remarks ? refund.seller_remarks : "No remarks from seller"}
-                        </p>
-                    </div>
-                </div>
-                <AdminRemarks remarks={refund.admin_remarks} modifyId={refund.refund_id} isAbleEdit={adminEditState} remarksFor="refund" />
-            </div>
-        </div>
-        <div className={ Styles.bottomPart }>
+        </div> */}
+        {/* <div className={ Styles.bottomPart }>
             <div className={Styles.redirectPart}>
                 <div className={ Styles.navComponent }>
                     <div>
@@ -185,7 +352,7 @@ export default async function reportDetails({params}) {
             <div className={Styles.actionButtonPart}>
                 <AdminRefundActionButtons isAble={adminEditState} modifyId={refund.refund_id} remarkdsFor="refund" />
             </div>
-        </div>
+        </div> */}
     </div>);
 }
 
