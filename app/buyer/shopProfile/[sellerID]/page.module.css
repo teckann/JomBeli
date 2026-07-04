@@ -1,0 +1,97 @@
+.bottomSection {
+    display: flex;
+}
+
+.filterWrapper {
+    flex: 1;
+}
+
+.listingWrapper {
+    flex: 4;
+}
+
+.breakLine {
+    margin: 1rem 0;
+}
+
+.profileContainer {
+    margin: 10px 20px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    gap: 3rem;
+    background-color: var(--color-surface);
+    border-radius: 10px;
+    border: 1px solid var(--color-border-primary);
+}
+
+.avatar {
+    border-radius: 999px;
+    border: 2px solid var(--color-border-primary);
+}
+
+.shopName {
+    font-size: var(--text-5xl);
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.filterContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-color: var(--color-surface);
+    border-radius: 12px;
+    padding: 10px 20px;
+    border: 1px solid var(--color-border-primary);
+    margin: 0 30px;
+}
+
+.categoryLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: var(--text-xl);
+    font-weight: 500;
+    transition: all 0.2s;
+    border-radius: 10px;
+}
+
+.categoryLink:hover {
+    color: var(--color-primary);
+    background-color: var(--color-bg-hover);
+}
+
+.categoryIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    fill: currentColor;
+}
+
+.linkContainer {
+    margin: 10px 0;
+    display: flex;
+    gap: 14px;
+}
+
+.linkContainer a {
+    background-color: var(--color-primary);
+    padding: 6px 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 12px;
+}
+
+.linkContainer p {
+    font-size: var(--text-4xl);
+}
+
+.infoText{
+    font-size: var(--text-base);
+}

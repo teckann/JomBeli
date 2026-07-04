@@ -3,23 +3,28 @@ import {
   getHotProducts,
   getDiscoverProducts,
   getFilterProducts,
+  getFilterProductsBySellerID,
 } from "@/app/_lib/data-services";
 import { getAllProducts } from "@/app/_lib/buyer-products-services";
 import ProductCard from "../ProductCard/ProductCard";
 import styles from "./ProductListing.module.css";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
+import { getProducts, getProductsBySellerID } from "@/app/_lib/dynamic-services";
 
-async function ProductListing({ type, filter }) {
+async function ProductListing({ type, filter, sellerID }) {
   let products = [];
 
   if (type === "discountProducts") products = await getDiscountProducts();
   if (type === "hotselling") products = await getHotProducts();
   if (type === "discover") products = await getDiscoverProducts();
+  if (type === "seller") products = await getProductsBySellerID(sellerID);
   if (filter) products = await getAllProducts();
 
   let displayProducts;
 
-  if (filter === "all") {
+  if (sellerID){
+    displayProducts = await getFilterProductsBySellerID(filter, sellerID);
+  } else if (filter === "all") {
     displayProducts = products;
   } else if (filter !== "") {
     displayProducts = await getFilterProducts(filter);

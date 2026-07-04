@@ -12,9 +12,13 @@ export default function OrderFilter() {
     const tabs = [
         { label: "All", value: "all" },
         { label: "To Ship", value: "Ordered" },
+        { label: "Packed By Seller", value: "Packed By Seller" },
         { label: "Shipped", value: "Shipped" },
-        { label: "Out For Delivery", value: "OutForDelivery" },
-        { label: "Completed", value: "Completed" }
+        { label: "Out For Delivery", value: "Out For Delivery" },
+        { label: "Delivered", value: "Delivered" },
+        { label: "Completed", value: "Completed" },
+        { label: "Applied For Refund", value: "Applied For Refund" },
+        { label: "Refunded", value: "Refunded" }
     ];
 
     return (

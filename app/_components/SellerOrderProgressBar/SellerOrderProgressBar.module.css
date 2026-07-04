@@ -4,31 +4,32 @@
 }
 
 .stepperWrapper {
-  border-radius: 12px;
-  padding: 40px 32px 24px 32px;
-  background-color: transparent;
+  border: 1px solid var(--color-border-primary, #d1d5db);
+  border-radius: 16px;
+  padding: 2.5rem 2rem 1.5rem 2rem;
+  background-color: var(--color-bg-card, #ffffff);
   position: relative;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 .progressLineTrack {
   position: absolute;
-  top: 65px; 
+  top: 70px; 
   left: 10%;
   right: 10%;
-  height: 5px;
+  height: 4px;
   background-color: var(--color-primary-lighter);
-  z-index: 2;
-
+  z-index: 1;
+  border-radius: 2px;
 }
 
 .progressLineFill {
   height: 100%;
   background-color: var(--color-primary);
   width: 0%;
-  transition: width 0.3s ease;
+  transition: width 0.4s ease;
   border-radius: 2px;
 }
 
@@ -41,115 +42,58 @@
 }
 
 .stepNode {
-  background: none;
+  background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  width: 120px;
+  gap: 1.25rem;
+  width: 130px;
   padding: 0;
   outline: none;
+  user-select: none;
 }
 
 .circle {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
-  background-color: #ffffff;
-  border: 3px solid var(--color-primary);
-  transition: all 0.25s ease;
+  background-color: var(--color-bg-surface, #ffffff);
+  border: 3px solid var(--color-primary-lighter);
   box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s ease;
+}
+
+.stepNode:active .circle {
+  transform: scale(0.9);
 }
 
 .stepLabel {
-  font-size: 14px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm, 0.8125rem);
   font-weight: 500;
-  color: #333333;
+  color: var(--color-font-secondary, #6b7280);
   text-align: center;
-  transition: font-weight 0.2s;
+  transition: color 0.25s ease, font-weight 0.2s ease;
 }
 
+
 .stepNode.activeNode .circle {
-  background-color: var(--color-primary-light);
-  border: 3px solid var(--color-primary);
-  transform: scale(1.05);
+  background-color: var(--color-primary); 
+  border-color: var(--color-primary); 
 }
 
 .stepNode.activeNode .stepLabel {
-  font-weight: bold;
+  color: var(--color-font-primary, #111827);
+  font-weight: 700;
 }
 
-.tableCard {
-  border: 1px solid #111111;
-  border-radius: 12px;
-  background-color: #ffffff;
-  overflow: hidden;
-  width: 100%;
-  box-sizing: border-box;
+.stepNode:hover:not(.activeNode) .circle {
+  border-color: var(--color-primary-light, #e86364);
 }
 
-.tableHeaderZone {
-  padding: 16px 24px;
-  border-bottom: 1px solid #111111;
-}
-
-.tableTitle {
-  font-size: 18px;
-  font-weight: bold;
-  color: #111111;
-  margin: 0;
-}
-
-.tableResponsive {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.ordersTable {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.ordersTable th {
-  background-color: #dedede; 
-  color: #111111;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 14px 24px;
-  border-bottom: 1px solid #111111;
-}
-
-.ordersTable td {
-  padding: 16px 24px;
-  font-size: 14px;
-  color: #333333;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.ordersTable tr:last-child td {
-  border-bottom: none;
-}
-
-.moreLink {
-  font-size: 18px;
-  text-decoration: none;
-  color: #111111;
-  font-weight: bold;
-  display: inline-block;
-  transition: transform 0.2s;
-}
-
-.moreLink:hover {
-  transform: translate(2px, -2px);
-}
-
-.tableMessage {
-  text-align: center;
-  padding: 48px 0;
-  color: #777777;
-  font-style: italic;
-  font-size: 14px;
+.stepNode:hover:not(.activeNode) .stepLabel {
+  color: var(--color-primary, #df3b3c);
 }

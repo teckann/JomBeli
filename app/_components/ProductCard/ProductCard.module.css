@@ -7,11 +7,11 @@
   width: 100%;
   max-width: 230px;
   height: 320px;
-
   display: flex;
   flex-direction: column;
   padding: 1rem;
   gap: 5px;
+  transition: all 0.2s ease;
 }
 
 .productCard:hover {

@@ -1,0 +1,108 @@
+.formWrapper {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  border: 2px solid var(--color-border-light);
+}
+
+.formTitle {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-font-primary);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-border-light);
+  padding-bottom: 0.75rem;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--color-font-primary);
+}
+
+.inputField,
+.textareaField {
+  padding: 0.65rem 0.75rem;
+  font-size: var(--text-base);
+  font-family: var(--font-body);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 6px;
+  background-color: var(--color-bg-input);
+  color: var(--color-font-primary);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  outline: none;
+}
+
+.textareaField {
+  resize: vertical;
+}
+
+.inputField:focus,
+.textareaField:focus {
+  background-color: var(--color-surface);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.fileInput {
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  color: var(--color-font-secondary);
+  padding: 0.25rem 0;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.cancelButton,
+.submitButton {
+  padding: 0.65rem 1.25rem;
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-font-secondary);
+}
+
+.cancelButton:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+  color: var(--color-font-primary);
+}
+
+.submitButton {
+  background-color: var(--color-primary); 
+  border: none;
+  color: var(--color-surface);
+}
+
+.submitButton:hover {
+  background-color: var(--color-primary-dark);
+}

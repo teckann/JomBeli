@@ -77,7 +77,7 @@ export default function BuyerNavBarClient({ user }) {
           <div className={Styles.LinkContainer}>
             {Links.filter((item) => item.position === "R").map(renderLink)}
             <Link
-              className={`${Styles.link} ${Styles.walletLink} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
+              className={`${Styles.walletLink} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
               href="/buyer/wallet"
             >
               <svg
@@ -114,7 +114,7 @@ export default function BuyerNavBarClient({ user }) {
         <div className={Styles.LinkContainer}>
           {Links.map(renderLink)}
           <Link
-            className={`${Styles.link} ${Styles.walletLink} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
+            className={`${Styles.walletLink} ${currentPath === "/buyer/wallet" ? Styles.active : ""}`}
             href="/buyer/wallet"
           >
             <svg

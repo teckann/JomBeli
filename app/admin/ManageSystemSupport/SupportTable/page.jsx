@@ -1,25 +1,25 @@
-import Styles from './RefundsTable.module.css';
+import Styles from './SupportTable.module.css';
 import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
 import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
-import { getFilterManageRefunds } from '@/app/_lib/analysis-serives';
-import AdminFilterReportsBar from '@/app/_components/AdminFilterRefundsBars/AdminFilterRefundsBars';
+import { getFilterSupport } from '@/app/_lib/analysis-serives';
+import AdminFilterSupportsBar from '@/app/_components/AdminFilterSupportBars/AdminFilterSupportBars';
 import AdminTable from '@/app/_components/AdminTable/AdminTable';
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
 
-export default async function manageProductsPage({ searchParams }) {
+export default async function ManageSupportPage({ searchParams }) {
 
-    const { date, adminStatus, sellerStatus } = await searchParams;
+    const { date, supportType, supportStatus } = await searchParams;
 
-    const reportList = await getFilterManageRefunds(date, adminStatus, sellerStatus);
+    const supportList = await getFilterSupport(date, supportType, supportStatus);
 
-    const titles = ["Refund ID", "Refund Subject", "Buyer Name", "Refund Amounts", "Seller Status", "Admin Status", "Request Date"];
+    const titles = ["Support ID", "Reporter Name", "Report Type", "Report Status", "Request Date"];
 
-    const actions = [{type: "viewRefund"}];
-    const fields = ["refund_id", "refund_subject", "ORDERS_T.buyer.username", "ORDERS_T.total_amount", "seller_status", "admin_status", "created_at"];
-    const datas = reportList;
+    const actions = [{type: "viewSupport"}];
+    const fields = ["support_id", "reporter.username", "support_type", "support_status", "created_at"];
+    const datas = supportList;
 
     // const yearMonthsSelect = await getYearsMonthsWithNewProduct();
 
@@ -30,15 +30,15 @@ export default async function manageProductsPage({ searchParams }) {
             <AdminBackButton />
             <div className={Styles.showTablePart}>
                 <div className={Styles.listingText}>
-                    <h2>Product Listing</h2>
-                    <p>View and manage system products through this table</p>
+                    <h2>System Report Table</h2>
+                    <p>Manage System Report here</p>
                 </div>
                 <div>
-                    <AdminFilterReportsBar />
+                    <AdminFilterSupportsBar />
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={false} dataIdFormat="report_id" />
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={false} dataIdFormat="refund_id" />
             </div>
         </div>
     );

@@ -169,7 +169,7 @@ export function AdminSystemSupportSliceComponent({data, purpose, reportItemName}
             <div className={ Styles.componentBottom}>
                 <div className={ Styles.daysText }><i>{afterDays} days ago</i></div>
                 <div className={ Styles.buttonContainer }>
-                    <button className="btn btn-primary"><Link className={ Styles.linkText } title="view report details" href={`/admin/ManageSystemSupport/${data.support_id}`}>View</Link></button>
+                    <button className="btn btn-primary"><Link className={ Styles.linkText } title="view report details" href={`/admin/ManageSystemSupport/SupportTable/${data.support_id}`}>View</Link></button>
                 </div>
             </div>
         </div>
