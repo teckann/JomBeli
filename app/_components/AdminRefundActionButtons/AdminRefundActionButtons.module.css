@@ -18,6 +18,8 @@
     font-size: 1em;
     color: white;
     border-radius: 10px;
+    border: none;
+    cursor: pointer;
 }
 
 .rejectButton {

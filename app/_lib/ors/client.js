@@ -1,6 +1,6 @@
 const API_KEY = process.env.ORS_API_KEY;
-const BASE_URL = 'https://api.openrouteservice.org/v2';
-const GEOCODE_URL = 'https://api.openrouteservice.org';
+const BASE_URL = 'https://api.heigit.org/openrouteservice/v2';
+const GEOCODE_URL = 'https://api.heigit.org/pelias/v1';
 
 // ORS expects [lng, lat] — opposite of Leaflet [lat, lng]
 const toCoords = (points) => points.map(p => [p.lng, p.lat]);
@@ -64,7 +64,7 @@ export async function fetchDistanceMatrix(stops) {
  */
 export async function fetchAddressLabel(lat, lng) {
   const res = await fetch(
-    `${GEOCODE_URL}/geocode/reverse?api_key=${API_KEY}&point.lon=${lng}&point.lat=${lat}&size=1`
+    `${GEOCODE_URL}/reverse?api_key=${API_KEY}&point.lon=${lng}&point.lat=${lat}&size=1`
   );
   if (!res.ok) return null;
   const data = await res.json();

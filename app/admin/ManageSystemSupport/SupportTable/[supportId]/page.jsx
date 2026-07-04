@@ -11,6 +11,7 @@ import AdminSolveSupportButton from "@/app/_components/AdminSolveSupportButton/A
 import { getUser } from "@/app/_lib/auth";
 import AdminDeactiveProductButton from "@/app/_components/AdminDeactiveProductButton/AdminDeactiveProductButton";
 import AdminReactiveProductButton from "@/app/_components/AdminReactiveProductButton/AdminReactiveProductButton";
+import Image from 'next/image';
 
 export default async function reportDetails({params}) {
     const resolvedParams = await params;
@@ -68,7 +69,7 @@ export default async function reportDetails({params}) {
     }
     else {
         reportDurationText = `Solved at ${solvedDate}`;
-        handleAdminText = `handled by ${support.admin.username}`;
+        handleAdminText = `handled by ${support.admin?.username}`;
         handleAdminTextColor = Styles.haveAdmin;
     }
 
@@ -133,7 +134,30 @@ export default async function reportDetails({params}) {
             </div>
             <div className={ Styles.middlePart }>
                 <div className={ Styles.specificInformationShow }>
-                    
+                    <div className={ Styles.imageComponent }>
+                        <Image src={`${isProduct ?support.product.product_image_url[0] : support.seller.avatar}`} width={200} height={200} alt="Picture of the author" />
+                        <span className={ Styles.reportedTimes }>Reported {isProduct ?  productReportCount : ""}{isSeller ? sellerReportCount : ""} Times</span>
+                    </div>
+                    { isProduct ?
+                        <div className={ Styles.showSpecific}>
+                            <div>
+                                <AdminTitle title={`Reported Product General Information`} />
+                            </div>
+                            <div className={ Styles.generalInformationList}>
+                                <ShowItemInformationList objectlist={productGeneralList1} />
+                                <ShowItemInformationList objectlist={productGeneralList2} />      
+                            </div>
+                        </div> :
+                        <div className={ Styles.showSpecific}>
+                            <div>
+                                <AdminTitle title={`Reported Seller General Information`} />
+                            </div>
+                            <div className={ Styles.generalInformationList}>
+                                <ShowItemInformationList objectlist={sellerGeneralList1} />
+                                <ShowItemInformationList objectlist={sellerGeneralList2} />      
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div className={ Styles.showReportDetails}>
                     <div>
