@@ -34,7 +34,12 @@ export default async function ProductDetails({params}) {
     const informationList = [{field: "Product Name", value: product.product_name}, {field: "Description", value: product.product_description},
         {field: "Current Stock", value: product.stock_quantity}, {field: "Normal Price", value: `RM ${product.price}`}, {field: "Discount Rate", value: `${product.discount === null ? "-" : `${product.discount} %`}`},
         {field: "Available Price", value: parseFloat((product.price * ((100 - product.discount) / 100))).toFixed(2)}
-    ]
+    ];
+
+    const variantsTitle = ["Variant ID", "SKU", "Price (RM)", "Stock", "Variant Status"];
+    const variantsFields = ["product_variant_id", "sku", "product_variant_price", "product_variant_stock", "product_variant_status"];
+
+    const productVariants = product.PRODUCT_VARIANTS_T;
 
     return (<div className={ Styles.productDetailsPage }>
         <div className={ Styles.upperPart }>
@@ -79,6 +84,10 @@ export default async function ProductDetails({params}) {
                     {product.product_status === "Active" ? <AdminDeactiveProductButton productId={productId} /> : <AdminReactiveProductButton productId={productId} />}
                 </div>
             </div>
+        </div>
+        <div className={ Styles.bottomPart }>
+            <h2>{product.product_name}'s Skus</h2>
+            <AdminTable titles={variantsTitle} fields={variantsFields} datas={productVariants} slice={true} dataIdFormat="product_variant_id" />
         </div>
         <div className={ Styles.bottomPart }>
             <h2>{product.product_name}'s Reviews</h2>

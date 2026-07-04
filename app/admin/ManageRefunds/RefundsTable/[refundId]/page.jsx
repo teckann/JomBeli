@@ -7,6 +7,7 @@ import EvidencesPhoto from '@/app/_components/EvidencesPhoto/EvidencesPhoto';
 import AdminRemarks from '@/app/_components/AdminRemarks/AdminRemarks';
 import Link from 'next/link';
 import AdminRefundActionButtons from '@/app/_components/AdminRefundActionButtons/AdminRefundActionButtons';
+import { adminRejectRefundAction, adminApproveRefundAction } from '@/app/_lib/actions';
 
 export default async function reportDetails({params}) {
     const resolvedParams = await params;
@@ -79,7 +80,7 @@ export default async function reportDetails({params}) {
 
     const generalList1 = [{field: "Seller ID", value: refund.ORDERS_T.seller.user_id}, {field: "Total Paid", value: `RM ${parseFloat(refund.ORDERS_T.total_amount).toFixed(2)}`}];
     const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
-    const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping.delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
+    const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping[0].delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
 
     const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
     const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
@@ -183,7 +184,7 @@ export default async function reportDetails({params}) {
                 </div>
             </div>
             <div className={Styles.actionButtonPart}>
-                <AdminRefundActionButtons isAble={adminEditState} modifyId={refund.refund_id} remarkdsFor="refund" />
+                <AdminRefundActionButtons isAble={adminEditState} refundId={refund.refund_id} remarkdsFor="refund" />
             </div>
         </div>
     </div>);

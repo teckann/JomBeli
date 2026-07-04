@@ -105,7 +105,7 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                     </tbody>
                 </table>
             </div>
-            {(datas.length !== 0 && slice) && 
+            {(datas.length > maxRowsForTable && slice) && 
                 <div className={ Styles.showPageTextContainer }>
                     <span className={ Styles.showPageText }>
                         <button className="btn btn-primary" onClick={() => handleFirstPageCounter()}>{"<<"}</button>
