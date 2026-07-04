@@ -1,0 +1,215 @@
+/* Courier navigation layout */
+.courierNav {
+  display: flex;
+  width: 100%;
+  height: 88vh;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+}
+
+.courierMap {
+  flex: 4;
+  height: 100%;
+  z-index: 0;
+}
+
+.loadingScreen,
+.errorScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-bg-primary);
+  color: var(--color-font-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-2xl); 
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+
+.errorDetail {
+  font-size: var(--text-base);
+  color: var(--color-font-secondary);
+  font-family: var(--font-body);
+}
+
+.courieSpinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--color-border-primary);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* Sidebar */
+.sideBarContainer {
+  width: 300px;
+  flex-shrink: 0;
+  background: var(--color-bg-surface);
+  border-left: 1px solid var(--color-border-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+  flex: 2;
+}
+
+.sideBarHeader {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sideBarHeaderTitle {
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.stopCount {
+  font-family: var(--font-body);
+  color: var(--color-font-secondary);
+}
+
+/* Status banners */
+.statusBanner {
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+/* Route stats */
+.routeStatContainer {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.routeStat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statLabel {
+  color: var(--color-font-secondary);
+  letter-spacing: 0.08em;
+}
+
+.statValue {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* Stop sequence list */
+.stopList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.stopListLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-font-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+
+.stopListHeader {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--color-font-secondary);
+  padding: 8px 8px 4px;
+}
+
+.stopListItem {
+  display: flex;
+  gap: 10px;
+  padding: 10px 8px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--color-border-primary); 
+}
+
+.stopListNumber {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.stopListInfo { 
+  flex: 1;
+}
+
+.stopListLabel {
+  font-family: var(--font-body);
+  color: var(--color-font-primary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.stopListCoords {
+  font-family: var(--font-body);
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.stopListOrderId {
+  font-family: var(--font-body);
+  color: var(--color-font-secondary);
+  margin: 2px 0 0;
+}
+
+.deliveredButton {
+  border-radius: 10px;
+  border: none;
+  background-color: var(--color-primary);
+  padding: 8px 12px;
+  max-height: 40px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deliveredButton:hover{
+  background-color: var(--color-primary-dark);
+}
+
+/* Courier GPS dot on map */
+.courier-dot {
+  width: 18px;
+  height: 18px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  border: 2px solid var(--color-bg-surface);
+}
+
+/* Map popup */
+.map-popup { font-family: var(--font-body); }
+.map-popup__index { font-weight: 600; font-size: var(--text-sm); display: block; }
+.map-popup__label { font-size: var(--text-xs); color: var(--color-font-secondary); margin: 2px 0 0; }
+.map-popup__order-id { font-size: 10px; color: var(--color-font-secondary); font-family: var(--font-body); margin: 2px 0 0; }

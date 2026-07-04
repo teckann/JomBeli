@@ -22,13 +22,13 @@ export function calculateTotalDistance(route, distanceMatrix = null) {
   }
 
   // Round trip — last stop back to first
-  if (distanceMatrix) {
-    total += distanceMatrix[route[route.length - 1].matrixIndex][route[0].matrixIndex];
-  } else {
-    total += getDistance(route[route.length - 1], route[0]);
-  }
+  // if (distanceMatrix) {
+  //   total += distanceMatrix[route[route.length - 1].matrixIndex][route[0].matrixIndex];
+  // } else {
+  //   total += getDistance(route[route.length - 1], route[0]);
+  // }
 
-  return total;
+  // return total;
 }
 
 export function nearestNeighbor(stops, distanceMatrix = null) {

@@ -726,24 +726,40 @@ export async function handleAdminRefundAction(formData) {
   const action = formData.get("action");
   const refundId = formData.get("refundId");
 
+  console.log("refund id", refundId);
+
+  const isApprove = action === "Approved";
+
   const supabase = await createClient();
 
   const updateData = {
     admin_status: action,
   };
 
-  if (action === "Approved") {
+  if (isApprove) {
     updateData.refunded_at = new Date().toISOString();
   }
 
-  const { data, error } = await supabase
+  const { data: refund, error } = await supabase
     .from("REFUNDS_T")
     .update(updateData)
-    .eq("refund_id", refundId);
+    .eq("refund_id", refundId)
+    .select('order_id')
+    .single();
 
   if (error) {
     console.error(error);
     throw new Error("Failed to update refund status.");
+  }
+
+  const orderId = refund.order_id;
+
+  // send money
+  if (isApprove) {
+    await adminApproveRefundAction(orderId);
+  }
+  else {
+    await adminRejectRefundAction(orderId);
   }
 
   return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
@@ -854,7 +870,7 @@ export async function confirmOrder(formData) {
       .from('ORDERS_T')
       .update({ order_status: 'Completed' })
       .eq('order_id', order_id)
-      .select('seller_id', 'total_amount')
+      .select('seller_id, total_amount')
       .single();
 
     if (orderError) throw new Error(`Failed to update order status: ${orderError.message}`);
@@ -915,6 +931,164 @@ export async function confirmOrder(formData) {
     return {
       success: true,
       message: 'Order confirmed',
+    };
+
+  } catch (error) {
+    console.error('Error executing confirmOrder:', error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function adminRejectRefundAction(orderID) {
+
+  const supabase = await createClient();
+
+  try {
+    // update order to completed
+    const { data: order, error: orderError } = await supabase
+      .from('ORDERS_T')
+      .update({ order_status: 'Completed' })
+      .eq('order_id', orderID)
+      .select('seller_id, total_amount')
+      .single();
+
+    if (orderError) throw new Error(`Failed to update order status: ${orderError.message}`);
+    if (!order) throw new Error('Order not found.');
+
+    const { seller_id, total_amount } = order;
+
+    // retrieve delivery fee
+    const { data: shipping, error: shippingError } = await supabase
+      .from('SHIPPING_T')
+      .select('delivery_fee')
+      .eq('order_id', orderID)
+      .single();
+
+    if (shippingError && shippingError.code !== 'PGRST116') {
+      throw new Error(`Failed to fetch shipping fee: ${shippingError.message}`);
+    }
+    
+    const deliveryFee = shipping?.delivery_fee ? Number(shipping.delivery_fee) : 0;
+
+    const sellerEarn = Number(total_amount) - deliveryFee;
+
+    // sellect seller current balances
+    const { data: seller, error: sellerFetchError } = await supabase
+      .from('USERS_T')
+      .select('balances')
+      .eq('user_id', seller_id)
+      .single();
+
+    if (sellerFetchError) throw new Error(`Failed to fetch seller balance: ${sellerFetchError.message}`);
+
+    const currentBalance = seller.balances ? Number(seller.balances) : 0;
+    const newBalance = currentBalance + sellerEarn;
+
+    // update new balances for seller
+    const { error: balanceUpdateError } = await supabase
+      .from('USERS_T')
+      .update({ balances: newBalance })
+      .eq('user_id', seller_id);
+
+    if (balanceUpdateError) throw new Error(`Failed to update seller balance: ${balanceUpdateError.message}`);
+
+    const transactionID = await IDGenerator();
+
+    // create new transaction record for seller
+    const { error: transactionError } = await supabase
+      .from('WALLET_TRANSACTIONS_T')
+      .insert({
+        wallet_transaction_id: transactionID,
+        user_id: seller_id,
+        transaction_type: `Payment for rejected order: #${orderID}`,
+        direction: 'Debit',
+        payment_method: 'Wallet Balance',
+        amount: sellerEarn,
+        wallet_transaction_status: 'Success'
+      });
+
+    if (transactionError) throw new Error(`Failed to log wallet transaction: ${transactionError.message}`);
+
+    // revalidatePath('/buyer/orders')
+
+    return {
+      success: true,
+      message: 'Refund Rejected',
+    };
+
+  } catch (error) {
+    console.error('Error executing confirmOrder:', error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function adminApproveRefundAction(orderID) {
+
+  const supabase = await createClient();
+
+  try {
+    // update order to Refunded
+    const { data: order, error: orderError } = await supabase
+      .from('ORDERS_T')
+      .update({ order_status: 'Refunded' })
+      .eq('order_id', orderID)
+      .select('buyer_id, total_amount')
+      .single();
+
+    if (orderError) throw new Error(`Failed to update order status: ${orderError.message}`);
+    if (!order) throw new Error('Order not found.');
+
+    const { buyer_id, total_amount } = order;
+
+    // sellect buyer current balances
+    const { data: buyer, error: sellerFetchError } = await supabase
+      .from('USERS_T')
+      .select('balances')
+      .eq('user_id', buyer_id)
+      .single();
+
+    if (sellerFetchError) throw new Error(`Failed to fetch buyer balance: ${sellerFetchError.message}`);
+
+    const currentBalance = buyer.balances ? Number(buyer.balances) : 0;
+    const newBalance = currentBalance + Number(total_amount);
+    console.log("Total Amount",Number(total_amount));
+
+    console.log("Current Balance", currentBalance);
+    console.log("New Balance", newBalance);
+
+    console.log(buyer_id);
+    console.log(newBalance);
+
+    // update new balances for buyer
+    const { error: balanceUpdateError } = await supabase
+      .from('USERS_T')
+      .update({ balances: newBalance })
+      .eq('user_id', buyer_id);
+
+    if (balanceUpdateError) throw new Error(`Failed to update buyer balance: ${balanceUpdateError.message}`);
+
+    const transactionID = await IDGenerator();
+
+    // create new transaction record for seller
+    const { error: transactionError } = await supabase
+      .from('WALLET_TRANSACTIONS_T')
+      .insert({
+        wallet_transaction_id: transactionID,
+        user_id: buyer_id,
+        transaction_type: `Refund for order: #${orderID}`,
+        direction: 'Credit',
+        payment_method: 'Wallet Balance',
+        amount: Number(total_amount),
+        wallet_transaction_status: 'Success'
+      });
+
+    if (transactionError) throw new Error(`Failed to log wallet transaction: ${transactionError.message}`);
+
+    // revalidatePath('/buyer/orders')
+
+    return {
+      success: true,
+      message: 'Refund Approved',
     };
 
   } catch (error) {

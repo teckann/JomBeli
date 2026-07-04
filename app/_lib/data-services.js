@@ -1476,3 +1476,183 @@ export async function checkProductReview(userId, orderId) {
 
   return !!data;
 }
+
+export async function getOrderDetails(orderId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select(`
+      order_id,
+      created_at,
+      total_amount,
+      original_price,
+      discount_amount,
+      payment_status,
+      order_status,
+
+      buyer:USERS_T!buyer_id (
+        user_id,
+        username,
+        email
+      ),
+
+      seller:USERS_T!seller_id (
+        user_id,
+        username,
+        email
+      ),
+
+      address:ADDRESSES_T!address_id (
+        address_id,
+        recipient_name,
+        street,
+        city,
+        state,
+        postcode,
+        country
+      ),
+
+      shipping:SHIPPING_T!order_id (
+        shipping_id,
+        delivery_type,
+        delivery_fee,
+        shipping_status,
+
+        hub:HUBS_T!hub_id (
+          hub_name,
+          hub_location
+        ),
+
+        courier:USERS_T!courier_id (
+          user_id,
+          username,
+          email
+        ),
+
+        admin:USERS_T!admin_id (
+          user_id,
+          username,
+          email
+        )
+      ),
+
+      transaction:ORDER_TRANSACTIONS_T!order_id (
+        order_transaction_id,
+        amount,
+        order_transaction_status
+      ),
+
+      voucher:USER_VOUCHERS_T!user_voucher_id (
+        user_voucher_status,
+
+        VOUCHERS_T!voucher_id (
+          voucher_name,
+          voucher_type,
+          discount_value
+        )
+      ),
+
+      ORDER_ITEMS_T!order_id (
+        order_item_id,
+        quantity,
+        unit_price,
+        subtotal,
+
+        PRODUCT_VARIANTS_T!product_variant_id (
+          product_variant_id,
+          sku,
+          product_variant_price,
+
+          PRODUCTS_T!product_id (
+            product_id,
+            product_name,
+            category,
+            product_image_url
+          )
+        )
+      )
+    `)
+    .eq("order_id", orderId)
+    .single();
+
+  if (error) {
+
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getTotalActiveHubCount() {
+
+  const supabase = await createClient();
+
+  const { data, error, count } = await supabase
+  .from('HUBS_T')
+  .select('*', { count: 'exact', head: true })
+  .eq('hub_status', 'Active');
+
+  if (error) {
+
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getWaitingAssignParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Created');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getOutOfDeliveryParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Out Of Delivery');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getAssignedParcelsByAdminThisMonth(adminId) {
+  const supabase = await createClient();
+
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('admin_id', adminId)
+    .neq('shipping_status', 'Created')
+    .gte('created_at', startOfMonth.toISOString());
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}

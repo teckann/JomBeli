@@ -101,6 +101,7 @@
 .link:hover, .servicesNavBar:hover {
     background-color: #D1E7DD;
     color: var(--color-primary);
+    cursor: pointer;
 }
 
 .userInfo {

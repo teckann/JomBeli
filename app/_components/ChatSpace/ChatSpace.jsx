@@ -8,6 +8,7 @@ import { sendMessageAction } from "@/app/_lib/actions";
 import { Suspense } from "react";
 import Spinner from "../Spinner/Spinner";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
+import Link from "next/link";
 
 async function ChatSpace({ id }) {
   if (!id)
@@ -28,6 +29,12 @@ async function ChatSpace({ id }) {
 
   return (
     <div className={styles.main}>
+      <div className={styles.chatSpaceHeader}>
+        <Link href={`/buyer/shopProfile/${id}`}>
+          {selectedUserInfo.username}
+        </Link>
+      </div>
+
       <div className={styles.chatMessages}>
         <Suspense fallback={<Spinner />}>
           <ChatMessages
