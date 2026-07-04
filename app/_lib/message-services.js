@@ -1,12 +1,13 @@
 import { createClient } from "./server";
 
-export async function getContactList(user_id) {
+export async function getContactList(userId) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  // all messages related the current user
+  const { data: messages, error } = await supabase
     .from("MESSAGES_T")
-    .select("sender_id, receiver_id")
-    .or(`sender_id.eq.${user_id},receiver_id.eq.${user_id}`)
+    .select("sender_id, receiver_id, message, created_at")
+    .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -14,26 +15,52 @@ export async function getContactList(user_id) {
     return [];
   }
 
-  // filter out the repeat seller id & current user id
-  const contactIDs = [
-    ...new Set(
-      data.map((item) =>
-        item.sender_id === user_id ? item.receiver_id : item.sender_id,
-      ),
-    ),
-  ];
+  //  latest message for each contact
+  const latestChats = new Map();
 
-  const { data: contactInfo, error: contactError } = await supabase
+  for (const msg of messages) {
+    const contactId =
+      msg.sender_id === userId ? msg.receiver_id : msg.sender_id;
+
+    if (!latestChats.has(contactId)) {
+      latestChats.set(contactId, {
+        user_id: contactId,
+        last_message: msg.message,
+        created_at: msg.created_at,
+      });
+    }
+  }
+
+  const contactIds = [...latestChats.keys()];
+
+  if (contactIds.length === 0) return [];
+
+  // user info
+  const { data: users, error: userError } = await supabase
     .from("USERS_T")
     .select("user_id, username, avatar")
-    .in("user_id", contactIDs);
+    .in("user_id", contactIds);
 
-  if (contactError) {
-    console.error(contactError);
+  if (userError) {
+    console.error(userError);
     return [];
   }
 
-  return contactInfo;
+  // merge user info and latest message
+  const result = contactIds.map((id) => {
+    const user = users.find((u) => u.user_id === id);
+    const chat = latestChats.get(id);
+
+    return {
+      user_id: id,
+      username: user?.username ?? "",
+      avatar: user?.avatar ?? null,
+      last_message: chat.last_message,
+      created_at: chat.created_at,
+    };
+  });
+
+  return result;
 }
 
 export async function getMessages(sender_id, receiver_id) {
