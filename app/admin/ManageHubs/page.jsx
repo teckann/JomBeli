@@ -1,4 +1,4 @@
-import Styles from './ManageDelivery.module.css';
+import Styles from './ManageHubs.module.css';
 import Link from 'next/link';
 import { getTotalWaitingRefundCount } from '@/app/_lib/analysis-serives';
 import { getTotalActiveHubCount, getWaitingAssignParcelCount, getOutOfDeliveryParcelCount, getAssignedParcelsByAdminThisMonth, getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
@@ -16,7 +16,6 @@ export default async function ManageDelivery() {
     const totalWaiting = await getWaitingAssignParcelCount();
     const totalOutOfDeliveryParcel = await getOutOfDeliveryParcelCount();
     const totalAssignedParcelMonth = await getAssignedParcelsByAdminThisMonth(user.id);
-    
 
     const rejectedBySeller = await getRejectedBySeller();
     const notProcessBySeller = await getNotProcessedBySeller();
@@ -89,6 +88,16 @@ export async function RefundOverViewBar({rejectedBySellerCount, notProcessBySell
         </div>
     );
 
+}
+
+export function HubInsightComponent({title, count, link = null, linkText}) {
+    return (
+        <div>
+            <div><h3>{title}</h3></div>
+            <div><h2>{count}</h2></div>
+            {link && <span><Link href={link}>{linkText}</Link></span>}
+        </div>
+    )
 }
 
 export function ProductDataAnalyticsComponent({title, count}) {
