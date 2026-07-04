@@ -67,6 +67,7 @@ export default function CourierMap({ courierPosition, optimizedStops, routeGeome
       center={[center.lat, center.lng]}
       zoom={20}
       className="courierMap"
+      zoomControl={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Style from "./page.module.css"
 
 const CourierMapView = dynamic(
   () => import('@/app/_components/CourierMapView/CourierMapView'),
@@ -10,8 +11,9 @@ const CourierMapView = dynamic(
 
 export default function NavigationPage() {
   return (
-    <div>
+    <div className={Style.navPageWrapper}>
       <Link 
+        className={Style.link}
         href="/courier" 
       >
         ← Back to Courier Home

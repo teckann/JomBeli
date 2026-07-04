@@ -1,8 +1,8 @@
 /* Courier navigation layout */
 .courierNav {
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 88vh;
   background: var(--color-bg-primary);
   overflow: hidden;
 }
@@ -33,7 +33,7 @@
 .errorDetail {
   font-size: var(--text-base);
   color: var(--color-font-secondary);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
 }
 
 .courieSpinner {
@@ -78,14 +78,14 @@
 }
 
 .stopCount {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   color: var(--color-font-secondary);
 }
 
 /* Status banners */
 .statusBanner {
   padding: 8px 16px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--color-border-primary);
 }
@@ -127,15 +127,15 @@
   align-items: center;
   justify-content: center;
   color: var(--color-font-secondary);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--text-xs);
 }
 
 .stopListHeader {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: 600;
   color: var(--color-font-secondary);
-  letter-spacing: 0.1em;
   padding: 8px 8px 4px;
 }
 
@@ -153,7 +153,7 @@
   border-radius: 50%;
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,13 +173,13 @@
 }
 
 .stopListCoords {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   color: var(--color-font-secondary);
   margin: 0;
 }
 
 .stopListOrderId {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   color: var(--color-font-secondary);
   margin: 2px 0 0;
 }
@@ -212,4 +212,4 @@
 .map-popup { font-family: var(--font-body); }
 .map-popup__index { font-weight: 600; font-size: var(--text-sm); display: block; }
 .map-popup__label { font-size: var(--text-xs); color: var(--color-font-secondary); margin: 2px 0 0; }
-.map-popup__order-id { font-size: 10px; color: var(--color-font-secondary); font-family: var(--font-mono); margin: 2px 0 0; }
+.map-popup__order-id { font-size: 10px; color: var(--color-font-secondary); font-family: var(--font-body); margin: 2px 0 0; }
