@@ -1,6 +1,11 @@
 import WalletFilterBar from "@/app/_components/WalletFilterBar/WalletFilterBar";
 import styles from "./page.module.css";
-import { getTransactionMonths, getUserInfo } from "@/app/_lib/data-services";
+import {
+  getTransactionMonths,
+  getUserInfo,
+  getFilterTransactions,
+  getTransactions
+} from "@/app/_lib/data-services";
 import { getUser } from "@/app/_lib/auth";
 import TransactionRecords from "@/app/_components/TransactionRecords/TransactionRecords";
 import TopUp from "@/app/_components/TopUp/TopUp";
@@ -14,20 +19,33 @@ async function page({ searchParams }) {
 
   const user = await getUser();
   const availableMonths = await getTransactionMonths(user.id);
-  const { balances } = await getUserInfo(user.id);
-  // console.log(availableMonths);
-  console.log(balances);
+  const userInfo = await getUserInfo(user.id);
+
+  // Fetch transactions for report
+  let transactions = [];
+  const normalizedMonth = month && month !== "all" ? month : null;
+  const normalizedType = type && type !== "all" ? type : null;
+
+  if (!normalizedMonth && !normalizedType) {
+    transactions = await getTransactions(user.id);
+  } else {
+    transactions = await getFilterTransactions(user.id, normalizedMonth, normalizedType);
+  }
 
   return (
     <main className={styles.main}>
       <div className={styles.div1}>
-        <WalletFilterBar availableMonths={availableMonths} />
+        <WalletFilterBar
+          availableMonths={availableMonths}
+          transactions={transactions}
+          userInfo={userInfo}
+        />
         <TransactionRecords userID={user.id} month={month} type={type} />
       </div>
 
       <div className={styles.div2}>
         <Wallet>
-          <WalletBalances balances={balances} />
+          <WalletBalances balances={userInfo.balances} />
           <TopUp userID={user.id} />
         </Wallet>
       </div>

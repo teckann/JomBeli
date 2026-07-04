@@ -2,8 +2,9 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./WalletFilterBar.module.css";
+import WalletReportGenerator from "../WalletReportGenerator/WalletReportGenerator";
 
-function WalletFilterBar({ availableMonths }) {
+function WalletFilterBar({ availableMonths, transactions, userInfo }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -54,18 +55,12 @@ function WalletFilterBar({ availableMonths }) {
       </div>
 
       <div className={styles.filterDiv2}>
-        <button className={styles.button}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            width="24"
-            height="24"
-          >
-            <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 13h8v2H8v-2zm0 4h8v2H8v-2zm0-8h5v2H8V9z" />
-          </svg>
-          <p>Generate Report</p>
-        </button>
+        <WalletReportGenerator
+          transactions={transactions}
+          userInfo={userInfo}
+          currentMonth={currentMonth}
+          currentType={currentType}
+        />
       </div>
     </form>
   );
