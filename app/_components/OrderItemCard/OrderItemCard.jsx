@@ -7,7 +7,8 @@ export default function CartItemCard({
     onCheckboxChange, 
     onDelete,
     showCheckbox = true, 
-    showDelete = true 
+    showDelete = true,
+    selectedShopID, 
 }) {
     const { product_variant_price: originalPrice, sku } = cartitem.PRODUCT_VARIANTS_T;
     const { product_name, product_image_url} = cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T;
@@ -22,6 +23,7 @@ export default function CartItemCard({
                     type="checkbox" 
                     checked={isChecked}
                     onChange={onCheckboxChange} 
+                    disabled={selectedShopID != null && selectedShopID!=cartitem.PRODUCT_VARIANTS_T.PRODUCTS_T.user_id}
                 />
             )}
 
@@ -51,7 +53,10 @@ export default function CartItemCard({
             </div>
 
             {showDelete && (
-                <button onClick={onDelete}>
+                <button 
+                    onClick={onDelete}
+                    disabled={isChecked}
+                >
                     Delete
                 </button>
             )}
