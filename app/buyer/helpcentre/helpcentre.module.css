@@ -1,67 +1,175 @@
 .linkContainer {
-  margin: 50px auto; 
+  margin: 50px auto;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-between;
   max-width: 1200px;
   width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
 }
 
 .linkCard {
   position: relative;
-  flex: 1 1 350px; 
-  min-height: 200px; 
+  flex: 1 1 350px;
+  min-height: 220px;
   background-color: var(--color-surface);
-  padding: 20px;
-  padding-bottom: 60px; 
-  border-radius: 8px;
-  border: 1px solid var(--color-border); 
-  box-sizing: border-box;
-}
-
-.linkCard a {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  background-color: var(--color-primary);
-  color: #ffffff; 
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease; 
-}
-
-.linkCard a:hover {
-  background-color: var(--color-primary-dark); 
-}
-
-.faqContainer {
-  margin: 50px auto; 
-  display: flex;
-  flex-wrap: wrap; 
-  gap: 30px;
-  max-width: 1200px;
-  width: 100%;
-  background-color: var(--color-surface);
-  padding: 30px;
+  padding: 24px;
+  padding-bottom: 70px;
   border-radius: 8px;
   border: 1px solid var(--color-border);
   box-sizing: border-box;
 }
 
+.linkCard h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.35rem;
+  color: var(--color-font-primary);
+}
+
+.linkCard p {
+  color: var(--color-font-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.linkCard a {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.linkCard a:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.faqContainer {
+  margin: 50px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  width: 100%;
+  background-color: var(--color-surface, #ffffff);
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  box-sizing: border-box;
+}
+
 .faqBanner {
-  flex: 1 1 300px;
+  flex: 1 1 280px;
+}
+
+.faqBanner h2 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  color: var(--color-font-primary, #1a202c);
+}
+
+.faqBanner p {
+  color: var(--color-font-secondary, #4a5568);
+  margin: 0;
+  font-size: 1rem;
 }
 
 .faqContent {
   display: flex;
-  flex: 2 1 400px; 
+  flex: 2 1 500px;
   flex-direction: column;
+  gap: 8px;
+}
+
+.faqItem {
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  padding: 8px 0;
+}
+
+.faqItem:last-child {
+  border-bottom: none;
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: left;
+  padding: 16px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-font-primary);
+  cursor: pointer;
   gap: 20px;
 }
 
-.faqContent p {
-  color: var(--color-font-secondary); 
-  line-height: 1.6; 
+.faqQuestion:hover .arrow {
+  color: var(--color-primary);
+}
+
+.arrow {
+  font-size: 0.75rem;
+  color: var(--color-font-secondary);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(180deg);
+  flex-shrink: 0;
+}
+
+.active .arrow {
+  transform: rotate(0deg); 
+  color: var(--color-primary);
+}
+
+.faqAnswer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  opacity: 0;
+}
+
+.active .faqAnswer {
+  max-height: 500px; 
+  opacity: 1;
+}
+
+.faqAnswer p {
+  color: var(--color-font-secondary, #4a5568);
+  line-height: 1.6;
+  font-size: 0.98rem;
+  margin: 0;
+  padding-bottom: 20px; 
+}
+
+@media (max-width: 768px) {
+  .faqContainer {
+    padding: 24px;
+    gap: 24px;
+    margin: 30px auto;
+  }
+  
+  .linkContainer {
+    margin: 30px auto;
+  }
+
+  .faqBanner h2 {
+    font-size: 1.6rem;
+  }
+
+  .faqQuestion {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
 }

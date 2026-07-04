@@ -115,3 +115,8 @@
 .submitButton:active {
   transform: translateY(0);
 }
+
+.orderIdText{
+  font-family: var(--font-mono);
+  color: var(--color-primary);
+}

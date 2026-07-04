@@ -1,7 +1,8 @@
 import Styles from "./BuyerContactUsForm.module.css";
 import { BuyerContactForm } from "@/app/_lib/actions";
 
-export default function BuyerContactUsForm({ userId }) {
+export default function BuyerContactUsForm({ userId, productID }) {
+
   return (
     <div className={Styles.formContainer}>
       <header className={Styles.formHeader}>
@@ -15,16 +16,25 @@ export default function BuyerContactUsForm({ userId }) {
 
       <form className={Styles.form} action={BuyerContactForm}>
         <input type="hidden" name="id" value={userId} />
+        
+        {!productID
+        ?
+          <div className={Styles.formGroup}>
+            <label htmlFor="category">Report Type</label>
+            <select name="category" id="category" defaultValue="" required>
+              <option value="" disabled>Select an option...</option>
+              <option value="Technical Support">Technical Support</option>
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Feedback & Suggestion">Feedback & Suggestion</option>
+            </select>
+          </div>        
+        :
+          <div>
+            <h2>Reporting Product #<span className={Styles.orderIdText}>{productID}</span></h2>
+            <input type="hidden" name="category" value="Report Product"/>
+          </div>
+        }
 
-        <div className={Styles.formGroup}>
-          <label htmlFor="category">Report Type</label>
-          <select name="category" id="category" defaultValue="" required>
-            <option value="" disabled>Select an option...</option>
-            <option value="TechnicalSupport">Technical Support</option>
-            <option value="GeneralInquiry">General Inquiry</option>
-            <option value="Feedback&Suggestion">Feedback & Suggestion</option>
-          </select>
-        </div>
 
         <div className={Styles.formGroup}>
           <label htmlFor="description">Description</label>

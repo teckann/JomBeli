@@ -6,14 +6,12 @@ import { getProducts } from "@/app/_lib/data-services";
 import Link from 'next/link';
 
 export default async function ProductListingPage() {
-    // get user data
     const currentUser = await getUser();
     if (!currentUser || !currentUser.id) {
         return <div className={styles.loading}>Please log in to view your shop.</div>;
     }
     const loggedInUserId = currentUser.id;
     
-    // get product data of the specific user (seller)
     const products = await getProducts(loggedInUserId);
     const { data: sellerData, error: userError } = await supabase
         .from('USERS_T')
@@ -25,7 +23,6 @@ export default async function ProductListingPage() {
         console.error("[Next.js] Failed to fetch data from USERS_T table:", userError.message);
     }
 
-    // here
     const shopName = sellerData?.username || currentUser.email || "My Store";
     const displayProducts = (products || []).filter(
         (product) => product.product_status === 'Active'
@@ -52,7 +49,7 @@ export default async function ProductListingPage() {
 
                     <div className={styles.shopInfo}>
                         <h1 className={styles.shopNameRow}>
-                            {shopName} <span className={styles.shopRating}>★ 4.7</span>
+                            {shopName} 
                         </h1>
                         <p className={styles.shopDescription}>
                             Welcome to {shopName}. Every item in this collection represents our commitment to excellence. 
@@ -63,10 +60,13 @@ export default async function ProductListingPage() {
                 </section>
 
                 <div className={styles.actionButtons}>
-                    <button className="btn btn-outline">Manage Category</button>
-                    <button className="btn btn-primary">Add New Product</button>
-                </div>
-                
+                    <Link href="/seller/addnewproduct" passHref>
+                        <button className="btn btn-primary" style={{ color: '#ffffff' }}>
+                            Add New Product
+                            </button>
+                    </Link>
+                    </div>
+                                    
                 <hr className={styles.divider} />
                 
                 {categoryList.length > 0 ? (
@@ -78,7 +78,7 @@ export default async function ProductListingPage() {
                                 <aside className={styles.sidebar}>
                                     <h2 className={styles.sidebarTitle}>{categoryName.toUpperCase()}</h2>
                                     <p className={styles.sidebarDesc}>
-                                        Explore our top collection of {categoryName.toLowerCase()} updated live. Quality guaranteed.
+                                        Explore our top collection of {categoryName.toUpperCase()} updated live. Quality guaranteed.
                                     </p>
                                 </aside>
 

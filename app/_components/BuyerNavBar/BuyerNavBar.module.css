@@ -17,7 +17,7 @@
 .link{
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px 8px;
     text-decoration: none;
     border: 1px solid transparent;
     padding: 10px;
@@ -45,21 +45,20 @@
     color: var(--color-text-primary);
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
-    padding: 6px 14px;
-    border-radius: 50px;
+    padding: 6px 24px;
+    border-radius: 40px;
     transition: all 0.2s ease;
 }
 
 .walletLink:hover {
     background-color: var(--color-surface-hover);
-    border-color: var(--color-primary);
     color: var(--color-primary);
 }
 
 .walletLink.active {
     background-color: var(--color-primary-subtle);
-    border-color: var(--color-primary);
     color: var(--color-primary);
+    border-radius: 40px;
 }
 
 .profileLink {
@@ -69,8 +68,8 @@
     text-decoration: none;
     color: var(--color-text-primary);
     font-weight: 500;
-    padding: 4px 12px 4px 4px;
-    border-radius: 20px;
+    padding: 8px 24px;
+    border-radius: 40px;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     transition: all 0.15s ease;
