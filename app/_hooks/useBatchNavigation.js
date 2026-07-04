@@ -3,37 +3,54 @@
 import { useState, useEffect, useRef } from 'react';
 import { useCourierPosition } from './useCourierPosition';
 import { useThrottledValue } from './useThrottledValue';
-import { getOptimizedBatchRoute } from '@/app/actions/courier-route';
+import { getOptimizedBatchRoute } from '@/app/_lib/courier-route';
 import { hasDeviated } from '@/app/_lib/routing/deviation';
 
 export function useBatchNavigation(deliveryStops) {
   const { position: courierPosition, error: gpsError } = useCourierPosition();
-  const throttledPosition = useThrottledValue(courierPosition, 15000);
+  const throttledPosition = useThrottledValue(courierPosition, 7000);
 
   const [optimizedStops, setOptimizedStops] = useState(deliveryStops);
   const [routeGeometry, setRouteGeometry] = useState(null);
-  const [routeDetails, setRouteDetails] = useState(null); 
+  const [routeDetails, setRouteDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [usedFallback, setUsedFallback] = useState(false);
 
-  const currentGeometryRef = useRef(null); 
+  const currentGeometryRef = useRef(null);
   const isFirstRouteRef = useRef(true);
+  const previousStopsRef = useRef(deliveryStops);
 
   useEffect(() => {
-    if (!throttledPosition || !deliveryStops.length) return;
+    if (!throttledPosition) return;
 
-    // On first route fetch, skip deviation check (no geometry yet)
-    if (!isFirstRouteRef.current && currentGeometryRef.current) {
-      const deviated = hasDeviated(throttledPosition, currentGeometryRef.current);
-      if (!deviated) return; // still on route, no need to re-route
-    }
+
+    if (!deliveryStops.length) {
+      setOptimizedStops([]);
+      setRouteGeometry(null);
+      setRouteDetails(null);
+      return;
+    }    
+
 
     let cancelled = false;
 
     const fetchRoute = async () => {
       setIsLoading(true);
       setError(null);
+
+      const stopsChanged = previousStopsRef.current !== deliveryStops;
+      previousStopsRef.current = deliveryStops;
+
+      if (
+        !stopsChanged &&
+        !isFirstRouteRef.current &&
+        currentGeometryRef.current
+      ) {
+        const deviated = hasDeviated(throttledPosition, currentGeometryRef.current);
+
+        if (!deviated) return;
+      }
 
       try {
         const result = await getOptimizedBatchRoute(throttledPosition, deliveryStops);
@@ -66,11 +83,11 @@ export function useBatchNavigation(deliveryStops) {
   }, [throttledPosition, deliveryStops]);
 
   return {
-    courierPosition,    
+    courierPosition,
     gpsError,
-    optimizedStops,     
-    routeGeometry,      
-    routeDetails,  
+    optimizedStops,
+    routeGeometry,
+    routeDetails,
     isLoading,
     error,
     usedFallback,
