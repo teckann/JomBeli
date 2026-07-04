@@ -870,7 +870,7 @@ export async function confirmOrder(formData) {
       .from('ORDERS_T')
       .update({ order_status: 'Completed' })
       .eq('order_id', order_id)
-      .select('seller_id', 'total_amount')
+      .select('seller_id, total_amount')
       .single();
 
     if (orderError) throw new Error(`Failed to update order status: ${orderError.message}`);
