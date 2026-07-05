@@ -14,7 +14,7 @@ export default function Modal({ isOpen, onClose, title, children }){
                          &times; {/*x button */}
                     </button>
                 </div>
-                <div>
+                <div className={Styles.contentContainer}>
                     {children}
                 </div>
             </div>
