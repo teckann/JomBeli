@@ -285,8 +285,8 @@ export async function getSellerVoucher(id) {
     .eq("voucher_type", "shop");
 
   if (error) {
-    console.error("Failed to fetch balance:", error.message);
-    throw new Error("Could not fetch balance");
+    console.error("Failed to fetch vouchers:", error.message);
+    throw new Error("Could not fetch vouchers");
   }
 
   return data;
@@ -1284,6 +1284,111 @@ export async function getPendingSupport() {
 
   if (error) {
     console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
+
+export async function getOneRefund(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("REFUNDS_T")
+.select(`
+      *,
+      temp_date:created_at::date,
+      temp_time:created_at::time,
+      ref_temp_date:refunded_at::date,
+      ref_temp_time:refunded_at::time,
+      
+      ORDERS_T!inner (
+        seller_id,
+        order_temp_date:created_at::date,
+        order_temp_time:created_at::time,
+        
+        buyer:USERS_T!buyer_id ( * ),
+        
+        ORDER_ITEMS_T!order_id (
+          *,      
+
+          PRODUCT_VARIANTS_T (
+            *,
+
+            PRODUCTS_T ( * )
+          )
+        )
+      )
+    `)
+    .eq("refund_id", id)
+    .single();
+
+  if (error) {
+    console.error("Failed to single refund:", error.message);
+    throw new Error("Could not fetch single refund");
+  }
+
+  return data;
+}
+
+
+export async function getOneVoucher(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+  .from("VOUCHERS_T")
+    .select(`
+      *,
+      
+      starts_date:start_date::date,
+      start_time:start_date::time,
+      ends_date:end_date::date,
+      starts_time:end_date::time,
+      USER_VOUCHERS_T (
+        user_voucher_status
+      )
+    `)
+    .eq("voucher_id", id)
+    .single();
+
+
+  if (error) {
+    console.error("Failed to fetch voucher:", error.message);
+    throw new Error("Could not fetch voucher");
+  }
+
+  const totalClaimed = data.USER_VOUCHERS_T ? data.USER_VOUCHERS_T.length : 0;
+
+
+  const totalUsed = data.USER_VOUCHERS_T 
+    ? data.USER_VOUCHERS_T.filter(v => v.user_voucher_status === 'used').length : 0;
+
+    
+  return {
+    ...data,
+    total_claimed: totalClaimed,
+    total_used: totalUsed
+  };
+}
+
+
+export async function getUsedVoucher(id) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("USER_VOUCHERS_T")
+    .select(`
+      user_voucher_status,
+      claimed_at,
+      used_at,
+      USERS_T ( username, avatar ),
+      VOUCHERS_T !inner ( voucher_name, user_id )
+    `)
+    .eq("VOUCHERS_T.user_id", id)
+    .order("claimed_at", { ascending: false })
+    .limit(15); 
+
+  if (error) {
+    console.error("Failed to fetch activity:", error.message);
     return [];
   }
 

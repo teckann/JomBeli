@@ -1,15 +1,23 @@
 import RefundTable from '@/app/_components/SellerTable/refundTable';
 import styles from './refunds.module.css'
 
+
+import { getUser } from "@/app/_lib/auth";
+import { getUserInfo } from "@/app/_lib/data-services";
+
 import { getSellerRefund } from "@/app/_lib/data-services";
 
 
 
-async function Vouchers() {
-
+async function Refunds() {
 
   
-  const Vdata = await getSellerRefund('928b6b94-3e25-4aba-93d1-2d3c8df29b40');
+  const user = await getUser();
+
+  const userInfo = await getUserInfo(user.id);
+
+  
+  const Vdata = await getSellerRefund(user.id);
 
 
   return (
@@ -33,4 +41,4 @@ async function Vouchers() {
   )
 }
 
-export default Vouchers
+export default Refunds

@@ -65,7 +65,7 @@ const SellerTable = ({
 
     <div className={styles.tcon}>
 
-        <FilterBig changeNav={setCurNav} navDetail={filterNav} />
+        <FilterBig changeNav={setCurNav} currentNav={curNav} navDetail={filterNav} />
             
 
 

@@ -24,10 +24,10 @@ export default function Navbar() {
         <a href="#" className={styles.navLink}>Orders</a>
         <a href="/seller/refunds" className={styles.navLink}>Refunds</a>
         <a href="/seller/vouchers" className={styles.navLink}>Vouchers</a>
-        <a href="#" className={styles.navLink}>Chat</a>
-        <a href="#" className={styles.navLink}>Wallet</a>
+        <a href="/seller/chat" className={styles.navLink}>Chat</a>
+        <a href="/seller/wallet" className={styles.navLink}>Wallet</a>
       </nav>
-      <div className={styles.avatar}></div>
+      <a href="/seller/profile"><div className={styles.avatar}></div></a>
     </header>
   );
 }

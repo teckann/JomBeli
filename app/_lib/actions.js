@@ -741,3 +741,34 @@ export async function handleAdminRefundAction(formData) {
 
   return redirect(`/admin/ManageRefunds/RefundsTable/${refundId}`);
 }
+
+
+
+export async function withdrawalAction(formData) {
+  const wallet_transaction_id = await IDGenerator();
+  const user_id = formData.get("userID");
+  const transaction_type = "Withdraw";
+  const direction = "Debit";
+  const payment_method = formData.get("payment");
+  const amount = Number(formData.get("amount"));
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("WALLET_TRANSACTIONS_T").insert([
+    {
+      wallet_transaction_id,
+      user_id,
+      transaction_type,
+      direction,
+      payment_method,
+      amount,
+    },
+  ]);
+
+  if (error) {
+    console.error("Insert error:", error);
+    throw new Error("Withdrawal failed");
+  }
+
+  await setBalances(user_id, -amount);
+  revalidatePath("/seller/wallet");
+}
