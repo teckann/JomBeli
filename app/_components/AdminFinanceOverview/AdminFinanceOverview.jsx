@@ -25,7 +25,7 @@ export default async function AdminFinanceOverview(){
                     <AdminStatCard title="Daily Buyer Money Used" value={dailyOutflow} isCurrency={true}/>
                 </div>
                 <div className={Styles.infoBox}> {/* in rm */}
-                    <AdminStatCard title="Platform Delivery Revenue" value={revenue} isCurrency={true}/>
+                    <AdminStatCard title="Platform Daily Delivery Revenue" value={revenue} isCurrency={true}/>
                 </div>
             </div>
             <div className={Styles.lowerContainer}>

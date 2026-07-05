@@ -1,0 +1,16 @@
+.upperContainer{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    gap: 50px;
+}
+
+.infoBox{
+    display: flex;
+    width: 400px;
+    padding: 20px;
+    align-items: center;
+    border: 1px solid #ccc;
+    background-color: #ffadad;
+    border-radius: 10px;
+}

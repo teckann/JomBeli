@@ -12,3 +12,31 @@
     width: 100%;
     /* padding: 1em; */
 }
+
+.infoBar{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 2%;
+}
+
+.chartRow{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5em;
+    margin-top: 2%;
+}
+
+.chartContainer{
+    position: relative;
+    width: 500px;
+    height: 300px;
+}
+
+.trendChartContainer{
+    position: relative;
+    width: 90%;
+    height: 250px;
+}

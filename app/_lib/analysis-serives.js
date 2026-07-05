@@ -787,3 +787,160 @@ export async function getDailyTransactionTypeBreakdown(){
 
   return counts;
 }
+
+export async function getTotalUsersCount(){
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("USERS_T")
+    .select("*",{count: "exact", head: true})
+    .in("role",["Buyer","Seller"]);
+
+  if (error){
+    console.error(error);
+    return 0;
+  }
+
+  return count;
+}
+
+export async function getTotalOrdersCount(){
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("ORDERS_T")
+    .select("*", {count: "exact", head: true});
+
+  if(error){
+    console.error(error);
+    return 0;
+  } 
+
+  return count;
+}
+
+export async function getAvailableCourierCount(){
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("USERS_T")
+    .select("*", {count: "exact", head: true})
+    .eq("role","Courier")
+    .eq("available_status", true);
+
+  if(error){
+    console.error(error);
+    return 0;
+  } 
+
+  return count;
+}
+
+export async function getAllTimePlatformDeliveryRevenue() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select("order_id, order_status, SHIPPING_T(delivery_fee)")
+    .eq("order_status", "Completed");
+
+  if (error) {
+    console.error("Error fetching completed orders for revenue:", error);
+    return 0;
+  }
+
+  const totalRevenue = data.reduce((sum, order) => {
+    const shipping = order.SHIPPING_T;
+    const fee = Array.isArray(shipping)
+      ? (shipping[0]?.delivery_fee ?? 0)
+      : (shipping?.delivery_fee ?? 0);
+    return sum + (fee / 2);
+  }, 0);
+
+  return totalRevenue;
+}
+
+export async function getDailyOrderStatusDistribution() {
+  const supabase = await createClient();
+  const { startDate, endDate } = getMalaysianDate();
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select("order_status")
+    .gte("created_at", startDate)
+    .lte("created_at", endDate);
+
+  if (error) {
+    console.error("Error fetching order status distribution:", error);
+    return {};
+  }
+
+  const counts = {};
+  for (const row of data) {
+    counts[row.order_status] = (counts[row.order_status] || 0) + 1;
+  }
+  return counts;
+}
+
+export async function getTopSellingProducts(limit = 5) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDER_ITEMS_T")
+    .select("quantity, PRODUCT_VARIANTS_T(product_id, PRODUCTS_T(product_name))");
+
+  if (error) {
+    console.error("Error fetching top selling products:", error);
+    return [];
+  }
+
+  const productTotals = {};
+  for (const item of data) {
+    const product = item.PRODUCT_VARIANTS_T?.PRODUCTS_T;
+    if (!product) continue;
+    const key = item.PRODUCT_VARIANTS_T.product_id;
+    if (!productTotals[key]) {
+      productTotals[key] = { product_name: product.product_name, total_sold: 0 };
+    }
+    productTotals[key].total_sold += item.quantity;
+  }
+
+  return Object.values(productTotals)
+    .sort((a, b) => b.total_sold - a.total_sold)
+    .slice(0, limit);
+}
+
+export async function getOrderTrendLast30Days() {
+  const supabase = await createClient();
+
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 29); // 30 days inclusive of today
+  startDate.setHours(0, 0, 0, 0);
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select("created_at")
+    .gte("created_at", startDate.toISOString())
+    .lte("created_at", endDate.toISOString());
+
+  if (error) {
+    console.error("Error fetching order trend:", error);
+    return [];
+  }
+
+  // Build a map of every day in the range, defaulting to 0
+  const dayCounts = {};
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+    const key = d.toISOString().substring(0, 10); // YYYY-MM-DD
+    dayCounts[key] = 0;
+  }
+
+  for (const row of data) {
+    const key = row.created_at.substring(0, 10);
+    if (dayCounts[key] !== undefined) {
+      dayCounts[key]++;
+    }
+  }
+
+  return Object.entries(dayCounts).map(([date, count]) => ({ date, count }));
+}

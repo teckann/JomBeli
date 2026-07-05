@@ -4,4 +4,16 @@
     justify-content: space-between; /* Pushes the title to the top and value to the bottom */
     height: 100%; /* Ensures all cards in the row stretch to match the tallest card */
     gap: 20px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: inherit;
+    color: inherit;
+}
+
+.AdminStatCard:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0,0.8);
+}
+
+.AdminStatCard:active{
+    transform: scale(0.98);
 }

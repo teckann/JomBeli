@@ -1,7 +1,7 @@
 'use client';
 
 import Styles from './AdminFilterUsers.module.css';
-import { AdminAddCourierForm } from '../AdminAddUsers/AdminAddUsersWidget';
+import { AdminAddCourierForm, AdminAddAdminForm } from '../AdminAddUsers/AdminAddUsersWidget';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export function FilterUser({role}){
@@ -88,6 +88,7 @@ export function FilterAdmin(){
         <div className={Styles.filterBar}>
             <div className={Styles.searchUser}>
                 <SearchUser values={currentUsername} handleChange={handleChange}/>  
+                <AdminAddAdminForm />
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
