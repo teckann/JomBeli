@@ -541,7 +541,7 @@ export async function getDailyOutflowAmount(){
   return totalOutflow ?? 0;
 }
 
-export async function getFilterTransactions({ transaction, transactionType, transactionStatus}) {
+export async function getFilterTransactions({ transaction, direction, transactionStatus}) {
 
   const supabase = await createClient();
 
@@ -569,8 +569,8 @@ export async function getFilterTransactions({ transaction, transactionType, tran
     .from("WALLET_TRANSACTIONS_T")
     .select("*, USERS_T(username)");
 
-  if (transactionType && transactionType !== "All") {
-    query = query.eq("transaction_type", transactionType);
+  if (direction && direction !== "All") {
+    query = query.eq("direction", direction);
   }
 
   if (transactionStatus && transactionStatus !== "All") {
@@ -727,4 +727,63 @@ export async function getFilterSupport(date, supportType, supportStatus) {
   }
 
   return count;
+}
+
+export async function getPlatformDeliveryRevenue() {
+  const supabase = await createClient();
+  const {startDate,endDate} = getMalaysianDate();
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select("order_id, order_status, created_at, SHIPPING_T(delivery_fee)")
+    .eq("order_status", "Completed")
+    .gte("created_at",startDate)
+    .lte("created_at",endDate);
+
+  if (error) {
+    console.error("Error fetching completed orders for revenue:", error);
+    return 0;
+  }
+
+  const totalRevenue = data.reduce((sum, order) => {
+    const shipping = order.SHIPPING_T;
+    const fee = Array.isArray(shipping)
+      ? (shipping[0]?.delivery_fee ?? 0)
+      : (shipping?.delivery_fee ?? 0);
+    return sum + (fee / 2);
+  }, 0);
+
+  return totalRevenue;
+}
+
+export async function getDailyTransactionTypeBreakdown(){
+  const supabase = await createClient();
+  const { startDate, endDate } = getMalaysianDate();
+
+  const { data, error } = await supabase
+    .from("WALLET_TRANSACTIONS_T")
+    .select("transaction_type")
+    .gte("created_at", startDate)
+    .lte("created_at", endDate);
+
+  if (error) {
+    console.error("Error fetching daily transaction breakdown:", error);
+    return {};
+  }
+
+  const normalizeType = (type) => {
+    if (type.startsWith("Refund")) return "Refund";
+    if (type.startsWith("Payment")) return "Payment";
+    return type; // Withdraw, Credit, Top Up, etc. stay as-is
+  }
+
+  const counts = {};
+
+  for (const row of data) {
+    const normalized = normalizeType(row.transaction_type);
+    counts[normalized] = (counts[normalized] || 0) + 1;
+  }
+  
+  console.log(counts);
+
+  return counts;
 }

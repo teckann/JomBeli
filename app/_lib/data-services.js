@@ -1687,70 +1687,30 @@ export async function getCourierHubs(){
   const supabase = await createClient();
   const {data,error} = await supabase
     .from("HUBS_T")
-    .select("*")
-    .order("hub_location",{ascending: true});
+    .select(`*`)
+    .order("hub_id", { ascending: true });
 
-  if(error){
-    console.error("Error fetching hubs: ", error)
-    return [];
+  if (error) {
+    console.error(error);
+    throw error;
   }
 
   return data;
 }
 
-export async function hasPendingDelivery(courierId) {
+export async function getFilteredHubs(hubStatus) {
   const supabase = await createClient();
 
-  const { count, error } = await supabase
-    .from("SHIPPING_T")
-    .select("*", { count: "exact", head: true })
-    .eq("courier_id", courierId)
-    .neq("shipping_status", "Delivered");
+  let query = supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_id", { ascending: true });
 
-  if (error) {
-    console.error("Error checking pending deliveries:", error);
-    return false; 
+  if (hubStatus && hubStatus !== "All") {
+    query = query.eq("hub_status", hubStatus);
   }
 
-  return count > 0;
-}
-
-export async function getUserOrders(userId){
-  const supabase = await createClient();
-
-    const { data, error } = await supabase
-        .from("ORDERS_T")
-        .select(`
-            order_id,
-            total_amount,
-            order_status,
-            created_at,
-            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
-            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
-        `)
-        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
-        .order("created_at", { ascending: false });
-
-    if (error) {
-        console.error("Error fetching user orders:", error);
-        return [];
-    }
-    return data;
-}
-
-export async function getHubs() {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("HUBS_T")
-    .select(`
-      hub_id,
-      hub_name,
-      capacity,
-      hub_status,
-      hub_location
-    `)
-    .order("hub_id", { ascending: true });
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);
@@ -1867,4 +1827,69 @@ export async function getUsedVoucher(id) {
   }
 
   return data;
+}
+
+export async function getAvailableShipments() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SHIPPING_T")
+    .select(`
+      *,
+      order:ORDERS_T!order_id (
+        address:ADDRESSES_T!address_id (
+          *
+        )
+      )
+    `)
+    .is("courier_id", null)
+    .eq("shipping_status", "Created")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
+
+
+export async function getUserTransactions(userId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("WALLET_TRANSACTIONS_T")
+        .select("*, USERS_T(username)")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user transactions:", error);
+        return [];
+    }
+    return data;
 }
