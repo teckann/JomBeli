@@ -10,7 +10,7 @@ export default function Navbar({ userAvatar }) {
   const pathname = usePathname();
 
   const navLinks = [
-    { name: 'Overview', href: '/seller/dashboard' },
+    { name: 'Dashboard', href: '/seller/dashboard' },
     { name: 'My Store', href: '/seller/productlisting' },
     { name: 'Orders', href: '/seller/ordertracking' },
     { name: 'Refunds', href: '/seller/refunds' },
