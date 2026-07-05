@@ -1,15 +1,29 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styles from './SellerNavBar.module.css'; 
 
-// will refine ltr this test nia
+export default function Navbar({ userAvatar }) {
+  const pathname = usePathname();
 
-export default function Navbar() {
+  const navLinks = [
+    { name: 'Overview', href: '/seller/dashboard' },
+    { name: 'My Store', href: '/seller/productlisting' },
+    { name: 'Orders', href: '/seller/ordertracking' },
+    { name: 'Refunds', href: '/seller/refunds' },
+    { name: 'Vouchers', href: '/seller/vouchers' },
+    { name: 'Chat', href: '/seller/chat' },
+    { name: 'Wallet', href: '/seller/wallet' },
+  ];
+
   return (
     <header className={styles.header}>
       <div className={styles.logoWrapper}>
         <Image 
-          src="/logo.png"       
+          src="/logo.png"      
           alt="Logo"    
           width={180}  
           height={48}      
@@ -19,15 +33,31 @@ export default function Navbar() {
       </div>
      
       <nav className={styles.nav}>
-        <a href="/seller" className={styles.navLink}>Overview</a>
-        <a href="#" className={styles.navLinkActive}>My Store</a>
-        <a href="#" className={styles.navLink}>Orders</a>
-        <a href="/seller/refunds" className={styles.navLink}>Refunds</a>
-        <a href="/seller/vouchers" className={styles.navLink}>Vouchers</a>
-        <a href="/seller/chat" className={styles.navLink}>Chat</a>
-        <a href="/seller/wallet" className={styles.navLink}>Wallet</a>
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <Link 
+              key={link.href} 
+              href={link.href} 
+              className={isActive ? styles.navLinkActive : styles.navLink}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
       </nav>
-      <a href="/seller/profile"><div className={styles.avatar}></div></a>
+
+      <Link href="/seller/profile" className={styles.avatarWrapper}>
+        {userAvatar ? (
+          <img 
+            src={userAvatar} 
+            alt="User Avatar" 
+            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
+          />
+        ) : (
+          <div className={styles.avatarPlaceholder} style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#ccc' }}></div>
+        )}
+      </Link>
     </header>
   );
 }
