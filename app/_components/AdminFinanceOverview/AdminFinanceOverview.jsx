@@ -1,12 +1,16 @@
 import Styles from './AdminFinanceOverview.module.css';
 import AdminStatCard from '@/app/_components/AdminFinanceOverviewData/OverviewData';
-import { getDailyTransactionCount,getDailyInflowAmount,getDailyOutflowAmount } from '@/app/_lib/analysis-serives';
+import { getDailyTransactionCount,getDailyInflowAmount,getDailyOutflowAmount, getPlatformDeliveryRevenue } from '@/app/_lib/analysis-serives';
+import { getDailyTransactionTypeBreakdown } from '@/app/_lib/analysis-serives';
+import AdminDailyTransactionPieChart from '../AdminDailyTransactionChart/DailyTransactionPieChart';
 
 export default async function AdminFinanceOverview(){
 
     const dailyTransactionCount = await getDailyTransactionCount();
     const dailyInflow = await getDailyInflowAmount();
     const dailyOutflow = await getDailyOutflowAmount();
+    const revenue = await getPlatformDeliveryRevenue();
+    const counts = await getDailyTransactionTypeBreakdown();
 
     return(
         <>
@@ -20,9 +24,12 @@ export default async function AdminFinanceOverview(){
                 <div className={Styles.infoBox}> {/* in rm */}
                     <AdminStatCard title="Daily Buyer Money Used" value={dailyOutflow} isCurrency={true}/>
                 </div>
+                <div className={Styles.infoBox}> {/* in rm */}
+                    <AdminStatCard title="Platform Delivery Revenue" value={revenue} isCurrency={true}/>
+                </div>
             </div>
-            <div>
-                
+            <div className={Styles.lowerContainer}>
+                <AdminDailyTransactionPieChart counts={counts} />
             </div>
         </>
     );

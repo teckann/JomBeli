@@ -1,0 +1,18 @@
+.openFormBtn {
+    display: flex;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary-light)
+}
+
+.openFormBtn:hover {
+    background-color: var(--color-primary-darker);
+    color: var(--color-primary-subtle);
+    cursor: pointer;
+}
