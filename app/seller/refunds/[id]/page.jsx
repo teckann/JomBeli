@@ -54,6 +54,13 @@ const Refund = async ({ params }) => {
   <form action={RefundAction} className={styles.fcon}>
       
       <input type="hidden" name="refund_id" value={oneRefund.refund_id} />
+      <input type="hidden"   
+                name="seller_remarks" 
+                
+                className={styles.remark} 
+              /> 
+
+
       
       <div className={styles.upCon}>
 
@@ -80,6 +87,10 @@ const Refund = async ({ params }) => {
         </div>
 
       </div>
+
+            </form>
+
+      
 
 
       
@@ -333,7 +344,7 @@ const Refund = async ({ params }) => {
 
       </div>
 
-    </form>
+    
 
 
     </div>
