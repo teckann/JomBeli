@@ -4,7 +4,7 @@ import { getFilterTransactions } from "@/app/_lib/analysis-serives";
 import { AdminFilterTransactions } from "../AdminFilterTransactions/AdminFilterTransactions";
 
 export default async function AdminFinanceTransactionHistory({ searchParams }){
-    const { transaction, transactionType, transactionStatus } = searchParams;
+    const { transaction, direction, transactionStatus } = searchParams;
 
     const titles = ['User Name','Transaction Type','Direction','Method','Amount','Transaction Status','Made At'];
     
@@ -14,7 +14,7 @@ export default async function AdminFinanceTransactionHistory({ searchParams }){
 
     const datas = await getFilterTransactions({
         transaction,
-        transactionType,
+        direction,
         transactionStatus
     });
     

@@ -41,7 +41,7 @@ export function FilterCourier({ hubs }){
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const currentUserStatus = searchParams.get("status") || "Active";
+    const currentUserStatus = searchParams.get("status") || "All";
     const currentUsername = searchParams.get("username") || "";
 
     const handleChange = (e) => {
@@ -124,6 +124,7 @@ export function SelectStatus({handleChange,values}){
         <div>
             <label className={Styles.selectText} htmlFor='status'/>
             <select name="status" id="status" className={Styles.statusDropdown} onChange={handleChange} value={values}>
+                <option value="All">All</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
             </select>

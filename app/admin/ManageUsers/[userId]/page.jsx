@@ -5,6 +5,7 @@ import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 import AdminDeactivateUserButton from "@/app/_components/AdminDeactivateUserButton/AdminDeactivateUserButton"
+import AdminViewOrderHistoryButton from "@/app/_components/AdminViewOrderTransactionsButton/AdminViewOrderTransactionsButton";
 
 export const revalidate = 0;
 
@@ -30,8 +31,7 @@ export default async function UserDetail({params}){
                 </div>
                 <div className={Styles.profileContainer}>
                     <div className={Styles.actionButtons}>
-                        <button className={Styles.btnSecondary}>View order history</button>
-                        <button className={Styles.btnSecondary}>View transaction history</button>
+                        <AdminViewOrderHistoryButton userId={userId} className={Styles.btnSecondary}/>
                     </div>
                     <AdminItemCard id={user.user_id} name={user.username} category={user.role} itemStatus={user.user_status} imageUrl={user.avatar}/>
                 </div>

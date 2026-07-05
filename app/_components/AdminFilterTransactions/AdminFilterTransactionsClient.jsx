@@ -8,8 +8,7 @@ export default function FilterTransactions({ type }){
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const currentTransactionType = searchParams.get("transactionType") || "All";
-    const currentTransactionStatus = searchParams.get("transactionStatus") || "Active";
+    const currentDirection = searchParams.get("direction") || "All";
     const currentTransaction = searchParams.get("transaction") || "";
 
     const handleChange = (e) => {
@@ -27,8 +26,7 @@ export default function FilterTransactions({ type }){
                 <SearchTransaction values={currentTransaction} handleChange={handleChange}/>  
             </div>
             <div className={Styles.roleAndStatus}>
-                <SelectType type={type} values={currentTransactionType} handleChange={handleChange}/>
-                {/* <SelectStatus values={currentTransactionStatus} handleChange={handleChange}/> */}
+                <SelectDirection values={currentDirection} handleChange={handleChange}/>
             </div>
         </div>
     )
@@ -43,30 +41,17 @@ export function SearchTransaction({ handleChange }){
     )
 }
 
-export function SelectType({ type,handleChange,values }){
+export function SelectDirection({ handleChange,values }){
     return(
         <div>
-            <label className={Styles.selectText} htmlFor='transactionType'/>
-            <select name="transactionType" id="transactionType" className={Styles.dropdown} onChange={handleChange} value={values}>
+            <label className={Styles.selectText} htmlFor='direction'/>
+            <select name="direction" id="direction" className={Styles.dropdown} onChange={handleChange} value={values}>
                 <option value="All">All</option>
-                {type.map((types) => {
-                    return <option key={types} value={types}>{types}</option>  
-                })}
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>             
             </select>
         </div>
     )
 }
 
-export function SelectStatus({ handleChange,values }){
-    return (
-        <div>
-            <label className={Styles.selectText} htmlFor='status'/>
-            <select name="transactionStatus" id="transactionStatus" className={Styles.dropdown} onChange={handleChange} value={values}>
-                <option value = "All">All</option>
-                <option value = "Success">Success</option>
-                <option value = "Unsuccessful">Unsuccessful</option>
-            </select>
-        </div>
-    )
-}
 

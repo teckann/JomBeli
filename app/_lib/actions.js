@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import { getUserInfo, setBalances, updateAdminRemarksRefund, updateAdminRemarksSupport } from "./data-services";
+import { getUserInfo, setBalances, updateAdminRemarksRefund, updateAdminRemarksSupport, getUserOrders, getUserTransactions } from "./data-services";
 import { createMessage } from "./message-services";
 import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
@@ -1198,6 +1198,13 @@ export async function verifySecurityQuestions(userId, questionNumber, submittedA
   return isMatch;
 }
 
+export async function fetchUserOrders(userId){
+    return await getUserOrders(userId);
+}
+
+export async function fetchUserTransactions(userId){
+    return await getUserTransactions(userId);
+}
 
 
 export async function withdrawalAction(formData) {
@@ -1227,4 +1234,31 @@ export async function withdrawalAction(formData) {
 
   await setBalances(user_id, -amount);
   revalidatePath("/seller/wallet");
+}
+
+
+export async function createHubAction(hubName, hubLocation, capacity) {
+
+  const supabase = await createClient();
+
+  const newId = await IDGenerator();
+
+  const { data, error } = await supabase
+    .from("HUBS_T")
+    .insert({
+      hub_id: newId,
+      hub_name: hubName,
+      hub_location: hubLocation,
+      capacity: Number(capacity),
+      hub_status: "Active",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
 }
