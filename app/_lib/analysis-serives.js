@@ -376,7 +376,7 @@ export async function getFilterCouriers(status, username) {
     
     let query = supabase
                 .from("USERS_T")
-                .select("*, HUBS_T(hub_id,hub_location)")
+                .select("*, HUBS_T(hub_id,hub_name)")
                 .in("role",["Courier"]);
 
     if (username?.trim()){
@@ -711,3 +711,20 @@ export async function getFilterSupport(date, supportType, supportStatus) {
     
     return {totalProducts, reviews};
   }
+
+  export async function getDeliveredCount(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .eq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error fetching delivered count:", error);
+    return 0;
+  }
+
+  return count;
+}

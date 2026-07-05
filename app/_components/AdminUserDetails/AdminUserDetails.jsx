@@ -31,10 +31,6 @@ export function UserInformation({ user, country }){
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.gender || "-"}</div>
 
-            <span className={Styles.label}>Nationality</span>
-            <span className={Styles.colon}>:</span>
-            <div className={Styles.value}>{country}</div>
-
             <span className={Styles.label}>Email</span>
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.email || "-"}</div>
@@ -47,41 +43,45 @@ export function UserInformation({ user, country }){
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.created_at || "-"}</div>
 
-            <span className={Styles.label}>Select Address</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>
-                    {addresses.length === 0 ? (
-                        <span className={Styles.noAddress}>No addresses used</span>
-                    ) : (
-                        <select 
-                            className={Styles.addressDropdownSelector}
-                            value={selectedAddressIdx}
-                            onChange={(e) => setSelectedAddressIdx(Number(e.target.value))}
-                        >
-                            {addresses.map((addr, index) => (
-                                <option key={addr.address_id || index} value={index}>
-                                    {`Address ${index + 1}`} ({addr.city || "No City"})
-                                </option>
-                            ))}
-                        </select>
+            {user?.role === "Buyer" && (
+                <>
+                    <span className={Styles.label}>Select Address</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>
+                        {addresses.length === 0 ? (
+                            <span className={Styles.noAddress}>No addresses used</span>
+                        ) : (
+                            <select 
+                                className={Styles.addressDropdownSelector}
+                                value={selectedAddressIdx}
+                                onChange={(e) => setSelectedAddressIdx(Number(e.target.value))}
+                            >
+                                {addresses.map((addr, index) => (
+                                    <option key={addr.address_id || index} value={index}>
+                                        {`Address ${index + 1}`} ({addr.city || "No City"})
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
+                    
+                    {activeAddress && (
+                            <>
+                                <span className={Styles.labelSub}>└ Recipient</span>
+                                <span className={Styles.colon}>:</span>
+                                <div className={Styles.valueSub}>{activeAddress.recipient_name || "-"}</div>
+
+                                <span className={Styles.labelSub}>└ Recipient Contact</span>
+                                <span className={Styles.colon}>:</span>
+                                <div className={Styles.valueSub}>{activeAddress.recipient_contact_number || "-"}</div>
+
+                                <span className={Styles.labelSub}>└ Full Address</span>
+                                <span className={Styles.colon}>:</span>
+                                <div className={Styles.valueSub}>{formatAddressString(activeAddress)}</div>
+                            </>
                     )}
-                </div>
-                
-            {activeAddress && (
-                    <>
-                        <span className={Styles.labelSub}>└ Recipient</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.valueSub}>{activeAddress.recipient_name || "-"}</div>
-
-                        <span className={Styles.labelSub}>└ Recipient Contact</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.valueSub}>{activeAddress.recipient_contact_number || "-"}</div>
-
-                        <span className={Styles.labelSub}>└ Full Address</span>
-                        <span className={Styles.colon}>:</span>
-                        <div className={Styles.valueSub}>{formatAddressString(activeAddress)}</div>
-                    </>
-                )}
+                </>
+            )}
         </div>
     </>    
     )
@@ -102,10 +102,6 @@ export function AdminInformation({ user, country }){
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.gender || "-"}</div>
 
-            <span className={Styles.label}>Nationality</span>
-            <span className={Styles.colon}>:</span>
-            <div className={Styles.value}>{country}</div>
-
             <span className={Styles.label}>Email</span>
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.email || "-"}</div>
@@ -123,7 +119,7 @@ export function AdminInformation({ user, country }){
     )
 }
 
-export function ProfileInformation({ user, country }){
+export function ProfileInformation({ user }){
     return(
     <>
         <div className={Styles.headerWrapper}>
@@ -138,10 +134,6 @@ export function ProfileInformation({ user, country }){
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.gender || "-"}</div>
 
-            <span className={Styles.label}>Nationality</span>
-            <span className={Styles.colon}>:</span>
-            <div className={Styles.value}>{country}</div>
-
             <span className={Styles.label}>Email</span>
             <span className={Styles.colon}>:</span>
             <div className={Styles.value}>{user?.email || "-"}</div>
@@ -159,49 +151,50 @@ export function ProfileInformation({ user, country }){
     )
 }
 
-export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,SellerItemsSold,GrossEarnings }){
+export function AccountActivityMonitoring({ user,OrderCount,TotalSpent,GrossEarnings,SellerItemsSold,DeliveredItems }){
     return(
         <>
-        <div className={Styles.headerWrapper}>
-            <h3 className={Styles.sectionTitle}>Account Activity Monitoring</h3>
-        </div>
-        <div className={Styles.infoGrid}>
-            {/* <PlaceholderIcon />
-            <span className={Styles.label}>Last Login</span>
-            <span className={Styles.colon}>:</span>
-            <div className={Styles.value}>{}</div> */}
-            {user?.role === 'Buyer' && (
-                <>
-                <span className={Styles.label}>Total Order History</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{OrderCount}</div>
-               
-                <span className={Styles.label}>Total Purchase Amount</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{TotalSpent ? TotalSpent.toFixed(2) : "-"}</div>
-                </>
-            )}
-            {user?.role === 'Seller' &&(
-                <>
-                <span className={Styles.label}>Total Items Sold</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{SellerItemsSold}</div>
+        <div className={Styles.AAMContainer}>
+            <div className={Styles.headerWrapper}>
+                <h3 className={Styles.sectionTitle}>Account Activity Monitoring</h3>
+            </div>
+            <div className={Styles.infoGrid}>
+                
+                {user?.role === 'Buyer' && (
+                    <>
+                    <span className={Styles.label}>Total Order History</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{OrderCount}</div>
+                
+                    <span className={Styles.label}>Total Purchase Amount</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{TotalSpent ? TotalSpent.toFixed(2) : "-"}</div>
 
-                <span className={Styles.label}>Gross Earnings</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{GrossEarnings}</div>
-                </>
-            )}
-            {user?.role === 'Courier' &&(
-                <>
-                <span className={Styles.label}>Total Items Delivered</span>
-                <span className={Styles.colon}>:</span>
-                <div className={Styles.value}>{SellerItemsSold}</div>
-                </>
-            )}
-            <span className={Styles.label}>Current Balance</span>
-            <span className={Styles.colon}>:</span>
-            <div className={Styles.value}>{user?.balances != null ? Number(user.balances).toFixed(2) : "-"}</div>
+                    <span className={Styles.label}>Current Balance</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{user?.balances != null ? Number(user.balances).toFixed(2) : "-"}</div>
+
+                    </>
+                )}
+                {user?.role === 'Seller' &&(
+                    <>
+                    <span className={Styles.label}>Total Items Sold</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{SellerItemsSold}</div>
+
+                    <span className={Styles.label}>Gross Earnings</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{GrossEarnings}</div>
+                    </>
+                )}
+                {user?.role === 'Courier' &&(
+                    <>
+                    <span className={Styles.label}>Total Items Delivered</span>
+                    <span className={Styles.colon}>:</span>
+                    <div className={Styles.value}>{DeliveredItems ?? "-"}</div>
+                    </>
+                )}
+            </div>
         </div>
         </>
     )
@@ -227,8 +220,4 @@ export function AccountSecurityAnalysis({ user }){
         </div>
         </>
     )
-}
-
-export function SellerItemsSold( user ){
-
 }

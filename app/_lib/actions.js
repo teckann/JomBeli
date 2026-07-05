@@ -13,6 +13,7 @@ import { GeneralIDGenerator, IDGenerator } from "./random-id-generator";
 import { supabase } from "./supabase";
 import { processPayment } from "./processpayment";
 import { getUser } from "./auth";
+import hashValue from "./bcrypt";
 
 const weakPasswordWarning =
   "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.";
@@ -532,6 +533,7 @@ export async function addCourier(formData){
   const gender = formData.get("gender");
   const email = formData.get("email");
   const contactNumber = formData.get("contact_number");
+  const hubId = formData.get("hub_id")
 
   const supabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -539,6 +541,7 @@ export async function addCourier(formData){
   );
 
   const temporaryPassword = "CourierDefault@123456";
+  const availableStatus = "TRUE";
 
   const { data,error } = await supabase.auth.admin.createUser({ 
     email,
@@ -564,8 +567,10 @@ export async function addCourier(formData){
       email: email,
       contact_number: contactNumber,
       role: "Courier",
+      available_status: availableStatus,
       user_status: "Active",
       balances: 0.00,
+      hub_id: hubId
     },
   ]);
   
@@ -1095,4 +1100,96 @@ export async function adminApproveRefundAction(orderID) {
     console.error('Error executing confirmOrder:', error.message);
     return { success: false, error: error.message };
   }
+}
+
+export async function assignHubToCourier(userId, hubId) {
+  const supabase = await createClient();
+
+  const { count, error: checkError } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", userId)
+    .neq("shipping_status", "Delivered");
+
+  if (checkError) {
+    console.error("Error checking pending deliveries:", checkError);
+    return { success: false, error: "Failed to verify delivery status" };
+  }
+
+  if (count > 0) {
+    return { success: false, error: "Cannot reassign hub while a delivery is pending." };
+  }
+
+  const { error } = await supabase
+    .from("USERS_T")
+    .update({ hub_id: hubId })
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error assigning hub:", error);
+    return { success: false, error: "Failed to assign hub" };
+  }
+  return { success: true };
+}
+
+const SECURITY_QUESTIONS = [
+  "What is your secondary school name?",
+  "What is the middle name of your mother?",
+  "What is your favorite color?",
+  "What is your first car brand?",
+  "What is the city name were you born in?",
+];
+
+export async function setSecurityQuestions(userId, formData){
+  const question1 = formData.get("security_question_1");
+  const answer1 = formData.get("security_answer_1");
+  const question2 = formData.get("security_question_2");
+  const answer2 = formData.get("security_answer_2");
+
+  if (!question1 || !answer1 || !question2 || !answer2) {
+        return { success: false, error: "All fields are required." };
+    }
+
+  if (question1 === question2) {
+        return { success: false, error: "Please choose two different questions." };
+    }
+
+  const hashedAnswer1 = await hashValue(answer1);
+  const hashedAnswer2 = await hashValue(answer2);
+
+  const supabase = await createClient();
+  const { error } = await supabase
+      .from("USERS_T")
+      .update({
+          security_question1: question1,
+          answer1: hashedAnswer1,
+          security_question2: question2,
+          answer2: hashedAnswer2,
+      })
+      .eq("user_id", userId);
+
+  if (error) {
+      console.error("Error setting security questions:", error);
+      return { success: false, error: "Failed to save security questions." };
+  }
+
+  return { success: true };
+}
+
+export async function verifySecurityQuestions(userId, questionNumber, submittedAnswer){
+  const supabase = await createClient();
+  const {data, error} = await supabase
+    .from("USERS_T")
+    .select(`answer${questionNumber}`)
+    .eq("user_id", userId)
+    .single();
+
+  if (error || !data) {
+    return false;
+  }
+
+  const storedHash = data[`answer${questionNumber}`];
+
+  const isMatch = await bcrypt.compare(submittedAnswer, storedHash);
+  return isMatch;
 }

@@ -13,7 +13,7 @@ export default async function manageCouriers({ searchParams }) {
     // console.log(userList);
     const titles = ["Full Name","Email","Contact Number","Hub","Role","Status"];
     const actions = [{type:"viewCouriers"}];
-    const fields = ["username", "email", "contact_number","HUBS_T.hub_location", "role","user_status"];
+    const fields = ["username", "email", "contact_number","HUBS_T.hub_name", "role","user_status"];
     const datas = userList;
     
     return (

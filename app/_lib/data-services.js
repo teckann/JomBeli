@@ -1656,3 +1656,84 @@ export async function getAssignedParcelsByAdminThisMonth(adminId) {
 
   return count;
 }
+
+export async function getCourierDetails(userId){
+  const supabase = await createClient();
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*,HUBS_T(*)")
+    .eq("user_id", userId)
+    .single();
+
+  if(error){
+    console.error("Fetch courier data error: ", error);
+    throw new Error("Could not find courier");
+  }
+
+  const cleanedData = {
+    ...data, // copy all the original user data
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar
+        ? [data.avatar]
+        : [],
+  };
+  
+  return cleanedData;
+}
+
+export async function getHubs(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_location",{ascending: true});
+
+  if(error){
+    console.error("Error fetching hubs: ", error)
+    return [];
+  }
+
+  return data;
+}
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; 
+  }
+
+  return count > 0;
+}
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
