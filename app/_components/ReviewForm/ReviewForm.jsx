@@ -26,8 +26,6 @@ export default function ReviewForm({ ReviewData }) {
     }))
   );
 
-  console.log(formState);
-
   const handleItemChange = (index, field, value) => {
     setFormState((prev) =>
       prev.map((item, idx) => (idx === index ? { ...item, [field]: value } : item))

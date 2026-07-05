@@ -1,0 +1,39 @@
+.assignHubContainer{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.headerWrapper {
+    margin-bottom: 24px;
+}
+
+.sectionTitle {
+    display: inline-block; 
+    font-size: 24px;
+    font-weight: 500;
+    color: #7a7a7a;
+    margin: 0;
+    padding-bottom: 4px;
+    border-bottom: 2px solid #b5b5b5;
+}
+
+.label {
+    font-size: 20px;
+    color: #333;
+    font-weight: 400;
+}
+
+.dropdown{
+    width: 100px;
+    height: 60px;
+    padding: 10px; 
+    border-radius: 5%;
+    border: none;
+}
+
+.container{
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+}

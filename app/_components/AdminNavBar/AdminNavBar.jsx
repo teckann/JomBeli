@@ -83,14 +83,14 @@ export default async function AdminNavBar(){
                             Manage Orders
                         </Link>
                         <ManageServicesNavBar />
-                        <Link className={Styles.link} href="/admin">
+                        <Link className={Styles.link} href="/admin/ManageHubs">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className={Styles.svg}>
                                 <path fill="none" d="M0 0h48v48H0z" />
                                 <path fill="currentColor" d="M8 32c0 2.2 1.8 4 4 4h2a4 4 0 0 0 8 0h7a4 4 0 0 0 8 0h3V24l-4-8h-4v-4c0-2.2-1.8-4-4-4H12c-2.2 0-4 1.8-4 4v20zm26 4c0 .551-.449 1-1 1s-1-.449-1-1 .449-1 1-1 1 .449 1 1zm-16 1c-.551 0-1-.449-1-1s.449-1 1-1 1 .449 1 1-.449 1-1 1zm16.146-18L37 24.708V26h-1c-2.2 0-4-1.8-4-4v-3h2.146z" />
                             </svg>
                             Manage Delivery
                         </Link>
-                        <Link className={Styles.link} href="#">
+                        <Link className={Styles.link} href="/admin/PlatformReports">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className={Styles.svg}>
                                 <title>{"report"}</title>
                                 <path fill="currentColor" d="M15 20h2v4h-2zM20 18h2v6h-2zM10 14h2v10h-2z" />
@@ -98,7 +98,7 @@ export default async function AdminNavBar(){
                                 <path d="M0 0h32v32H0z" data-name="&lt;Transparent Rectangle&gt;" style={{ fill: "none", }}
                                 />
                             </svg>
-                            Manage Reports
+                            Platform Reports
                         </Link>
                     </div>
                 </div>

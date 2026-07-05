@@ -51,7 +51,13 @@
     background-color: var(--color-warning-bg); 
     color: var(--color-warning-text); 
 }
+
 .statusOutForDelivery { 
+    background-color: var(--color-warning-bg); 
+    color: var(--color-warning-text); 
+}
+
+.statusOutForRefunded { 
     background-color: var(--color-primary-subtle); 
     color: var(--color-primary); 
 }
@@ -151,7 +157,8 @@
     background-color: var(--color-surface-muted);
     border-top: 1px solid var(--color-border-primary);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .totalWrapper {
@@ -192,4 +199,38 @@
 
 .discountColor {
   color: var(--color-primary);
+}
+
+.actionContainer{
+    display: flex;
+    gap: 8px;
+}
+
+.actionButton{
+    background-color: var(--color-primary);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+}
+
+.actionLink{
+    background-color: var(--color-primary);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+}
+
+.productReviewed{
+    background-color: var(--color-primary-subtle);
+    padding: 10px 12px;
+    border-radius: 10px;
 }

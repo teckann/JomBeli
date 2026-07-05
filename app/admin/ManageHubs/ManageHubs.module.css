@@ -1,0 +1,127 @@
+.linkText {
+    text-decoration: none;
+    color: currentColor;
+}
+
+.contentPage {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.productsOverviewContainer {
+    padding-top: 2em;
+}
+
+.analyticsComponent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.upperPart {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* padding: 1em; */
+}
+
+.generateReportPart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.productsOverviewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.analyticsBar {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: #DBC7BE;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+}
+
+.analyticsTitle {
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.countWrapper {
+    background-color: #F15946;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 2em;
+    padding: 2px;
+}
+
+.countContainer {
+    display: flex;
+    justify-content: center;;
+}
+
+.analyticsBarDatas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+}
+
+.refundsOverviewContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.showSlicePart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 1em;
+}
+
+.showComponent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    padding: 5px 1em 10px 10px;
+    border-radius: 10px;
+    background-color: var(--color-bg-card);
+    width: 20%;
+    height: 100%;
+}
+
+.smallPartTitle {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.smallTitleText {
+    color: chocolate;
+}
+
+.smallPartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+

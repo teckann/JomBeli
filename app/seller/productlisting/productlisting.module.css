@@ -76,7 +76,7 @@
 }
 
 .shopHeader {
-    margin-top: 16px;
+    margin-top: 30px;
     display: flex;
     gap: 24px;
     align-items: center;
@@ -210,10 +210,6 @@
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* .productCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-} */
 
 .categoryTag {
     font-size: var(--text-xs);

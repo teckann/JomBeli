@@ -117,18 +117,18 @@ export function formatData(data) {
       : "No date provided";
 
     cleanedData.start_date = data.start_date
-    ? data.start_date.substring(0, 10)
-    : "No date provided";
+      ? data.start_date.substring(0, 10)
+      : "No date provided";
     
     cleanedData.end_date = data.end_date
-    ? data.end_date.substring(0, 10)
-    : "No date provided";
-
-    // Replace any null values with dashes
+      ? data.end_date.substring(0, 10)
+      : "No date provided";
+    
     for (const key in cleanedData) {
-      cleanedData[key] = cleanedData[key] === null ? "-" : cleanedData[key];
+      if (cleanedData[key] === null) {
+        cleanedData[key] = "-";
+      }
     }
-
     return cleanedData;
   });
 }
@@ -645,7 +645,6 @@ export async function getProductReportData(startDate, endDate) {
     price,
     stock_quantity,
     created_at,
-    overall_product_rating,
     USERS_T (
       user_id,
       username
@@ -670,6 +669,22 @@ export async function getFilterProducts(category) {
     .from("PRODUCTS_T")
     .select("*")
     .eq("category", category);
+
+  if (error) {
+    console.error("Failed to fetch filter products:", error.message);
+    return [];
+  }
+
+  return data;
+}
+export async function getFilterProductsBySellerID(category, sellerID) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .eq("category", category)
+    .eq("user_id", sellerID);
 
   if (error) {
     console.error("Failed to fetch filter products:", error.message);
@@ -1019,7 +1034,26 @@ export async function updateAdminRemarksRefund(refundId, adminRemarks) {
     .select();
 
   if (error) {
-    console.error("Update admin remarks failed:", error);
+    console.error("Update admin refund remarks failed:", error);
+    return { success: false, error };
+  }
+
+  return { success: true, data };
+}
+
+export async function updateAdminRemarksSupport(supportId, adminRemarks) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .update({
+      admin_remarks: adminRemarks,
+    })
+    .eq("support_id", supportId)
+    .select();
+
+  if (error) {
+    console.error("Update admin support remarks failed:", error);
     return { success: false, error };
   }
 
@@ -1148,7 +1182,6 @@ export async function getOrder(orderId, userId) {
         buyer_id,
         seller_id,
         address_id,
-        delivery_id,
         original_price,
         discount_amount,
         total_amount,
@@ -1285,6 +1318,443 @@ export async function getPendingSupport() {
   if (error) {
     console.error(error);
     return [];
+  }
+
+  return data;
+}
+
+export async function getSystemSupports() {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .select(`
+      support_id,
+      support_type,
+      support_status,
+      created_at,
+
+      reporter:USERS_T!SUPPORTS_T_reporter_id_fkey (
+        username
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getSupportDetails(supportId) {
+
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SUPPORTS_T")
+    .select(`
+      support_id,
+      support_type,
+      support_description,
+      support_status,
+      admin_remarks,
+      solved_at,
+      created_at,
+
+      reporter:USERS_T!reporter_id (
+        user_id,
+        username,
+        email
+      ),
+
+      seller:USERS_T!target_seller_id (
+        user_id,
+        username,
+        email,
+        created_at,
+        user_status,
+        avatar
+      ),
+
+      admin:USERS_T!handle_admin_id (
+        user_id,
+        username,
+        email
+      ),
+
+      product:PRODUCTS_T!target_product_id (
+      product_id,
+      product_name,
+      product_image_url,
+      product_status,
+      category,
+
+      seller:USERS_T!user_id (
+        user_id,
+        username,
+        avatar
+      ),
+
+      REVIEWS_T (
+        product_rating
+      )
+    )
+    `)
+    .eq("support_id", supportId)
+    .maybeSingle();
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  const sellerCountPromise = data.seller?.user_id
+    ? supabase
+        .from("SUPPORTS_T")
+        .select("*", { count: "exact", head: true })
+        .eq("target_seller_id", data.seller.user_id)
+    : Promise.resolve({ count: 0 });
+
+  const productCountPromise = data.product?.product_id
+    ? supabase
+        .from("SUPPORTS_T")
+        .select("*", { count: "exact", head: true })
+        .eq("target_product_id", data.product.product_id)
+    : Promise.resolve({ count: 0 });
+
+  const [
+    { count: sellerReportCount },
+    { count: productReportCount }
+  ] = await Promise.all([
+    sellerCountPromise,
+    productCountPromise
+  ]);
+
+  return {data, sellerReportCount, productReportCount};
+}
+
+// export async function updateSystemSupportSolved(supportId, adminId) {
+
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from("SUPPORTS_T")
+//     .update({
+//       support_status: "Solved",
+//       handle_admin_id: adminId,
+//       solved_at: new Date().toISOString(), // or use a database trigger if preferred
+//     })
+//     .eq("support_id", supportId)
+//     .select();
+
+//   if (error) {
+//     console.error("Failed to solve support:", error);
+//     return { success: false, error };
+//   }
+
+//   return { success: true, data };
+// }
+
+export async function checkProductReview(userId, orderId) {
+
+  const supabase = await createClient();
+  
+  const { data, error } = await supabase
+    .from('REVIEWS_T')
+    .select('review_id')
+    .eq('user_id', userId)
+    .eq('order_id', orderId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching review status:', error.message);
+    throw error;
+  }
+
+  return !!data;
+}
+
+export async function getOrderDetails(orderId) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("ORDERS_T")
+    .select(`
+      order_id,
+      created_at,
+      total_amount,
+      original_price,
+      discount_amount,
+      payment_status,
+      order_status,
+
+      buyer:USERS_T!buyer_id (
+        user_id,
+        username,
+        email
+      ),
+
+      seller:USERS_T!seller_id (
+        user_id,
+        username,
+        email
+      ),
+
+      address:ADDRESSES_T!address_id (
+        address_id,
+        recipient_name,
+        street,
+        city,
+        state,
+        postcode,
+        country
+      ),
+
+      shipping:SHIPPING_T!order_id (
+        shipping_id,
+        delivery_type,
+        delivery_fee,
+        shipping_status,
+
+        hub:HUBS_T!hub_id (
+          hub_name,
+          hub_location
+        ),
+
+        courier:USERS_T!courier_id (
+          user_id,
+          username,
+          email
+        ),
+
+        admin:USERS_T!admin_id (
+          user_id,
+          username,
+          email
+        )
+      ),
+
+      transaction:ORDER_TRANSACTIONS_T!order_id (
+        order_transaction_id,
+        amount,
+        order_transaction_status
+      ),
+
+      voucher:USER_VOUCHERS_T!user_voucher_id (
+        user_voucher_status,
+
+        VOUCHERS_T!voucher_id (
+          voucher_name,
+          voucher_type,
+          discount_value
+        )
+      ),
+
+      ORDER_ITEMS_T!order_id (
+        order_item_id,
+        quantity,
+        unit_price,
+        subtotal,
+
+        PRODUCT_VARIANTS_T!product_variant_id (
+          product_variant_id,
+          sku,
+          product_variant_price,
+
+          PRODUCTS_T!product_id (
+            product_id,
+            product_name,
+            category,
+            product_image_url
+          )
+        )
+      )
+    `)
+    .eq("order_id", orderId)
+    .single();
+
+  if (error) {
+
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getTotalActiveHubCount() {
+
+  const supabase = await createClient();
+
+  const { data, error, count } = await supabase
+  .from('HUBS_T')
+  .select('*', { count: 'exact', head: true })
+  .eq('hub_status', 'Active');
+
+  if (error) {
+
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getWaitingAssignParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Created');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getOutOfDeliveryParcelCount() {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('shipping_status', 'Out Of Delivery');
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getAssignedParcelsByAdminThisMonth(adminId) {
+  const supabase = await createClient();
+
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const { count, error } = await supabase
+    .from('SHIPPING_T')
+    .select('*', { count: 'exact', head: true })
+    .eq('admin_id', adminId)
+    .neq('shipping_status', 'Created')
+    .gte('created_at', startOfMonth.toISOString());
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return count;
+}
+
+export async function getCourierDetails(userId){
+  const supabase = await createClient();
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*,HUBS_T(*)")
+    .eq("user_id", userId)
+    .single();
+
+  if(error){
+    console.error("Fetch courier data error: ", error);
+    throw new Error("Could not find courier");
+  }
+
+  const cleanedData = {
+    ...data, // copy all the original user data
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar
+        ? [data.avatar]
+        : [],
+  };
+  
+  return cleanedData;
+}
+
+export async function getCourierHubs(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_location",{ascending: true});
+
+  if(error){
+    console.error("Error fetching hubs: ", error)
+    return [];
+  }
+
+  return data;
+}
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; 
+  }
+
+  return count > 0;
+}
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function getHubs() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("HUBS_T")
+    .select(`
+      hub_id,
+      hub_name,
+      capacity,
+      hub_status,
+      hub_location
+    `)
+    .order("hub_id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    throw error;
   }
 
   return data;

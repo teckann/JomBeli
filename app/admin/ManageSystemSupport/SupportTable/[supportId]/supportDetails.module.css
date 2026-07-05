@@ -1,0 +1,378 @@
+.upperPart {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    align-items: center;
+}
+
+.refundDetailsPage {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    align-items: center;
+    width: 100%;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.backButtonPart, .refundUp {
+    width: 100%;
+}
+
+.informationLeft {
+    width: 50%;
+}
+
+.middlePart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 2em;
+}
+
+.productInformationContainer {
+    display: flex;
+    width: 80%;
+    background-color: bisque;
+    border-radius: 2em;
+    flex-direction: column;
+    padding: 0.3em;
+}
+
+.informationUpper {
+    display: flex;
+}
+
+.informationRight {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    gap: 1em;
+}
+
+.relatedInformation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.buttonParts {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em 0;
+    gap: 1em;
+}
+
+.bottomPart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+.informationListFrame {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+}
+
+.informationSpace {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.informationRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.informationField {
+    width: 30%;
+}
+
+.informationMiddleQuote {
+    width: 5%;
+}
+
+.informationValue {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    background-color: pink;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.titleBar {
+    display: flex;
+    /* padding: 1em; */
+    color: grey;
+}
+
+.hrLength {
+    width: 30%;
+    
+}
+
+.evidencesShow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.evidenceContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 30%; */
+}
+
+.generalInformation, .refundInformation {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1em; */
+    width: 80%;
+    background-color: var(--color-bg-card);
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.generalInformationList {
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.refundUp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1em;
+}
+
+.refundStatusContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+    background-color: var(--color-bg-primary);
+}
+
+.generalInformationTitle {
+    padding: 0 1em;
+}
+
+.showProductSku {
+    display:flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+.refundTable {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.refundDescription {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+}
+
+.refundDescriptionText {
+    display: flex;
+    justify-content: center;
+    padding: 0.5em;
+    border-radius: 10px;
+    background-color: pink;
+    width: 80%;
+}
+
+.showRemarks {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    width: 80%;
+}
+
+.sellerRemarks, .adminRemarks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+    background-color: var(--color-bg-card);
+    width: 100%;
+    border-radius: 10px;
+}
+
+.remarksContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    min-height: 5em;
+    padding: 2em;
+}
+
+.redirectPart {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+    padding-left: 20%;
+    padding: 1em;
+    width: 80%;
+}
+
+.navComponent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+    padding: 0 2em;
+}
+
+.navContainer {
+    display: flex;
+    gap: 1em;
+}
+
+.linkText {
+    font-size: 1.2em;
+    text-decoration: none;
+
+}
+
+.actionButtonPart {
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+    padding: 2em 0;
+    border: none;
+}
+
+.imageComponent {
+    position: relative;
+}
+
+.reportedTimes {
+    position: absolute;
+    top: -10px;
+    left: -30px;
+    background-color: #EF233C;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.specificInformationShow {
+    width: 100%;
+    display: flex;
+    padding-left: 2em;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.showSpecific {
+    width: 100%;
+}
+
+.showSpecific, .showReportDetails {
+    padding: 1em;
+    border: none;
+    background-color: var(--color-bg-card);
+    border-radius: 10px;
+}
+
+.showNavLink {
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    justify-content: center;
+    align-items: center;
+}
+
+.anotherPart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    gap: 2em;
+    background-color: var(--color-bg-card);
+    width: 80%;
+    border-radius: 10px;
+}
+
+.buttonParts {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 2em;
+    padding-top: 0;
+}
+
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.red {
+    background-color: red;
+}
+
+.refundStatusText {
+    color: white;
+}
+
+.notAdmin {
+    color: orange;
+}
+
+.haveAdmin {
+    color: green;
+}
+
+.showGeneralInformation {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: var(--color-bg-card);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    padding: 2em;
+}
+
+.generalInformationTitle {
+    font-size: 3em;
+}
+
+.generalInformationText {
+    font-size: 1.2em;
+}

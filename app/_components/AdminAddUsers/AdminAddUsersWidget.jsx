@@ -5,7 +5,7 @@ import { addCourier } from "@/app/_lib/actions";
 import Modal from "../Modals/Modal";
 import { useState } from 'react';
 
-export function AdminAddCourierForm(){
+export function AdminAddCourierForm({ hubs }){
     const [error,setError] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
     
@@ -43,6 +43,18 @@ export function AdminAddCourierForm(){
                         <div className={Styles.formGroup}>
                             <label>Contact Number</label>
                             <input type="text" name="contact_number" required placeholder="e.g. 0123456789" />
+                        </div>
+
+                        <div className={Styles.formGroup}>
+                            <label>Assigned Hub</label>
+                            <select name="hub_id" required defaultValue="">
+                                <option value="" disabled>-- Select a hub --</option>
+                                {hubs.map((hub) => (
+                                    <option key={hub.hub_id} value={hub.hub_id}>
+                                        {hub.hub_name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <div className={Styles.formActions}>

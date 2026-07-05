@@ -147,7 +147,10 @@
 }
 
 .generalInformationList {
-    display: flex;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 }
 
 .refundUp {
@@ -265,4 +268,5 @@
     justify-content: flex-end;
     width: 80%;
     padding: 2em 0;
+    border: none;
 }

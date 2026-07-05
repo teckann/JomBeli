@@ -12,7 +12,8 @@ export default function DynamicProductView({
   latestReview,
   averageRating = "0.0",
   totalReviews = 0,
-  starCounts = { 5: 0, 4: 0, 3: 0 }
+  starCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+  totalSales = 0
 }) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false); 
@@ -22,15 +23,34 @@ export default function DynamicProductView({
   const [selectedStorage, setSelectedStorage] = useState('');
   const [selectedColour, setSelectedColour] = useState('');
 
+  const productImages = Array.isArray(initialProduct?.product_image_url) 
+    ? initialProduct.product_image_url 
+    : [];
+  
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [variantImage, setVariantImage] = useState(null);
+
   const [currentPrice, setCurrentPrice] = useState(initialProduct?.price || 0);
-  const [currentStock, setCurrentStock] = useState(initialProduct?.stock_quantity || 0);
-  const [currentImage, setCurrentImage] = useState(initialProduct?.product_image_url?.[0] || null);
+  const [currentStock, setCurrentStock] = useState(initialProduct?.stock_quantity ?? 0);
 
   const formatDate = (str) => str ? new Date(str).toLocaleDateString('en-GB') : '';
 
+  const handlePrevImage = () => {
+    if (productImages.length === 0) return;
+    setVariantImage(null); 
+    setCurrentImageIndex((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    if (productImages.length === 0) return;
+    setVariantImage(null); 
+    setCurrentImageIndex((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
+  };
+
   useEffect(() => {
     if (!variants?.length) {
-      setCurrentStock(initialProduct?.stock_quantity || 0);
+      setCurrentStock(initialProduct?.stock_quantity ?? 0);
+      setCurrentPrice(initialProduct?.price || 0); 
       return;
     }
 
@@ -39,30 +59,60 @@ export default function DynamicProductView({
 
     variants.forEach(v => {
       if (v.sku?.includes('*')) {
-        const [s, c] = v.sku.split('*').map(p => p.trim());
-        storageSet.add(s);
-        colourSet.add(c);
+        const parts = v.sku.split('*').map(p => p.trim());
+        let storagePart = parts[0];
+        let colourPart = parts[1];
+
+        const colorKeywords = ['black', 'white', 'blue', 'red', 'green', 'grey', 'silver', 'gold', 'purple', 'pink', 'starlight'];
+        if (colorKeywords.some(keyword => parts[0].toLowerCase().includes(keyword))) {
+          storagePart = parts[1];
+          colourPart = parts[0];
+        }
+
+        if (storagePart) storageSet.add(storagePart);
+        if (colourPart) colourSet.add(colourPart);
+      } else if (v.sku) {
+        colourSet.add(v.sku.trim());
       }
     });
 
-    setStorages(Array.from(storageSet));
-    setColours(Array.from(colourSet));
+    const finalStorages = Array.from(storageSet);
+    const finalColours = Array.from(colourSet);
 
-    if (variants[0].sku?.includes('*')) {
-      const [s, c] = variants[0].sku.split('*').map(p => p.trim());
-      setSelectedStorage(s);
-      setSelectedColour(c);
-    }
+    setStorages(finalStorages);
+    setColours(finalColours);
+
+    if (finalStorages.length > 0) setSelectedStorage(finalStorages[0]);
+    if (finalColours.length > 0) setSelectedColour(finalColours[0]);
   }, [variants, initialProduct]);
 
   useEffect(() => {
-    if (!selectedStorage || !selectedColour || !variants?.length) return;
+    if (!variants?.length) {
+      setCurrentPrice(initialProduct?.price || 0);
+      return;
+    }
 
-    const matched = variants.find(v => v.sku?.trim() === `${selectedStorage} * ${selectedColour}`);
+    const matched = variants.find(v => {
+      if (!v.sku) return false;
+      const skuParts = v.sku.split('*').map(p => p.trim().toLowerCase());
+      
+      const sLower = selectedStorage.toLowerCase();
+      const cLower = selectedColour.toLowerCase();
+
+      if (skuParts.length === 2) {
+        return (skuParts.includes(sLower) && skuParts.includes(cLower)) || 
+               (skuParts[0] === sLower && !selectedColour) || 
+               (skuParts[0] === cLower && !selectedStorage);
+      }
+      return skuParts[0] === cLower || skuParts[0] === sLower;
+    });
+
     if (matched) {
-      setCurrentPrice(matched.product_variant_price);
-      setCurrentStock(matched.product_variant_stock);
-      if (matched.product_variant_image_url) setCurrentImage(matched.product_variant_image_url);
+      setCurrentPrice(matched.product_variant_price ?? initialProduct?.price ?? 0);
+      setCurrentStock(matched.product_variant_stock ?? 0);
+      if (matched.product_variant_image_url) {
+        setVariantImage(matched.product_variant_image_url);
+      }
     } else {
       setCurrentPrice(initialProduct?.price || 0);
       setCurrentStock(0);
@@ -91,13 +141,7 @@ export default function DynamicProductView({
     }
   };
 
-  if (!initialProduct) {
-    return (
-      <div className={styles.container} style={{ textAlign: 'center', padding: '100px 0' }}>
-        <h2 style={{ color: '#cc0000' }}>Loading product details securely...</h2>
-      </div>
-    );
-  }
+  const displayImage = variantImage || productImages[currentImageIndex] || null;
 
   return (
     <div className={styles.container}>
@@ -105,7 +149,7 @@ export default function DynamicProductView({
         <div className={styles.topPartWrapper}>
           <div className={styles.topLeftColumn}>
             <a href="/seller/productlisting" className={styles.backBtn} style={{ textDecoration: 'none' }}>← Back</a>
-            <h1 className={styles.productTitle}>{initialProduct.product_name}</h1>
+            <h1 className={styles.productTitle}>{initialProduct?.product_name}</h1>
           </div>
 
           <div className={styles.topRightColumn}>
@@ -123,27 +167,50 @@ export default function DynamicProductView({
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
             </a>
-            <span className={styles.postDate}></span> 
-            {/* add date */}
           </div>
         </div>
         <hr className={styles.divider} />
 
         <section className={styles.detailsSection}>
-          <div className={styles.imagePlaceholder}>
-            {currentImage ? (
-              <img src={currentImage} alt={initialProduct.product_name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
-            ) : (
-              <div style={{ textAlign: 'center', padding: '60px 0', color: '#999' }}>No Image Sync</div>
+          <div className={styles.imageGalleryContainer}>
+            <div className={styles.imagePlaceholder}>
+              {displayImage ? (
+                <img 
+                  src={displayImage} 
+                  alt={initialProduct?.product_name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} 
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '60px 0', color: '#999' }}>No Image Sync</div>
+              )}
+
+              {productImages.length > 1 && !variantImage && (
+                <>
+                  <button type="button" className={styles.slideBtnLeft} onClick={handlePrevImage}>‹</button>
+                  <button type="button" className={styles.slideBtnRight} onClick={handleNextImage}>›</button>
+                </>
+              )}
+            </div>
+
+            {productImages.length > 1 && !variantImage && (
+              <div className={styles.carouselDots}>
+                {productImages.map((_, idx) => (
+                  <span 
+                    key={idx} 
+                    className={`${styles.dot} ${idx === currentImageIndex ? styles.activeDot : ''}`}
+                    onClick={() => setCurrentImageIndex(idx)}
+                  />
+                ))}
+              </div>
             )}
           </div>
 
           <div className={styles.infoTableContainer}>
             <table className={styles.infoTable}>
               <tbody>
-                <tr><td>Product ID</td><td>{initialProduct.product_id}</td></tr>
-                <tr><td>Category</td><td>{initialProduct.category || "Phone"}</td></tr>
-                <tr><td className={styles.alignTop}>Description</td><td>{initialProduct.product_description}</td></tr>
+                <tr><td>Product ID</td><td>{initialProduct?.product_id}</td></tr>
+                <tr><td>Category</td><td>{initialProduct?.category || "Phone"}</td></tr>
+                <tr><td className={styles.alignTop}>Description</td><td>{initialProduct?.product_description}</td></tr>
                 <tr><td>Stock</td><td>{currentStock}</td></tr>
                 <tr>
                   <td>Price</td>
@@ -151,7 +218,6 @@ export default function DynamicProductView({
                     RM {Number(currentPrice || 0).toFixed(2)}
                   </td>
                 </tr>
-                <tr><td>Total Sales</td><td></td></tr>
               </tbody>
             </table>
           </div>
@@ -161,46 +227,60 @@ export default function DynamicProductView({
           <div className={styles.variantsContainer}>
             <h2 className={styles.sectionTitle}>Product Variants</h2>
             
-            <div className={styles.variantGroup}>
-              <div className={styles.variantLabel}>Storage</div>
-              <div className={styles.variantOptions}>
-                {storages.map(size => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedStorage(size)}
-                    className={`${styles.optionTagButton} ${selectedStorage === size ? styles.activeOption : ''}`}
-                    type="button"
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <hr className={styles.divider} />
-            
-            <div className={styles.variantGroup}>
-              <div className={styles.variantLabel}>Colour</div>
-              <div className={styles.colorOptions}>
-                {colours.map(color => {
-                  let colorClass = styles.greyBg;
-                  if (color.toLowerCase() === 'black') colorClass = styles.blackBg;
-                  if (color.toLowerCase() === 'white') colorClass = styles.whiteBg;
-
-                  return (
+            {storages.length > 0 && (
+              <div className={styles.variantGroup}>
+                <div className={styles.variantLabel}>Options / Storage</div>
+                <div className={styles.variantOptions}>
+                  {storages.map(size => (
                     <button
-                      key={color}
-                      onClick={() => setSelectedColour(color)}
-                      className={`${styles.colorBoxButton} ${selectedColour === color ? styles.activeColorBox : ''}`}
+                      key={size}
+                      onClick={() => {
+                        setSelectedStorage(size);
+                        setVariantImage(null);
+                      }}
+                      className={`${styles.optionTagButton} ${selectedStorage === size ? styles.activeOption : ''}`}
                       type="button"
                     >
-                      <div className={`${styles.colorPreview} ${colorClass}`}></div>
-                      <span>{color}</span>
+                      {size}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+            
+            {storages.length > 0 && colours.length > 0 && <hr className={styles.divider} />}
+            
+            {colours.length > 0 && (
+              <div className={styles.variantGroup}>
+                <div className={styles.variantLabel}>Colour</div>
+                <div className={styles.colorOptions}>
+                  {colours.map(color => {
+                    let colorClass = styles.greyBg;
+                    if (color.toLowerCase().includes('black')) colorClass = styles.blackBg;
+                    if (color.toLowerCase().includes('white') || color.toLowerCase().includes('starlight')) colorClass = styles.whiteBg;
+
+                    return (
+                      <button
+                        key={color}
+                        onClick={() => {
+                          setSelectedColour(color);
+                          setVariantImage(null);
+                        }}
+                        className={`${styles.colorBoxButton} ${selectedColour === color ? styles.activeColorBox : ''}`}
+                        type="button"
+                      >
+                        <div className={`${styles.colorPreview} ${colorClass}`}></div>
+                        <span>{color}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {storages.length === 0 && colours.length === 0 && (
+              <div style={{ color: '#999', padding: '10px 0' }}>Standard item (No extra configurations)</div>
+            )}
           </div>
 
           <div className={styles.reviewsContainer}>
@@ -216,16 +296,38 @@ export default function DynamicProductView({
                 <p className={styles.reviewCount}>{totalReviews} reviews</p>
               </div>
               
-              <div className={styles.ratingBars}>
-                {[5, 4, 3,2,1].map(star => {
-                  const count = starCounts?.[star] || 0;
+              <div className={styles.ratingBars} style={{ width: '100%', minWidth: '200px' }}>
+                {[5, 4, 3, 2, 1].map(star => {
+                  let count = 0;
+                  const currentAvgFloor = Math.floor(parseFloat(averageRating));
+                  
+                  if (totalReviews === 1 && currentAvgFloor === star) {
+                    count = 1;
+                  } else if (starCounts) {
+                    Object.entries(starCounts).forEach(([key, value]) => {
+                      if (Math.floor(parseFloat(key)) === star || Math.round(parseFloat(key)) === star) {
+                        count += Number(value) || 0;
+                      }
+                    });
+                  }
+
                   const percentage = totalReviews > 0 ? `${((count / totalReviews) * 100).toFixed(0)}%` : '0%';
+                  
                   return (
-                    <div key={star} className={styles.barItem}>
-                      <div className={styles.barTrack}>
-                        <div className={styles.barFill} style={{ width: percentage, backgroundColor: '#ff2323' }}></div>
+                    <div key={star} className={styles.barItem} style={{ display: 'flex', alignItems: 'center', marginBottom: '4px', width: '100%' }}>
+                      <div className={styles.barTrack} style={{ flex: 1, backgroundColor: '#eee', height: '8px', borderRadius: '4px', overflow: 'hidden', marginRight: '10px', minWidth: '120px' }}>
+                        <div 
+                          className={styles.barFill} 
+                          style={{ 
+                            width: percentage, 
+                            backgroundColor: '#ff2323', 
+                            height: '100%', 
+                            borderRadius: '4px',
+                            transition: 'width 0.3s ease'
+                          }}
+                        ></div>
                       </div>
-                      <span className={styles.starNum}>{star}</span>
+                      <span className={styles.starNum} style={{ minWidth: '12px', textAlign: 'right' }}>{star}</span>
                     </div>
                   );
                 })}

@@ -11,21 +11,38 @@ export default async function ProductDetailPage({ params }) {
   const resolvedParams = await params;
   const currentUrlId = resolvedParams?.id ? String(resolvedParams.id).trim() : "";
 
-  const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL, 
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 
-  let product = null, variants = [], latestReview = null, averageRating = "0.0", totalReviews = 0;
-  const starCounts = { 5: 0, 4: 0, 3: 0 }; 
+  let product = null, variants = [], latestReview = null, averageRating = "0.0", totalReviews = 0, totalSales = 0;
+  const starCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }; 
 
   if (currentUrlId) {
-    const [productRes, variantsRes] = await Promise.all([
+    const [productRes, variantsRes, orderItemsRes] = await Promise.all([
       supabaseAdmin.from('PRODUCTS_T').select('*').eq('product_id', currentUrlId).maybeSingle(),
-      supabaseAdmin.from('PRODUCT_VARIANTS_T').select('*').eq('product_id', currentUrlId)
+      supabaseAdmin.from('PRODUCT_VARIANTS_T').select('*').eq('product_id', currentUrlId),
+      supabaseAdmin.from('ORDER_ITEMS_T').select('quantity').eq('product_id', currentUrlId)
     ]);
     
     product = productRes.data;
     variants = variantsRes.data || [];
 
-    if (product && product.user_id !== currentUser.id) {
+    if (!product) {
+      return (
+        <div className={styles.container}>
+          <main className={styles.main}>
+            <a href="/seller/productlisting" className={styles.backBtn} style={{ textDecoration: 'none' }}>← Back to Shop</a>
+            <div style={{ textAlign: 'center', padding: '100px 0', color: '#dc3545', fontWeight: 'bold' }}>
+             
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    if (product.user_id !== currentUser.id) {
       return (
         <div className={styles.container}>
           <main className={styles.main}>
@@ -44,39 +61,41 @@ export default async function ProductDetailPage({ params }) {
       );
     }
 
-    if (product) {
-      try {
-        const { data: reviews } = await supabaseAdmin
-          .from('REVIEWS_T')
-          .select('*')
-          .eq('product_id', currentUrlId)
-          .order('created_at', { ascending: false });
+    if (orderItemsRes.data?.length) {
+      totalSales = orderItemsRes.data.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    }
 
-        if (reviews?.length) {
-          totalReviews = reviews.length;
-          latestReview = { ...reviews[0] }; 
+    try {
+      const { data: reviews } = await supabaseAdmin
+        .from('REVIEWS_T')
+        .select('*')
+        .eq('product_id', currentUrlId)
+        .order('created_at', { ascending: false });
 
-          let totalStars = 0;
-          reviews.forEach(r => {
-            const rating = r.rating || r.product_rating || 0;
-            totalStars += rating;
-            if (starCounts[rating] !== undefined) starCounts[rating]++;
-          });
-          averageRating = (totalStars / totalReviews).toFixed(1);
+      if (reviews?.length) {
+        totalReviews = reviews.length;
+        latestReview = { ...reviews[0] }; 
 
-          if (latestReview.user_id) {
-            const { data: userData } = await supabaseAdmin
-              .from('USERS_T') 
-              .select('username')
-              .eq('user_id', latestReview.user_id)
-              .maybeSingle();
+        let totalStars = 0;
+        reviews.forEach(r => {
+          const rating = r.rating || r.product_rating || 0;
+          totalStars += rating;
+          if (starCounts[rating] !== undefined) starCounts[rating]++;
+        });
+        averageRating = (totalStars / totalReviews).toFixed(1);
 
-            latestReview.reviewer_name = userData?.username || "Anonymous User";
-          }
+        if (latestReview.user_id) {
+          const { data: userData } = await supabaseAdmin
+            .from('USERS_T') 
+            .select('username')
+            .eq('user_id', latestReview.user_id)
+            .maybeSingle();
+
+          latestReview.reviewer_name = userData?.username || "Anonymous User";
         }
-      } catch (err) {
-        console.error("Error processing reviews:", err);
       }
+    } catch (err) {
+      console.error("Error processing reviews:", err);
     }
   }
 
@@ -89,6 +108,7 @@ export default async function ProductDetailPage({ params }) {
       averageRating={averageRating}
       totalReviews={totalReviews}
       starCounts={starCounts}
+      totalSales={totalSales}
     />
   );
 }

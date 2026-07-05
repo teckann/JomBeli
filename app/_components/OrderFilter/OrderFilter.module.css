@@ -3,7 +3,7 @@
     background-color: var(--color-surface-muted);
     padding: 4px;
     border-radius: 9999px;
-    gap: 4px;
+    justify-content: space-evenly;
     width: 100%;
     max-width: 80%;
     margin: 20px auto 24px auto;
@@ -12,6 +12,7 @@
 
 .tabLink {
     flex: 1;
+    align-self: center;
     text-align: center;
     padding: 10px 16px;
     text-decoration: none;
@@ -20,6 +21,7 @@
     font-weight: 500;
     color: var(--color-font-secondary);
     border-radius: 9999px;
+    text-wrap: nowrap;
 }
 
 .tabLink:hover {

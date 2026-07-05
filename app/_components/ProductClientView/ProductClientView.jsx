@@ -20,6 +20,7 @@ function ProductClientView({
     price: productPrice,
     stock_quantity: productStock,
     discount,
+    product_id,
   } = product;
 
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -133,7 +134,7 @@ function ProductClientView({
 
   return (
     <div className={styles.content}>
-      <Header name={name} star={productOverallRating} />
+      <Header name={name} star={productOverallRating} productID={product_id}/>
 
       <FinalPrice
         finalPrice={finalPrice}
@@ -247,7 +248,7 @@ const NoOptionsCard = () => {
   );
 };
 
-const Header = ({ name, star }) => {
+const Header = ({ name, star, productID }) => {
   return (
     <div className={styles.header}>
       <p className={styles.title}>{name}</p>
@@ -274,7 +275,7 @@ const Header = ({ name, star }) => {
           )}
         </div>
 
-        <Link href="" className={styles.reportContainer}>
+        <Link href={`/buyer/contactus?productID=${productID}`} className={styles.reportContainer}>
           <svg
             className={styles.reportIcon}
             xmlns="http://www.w3.org/2000/svg"

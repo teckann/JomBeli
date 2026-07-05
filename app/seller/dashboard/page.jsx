@@ -39,7 +39,7 @@ const DashboardPage = () => {
               .from('ORDERS_T') 
               .select('*', { count: 'exact', head: true })
               .eq('seller_id', currentUserId) 
-              .eq('order_status', 'ordered'),
+              .eq('order_status', 'Ordered'),
 
             supabase
               .from('ORDERS_T')

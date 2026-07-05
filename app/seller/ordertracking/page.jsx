@@ -51,6 +51,7 @@ export default function OrderTrackingPage() {
                                : activeStatus === 'packed' ? 'Packed' 
                                : 'Shipped';
 
+ 
                 const { data: orders, error } = await supabase
                     .from('ORDERS_T')
                     .select(`
@@ -75,17 +76,46 @@ export default function OrderTrackingPage() {
                 if (error) throw error;
 
                 const formattedOrders = (orders || []).map(order => {
-                    const firstItem = order.ORDER_ITEMS_T?.[0];
-                    const variantData = firstItem?.PRODUCT_VARIANTS_T;
-                    const productData = variantData?.PRODUCTS_T;
+                    const items = order.ORDER_ITEMS_T || [];
+
+                    if (items.length === 0) {
+                        return {
+                            id: order.order_id,
+                            userId: order.buyer_id, 
+                            productName: 'No Items Found', 
+                            variant: 'N/A', 
+                            amount: 0, 
+                            date: new Date(order.created_at).toLocaleDateString('en-GB'),
+                            status: getDisplayStatus(order.order_status)
+                        };
+                    }
+
+                    const productNamesArr = [];
+                    const variantsArr = [];
+                    let totalQuantity = 0;
+
+                    items.forEach(item => {
+                        totalQuantity += (item.quantity || 0);
+
+                        const variantData = item.PRODUCT_VARIANTS_T;
+                        const skuName = variantData?.sku || 'N/A';
+                        variantsArr.push(skuName);
+
+                        const productData = variantData?.PRODUCTS_T;
+                        const pName = productData?.product_name || 'Unknown Product';
+                        productNamesArr.push(pName);
+                    });
+
+                    const displayProductName = productNamesArr.join(', ');
+                    const displayVariant = variantsArr.join(', ');
 
                     return {
                         id: order.order_id,
                         userId: order.buyer_id, 
-                        productName: productData?.product_name || 'Unknown Product', 
-                        variant: variantData?.sku || 'Standard', 
-                        amount: firstItem?.quantity || 0, 
-                        date: new Date(order.created_at).toLocaleDateString('en-GB'), // DD-MM-YYYY
+                        productName: displayProductName, 
+                        variant: displayVariant, 
+                        amount: totalQuantity, 
+                        date: new Date(order.created_at).toLocaleDateString('en-GB'),
                         status: getDisplayStatus(order.order_status)
                     };
                 });
@@ -114,6 +144,7 @@ export default function OrderTrackingPage() {
             <main className={styles.main}>
                 <div className={styles.topPartWrapper}>
                     <div className={styles.topLeftColumn}>
+                        <button type="button" className={styles.backBtn} onClick={() => router.back()}>← Back</button>
                         <h1 className={styles.productTitle}>ORDERS</h1>
                     </div>
                 </div>

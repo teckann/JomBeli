@@ -7,7 +7,7 @@ import AdminSliceShow from '@/app/_components/AdminSliceShow/AdminSlideShow';
 
 
 
-export default async function manageRefuns() {
+export default async function manageRefunds() {
 
     const rejectedBySeller = await getRejectedBySeller();
     const notProcessBySeller = await getNotProcessedBySeller();
