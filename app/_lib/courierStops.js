@@ -57,7 +57,10 @@ export async function markOrderDelivered(orderId) {
 
   const { error: shippingError } = await supabase
     .from('SHIPPING_T')
-    .update({ shipping_status: 'Completed' })
+    .update({ 
+      shipping_status: 'Completed',
+      shipped_at: new Date().toISOString(),
+     })
     .eq('order_id', orderId);
 
   if (shippingError) throw new Error(`Failed to update shipping for order ${orderId}: ${shippingError.message}`)
