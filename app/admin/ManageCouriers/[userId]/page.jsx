@@ -1,4 +1,4 @@
-import { getCourierDetails, getHubs, hasPendingDelivery } from "@/app/_lib/data-services";
+import { getCourierDetails, getCourierHubs, hasPendingDelivery } from "@/app/_lib/data-services";
 import Styles from "./CourierDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
@@ -15,7 +15,7 @@ export default async function UserDetail({params}){
 
     const user = await getCourierDetails(userId);
     const country = user?.ADDRESSES_T?.[0]?.country || "No country provided";
-    const hubs = await getHubs();
+    const hubs = await getCourierHubs();
     const deliveredcount = await getDeliveredCount(userId);
     const hasPending = await hasPendingDelivery(userId);
 
