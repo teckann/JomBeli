@@ -59,14 +59,14 @@ async function Vouchers() {
             <div className={styles.realTime}>
 
                 {used.length === 0 ? (
-                            <p className={styles.emptyFeed}>No activity yet.</p>
+                            <p className={styles.emptyFeed}>No Voucher yet.</p>
                         ) : (
-                            used.map((activity, index) => {
+                            used.map((usedVoucher, index) => {
 
                                 
-                                const buyer = activity.USERS_T;
-                                const voucher = activity.VOUCHERS_T;
-                                const isUsed = activity.user_voucher_status === 'used';
+                                const buyer = usedVoucher.USERS_T;
+                                const voucher = usedVoucher.VOUCHERS_T;
+                                const isUsed = usedVoucher.user_voucher_status === 'used';
 
                                 return (
                                     <div key={index} className={styles.feedItem}>
@@ -81,11 +81,11 @@ async function Vouchers() {
                                         </div>
                                         <div className={styles.feedText}>
                                             <p className={styles.feedDesc}>
-                                                <strong>{maskName(buyer?.username || 'User')}</strong> {isUsed ? 'used' : 'claimed'}{' '}
+                                                <strong>{(buyer?.username || 'User')}</strong> {isUsed ? 'used' : 'claimed'}{' '}
                                                 <span className={styles.highlight}>{voucher?.voucher_name}</span>
                                             </p>
                                             <p className={styles.feedTime}>
-                                                {formatTime(isUsed ? activity.used_at : activity.claimed_at)}
+                                                {isUsed ? usedVoucher.used_date : usedVoucher.claimed_date}
                                             </p>
                                         </div>
                                     </div>
