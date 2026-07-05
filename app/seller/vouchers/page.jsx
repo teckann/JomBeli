@@ -58,7 +58,7 @@ async function Vouchers() {
                 {used.length === 0 ? (
                             <p className={styles.emptyFeed}>No activity yet.</p>
                         ) : (
-                            activityData.map((activity, index) => {
+                            used.map((activity, index) => {
 
                                 
                                 const buyer = activity.USERS_T;
