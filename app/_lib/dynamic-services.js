@@ -10,6 +10,7 @@ export async function getSingleProduct(productId) {
     .from("PRODUCTS_T")
     .select("*")
     .eq("product_id", productId)
+    .eq("product_status", "Active")
     .single();
 
   if (error) {
@@ -24,6 +25,7 @@ export async function getProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -38,6 +40,7 @@ export async function getProductsBySellerID(sellerID) {
     .from("PRODUCTS_T")
     .select("*")
     .order("created_at", { ascending: false })
+    .eq("product_status", "Active")
     .eq("user_id", sellerID);
 
   if (error) {
