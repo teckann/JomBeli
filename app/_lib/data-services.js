@@ -1850,6 +1850,10 @@ export async function getUsedVoucher(id) {
       user_voucher_status,
       claimed_at,
       used_at,
+      
+      used_date:used_at::date,
+      claimed_date:claimed_at::time,
+
       USERS_T ( username, avatar ),
       VOUCHERS_T !inner ( voucher_name, user_id )
     `)
