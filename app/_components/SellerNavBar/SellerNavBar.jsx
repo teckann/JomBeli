@@ -49,10 +49,13 @@ export default function Navbar({ userAvatar }) {
 
       <Link href="/seller/profile" className={styles.avatarWrapper}>
         {userAvatar ? (
-          <img 
+          <Image 
             src={userAvatar} 
             alt="User Avatar" 
-            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
+            width={40} 
+            height={40}
+            priority
+            style={{ borderRadius: '50%', objectFit: 'cover' }}
           />
         ) : (
           <div className={styles.avatarPlaceholder} style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#ccc' }}></div>
