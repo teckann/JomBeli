@@ -3,6 +3,7 @@ import { getContactList } from "@/app/_lib/message-services";
 import styles from "./ContactList.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { getUserInfo } from "@/app/_lib/data-services";
 
 async function ContactList({ paramID }) {
   const user = await getUser();
@@ -29,10 +30,23 @@ async function ContactList({ paramID }) {
     </div>
   );
 }
-const Contact = ({ user_id, username, avatar, selected, lastMessage }) => {
+const Contact = async ({
+  user_id,
+  username,
+  avatar,
+  selected,
+  lastMessage,
+}) => {
+  // resuable & dynamic routing (contact person id)
+  const { role } = await getUserInfo(user_id);
+
   return (
     <Link
-      href={`/buyer/chat?id=${user_id}`}
+      href={
+        role === "Buyer"
+          ? `/seller/chat?id=${user_id}`
+          : `/buyer/chat?id=${user_id}`
+      }
       className={`${styles.link} ${selected ? styles.hover : ""}`}
     >
       <div className={styles.avatarContainer}>

@@ -117,18 +117,18 @@ export function formatData(data) {
       : "No date provided";
 
     cleanedData.start_date = data.start_date
-    ? data.start_date.substring(0, 10)
-    : "No date provided";
+      ? data.start_date.substring(0, 10)
+      : "No date provided";
     
     cleanedData.end_date = data.end_date
-    ? data.end_date.substring(0, 10)
-    : "No date provided";
-
-    // Replace any null values with dashes
+      ? data.end_date.substring(0, 10)
+      : "No date provided";
+    
     for (const key in cleanedData) {
-      cleanedData[key] = cleanedData[key] === null ? "-" : cleanedData[key];
+      if (cleanedData[key] === null) {
+        cleanedData[key] = "-";
+      }
     }
-
     return cleanedData;
   });
 }
@@ -285,8 +285,8 @@ export async function getSellerVoucher(id) {
     .eq("voucher_type", "shop");
 
   if (error) {
-    console.error("Failed to fetch balance:", error.message);
-    throw new Error("Could not fetch balance");
+    console.error("Failed to fetch vouchers:", error.message);
+    throw new Error("Could not fetch vouchers");
   }
 
   return data;
@@ -1657,6 +1657,168 @@ export async function getAssignedParcelsByAdminThisMonth(adminId) {
   return count;
 }
 
+export async function getCourierDetails(userId){
+  const supabase = await createClient();
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*,HUBS_T(*)")
+    .eq("user_id", userId)
+    .single();
+
+  if(error){
+    console.error("Fetch courier data error: ", error);
+    throw new Error("Could not find courier");
+  }
+
+  const cleanedData = {
+    ...data, // copy all the original user data
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar
+        ? [data.avatar]
+        : [],
+  };
+  
+  return cleanedData;
+}
+
+export async function getCourierHubs(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_location",{ascending: true});
+
+  if(error){
+    console.error("Error fetching hubs: ", error)
+    return [];
+  }
+
+  return data;
+}
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; 
+  }
+
+  return count > 0;
+}
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
+
+export async function getCourierDetails(userId){
+  const supabase = await createClient();
+  const { data,error } = await supabase
+    .from("USERS_T")
+    .select("*,HUBS_T(*)")
+    .eq("user_id", userId)
+    .single();
+
+  if(error){
+    console.error("Fetch courier data error: ", error);
+    throw new Error("Could not find courier");
+  }
+
+  const cleanedData = {
+    ...data, // copy all the original user data
+
+    avatar: Array.isArray(data.avatar)
+      ? data.avatar
+      : data.avatar
+        ? [data.avatar]
+        : [],
+  };
+  
+  return cleanedData;
+}
+
+export async function getCourierHubs(){
+  const supabase = await createClient();
+  const {data,error} = await supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_location",{ascending: true});
+
+  if(error){
+    console.error("Error fetching hubs: ", error)
+    return [];
+  }
+
+  return data;
+}
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; 
+  }
+
+  return count > 0;
+}
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
+
 export async function getHubs() {
   const supabase = await createClient();
 
@@ -1690,6 +1852,115 @@ export async function getFilteredHubs(hubStatus) {
   if (error) {
     console.error(error);
     throw error;
+  }
+
+  return data;
+}
+
+
+export async function getOneRefund(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("REFUNDS_T")
+.select(`
+      *,
+      temp_date:created_at::date,
+      temp_time:created_at::time,
+      ref_temp_date:refunded_at::date,
+      ref_temp_time:refunded_at::time,
+      
+      ORDERS_T!inner (
+        seller_id,
+        order_temp_date:created_at::date,
+        order_temp_time:created_at::time,
+        
+        buyer:USERS_T!buyer_id ( * ),
+        
+        ORDER_ITEMS_T!order_id (
+          *,      
+
+          PRODUCT_VARIANTS_T (
+            *,
+
+            PRODUCTS_T ( * )
+          )
+        )
+      )
+    `)
+    .eq("refund_id", id)
+    .single();
+
+  if (error) {
+    console.error("Failed to single refund:", error.message);
+    throw new Error("Could not fetch single refund");
+  }
+
+  return data;
+}
+
+
+export async function getOneVoucher(id) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+  .from("VOUCHERS_T")
+    .select(`
+      *,
+      
+      starts_date:start_date::date,
+      start_time:start_date::time,
+      ends_date:end_date::date,
+      starts_time:end_date::time,
+      USER_VOUCHERS_T (
+        user_voucher_status
+      )
+    `)
+    .eq("voucher_id", id)
+    .single();
+
+
+  if (error) {
+    console.error("Failed to fetch voucher:", error.message);
+    throw new Error("Could not fetch voucher");
+  }
+
+  const totalClaimed = data.USER_VOUCHERS_T ? data.USER_VOUCHERS_T.length : 0;
+
+
+  const totalUsed = data.USER_VOUCHERS_T 
+    ? data.USER_VOUCHERS_T.filter(v => v.user_voucher_status === 'used').length : 0;
+
+    
+  return {
+    ...data,
+    total_claimed: totalClaimed,
+    total_used: totalUsed
+  };
+}
+
+
+export async function getUsedVoucher(id) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("USER_VOUCHERS_T")
+    .select(`
+      user_voucher_status,
+      claimed_at,
+      used_at,
+      
+      used_date:used_at::date,
+      claimed_date:claimed_at::time,
+
+      USERS_T ( username, avatar ),
+      VOUCHERS_T !inner ( voucher_name, user_id )
+    `)
+    .eq("VOUCHERS_T.user_id", id)
+    .order("claimed_at", { ascending: false })
+    .limit(15); 
+
+  if (error) {
+    console.error("Failed to fetch activity:", error.message);
+    return [];
   }
 
   return data;

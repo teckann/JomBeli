@@ -155,7 +155,8 @@ export function InsertData({evenRows, fields, data, actions, actionMaps}) {
 
 // convert the path pass from fields (string into valid format)
 export function getdataPath(data, path) {
-    return path.split(".").reduce((acc, cur) => acc?.[cur], data);
+    const result =  path.split(".").reduce((acc, cur) => acc?.[cur], data);
+    return result ?? "-";
 }
 
 export function DeactiveIcon() {

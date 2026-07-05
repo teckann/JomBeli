@@ -1,8 +1,9 @@
 'use client'
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import Styles from './AdminGeneratePlatformReports.module.css';
 
-export default function DownloadReportButton({
+export function DownloadReportButton({
     companyName="JomBeli Company",
     reportTitle,
     reportSubtitle,
@@ -48,10 +49,10 @@ export default function DownloadReportButton({
             doc.rect(boxX, boxY, boxWidth, boxHeight, "F");
 
             doc.setFontSize(11);
-            doc.setTestColor(0, 0, 0);
+            doc.setTextColor(0, 0, 0);
 
             summaryItems.forEach((item,index) => {
-                const lineY = boxY + 12 + index + rowHeight;
+                const lineY = boxY + 12 + index * rowHeight;
                 doc.text(item.label, boxX + 8, lineY);
                 doc.text(String(item.value), boxX + boxWidth - 8, lineY, {align:"right"});
             });
@@ -75,9 +76,15 @@ export default function DownloadReportButton({
             startY: cursorY,
             head: [columns],
             body: rows,
-            styles: {fontSize: 9, halign: "center"},
+            styles: {fontSize: 9, halign: "center", overflow: "linebreak"},
             headStyles: { fillColor: [144, 45, 65], textColor: 255 },
             alternateRowStyles: {fillColor: [232, 232, 232]},
+            rowPageBreak: 'avoid',
+            margin: {top: 20},
+            columnStyles:{
+                1: {cellWidth: 35},
+                4: {cellWidth: 35}
+            },
             didDrawPage: (data) => {
                 doc.setFontSize(8);
                 doc.setTextColor(213, 161, 142);
@@ -94,8 +101,13 @@ export default function DownloadReportButton({
     };
 
     return(
-        <button onlick={handleDownload} className="btn btn-primary">
+        <button onClick={handleDownload} className={Styles.downloadButton}>
             Download Report
         </button>
     )
+}
+
+
+export function MonthlyYearlyReportForm(){
+    const [month, setMonth] = useState("June");
 }

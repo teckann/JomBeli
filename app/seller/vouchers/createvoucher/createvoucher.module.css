@@ -1,0 +1,39 @@
+.fcon {
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+.pageTitle {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+
+  color: var(--color-font-primary);
+  margin-bottom: 2rem;
+}
+
+.scon {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+
+
+.left {
+  width: 100%;
+}
+
+.profile {
+  border: 2px solid var(--color-font-primary);
+  border-radius: 8px;
+  height: 300px;
+
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+  background-color: var(--color-surface);
+}
+
+

@@ -1,4 +1,5 @@
 import { getBuyerSellerInfo,getAdminInfo,getCourierInfo } from "@/app/_lib/data-services";
+import { getHubs } from "@/app/_lib/data-services";
 import Styles from './AdminFilterUsers.module.css';
 import { FilterUser,FilterAdmin, FilterCourier } from "./AdminFilterUsersClient";
 
@@ -19,6 +20,7 @@ export async function AdminFilterUser(){
 
 export async function AdminFilterCourier(){
 
+    const hubs = await getHubs();
     const users = await getCourierInfo();
 
     // const distinctCouriers = [...new Set(users.map((user) => user.role))]
@@ -26,7 +28,7 @@ export async function AdminFilterCourier(){
     return(
         <div className={Styles.tableRelatedContainer}>
             <div className={Styles.filterRelatedContainer}>
-                <FilterCourier />
+                <FilterCourier hubs={hubs}/>
             </div>
         </div>
     )

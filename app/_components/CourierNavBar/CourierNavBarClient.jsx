@@ -9,16 +9,10 @@ export default function CourierNavBarClient({userInfo}){
             <Link href="/" style={{textDecoration: "none"}}>
                 <span className={Styles.logo}>JomBeli</span>
             </Link>
-            <Link href="/courier/profile" style={{textDecoration: "none"}} >
-                <div className={Styles.profileContainer}>
-                    <Image
-                        alt="avatar" 
-                        src={avatar}  
-                        height={40} 
-                        width={40}
-                    />
-                    <span className={Styles.username}>{username}</span>    
-                </div>
+
+            <Link className={Styles.profileLink} href="/courier/profile">
+              <Image className={Styles.profileImage} src={avatar} width={28} height={28} alt="Profile" />
+              <span>{username}</span>
             </Link>
 
         </div>

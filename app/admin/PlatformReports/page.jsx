@@ -1,18 +1,26 @@
-import Styles from "./ManageVoucher.module.css";
-import Link from "next/link";
+import Styles from "./PlatformReports.module.css";
+import Link from 'next/link';
 
 export default async function manageVoucher({ searchParams }) {
-    return (
+    return (  
         <div className={Styles.contentPage}>
-            <h1>Financial</h1>
-            <div className={Styles.cardRow}>
-                <link href="/admin/PlatformReports/Financial/Daily" className={Styles.Card}>Daily Report</link>
-                <link href="/admin/PlatformReports/Financial/Monthly/Yearly" className={Styles.Card}></link>
+            <div className={Styles.upperPart}>
+                <div className={Styles.pageDescription}>
+                    <h1 className={Styles.header}>Manage Vouchers</h1>
+                    <p>Manage All Vouchers Right Now!</p>
+                </div>
             </div>
-            <h1>Users</h1>
-            <div className={Styles.cardRow}>
-                <link href="/admin/PlatformReports/User/Daily" className={Styles.Card}>Daily Report</link>
-                <link href="/admin/PlatformReports/User/Monthly/Yearly" className={Styles.Card}></link>
+            <div className={Styles.cardBox}>
+                <h1 className={Styles.header}>Financial</h1>
+                <div className={Styles.cardContainer}>
+                    <Link href="/admin/PlatformReports/Financial/MonthlyYearly" className={Styles.cardText}>Monthly and Yearly Report</Link>
+                </div>
+            </div>
+            <div className={Styles.cardBox}>
+                <h1 className={Styles.header}>Users</h1>
+                <div className={Styles.cardContainer}>
+                    <Link href="/admin/PlatformReports/User/MonthlyYearly" className={Styles.cardText}>Monthly and Yearly Report</Link>
+                </div>
             </div>
         </div> 
     )

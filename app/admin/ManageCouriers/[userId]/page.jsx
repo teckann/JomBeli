@@ -1,10 +1,11 @@
-import { getUserDetails } from "@/app/_lib/data-services";
-import { getBuyerOrderCount, getBuyerTotalSpent, getSellerOrderCount, getSellerGrossEarnings } from "@/app/_lib/analysis-serives"
+import { getCourierDetails, getCourierHubs, hasPendingDelivery } from "@/app/_lib/data-services";
 import Styles from "./CourierDetail.module.css";
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import BackButton from "@/app/_components/AdminBackButton/AdminBackButton";
 import { UserInformation,AccountActivityMonitoring,AccountSecurityAnalysis } from "@/app/_components/AdminUserDetails/AdminUserDetails";
 import AdminDeactivateUserButton from "@/app/_components/AdminDeactivateUserButton/AdminDeactivateUserButton"
+import AssignHub from "@/app/_components/AdminAssignCourierHub/AssignCourierHub";
+import { getDeliveredCount } from "@/app/_lib/analysis-serives";
 
 export const revalidate = 0;
 
@@ -12,12 +13,11 @@ export default async function UserDetail({params}){
     const resolvedParams = await params;
     const userId = resolvedParams?.userId ? String (resolvedParams.userId).trim() : ""
 
-    const user = await getUserDetails(userId);
+    const user = await getCourierDetails(userId);
     const country = user?.ADDRESSES_T?.[0]?.country || "No country provided";
-    const OrderCount = await getBuyerOrderCount(userId);
-    const TotalSpent = await getBuyerTotalSpent(userId);
-    const SellerOrderCount = await getSellerOrderCount(userId); 
-    const GrossEarnings = await getSellerGrossEarnings(userId);
+    const hubs = await getCourierHubs();
+    const deliveredcount = await getDeliveredCount(userId);
+    const hasPending = await hasPendingDelivery(userId);
 
     return(
         <div className={Styles.userDetailsPage}>
@@ -39,7 +39,8 @@ export default async function UserDetail({params}){
                 </div>
                 <div className={Styles.rightSide}>
                     <AccountSecurityAnalysis user={user} />
-                    <AccountActivityMonitoring user={user} OrderCount={OrderCount} TotalSpent={TotalSpent} SellerItemsSold={SellerOrderCount} GrossEarnings={GrossEarnings}/>
+                    <AccountActivityMonitoring user={user} DeliveredItems={deliveredcount}/>
+                    <AssignHub userId={userId} currentHubId={user.hub_id} hubs={hubs} disabled={hasPending}/>
                 </div>
             </div>
         </div>

@@ -1,0 +1,62 @@
+.contentPage{
+    display:flex;
+    flex-direction: column;
+}
+
+.upperPart{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.pageDescription{
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
+    gap: 10px;
+}
+
+.header{
+    font-family: var(--font-display);
+}
+
+.cardBox{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 2%;
+}
+
+.cardContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 800px;
+    height: 200px;
+    background-color: var(--color-bg-card);
+    border-radius: 25px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.cardContainer:active{
+    transform: scale(0.97);
+    background-color: var(--color-bg-hover);
+}
+
+.cardText{
+    font-size: 32px;
+    font-family: var(--font-body);
+    color: var(--color-font-primary);
+    text-decoration: none;
+    padding: 75px 200px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.cardText:visited{
+    text-decoration: none;
+}
+
+.cardText:active{
+    color: var(--color-border-strong);
+    transform: scale(0.95);
+}

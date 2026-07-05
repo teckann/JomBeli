@@ -14,9 +14,10 @@ const RefundTable = ({ data }) => {
                       {header: 'Description', data: 'refund_description'},
                       {header: 'Request Date', multiple: (row) => `${row.temp_date} ${row.temp_time}`}, 
                       {header: 'Response', multiple: (row) => `${row.ref_temp_date ?? 'Not Yet Response'} ${row.ref_temp_time ?? ''}`}, 
-                      {header: 'Refund Status', multiple: (row) => `${(row.refund_status).toUpperCase()}`}, 
+                      {header: 'Refund Status', multiple: (row) => `${row.seller_status}`}, 
+                      {header: 'Refund Status (Admin)', multiple: (row) => `${row.admin_status}`}, 
                       {header: 'Action', multiple: (row) => <> <Link href={`./refunds/${row.refund_id}`}>view</Link> </>}]} 
-        navColumn='refund_status'
+        navColumn='seller_status'
         filterNav = {[{nav: 'All', navStatus: ''},
                       {nav: 'Pending', navStatus: 'pending'},
                       {nav: 'Refunded', navStatus: 'refunded'},

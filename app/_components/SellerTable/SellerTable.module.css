@@ -4,7 +4,9 @@
     margin: 0 10 10 10px;
     padding: 10px;
     border-radius: 10px;
-    background-color: pink;
+
+    background-color: var(--color-info-bg);
+    
 
 }
 
@@ -18,12 +20,13 @@
 
     font-weight: bold;
 
-    border-bottom: 2px solid var(--color-border-light);
+    border-bottom: 2px solid var(--color-border-strong);
 
-    background-color: rgba(88, 88, 88, 0.142);
+    background-color: var(--color-primary);
 
 
 }
+
 
 
 .tbody td {
@@ -31,13 +34,21 @@
 
     padding: 12px;
 
+
+
     font-size: 16px;
 
+    max-width: 250px;
 
-    border-bottom: 1px solid var(--color-border-light);
-    border-left: 1px solid var(--color-border-light);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-    background-color: var(--color-info-bg);
+
+    border-bottom: 1px solid var(--color-border-strong);
+    
+    border-left: 1px solid var(--color-border-strong);
+
 
 }
 
@@ -49,28 +60,20 @@
     
     margin-bottom: 20px;
 
+
 }
 
 .search{
     position: relative;
     display: flex;
     border: none;
+
     align-items: center;
     width: 150px;
 }
 
-.filter{
-    background-color: blue;
-}
-
-.sort{
-    background-color: blueviolet;
-}
-
-
 .tcon{
 
-    background-color: aquamarine;
     
 }
 
@@ -89,7 +92,11 @@
 .nav{
     background: none;
     border: none;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid transparent;
+
+    min-width: 80px;
+
+
     font-size: var(--text-base);
     width: 5%;
 
@@ -99,7 +106,14 @@
     padding-bottom: 5px;
 }
 
+.activeNav {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
 
+.nav:hover {
+    color: var(--color-primary-light);
+}
 
 
 
@@ -107,13 +121,23 @@
     position: relative;
     display: flex;
     width: 100%;
-    font-size: 14px;
+    font-size: var(--text-base);
+
     height: 25px;
-    border: 1px solid rgb(148, 146, 146);
+    border: 1px solid var(--color-font-secondary);
     border-radius: 24px;
+
+    color: var(--color-font-primary);
+
+    outline: none;
 
 
 
     padding-left: 10px;
     padding-right: 40px;
+}
+
+.thead th:last-child,
+.tbody td:last-child {
+    border-right: 1px solid var(--color-border-strong);
 }
