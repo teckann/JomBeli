@@ -109,6 +109,7 @@ const ShopProfileHeader = ({sellerInfo, sellerRating, totalProduct}) => {
                     <p className={Styles.infoText}>Total Product: {totalProduct}</p>
                     {sellerRating? <p className={Styles.infoText}>Rating: {sellerRating}</p>: <p className={Styles.infoText}>No Rating Found</p>}
                 </div>
+                <Link className={Styles.reportShop} href={`/buyer/contactus/?shopID=${sellerInfo.user_id}`}><span className={Styles.exlcaim}>!</span> Report Shop</Link>
             </div>
         </div>
     )
