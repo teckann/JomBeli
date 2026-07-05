@@ -3,6 +3,7 @@ import { getSellerInfo, getSellerRating, getSellerTotalProduct } from "@/app/_li
 import Image from "next/image";
 import Styles from "./page.module.css";
 import Link from "next/link";
+import { getUserInfo } from "@/app/_lib/data-services";
 
 const categories = [
   {
@@ -76,11 +77,16 @@ export default async function ShopProfile({ params, searchParams }){
     const sellerInfo = await getSellerInfo(sellerID);
     const sellerRating = await getSellerRating(sellerID);
     const totalProduct = await getSellerTotalProduct(sellerID);
+    const { created_at } = await getUserInfo(sellerID);
 
     return(
         <div>
-            <ShopProfileHeader sellerInfo={sellerInfo} sellerRating={sellerRating} totalProduct={totalProduct}/>
-            <hr className={Styles.breakLine}/>
+            <ShopProfileHeader 
+                sellerInfo={sellerInfo} 
+                sellerRating={sellerRating} 
+                totalProduct={totalProduct}
+                created_at={created_at}
+            />
             <div className={Styles.bottomSection}>
                 <div className={Styles.filterWrapper}>
                     <ShopFilter sellerID={sellerID}/>
@@ -95,19 +101,22 @@ export default async function ShopProfile({ params, searchParams }){
 }
 
 
-const ShopProfileHeader = ({sellerInfo, sellerRating, totalProduct}) => {
+const ShopProfileHeader = ({sellerInfo, sellerRating, totalProduct, created_at}) => {
+    const date = new Date(created_at);
+    const dateOnly = date.toISOString().split('T')[0];
     return(
         <div>
             <div className={Styles.profileContainer}>
                 <Image className={Styles.avatar} src={sellerInfo.avatar} width={250} height={250} alt={sellerInfo.username}></Image>
                 <div className={Styles.infoContainer}>
                     <h1 className={Styles.shopName}>{sellerInfo.username}</h1>
+                    <p className={Styles.infoText}>Total Product: <span className={Styles.infoValue}>{totalProduct}</span></p>
+                    {sellerRating? <p className={Styles.infoText}>Rating: <span className={Styles.infoValue}>{sellerRating}</span></p>: <p className={Styles.infoText}>No Rating Found</p>}
+                    <p className={Styles.infoText}>Joined on: <span className={Styles.infoValue}>{dateOnly}</span></p>
                     <div className={Styles.linkContainer}>
                         <Link href={`/buyer/chat?id=${sellerInfo.user_id}`}>Chat</Link>
                         <Link href={`/buyer/vouchers?id=${sellerInfo.user_id}`}>Voucher</Link>
                     </div>
-                    <p className={Styles.infoText}>Total Product: {totalProduct}</p>
-                    {sellerRating? <p className={Styles.infoText}>Rating: {sellerRating}</p>: <p className={Styles.infoText}>No Rating Found</p>}
                 </div>
                 <Link className={Styles.reportShop} href={`/buyer/contactus/?shopID=${sellerInfo.user_id}`}><span className={Styles.exlcaim}>!</span> Report Shop</Link>
             </div>
@@ -118,7 +127,7 @@ const ShopProfileHeader = ({sellerInfo, sellerRating, totalProduct}) => {
 const ShopFilter = ({sellerID}) => {
     return(
         <div className={Styles.filterContainer}>
-            <h2>Category</h2>
+            <h2 style={{textAlign: "center"}}>Category</h2>
             <hr className={Styles.breakLine}/>
             {categories.map((item)=>(
                 <Link

@@ -4,7 +4,6 @@ import Styles from "./page.module.css"
 import { getAssignedOrderCount, getCourierCount, getCurrentTasks, getShippingCountByHub, getTodayCompletedCount } from "../_lib/courier-services";
 import Link from "next/link";
 import TempCoverComponent from "../_components/TempCoverComponent/TempCoverComponent";
-import ClockWidget from "../_components/ClockWidget/Clockwidget";
 
 export const revalidate = 0;
 
