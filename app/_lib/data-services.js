@@ -448,6 +448,7 @@ export async function getDiscountProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -468,6 +469,7 @@ export async function getHotProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("total_sold", { ascending: false })
     .limit(5);
 
@@ -484,6 +486,7 @@ export async function getDiscoverProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false })
     .limit(10);
 
