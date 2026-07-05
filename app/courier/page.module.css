@@ -32,7 +32,7 @@
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -127,4 +127,13 @@
 
 .taskCard a:active {
   background: var(--color-primary-darker);
+}
+
+.tempCoverContainer {
+    width: 100%;
+    height: 520px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
