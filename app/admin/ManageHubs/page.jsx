@@ -2,8 +2,9 @@ import Styles from './ManageHubs.module.css';
 import Link from 'next/link';
 import { getTotalWaitingRefundCount } from '@/app/_lib/analysis-serives';
 import { getTotalActiveHubCount, getWaitingAssignParcelCount, getOutOfDeliveryParcelCount, getAssignedParcelsByAdminThisMonth, getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
-import AdminSliceShow from '@/app/_components/AdminSliceShow/AdminSlideShow';
+import AdminFilterHubsBar from '@/app/_components/AdminFilterHubsBars/AdminFlterHubsBars';
 import { getUser } from "@/app/_lib/auth";
+import AdminTable from "@/app/_components/AdminTable/AdminTable";
 // import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
 
 
@@ -17,11 +18,11 @@ export default async function ManageDelivery() {
     const totalOutOfDeliveryParcel = await getOutOfDeliveryParcelCount();
     const totalAssignedParcelMonth = await getAssignedParcelsByAdminThisMonth(user.id);
 
-    const rejectedBySeller = await getRejectedBySeller();
-    const notProcessBySeller = await getNotProcessedBySeller();
+    // const rejectedBySeller = await getRejectedBySeller();
+    // const notProcessBySeller = await getNotProcessedBySeller();
     
-    const rejectedBySellerCount = rejectedBySeller.length;
-    const notProcessBySellerCount = notProcessBySeller.length;
+    // const rejectedBySellerCount = rejectedBySeller.length;
+    // const notProcessBySellerCount = notProcessBySeller.length;
 
     return (
         <div className={ Styles.contentPage}>
@@ -31,28 +32,22 @@ export default async function ManageDelivery() {
                     <p>Manage system delivery and hubs here.</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable">Manage Hubs</Link></button>
+                    <button className="btn btn-primary">Add Hub</button>
                 </div>
             </div>
-            <div className={Styles.refundsOverviewContainer}>
-                <RefundOverViewBar rejectedBySellerCount={rejectedBySellerCount} notProcessBySellerCount={notProcessBySellerCount} />
+            <div className={Styles.smallPartContainer}>
+                <HubInsightComponent title="Total Hubs" count={totalActiveHubs} />
+                <HubInsightComponent title="Tota Parcels Waiting Assign" count={totalWaiting} />
+                <HubInsightComponent title="Out of Delivery" count={totalOutOfDeliveryParcel} />
+                <HubInsightComponent title="Weekly Personal Delivery" count={totalAssignedParcelMonth} />
             </div>
-            <div className={Styles.showSlicePart}>
+            <div className={Styles.showTablePart}>
                 <div className={Styles.listingText}>
-                    <h2>Refund Rejected by Seller {"("}{rejectedBySellerCount}{")"}</h2>
-                    <p>Monitor and ensure that sellers provide reasonable justifications when rejecting refund requests.</p>
+                    <h2>Hub Listing For Assigning Delivery</h2>
+                    <p>View and manage Hub and assign delivery</p>
                 </div>
                 <div>
-                    <AdminSliceShow datas={rejectedBySeller} purpose="refund" />
-                </div>
-            </div>
-            <div className={Styles.showSlicePart}>
-                <div className={Styles.listingText}>
-                    <h2>Not Process by Seller {"("}{notProcessBySellerCount}{")"}</h2>
-                    <p>Manage refund requests that have not been processed by sellers within 7 days.</p>
-                </div>
-                <div>
-                    <AdminSliceShow datas={notProcessBySeller} purpose="refund" />
+                    <AdminFilterHubsBar />
                 </div>
             </div>
             <div>
@@ -90,12 +85,11 @@ export async function RefundOverViewBar({rejectedBySellerCount, notProcessBySell
 
 }
 
-export function HubInsightComponent({title, count, link = null, linkText}) {
+export function HubInsightComponent({title, count}) {
     return (
-        <div>
-            <div><h3>{title}</h3></div>
+        <div className={ Styles.showComponent }>
+            <div className={ Styles.smallPartTitle }><h3 className={ Styles.smallTitleText}>{title}</h3></div>
             <div><h2>{count}</h2></div>
-            {link && <span><Link href={link}>{linkText}</Link></span>}
         </div>
     )
 }

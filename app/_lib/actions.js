@@ -280,6 +280,8 @@ export async function BuyerContactForm(formData) {
   const message = formData.get("description");
   const userID = formData.get("id");
   const supportId = GeneralIDGenerator();
+  const shopID = formData.get("shopID");
+  const productID = formData.get("productID");
 
   if (!category || !message) {
     return { error: "All fields are required." };
@@ -292,6 +294,8 @@ export async function BuyerContactForm(formData) {
       support_description: message,
       support_status: "pending",
       reporter_id: userID,
+      target_product_id: productID? productID : null,
+      target_seller_id: shopID? shopID : null
     },
   ]);
 

@@ -1683,7 +1683,7 @@ export async function getCourierDetails(userId){
   return cleanedData;
 }
 
-export async function getHubs(){
+export async function getCourierHubs(){
   const supabase = await createClient();
   const {data,error} = await supabase
     .from("HUBS_T")
@@ -1736,4 +1736,26 @@ export async function getUserOrders(userId){
         return [];
     }
     return data;
+}
+
+export async function getHubs() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("HUBS_T")
+    .select(`
+      hub_id,
+      hub_name,
+      capacity,
+      hub_status,
+      hub_location
+    `)
+    .order("hub_id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
 }

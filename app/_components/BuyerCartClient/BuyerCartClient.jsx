@@ -5,12 +5,14 @@ import Styles from "./BuyerCartClient.module.css";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import OrderItemCard from "../OrderItemCard/OrderItemCard";
+import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
 
 
 export default function BuyerCartClient({cartData}){
 
     const [itemList, setItemsList] = useState(cartData);
     const [checkedItems, setCheckedItems] = useState([]);
+    const [selectedShopID, setSelectedShopID] = useState(null);
 
     // Group items by shop (seller user id)
     const groupedByShop = itemList.reduce((acc, cartitem) => {
@@ -28,12 +30,19 @@ export default function BuyerCartClient({cartData}){
         return acc;
     }, {});
     
-    const handleCheckboxChange = (id) => {
-        setCheckedItems((prev) =>
-            prev.includes(id)
-                ?prev.filter((item) => item !== id)
-                :[...prev, id]
-        );
+    const handleCheckboxChange = (id, shopId) => {
+        const isAlreadyChecked = checkedItems.includes(id);
+        const nextCheckedItems = isAlreadyChecked
+            ? checkedItems.filter((item) => item !== id)
+            : [...checkedItems, id];
+
+        setCheckedItems(nextCheckedItems);
+
+        if (nextCheckedItems.length === 0) {
+            setSelectedShopID(null);
+        } else {
+            setSelectedShopID(shopId);
+        }
     };
 
     // Calculate price based on checked items
@@ -83,6 +92,18 @@ export default function BuyerCartClient({cartData}){
     return(
         <div className={Styles.cartComponentWrapper}>
             <div className={Styles.cartItemWrapper}>
+                {Object.entries(groupedByShop).length==0
+                ?
+                    <div className={Styles.tempCoverContainer}>
+                        <TempCoverComponent
+                        imagePath="/data-not-found.png"
+                        alt="Data not found"
+                        title="No Cart Item Found"
+                        desc="Go browse and add items to cart"
+                        />
+                    </div>
+                :   null
+                }
                 {Object.entries(groupedByShop).map(([shopId, { shopName, items }]) => (
                     <div key={shopId} className={Styles.cartItemList}>
                         <h2>{shopName}</h2>
@@ -92,10 +113,11 @@ export default function BuyerCartClient({cartData}){
                                 key={cartitem.cart_item_id}
                                 cartitem={cartitem}
                                 isChecked={checkedItems.includes(cartitem.cart_item_id)}
-                                onCheckboxChange={() => handleCheckboxChange(cartitem.cart_item_id)}
+                                onCheckboxChange={() => handleCheckboxChange(cartitem.cart_item_id, shopId)}
                                 onDelete={() => handleDelete(cartitem.cart_item_id)}
                                 showCheckbox={true}
                                 showDelete={true}
+                                selectedShopID={selectedShopID}
                             />
                         ))}
                     </div>
