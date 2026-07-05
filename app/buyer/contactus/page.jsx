@@ -4,9 +4,9 @@ import BuyerContactUsForm from "@/app/_components/BuyerContactUsForm/BuyerContac
 export default async function ContactUs({ searchParams }){
 
     const user = await getUser();
-    const {productID} = await searchParams || null;
+    const {productID, shopID} = await searchParams || null;
 
     return(
-        <BuyerContactUsForm userId={user.id} productID={productID}/>
+        <BuyerContactUsForm userId={user.id} productID={productID} shopID={shopID}/>
     )
 }

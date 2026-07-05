@@ -1,0 +1,27 @@
+.filterBarsContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2em 1em;
+}
+
+.selectBoxs {
+    display: flex;
+    gap: 2em;
+}
+
+.selectBox {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+}
+
+.selectText {
+    font-weight: bold;
+    text-align: center;
+}
+
+.inputs {
+    padding: 5px;
+    border-radius: 5px;
+}

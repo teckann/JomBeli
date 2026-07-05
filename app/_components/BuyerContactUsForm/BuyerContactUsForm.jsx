@@ -1,7 +1,7 @@
 import Styles from "./BuyerContactUsForm.module.css";
 import { BuyerContactForm } from "@/app/_lib/actions";
 
-export default function BuyerContactUsForm({ userId, productID }) {
+export default function BuyerContactUsForm({ userId, productID, shopID }) {
 
   return (
     <div className={Styles.formContainer}>
@@ -17,7 +17,7 @@ export default function BuyerContactUsForm({ userId, productID }) {
       <form className={Styles.form} action={BuyerContactForm}>
         <input type="hidden" name="id" value={userId} />
         
-        {!productID
+        {!productID && !shopID
         ?
           <div className={Styles.formGroup}>
             <label htmlFor="category">Report Type</label>
@@ -29,9 +29,17 @@ export default function BuyerContactUsForm({ userId, productID }) {
             </select>
           </div>        
         :
+          productID?
           <div>
             <h2>Reporting Product #<span className={Styles.orderIdText}>{productID}</span></h2>
             <input type="hidden" name="category" value="Report Product"/>
+            <input type="hidden" name="productID" value={productID}/>
+          </div>
+          :
+          <div>
+            <h2>Reporting Shop #<span className={Styles.orderIdText}>{shopID}</span></h2>
+            <input type="hidden" name="category" value="Report Shop"/>
+            <input type="hidden" name="shopID" value={shopID}/>
           </div>
         }
 

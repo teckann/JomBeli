@@ -95,3 +95,19 @@ export async function getCurrentTasks(courierId) {
 
     return data ?? [];
 }
+
+export async function getCourierCount(hubId) {
+    const supabase = await createClient();
+
+    const { count, error } = await supabase
+        .from("USERS_T")
+        .select("*", { count: "exact", head: true })
+        .eq("hub_id", hubId)
+        .eq("user_status", "Active");
+
+    if (error) {
+        throw new Error(`Failed to retrieve active courier count: ${error.message}`);
+    }
+
+    return count ?? 0;
+}

@@ -93,3 +93,35 @@
     gap: 0.5em;
     padding: 1em;
 }
+
+.showComponent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    padding: 5px 1em 10px 10px;
+    border-radius: 10px;
+    background-color: var(--color-bg-card);
+    width: 20%;
+    height: 100%;
+}
+
+.smallPartTitle {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.smallTitleText {
+    color: chocolate;
+}
+
+.smallPartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+

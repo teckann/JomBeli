@@ -36,7 +36,7 @@ export function FilterUser({role}){
 
 }
 
-export function FilterCourier(){
+export function FilterCourier({ hubs }){
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -57,7 +57,7 @@ export function FilterCourier(){
         <div className={Styles.filterBar}>
             <div className={Styles.searchUser}>
                 <SearchUser values={currentUsername} handleChange={handleChange}/>  
-                <AdminAddCourierForm />
+                <AdminAddCourierForm hubs={hubs} />
             </div>
             <div className={Styles.roleAndStatus}>
                 <SelectStatus values={currentUserStatus }handleChange={handleChange}/>
