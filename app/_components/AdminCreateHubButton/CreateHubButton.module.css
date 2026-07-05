@@ -1,0 +1,102 @@
+.overlay {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+.component {
+    position: fixed;
+    top: 20%;
+    left: 35%;
+    width: 30%;
+    height: 70%;
+    background-color: white;
+    z-index: 1111;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.openButton, .confirmButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    color: white;
+    background-color: var(--color-primary-light);
+    border: none;
+    border-radius: 10px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.openButton:hover {
+    background-color: var(--color-primary-dark);
+    transform: scale(1.2);
+}
+
+.componentTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.componentUp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputChange {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.checkBoxChange {
+    display: flex;
+    gap: 1em,;
+}
+
+.checkBox {
+    padding: 5px;
+}
+
+.locationInput {
+    padding: 6px;
+    resize: none;
+    border-radius: 3px;
+    border: 1px black solid;
+    width: 20em;
+}
+
+.input {
+    padding: 6px;
+    border-radius: 3px;
+    width: 20em;
+    border: 1px black solid;
+}
+
+.confirmButton {
+    background-color: var(--color-success);
+}
+
+.confirmButton:hover {
+    transform: scale(1.2);
+    background-color: var(--color-success-text);
+}

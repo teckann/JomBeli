@@ -1096,3 +1096,29 @@ export async function adminApproveRefundAction(orderID) {
     return { success: false, error: error.message };
   }
 }
+
+export async function createHubAction(hubName, hubLocation, capacity) {
+
+  const supabase = await createClient();
+
+  const newId = await IDGenerator();
+
+  const { data, error } = await supabase
+    .from("HUBS_T")
+    .insert({
+      hub_id: newId,
+      hub_name: hubName,
+      hub_location: hubLocation,
+      capacity: Number(capacity),
+      hub_status: "Active",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}

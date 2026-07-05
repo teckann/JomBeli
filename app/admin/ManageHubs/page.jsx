@@ -3,13 +3,16 @@ import Link from 'next/link';
 import { getTotalWaitingRefundCount } from '@/app/_lib/analysis-serives';
 import { getTotalActiveHubCount, getWaitingAssignParcelCount, getOutOfDeliveryParcelCount, getAssignedParcelsByAdminThisMonth, getNotProcessedBySeller, getRejectedBySeller } from '@/app/_lib/data-services';
 import AdminFilterHubsBar from '@/app/_components/AdminFilterHubsBars/AdminFlterHubsBars';
+import AdminCreateHubsButton from '@/app/_components/AdminCreateHubButton/CreateHubButton';
 import { getUser } from "@/app/_lib/auth";
 import AdminTable from "@/app/_components/AdminTable/AdminTable";
-// import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
+import { getFilteredHubs } from '@/app/_lib/data-services';
 
 
 
-export default async function ManageDelivery() {
+export default async function ManageDelivery({searchParams}) {
+
+    const { hubStatus } = await searchParams;
 
     const user = await getUser();
 
@@ -18,11 +21,11 @@ export default async function ManageDelivery() {
     const totalOutOfDeliveryParcel = await getOutOfDeliveryParcelCount();
     const totalAssignedParcelMonth = await getAssignedParcelsByAdminThisMonth(user.id);
 
-    // const rejectedBySeller = await getRejectedBySeller();
-    // const notProcessBySeller = await getNotProcessedBySeller();
-    
-    // const rejectedBySellerCount = rejectedBySeller.length;
-    // const notProcessBySellerCount = notProcessBySeller.length;
+    const filteredHubDatas = await getFilteredHubs(hubStatus);
+
+    const actions = [{type: "manageHubs"}];
+    const titles = ["Hub ID", "Hub Name", "Location", "Capacity", "Status", "Created Time"];
+    const fields = ["hub_id", "hub_name", "hub_location", "capacity", "hub_status","created_at"];
 
     return (
         <div className={ Styles.contentPage}>
@@ -32,7 +35,7 @@ export default async function ManageDelivery() {
                     <p>Manage system delivery and hubs here.</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    <button className="btn btn-primary">Add Hub</button>
+                    <AdminCreateHubsButton />
                 </div>
             </div>
             <div className={Styles.smallPartContainer}>
@@ -51,7 +54,7 @@ export default async function ManageDelivery() {
                 </div>
             </div>
             <div>
-                {/* <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={true} dataIdFormat="product_id" /> */}
+                <AdminTable titles={titles} fields={fields} actions={actions} datas={filteredHubDatas} slice={true} dataIdFormat="hub_id" />
             </div>
         </div>
     );

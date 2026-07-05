@@ -21,7 +21,8 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         viewTransaction: {name: "View", icon: <InfoIcon />, handler: (transaction) => router.push(`/admin/ManageFinance/${getdataPath(transaction, "wallet_transaction_id")}`), show: (data) => true},
                         viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true},
                         viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true},
-                        viewSupport: {name: "View Support", icon: <InfoIcon />, handler: (support) => router.push(`/admin/ManageSystemSupport/SupportTable/${getdataPath(support, "support_id")}`), show: (order) => true}
+                        viewSupport: {name: "View Support", icon: <InfoIcon />, handler: (support) => router.push(`/admin/ManageSystemSupport/SupportTable/${getdataPath(support, "support_id")}`), show: (order) => true},
+                        manageHubs: {name: "Manage Hub's Delivery", icon: <InfoIcon />, handler: (hub) => router.push(`/admin/ManageHubs/${hub.hub_id}/AssignCourier`), show: (admin) => true}
                     };
 
     // console.log(datas);

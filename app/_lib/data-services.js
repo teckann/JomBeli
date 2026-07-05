@@ -1662,14 +1662,30 @@ export async function getHubs() {
 
   const { data, error } = await supabase
     .from("HUBS_T")
-    .select(`
-      hub_id,
-      hub_name,
-      capacity,
-      hub_status,
-      hub_location
-    `)
+    .select(`*`)
     .order("hub_id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getFilteredHubs(hubStatus) {
+  const supabase = await createClient();
+
+  let query = supabase
+    .from("HUBS_T")
+    .select("*")
+    .order("hub_id", { ascending: true });
+
+  if (hubStatus && hubStatus !== "All") {
+    query = query.eq("hub_status", hubStatus);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error(error);
