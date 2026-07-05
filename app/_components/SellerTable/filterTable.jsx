@@ -27,18 +27,12 @@ const FilterTable = ({ changeSearch }) => {
             </div>
 
 
-            <div className={styles.sort}>
-
-                <select name="" id=""></select>
-                
-                
-            </div>
 
         </div>
   )
 }
 
-const FilterBig = ({ changeNav,     
+const FilterBig = ({ changeNav, currentNav,     
                      navDetail = [{nav: 'All', navStatus: ''},
                                 {nav: 'Active', navStatus: 'active'},
                                 {nav: 'Expired', navStatus: 'expired'},
@@ -48,10 +42,9 @@ const FilterBig = ({ changeNav,
     return (
         <div className={styles.navs}>
             {navDetail.map((bar) => (
-                <button className={styles.nav} 
+                <button className={`${styles.nav} ${currentNav === bar.navStatus ? styles.activeNav : ''}`}
                     onClick={(e) => {
                         changeNav(bar.navStatus);
-                        e.target.styles.color = 'var(--color-primary)';
 
                     }}
                 >

@@ -30,7 +30,11 @@ async function ChatSpace({ id }) {
   return (
     <div className={styles.main}>
       <div className={styles.chatSpaceHeader}>
-        <Link href={`/buyer/shopProfile/${id}`}>
+        <Link
+          href={
+            currentUserInfo.role === "Buyer" ? `/buyer/shopProfile/${id}` : "#"
+          }
+        >
           {selectedUserInfo.username}
         </Link>
       </div>
