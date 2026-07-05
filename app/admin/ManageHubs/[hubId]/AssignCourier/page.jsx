@@ -11,7 +11,7 @@ import AdminTable from '@/app/_components/AdminTable/AdminTable';
 
 export default async function ManageSupportPage({ params }) {
 
-    const { hubId } = await searchParams;
+    const { hubId } = await params;
 
     const supportList = await getFilterSupport(date, supportType, supportStatus);
 

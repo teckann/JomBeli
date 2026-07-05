@@ -1829,6 +1829,31 @@ export async function getUsedVoucher(id) {
   return data;
 }
 
+export async function getAvailableShipments() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("SHIPPING_T")
+    .select(`
+      *,
+      order:ORDERS_T!order_id (
+        address:ADDRESSES_T!address_id (
+          *
+        )
+      )
+    `)
+    .is("courier_id", null)
+    .eq("shipping_status", "Created")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
 export async function getUserOrders(userId){
   const supabase = await createClient();
 
