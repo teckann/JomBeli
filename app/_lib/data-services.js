@@ -1853,3 +1853,43 @@ export async function getAvailableShipments() {
 
   return data;
 }
+
+export async function getUserOrders(userId){
+  const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("ORDERS_T")
+        .select(`
+            order_id,
+            total_amount,
+            order_status,
+            created_at,
+            seller:USERS_T!ORDERS_T_seller_id_fkey ( username ),
+            buyer:USERS_T!ORDERS_T_buyer_id_fkey ( username )
+        `)
+        .or(`seller_id.eq.${userId},buyer_id.eq.${userId}`)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user orders:", error);
+        return [];
+    }
+    return data;
+}
+
+
+export async function getUserTransactions(userId) {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("WALLET_TRANSACTIONS_T")
+        .select("*, USERS_T(username)")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Error fetching user transactions:", error);
+        return [];
+    }
+    return data;
+}
