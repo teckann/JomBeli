@@ -2,6 +2,9 @@ import VoucherTable from '@/app/_components/SellerTable/voucherTable';
 import styles from './vouchers.module.css'
 import Link from 'next/link';
 
+import Image from 'next/image';
+
+
 import { getSellerVoucher } from "@/app/_lib/data-services";
 
 import { getUsedVoucher } from "@/app/_lib/data-services";
