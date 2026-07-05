@@ -103,7 +103,7 @@ export async function getCourierCount(hubId) {
         .from("USERS_T")
         .select("*", { count: "exact", head: true })
         .eq("hub_id", hubId)
-        .eq("user_status", "Active");
+        .eq("available_status", true);
 
     if (error) {
         throw new Error(`Failed to retrieve active courier count: ${error.message}`);

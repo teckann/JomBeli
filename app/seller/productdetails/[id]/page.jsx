@@ -4,6 +4,24 @@ import styles from './productdetails.module.css';
 import { createClient } from '@supabase/supabase-js';
 import DynamicProductView from './DynamicProductView.jsx'; 
 
+async function deleteProductAction(productId) {
+  'use server';
+  if (!productId) return { success: false, error: 'Missing Product ID' };
+
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL, 
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+  
+  const { error } = await supabaseAdmin
+    .from('PRODUCTS_T')
+    .update({ product_status: 'Inactive' })
+    .eq('product_id', productId);
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
 export default async function ProductDetailPage({ params }) {
   const currentUser = await getUser();
   if (!currentUser?.id) return <div className={styles.loading}>Please log in to view your shop.</div>;
@@ -16,18 +34,20 @@ export default async function ProductDetailPage({ params }) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  let product = null, variants = [], latestReview = null, averageRating = "0.0", totalReviews = 0, totalSales = 0;
+  let product = null, variants = [], productOptions = [], latestReview = null, averageRating = "0.0", totalReviews = 0, totalSales = 0;
   const starCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }; 
 
   if (currentUrlId) {
-    const [productRes, variantsRes, orderItemsRes] = await Promise.all([
+    const [productRes, variantsRes, optionsRes, orderItemsRes] = await Promise.all([
       supabaseAdmin.from('PRODUCTS_T').select('*').eq('product_id', currentUrlId).maybeSingle(),
       supabaseAdmin.from('PRODUCT_VARIANTS_T').select('*').eq('product_id', currentUrlId),
+      supabaseAdmin.from('PRODUCT_OPTIONS_T').select('option_name').eq('product_id', currentUrlId),
       supabaseAdmin.from('ORDER_ITEMS_T').select('quantity').eq('product_id', currentUrlId)
     ]);
     
     product = productRes.data;
     variants = variantsRes.data || [];
+    productOptions = optionsRes.data || [];
 
     if (!product) {
       return (
@@ -35,7 +55,7 @@ export default async function ProductDetailPage({ params }) {
           <main className={styles.main}>
             <a href="/seller/productlisting" className={styles.backBtn} style={{ textDecoration: 'none' }}>← Back to Shop</a>
             <div style={{ textAlign: 'center', padding: '100px 0', color: '#dc3545', fontWeight: 'bold' }}>
-             
+              Product not found.
             </div>
           </main>
         </div>
@@ -103,12 +123,14 @@ export default async function ProductDetailPage({ params }) {
     <DynamicProductView 
       initialProduct={product} 
       variants={variants} 
+      productOptions={productOptions} 
       currentUrlId={currentUrlId} 
       latestReview={latestReview} 
       averageRating={averageRating}
       totalReviews={totalReviews}
       starCounts={starCounts}
       totalSales={totalSales}
+      onDeleteProduct={deleteProductAction} 
     />
   );
 }

@@ -5,20 +5,11 @@ import { getAssignedOrderCount, getCourierCount, getCurrentTasks, getShippingCou
 import Link from "next/link";
 import TempCoverComponent from "../_components/TempCoverComponent/TempCoverComponent";
 
-export const revalidate = 0;
-
 const user = await getUser();
 const userInfo = await getUserInfo(user.id);
 
-const {
-  username,
-  avatar,
-  hub_id,
-  user_id
-} = userInfo;
-
 export default async function CourierHomePage() {
-
+  const { username, hub_id, user_id } = userInfo;
   const hubParcelCount = await getShippingCountByHub(hub_id);
   const assignedOrderCount = await getAssignedOrderCount(user_id);
   const dailyCompletedTaskCount = await getTodayCompletedCount(user_id);
@@ -29,7 +20,7 @@ export default async function CourierHomePage() {
   return (
     <div className={Styles.dashboardWrapper}>
       <main className={Styles.dashboard}>
-        <DashboardHeader />
+        <DashboardHeader username={username}/>
         <StatsGrid 
           hubParcelCount={hubParcelCount} 
           assignedOrderCount={assignedOrderCount}
@@ -42,7 +33,7 @@ export default async function CourierHomePage() {
   );
 }
 
-function DashboardHeader() {
+function DashboardHeader({username}) {
 
   return (
     <header className={Styles.header}>

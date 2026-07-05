@@ -5,6 +5,7 @@ import StarRating from "../StarRating/StarRating";
 import { submitReviews } from "@/app/_lib/actions";
 import Styles from "./ReviewForm.module.css"; 
 import Image from "next/image";
+import ProductDetailsBackButton from "../ProductDetailsBackButton/ProductDetailsBackButton";
 
 export default function ReviewForm({ ReviewData }) {
   const [isPending, startTransition] = useTransition();
@@ -45,43 +46,46 @@ export default function ReviewForm({ ReviewData }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={Styles.formWrapper}>
-      <h1 className={Styles.title}>Review Order #{orderId}</h1>
-      
-      {formState.map((item, index) => (
-        <div key={index} className={Styles.reviewCard}>
-          <h3 className={Styles.productName}>{item.productName}</h3>
-          <h3 className={Styles.sku}>{item.sku}</h3>
-          <Image className={Styles.productImage} src={item.productImage} width={100} height={100} alt={item.productName}/>
-          
-          <div className={Styles.ratingSection}>
-            <span>Rating:</span>
-            <StarRating 
-              maxRating={5}
-              defaultRating={5}
-              size={24}
-              onRateChange={(newRating) => handleItemChange(index, "rating", newRating)}
-            />
-          </div>
+    <>
+      <ProductDetailsBackButton/>
+      <form onSubmit={handleSubmit} className={Styles.formWrapper}>
+        <h1 className={Styles.title}>Review Order #{orderId}</h1>
+        
+        {formState.map((item, index) => (
+          <div key={index} className={Styles.reviewCard}>
+            <h3 className={Styles.productName}>{item.productName}</h3>
+            <h3 className={Styles.sku}>{item.sku}</h3>
+            <Image className={Styles.productImage} src={item.productImage} width={100} height={100} alt={item.productName}/>
+            
+            <div className={Styles.ratingSection}>
+              <span>Rating:</span>
+              <StarRating 
+                maxRating={5}
+                defaultRating={5}
+                size={24}
+                onRateChange={(newRating) => handleItemChange(index, "rating", newRating)}
+              />
+            </div>
 
-          <div className={Styles.commentSection}>
-            <label htmlFor={`comment-${index}`}>Comments:</label>
-            <textarea
-              id={`comment-${index}`}
-              rows="3"
-              value={item.comment}
-              onChange={(e) => handleItemChange(index, "comment", e.target.value)}
-              placeholder="Tell us what you think about this product..."
-              required
-              className={Styles.textarea}
-            />
+            <div className={Styles.commentSection}>
+              <label htmlFor={`comment-${index}`}>Comments:</label>
+              <textarea
+                id={`comment-${index}`}
+                rows="3"
+                value={item.comment}
+                onChange={(e) => handleItemChange(index, "comment", e.target.value)}
+                placeholder="Tell us what you think about this product..."
+                required
+                className={Styles.textarea}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      <button type="submit" disabled={isPending} className={Styles.submitButton}>
-        {isPending ? "Submitting..." : "Submit Reviews"}
-      </button>
-    </form>
+        <button type="submit" disabled={isPending} className={Styles.submitButton}>
+          {isPending ? "Submitting..." : "Submit Reviews"}
+        </button>
+      </form>
+    </>
   );
 }

@@ -53,6 +53,17 @@ export async function markOrderDelivered(orderId) {
     .update({ order_status: 'Delivered' })
     .eq('order_id', orderId);
 
+  const { data: shipping, error: fetchError } = await supabase
+    .from("SHIPPING_T")
+    .select("courier_id")
+    .eq("order_id", orderId)
+    .single();
+
+  if (fetchError)
+    throw new Error(`Failed to fetch shipping: ${fetchError.message}`);
+
+  const courierId = shipping.courier_id;
+
   if (orderError) throw new Error(`Failed to update order ${orderId}: ${orderError.message}`);
 
   const { error: shippingError } = await supabase
@@ -64,4 +75,23 @@ export async function markOrderDelivered(orderId) {
     .eq('order_id', orderId);
 
   if (shippingError) throw new Error(`Failed to update shipping for order ${orderId}: ${shippingError.message}`)
+
+  const { data: activeShipments, error: activeError } = await supabase
+    .from("SHIPPING_T")
+    .select("shipping_id")
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Completed");
+
+  if (activeError)
+    throw new Error(`Failed to check active shipments: ${activeError.message}`);
+
+  if (activeShipments.length === 0) {
+    const { error: courierError } = await supabase
+      .from("USERS_T")
+      .update({ available_status: true })
+      .eq("user_id", courierId);
+
+    if (courierError)
+      throw new Error(`Failed to update courier: ${courierError.message}`);
+  }
 }

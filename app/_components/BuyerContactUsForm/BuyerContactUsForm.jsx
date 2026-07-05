@@ -1,64 +1,68 @@
+import ProductDetailsBackButton from "../ProductDetailsBackButton/ProductDetailsBackButton";
 import Styles from "./BuyerContactUsForm.module.css";
 import { BuyerContactForm } from "@/app/_lib/actions";
 
 export default function BuyerContactUsForm({ userId, productID, shopID }) {
 
   return (
-    <div className={Styles.formContainer}>
-      <header className={Styles.formHeader}>
-        <h1>Contact Us</h1>
-        <p>
-          Have a question, an idea, or just want to say hi? We’d love to hear
-          from you. Drop us a message below and our team will get back to you as
-          soon as possible.
-        </p>
-      </header>
+    <div>
+      <ProductDetailsBackButton/>
+      <div className={Styles.formContainer}>
+        <header className={Styles.formHeader}>
+          <h1>Contact Us</h1>
+          <p>
+            Have a question, an idea, or just want to say hi? We’d love to hear
+            from you. Drop us a message below and our team will get back to you as
+            soon as possible.
+          </p>
+        </header>
 
-      <form className={Styles.form} action={BuyerContactForm}>
-        <input type="hidden" name="id" value={userId} />
-        
-        {!productID && !shopID
-        ?
-          <div className={Styles.formGroup}>
-            <label htmlFor="category">Report Type</label>
-            <select name="category" id="category" defaultValue="" required>
-              <option value="" disabled>Select an option...</option>
-              <option value="Technical Support">Technical Support</option>
-              <option value="General Inquiry">General Inquiry</option>
-              <option value="Feedback & Suggestion">Feedback & Suggestion</option>
-            </select>
-          </div>        
-        :
-          productID?
-          <div>
-            <h2>Reporting Product #<span className={Styles.orderIdText}>{productID}</span></h2>
-            <input type="hidden" name="category" value="Report Product"/>
-            <input type="hidden" name="productID" value={productID}/>
-          </div>
+        <form className={Styles.form} action={BuyerContactForm}>
+          <input type="hidden" name="id" value={userId} />
+          
+          {!productID && !shopID
+          ?
+            <div className={Styles.formGroup}>
+              <label htmlFor="category">Report Type</label>
+              <select name="category" id="category" defaultValue="" required>
+                <option value="" disabled>Select an option...</option>
+                <option value="Technical Support">Technical Support</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Feedback & Suggestion">Feedback & Suggestion</option>
+              </select>
+            </div>        
           :
-          <div>
-            <h2>Reporting Shop #<span className={Styles.orderIdText}>{shopID}</span></h2>
-            <input type="hidden" name="category" value="Report Shop"/>
-            <input type="hidden" name="shopID" value={shopID}/>
+            productID?
+            <div>
+              <h2>Reporting Product #<span className={Styles.orderIdText}>{productID}</span></h2>
+              <input type="hidden" name="category" value="Report Product"/>
+              <input type="hidden" name="productID" value={productID}/>
+            </div>
+            :
+            <div>
+              <h2>Reporting Shop #<span className={Styles.orderIdText}>{shopID}</span></h2>
+              <input type="hidden" name="category" value="Report Shop"/>
+              <input type="hidden" name="shopID" value={shopID}/>
+            </div>
+          }
+
+
+          <div className={Styles.formGroup}>
+            <label htmlFor="description">Description</label>
+            <textarea
+              name="description"
+              id="description"
+              rows="5"
+              placeholder="Tell us more details..."
+              required
+            ></textarea>
           </div>
-        }
 
-
-        <div className={Styles.formGroup}>
-          <label htmlFor="description">Description</label>
-          <textarea
-            name="description"
-            id="description"
-            rows="5"
-            placeholder="Tell us more details..."
-            required
-          ></textarea>
-        </div>
-
-        <button type="submit" className={Styles.submitButton}>
-          Submit Message
-        </button>
-      </form>
+          <button type="submit" className={Styles.submitButton}>
+            Submit Message
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

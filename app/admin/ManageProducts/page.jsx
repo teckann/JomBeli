@@ -24,7 +24,7 @@ export default async function manageProductsPage({ searchParams }) {
 
     const yearMonthsSelect = await getYearsMonthsWithNewProduct();
 
-
+    
 
     return (
         <div className={ Styles.contentPage}>

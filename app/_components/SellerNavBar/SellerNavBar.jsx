@@ -10,7 +10,7 @@ export default function Navbar({ userAvatar }) {
   const pathname = usePathname();
 
   const navLinks = [
-    { name: 'Overview', href: '/seller/dashboard' },
+    { name: 'Dashboard', href: '/seller' }, 
     { name: 'My Store', href: '/seller/productlisting' },
     { name: 'Orders', href: '/seller/ordertracking' },
     { name: 'Refunds', href: '/seller/refunds' },
@@ -34,7 +34,11 @@ export default function Navbar({ userAvatar }) {
      
       <nav className={styles.nav}>
         {navLinks.map((link) => {
-          const isActive = pathname === link.href;
+       
+          const isActive = link.href === '/seller' 
+            ? pathname === '/seller' 
+            : pathname.startsWith(link.href);
+
           return (
             <Link 
               key={link.href} 

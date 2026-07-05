@@ -38,61 +38,6 @@ export default async function reportDetails({params}) {
     statusColor = "#6B7280"; 
     }
 
-
-
-    // const requestDate = new Date(refund.created_at).getDate() + "/" + (new Date(refund.created_at).getMonth() + 1) + "/" + new Date(refund.created_at).getFullYear();
-    // const isOverOneWeek = (new Date() - new Date(refund.created_at)) / (1000 * 60 * 60 * 24) > 7;
-    // let refundStatus = "";
-    // let refundStatusColor = "";
-    // const adminStatus = refund.admin_status;
-    // const sellerStatus = refund.seller_status;
-    // let adminEditState = false;
-
-    // const buyerSubject = `Refund Request Related Question (${refund.refund_id})`
-    // const sellerSubject = `Buyer's Refund Request Related Question (${refund.refund_id})`
-    // const emailBuyerBody = 
-    // `Hello ${refund.ORDERS_T.buyer.username},`;
-
-    // const emailSellerBody = 
-    // `Hello ${refund.ORDERS_T.seller.username},`;
-    
-    // if (sellerStatus === "Approved") {
-    // refundStatus = "Refund Approved";
-    // refundStatusColor = "green";
-    // }
-    // else if (sellerStatus === "Rejected") {
-
-    // if (adminStatus === "Approved") {
-    //     refundStatus = "Refund Approved After Review";
-    //     refundStatusColor = "green";
-    // } 
-    // else if (adminStatus === "Rejected") {
-    //     refundStatus = "Refund Rejected";
-    //     refundStatusColor = "red";
-    // } 
-    // else {
-    //     refundStatus = "Under Admin Review";
-    //     refundStatusColor = "orange";
-    //     adminEditState = true;
-    // }
-    // }
-    // else if (sellerStatus === "Pending") {
-
-    // if (isOverOneWeek) {
-    //     refundStatus = "Escalated To Admin";
-    //     refundStatusColor = "red";
-    //     adminEditState = true;
-    // } 
-    // else {
-    //         refundStatus = "Waiting For Seller Response";
-    //         refundStatusColor = "gray";
-    //     }
-    // }
-    // else {
-    // refundStatus = "Unknown Status";
-    // refundStatusColor = "black";
-    // }
-
     const hubAssigned = order.shipping[0]?.hub ? order.shipping[0].hub.hub_name : "-";
 
     const skuDatas = order.ORDER_ITEMS_T;
@@ -106,12 +51,6 @@ export default async function reportDetails({params}) {
 
     const generalList1 = [{field: "Buyer ID", value: order.buyer.user_id}, {field: "Seller ID", value: order.buyer.user_id}, {field: "Ordered Date", value: orderDate}, {field: "Address Area", value: order.address.city}, {field: "Shipping ID", value: order.shipping[0]?.shipping_id}];
     const generalList2 = [{field: "Buyer Name", value: order.buyer.username}, {field: "Seller Name", value: order.seller.username}, {field: "Total Product Type", value: skuDatas?.length}, {field: "Hub", value: hubAssigned}, {field: "Shipping Type", value: order.shipping[0]?.delivery_type}];
-    // const generalList2 = [{field: "Seller Name", value: refund.ORDERS_T.seller.username}, {field: "Order Date", value: orderDate}];
-    // const generalList3 = [{field: "Shipping Type", value: refund.ORDERS_T.shipping.delivery_type}, {field: "Order Status", value: refund.ORDERS_T.order_status}];
-
-    // const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
-    // const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
-    // const refundList3 = [{field: "Request Date", value: requestDate}];
 
     return (<div className={ Styles.refundDetailsPage }>
         <div className={ Styles.upperPart }>
