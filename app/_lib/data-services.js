@@ -1893,3 +1893,20 @@ export async function getUserTransactions(userId) {
     }
     return data;
 }
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; // fail-safe: don't block the admin if the check itself errors
+  }
+
+  return count > 0;
+}
