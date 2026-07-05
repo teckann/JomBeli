@@ -5,6 +5,7 @@ export async function getAllProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false });
 
   if (error) {
