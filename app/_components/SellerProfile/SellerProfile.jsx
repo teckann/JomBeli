@@ -7,6 +7,7 @@ import SignOutButton from '../SignOutButton';
 import ThemeToggleButton from "../ThemeToggleButton";
 
 import { updateUserData,uploadAvatar } from "@/app/_lib/actions";
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
 const SellerProfile = ({ userInfo }) => {
 
@@ -205,7 +206,7 @@ const SellerProfile = ({ userInfo }) => {
                         <div className={styles.themeCon}>
                             <h2>Theme</h2>
                             <div className={styles.themeBtn}>
-                                <ThemeToggleButton />
+                                <ThemeToggle />
                             </div>
 
                         </div>
