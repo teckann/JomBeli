@@ -8,6 +8,13 @@
     margin: 20 10 20 20;
     background-color: transparent;
 
+    background-color: var(--color-bg-card);
+    padding-bottom: 10px;
+
+    border-radius: 10px;
+
+    box-shadow: inset 0px 0px 10px var(--color-border-strong);
+
 }
 
 

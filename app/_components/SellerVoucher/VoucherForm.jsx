@@ -28,12 +28,12 @@ const VoucherForm = ( {id} ) => {
 
                     <div className={styles.inputGroup}>
                         <label>Voucher Name :</label>
-                        <input autoComplete='false' className={styles.input} type="text" name="voucher_name" placeholder="e.g. 11.11 " required />
+                        <input autoComplete='false' className={styles.input} type="text" name="voucher_name" placeholder=" Apple Back to School " required />
                     </div>
 
                     <div className={styles.inputGroup}>
                         <label>Discount Value :</label>
-                        <input autoComplete='false' className={styles.input} type="number" name="discount_value" placeholder="e.g. 6" required
+                        <input autoComplete='false' className={styles.input} type="number" name="discount_value" placeholder=" 6 " required
                             value={discount}
                             onChange={(e) => setDiscount(e.target.value)} />
                     </div>
@@ -51,7 +51,7 @@ const VoucherForm = ( {id} ) => {
                     <div>
                         <div className={styles.inputGroup}>
                             <label>Min Spend (RM) :</label>
-                            <input autoComplete='false' className={styles.input} type="number" name="min_spend" placeholder="e.g. 60" 
+                            <input autoComplete='false' className={styles.input} type="number" name="min_spend" placeholder=" 60" 
                                 required 
                                 value={minSpend}
                                 onChange={(e) => setMinSpend(e.target.value)}/>

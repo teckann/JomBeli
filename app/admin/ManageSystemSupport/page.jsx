@@ -16,7 +16,7 @@ export default async function manageSystemSupport() {
     })
 
     const reportProductList = pendingSupports.filter(support => support.support_type === "Report Product");
-    const reportSellerList = pendingSupports.filter(support => support.support_type === "Report Seller");
+    const reportSellerList = pendingSupports.filter(support => support.support_type === "Report Shop");
     const reportGeneralList = pendingSupports.filter(support => (support.support_type !== "Report Product" && support.support_type !== "Report Seller"));
     
     const allReportCount = pendingSupports.length;
@@ -49,7 +49,7 @@ export default async function manageSystemSupport() {
             </div>
             <div className={Styles.showSlicePart}>
                 <div className={Styles.listingText}>
-                    <h2>Seller Product {"("}{reportSellerCount}{")"}</h2>
+                    <h2>Seller Report {"("}{reportSellerCount}{")"}</h2>
                     <p>Manage seller report by buyer.</p>
                 </div>
                 <div>
@@ -58,7 +58,7 @@ export default async function manageSystemSupport() {
             </div>
             <div className={Styles.showSlicePart}>
                 <div className={Styles.listingText}>
-                    <h2>Seller Product {"("}{reportGeneralCount}{")"}</h2>
+                    <h2>General Report {"("}{reportGeneralCount}{")"}</h2>
                     <p>Manage general report by user.</p>
                 </div>
                 <div>
