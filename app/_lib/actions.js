@@ -1292,7 +1292,7 @@ export async function createHubAction(hubName, hubLocation, capacity) {
 
   const supabase = await createClient();
 
-  const newId = await IDGenerator();
+  const newId = await GeneralIDGenerator();
 
   const { data, error } = await supabase
     .from("HUBS_T")
@@ -1312,4 +1312,56 @@ export async function createHubAction(hubName, hubLocation, capacity) {
   }
 
   return data;
+}
+
+export async function adminAssignCourier(adminId, shippingId, courierId, orderId) {
+  const supabase = await createClient();
+
+  // uupdate shipping table
+  const { error: shippingError } = await supabase
+    .from("SHIPPING_T")
+    .update({
+      admin_id: adminId,
+      courier_id: courierId,
+      shipping_status: "Assigned",
+    })
+    .eq("shipping_id", shippingId)
+    .select()
+    .single();
+
+  if (shippingError) {
+    console.error("Error assigning courier:", error);
+    throw error;
+  }
+
+  // update order table (!BUG)
+  const { error: orderError } = await supabase
+    .from("ORDERS_T")
+    .update({
+      order_status: "Out For Delivery"
+    })
+    .eq("order_id", orderId)
+
+  if (orderError) {
+    console.error("Error assigning courier:", error);
+    throw error;
+  }
+}
+
+export async function updateCourierStatus(courierID){
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("USERS_T")
+    .update({
+      available_status: false
+    })
+    .eq("user_id", courierID)
+  
+  if (error) {
+    console.error("Error assigning courier:", error);
+    throw error;
+  }
+
 }

@@ -12,24 +12,33 @@
     display: inline-block; 
     font-size: 24px;
     font-weight: 500;
-    color: #7a7a7a;
+    color: var(--color-font-secondary);
     margin: 0;
     padding-bottom: 4px;
-    border-bottom: 2px solid #b5b5b5;
+    border-bottom: 2px solid var(--color-border-primary);
 }
 
 .label {
     font-size: 20px;
-    color: #333;
+    color: var(--color-font-primary);
     font-weight: 400;
 }
 
 .dropdown{
     width: 100px;
-    height: 60px;
+    height: 40px;
     padding: 10px; 
     border-radius: 5%;
     border: none;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown:hover{
+    background-color: var(--color-bg-hover);
 }
 
 .container{

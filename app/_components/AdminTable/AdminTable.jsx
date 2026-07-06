@@ -3,10 +3,15 @@
 import Styles from './AdminTable.module.css';
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function AdminTable({titles, actions, fields, datas, dataIdFormat, slice}) {
+export default function AdminTable({titles, actions, fields, datas, dataIdFormat, slice, handleClickDelivery = null, deliveryList = null}) {
 
     const router = useRouter();
+
+    // search the delivery array
+    // const searchParams = new useSearchParams();
+    // const currentDeliveryArray = searchParams.get("shippingCheckBox") || [];
 
     // name = title name, icon = icon function, handler = handle action, show = precondition for show
     // define icon and actions
@@ -22,7 +27,8 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
                         viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true},
                         viewOrder: {name: "View Order", icon: <InfoIcon />, handler: (order) => router.push(`/admin/ManageOrders/${getdataPath(order, "order_id")}`), show: (order) => true},
                         viewSupport: {name: "View Support", icon: <InfoIcon />, handler: (support) => router.push(`/admin/ManageSystemSupport/SupportTable/${getdataPath(support, "support_id")}`), show: (order) => true},
-                        manageHubs: {name: "Manage Hub's Delivery", icon: <InfoIcon />, handler: (hub) => router.push(`/admin/ManageHubs/${hub.hub_id}/AssignCourier`), show: (admin) => true}
+                        manageHubs: {name: "Manage Hub's Delivery", icon: <InfoIcon />, handler: (hub) => router.push(`/admin/ManageHubs/${hub.hub_id}/AssignCourier`), show: (admin) => true},
+                        assignDelivery: {name: "Select Delivery", icon: (shipping) => <SelectDelivery handleClick={handleClickDelivery} checked={deliveryList.includes(shipping.shipping_id)} shipping={shipping} />, handler: () => {}, show: (admin) => true}
                     };
 
     // console.log(datas);
@@ -63,12 +69,6 @@ export default function AdminTable({titles, actions, fields, datas, dataIdFormat
     }
 
     let counter = 0;
-
-    // if (datas.length === 0) {
-    //     return <div className={ Styles.noDataContainer }>
-    //         <h3>The table is empty</h3>
-    //     </div>
-    // }
 
     return (
         <div className={ Styles.overallTable}>
@@ -142,7 +142,9 @@ export function InsertData({evenRows, fields, data, actions, actionMaps}) {
 
                                 return (actionConfig.show(data) &&
                                 <button key={actionConfig.name} className={Styles.actionButton} title={actionConfig.name} onClick={() => actionMaps[action.type].handler(data)}>
-                                    {actionConfig.icon}
+                                    {typeof actionConfig.icon === "function"
+                                    ? actionConfig.icon(data)
+                                    : actionConfig.icon}
                                 </button>
                             )
                             })
@@ -188,3 +190,9 @@ export function InfoIcon() {
     );
 }
 
+export function SelectDelivery({shipping, handleClick, checked}) {
+    
+    return (
+        <input type="checkbox" onChange={handleClick} name="shippingCheckBox" checked={checked} value={shipping.shipping_id}  />
+    )
+}

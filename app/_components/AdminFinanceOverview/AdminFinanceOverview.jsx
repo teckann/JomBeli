@@ -29,6 +29,7 @@ export default async function AdminFinanceOverview(){
                 </div>
             </div>
             <div className={Styles.lowerContainer}>
+                <h3>Daily Transaction Types</h3>
                 <AdminDailyTransactionPieChart counts={counts} />
             </div>
         </>
