@@ -81,6 +81,7 @@ export async function createNewVoucher(NewVoucher) {
   }
 
   revalidatePath('/seller/vouchers');
+  redirect('/seller/vouchers');
 
 }
 
