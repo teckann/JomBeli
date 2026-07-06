@@ -457,8 +457,8 @@
 
 .btnReject {
 
-  background-color: var(--color-primary-lighter);
-  color: var(--color-info-text);
+  background-color: var(--color-font-secondary);
+  color: var(--color-font-primary);
 
 }
 
@@ -509,7 +509,7 @@
   color: var(--color-warning-text);
 }
 
-.Reject {
+.Rejected {
   background-color: var(--color-danger-bg);
 
   
