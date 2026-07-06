@@ -19,8 +19,8 @@ export default function OrderTrackingPage() {
     const activeStatus = searchParams.get('status') ?? "ordered";
 
     const getDisplayStatus = (status) => {
-        if (status === 'ordered') return 'New Order';
-        if (status === 'packed') return 'Packed Order';
+        if (status === 'ordered' || status === 'Ordered') return 'New Order';
+        if (status === 'packed' || status === 'Packed By Seller') return 'Packed Order';
         return 'Shipped Order';
     };
 
@@ -48,10 +48,9 @@ export default function OrderTrackingPage() {
                 setTableLoading(true);
                 
                 const dbStatus = activeStatus === 'ordered' ? 'Ordered' 
-                               : activeStatus === 'packed' ? 'Packed' 
+                               : activeStatus === 'packed' ? 'Packed By Seller' 
                                : 'Shipped';
 
- 
                 const { data: orders, error } = await supabase
                     .from('ORDERS_T')
                     .select(`
