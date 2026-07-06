@@ -98,7 +98,7 @@ const Refund = async ({ params }) => {
 
       
         <h1 className={styles.heading}>Refund Request</h1>
-        <p className={styles.id}>Order ID : {oneRefund.order_id} </p>
+        <p className={styles.id}>Refund ID : {oneRefund.refund_id} </p>
         <br />
         <div className={`${styles.status} ${styles[statStyle]}`}>
           {status}
@@ -290,6 +290,7 @@ const Refund = async ({ params }) => {
 
       <h2 className={styles.orderTitle}>Order Details</h2>
 
+      <p className={styles.orderId}>Order ID : {oneRefund.order_id}</p>
       <p className={styles.orderTotal}>Order Total : RM 1123</p>
 
           <div className={styles.orderCon}>
