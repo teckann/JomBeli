@@ -64,7 +64,7 @@ export async function RefundAction(formData) {
                     user_id: orderData.buyer_id,
                     transaction_type: `Refund for order: #${orderId}`,
                     direction: "Credit",
-                    payment_method: "Wallet Balance",
+                    payment_method: "Wallet",
                     amount: orderData.total_amount,
                     wallet_transaction_status: "Success"
                 }
