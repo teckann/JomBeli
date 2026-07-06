@@ -78,8 +78,8 @@ const Refund = async ({ params }) => {
                 </div>
             )}
 
-            <button className={`${styles.btn} ${styles.btnContact}`}>Contact Buyer</button>
-
+            <a href={`/seller/chat?id=${buyer.user_id}`}><button type="button" className={`${styles.btn} ${styles.btnContact}`}>Contact Buyer</button>
+            </a>
             
 
 
@@ -246,7 +246,7 @@ const Refund = async ({ params }) => {
 
             <div className={styles.chatCon}>
 
-                <ChatSpace id={'970b7abe-12ca-449c-b482-11c7572bd781'} />
+                <ChatSpace id={buyer.user_id} />
             </div>
             
 

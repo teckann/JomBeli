@@ -6,6 +6,9 @@ import styles from './SellerProfile.module.css';
 import SignOutButton from '../SignOutButton';
 import ThemeToggleButton from "../ThemeToggleButton";
 
+
+import LogoutButton from "../LogoutButton/LogoutButton";
+
 import { updateUserData,uploadAvatar } from "@/app/_lib/actions";
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 
@@ -138,7 +141,7 @@ const SellerProfile = ({ userInfo }) => {
                     <div className={styles.rightCon}>
 
                         <div className={styles.row}>
-                            <label>Name</label>
+                            <label className={styles.label}>Name</label>
                             {isEditing ? (
                                 <input 
                                     type="text"
@@ -155,14 +158,32 @@ const SellerProfile = ({ userInfo }) => {
                         </div>
 
                         <div className={styles.row}>
-                            <label >Gender</label>
+                            <label className={styles.label}>Gender</label>
                             {isEditing ? (
-                                <input 
-                                    type='text'
-                                    name='gender'
-                                    value={userData.gender}
-                                    onChange={changeState}
-                                    className={styles.input}/>
+                                <div className={styles.radioCon}>
+                                    <label className={styles.radio}>
+                                        <input 
+                                            type="radio"
+                                            name="gender"
+                                            value="Male"
+                                            className={styles.oneRadio}
+                                            checked={userData.gender === 'Male'}
+                                            onChange={changeState}
+                                        />
+                                        Male
+                                    </label>
+                                    <label className={styles.radio}>
+                                        <input 
+                                            type="radio"
+                                            name="gender"
+                                            value="Female"
+                                            className={styles.oneRadio}
+                                            checked={userData.gender === 'Female'}
+                                            onChange={changeState}
+                                        />
+                                        Female
+                                    </label>
+                                </div>
                             ) : (
                                 <p>{userData.gender}</p>
                             )}
@@ -170,7 +191,7 @@ const SellerProfile = ({ userInfo }) => {
                         </div>
 
                         <div className={styles.row}>
-                            <label>Email</label>
+                            <label className={styles.label}>Email</label>
                             {isEditing ? (
                                 <input 
                                     type="email"
@@ -186,7 +207,7 @@ const SellerProfile = ({ userInfo }) => {
                         </div>
 
                         <div className={styles.row}>
-                            <label>Contact</label>
+                            <label className={styles.label}>Contact</label>
                             {isEditing ? (
                                 <input 
                                     type="text"
@@ -203,14 +224,17 @@ const SellerProfile = ({ userInfo }) => {
                     </div>
 
                     {!isEditing && (
-                        <div className={styles.themeCon}>
-                            <h2>Theme</h2>
-                            <div className={styles.themeBtn}>
-                                <ThemeToggle />
-                            </div>
+                        <>
+                    
 
+                        <div className={styles.themeBtn}>
+                                <ThemeToggle />
                         </div>
+
+                        </>
                     )}
+
+
 
                 </div>
 
@@ -222,11 +246,12 @@ const SellerProfile = ({ userInfo }) => {
                 {!isEditing ? (
                     <>
                         <div className={styles.leftAct}>
-                            <SignOutButton />        
+                            
+                            <LogoutButton />      
 
                         </div>
                         <div className={styles.rightAct}>
-                            <button className={styles.btn}>Account Security</button>
+                            
                             <button 
                                 className={styles.btn}
                                 onClick={() => setisEditing(true)}>

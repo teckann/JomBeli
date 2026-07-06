@@ -68,6 +68,8 @@
     display: flex;
     border: none;
 
+    background-color: var(--color-bg-card);
+
     align-items: center;
     width: 150px;
 }
@@ -128,6 +130,8 @@
     border-radius: 24px;
 
     color: var(--color-font-primary);
+
+    background-color: var(--color-bg-card);
 
     outline: none;
 

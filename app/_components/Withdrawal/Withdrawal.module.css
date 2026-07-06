@@ -235,6 +235,17 @@
 
 }
 
+.disabled {
+  background-color: var(--color-bg-input);
+  color: #c2c2c2;
+  cursor: not-allowed;
+}
+.disabled:hover {
+  background-color: var(--color-bg-input);
+  color: #c2c2c2;
+  cursor: not-allowed;
+}
+
 .notSelected {
   color: #c2c2c2;
 }
