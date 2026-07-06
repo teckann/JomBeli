@@ -4,6 +4,7 @@ import { getUserDetails } from '@/app/_lib/data-services';
 import AdminDashboardInfoBar from '@/app/_components/AdminDashboardInfoBar/DashboardInfoBar';
 import { AdminOrderStatusChart,AdminTopSellingProductsChart, AdminOrderTrendChart } from '@/app/_components/AdminDashboardCharts/DashboardCharts';
 import { getDailyOrderStatusDistribution, getTopSellingProducts, getOrderTrendLast30Days } from '@/app/_lib/analysis-serives';
+import ThemeToggle from '@/app/_components/ThemeToggle/ThemeToggle';
 
 export default async function AdminDashboard(){
     const authUser = await getUser();

@@ -34,6 +34,12 @@
     overflow: hidden;
 }
 
+.modalBody {
+    overflow-y: auto;   
+    padding: 16px 24px;
+    flex: 1;           
+}
+
 .closeButton{
     background: none;
     border: none;
@@ -46,12 +52,6 @@
     transition: color 0.2s ease;
 }
 
-.closeIcon:hover {
+.closeButton:hover {
     color: var(--color-danger); 
-}
-
-.contentContainer{
-    display:flex;
-    flex-direction: column;
-    margin: 10px;
 }

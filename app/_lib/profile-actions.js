@@ -123,7 +123,7 @@ export async function removeAddress(userId, addressId, pathname) {
   const { error } = await supabase
     .from("ADDRESSES_T")
     .update({
-      address_status: "Delected",
+      address_status: "Deleted",
     })
     .eq("user_id", userId)
     .eq("address_id", addressId);

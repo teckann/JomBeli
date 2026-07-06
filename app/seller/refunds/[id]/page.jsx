@@ -29,7 +29,7 @@ const Refund = async ({ params }) => {
 
     let status = 'Pending';
     let isResponse = false;
-    let statStyle = 'pending';
+    let statStyle = 'Pending';
 
     if (oneRefund.admin_status === 'Approved' || oneRefund.admin_status === 'Rejected') {
       status = oneRefund.admin_status + ' by admin';
@@ -51,6 +51,9 @@ const Refund = async ({ params }) => {
 
   return (
 <div className={styles.fcon}>
+
+  <a href="/seller/refunds" className={styles.backBtn} style={{ textDecoration: 'none' }}>← Back</a>
+
   <form action={RefundAction} className={styles.fcon}>
       
       <input type="hidden" name="refund_id" value={oneRefund.refund_id} />
@@ -67,7 +70,7 @@ const Refund = async ({ params }) => {
         
         <div className={styles.actionContainer}>
 
-          {statStyle === 'pending' && (
+          {statStyle === 'Pending' && (
                 <div className={styles.response}>
                     <button type="submit" name="action" value="Rejected" className={`${styles.btn} ${styles.btnReject}`}>
                         Reject Refund
@@ -78,8 +81,8 @@ const Refund = async ({ params }) => {
                 </div>
             )}
 
-            <button className={`${styles.btn} ${styles.btnContact}`}>Contact Buyer</button>
-
+            <a href={`/seller/chat?id=${buyer.user_id}`}><button type="button" className={`${styles.btn} ${styles.btnContact}`}>Contact Buyer</button>
+            </a>
             
 
 
@@ -246,7 +249,7 @@ const Refund = async ({ params }) => {
 
             <div className={styles.chatCon}>
 
-                <ChatSpace id={'970b7abe-12ca-449c-b482-11c7572bd781'} />
+                <ChatSpace id={buyer.user_id} />
             </div>
             
 
@@ -261,7 +264,7 @@ const Refund = async ({ params }) => {
 
             <h3 className={styles.cardTitle}>Remarks</h3>
 
-            { statStyle !== 'pending' ? (
+            { statStyle !== 'Pending' ? (
               <p>{(oneRefund.seller_remarks || oneRefund.admin_remarks) || ''}</p>
             ) : (
               <textarea 

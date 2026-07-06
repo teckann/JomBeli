@@ -5,7 +5,7 @@
     padding: 10px;
     border-radius: 10px;
 
-    background-color: var(--color-info-bg);
+    
     
 
 }
@@ -18,11 +18,13 @@
 
     font-size: var(--text-lg);
 
-    font-weight: bold;
+    font-weight: 500;
 
     border-bottom: 2px solid var(--color-border-strong);
 
     background-color: var(--color-primary);
+
+    color: var(--color-bg-card)
 
 
 }
@@ -52,6 +54,13 @@
 
 }
 
+.view:hover {
+    color: var(--color-bg-hover);
+
+
+
+}
+
 .finding{
     display: flex;
     flex-direction: row;
@@ -67,6 +76,8 @@
     position: relative;
     display: flex;
     border: none;
+
+    background-color: var(--color-bg-card);
 
     align-items: center;
     width: 150px;
@@ -128,6 +139,8 @@
     border-radius: 24px;
 
     color: var(--color-font-primary);
+
+    background-color: var(--color-bg-card);
 
     outline: none;
 

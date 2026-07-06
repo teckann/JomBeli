@@ -19,7 +19,7 @@ const payments = [
   { payment: "DuitNow Transfer", logo: "/duitnow-logo.png" },
 ];
 
-function Withdrawal({ userID }) {
+function Withdrawal({ userID, balance=0}) {
   const [amount, setAmount] = useState("");
   const [display, setDisplay] = useState("");
   const [isFocus, setIsFocus] = useState(false);
@@ -104,6 +104,14 @@ function Withdrawal({ userID }) {
     setIsOpen(false);
   };
 
+  const checkAmount = Number(amount);
+  const isUnderMinimum = amount !== "" && checkAmount < 10;
+  const isOverBalance = amount !== "" && checkAmount > balance;
+  const popWarning = isUnderMinimum || isOverBalance;
+  
+  
+  const disableBtn = !amount || isUnderMinimum || isOverBalance || !selectedPayment;
+
   const handleBankChange = (e) => {
     const value = e.target.value;
 
@@ -161,7 +169,9 @@ function Withdrawal({ userID }) {
             />
           </div>
 
-          {warning && <p className={styles.error}>Minimum amount is RM10</p>}
+          {isUnderMinimum && <p className={styles.error}>Minimum amount is RM10</p>}
+          {isOverBalance && <p className={styles.error}>Out of Balance (RM {balance})</p>}
+
           {!isEnterAmount && (
             <p className={styles.error}>Please enter amount</p>
           )}
@@ -246,7 +256,7 @@ function Withdrawal({ userID }) {
             <p className={styles.totalAmount}>RM {display || 0}</p>
           </div>
 
-          <SubmitButton handleSubmit={handleSubmit} />
+          <SubmitButton handleSubmit={handleSubmit} disable={disableBtn} />
         </div>
       </form>
     </div>
@@ -261,7 +271,7 @@ const PaymentLogo = ({ path }) => {
   );
 };
 
-const SubmitButton = ({ handleSubmit }) => {
+const SubmitButton = ({ handleSubmit, disable }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
@@ -273,9 +283,11 @@ const SubmitButton = ({ handleSubmit }) => {
   return (
     <button
       type="button"
-      className={styles.submitButton}
+      className={`${styles.submitButton} ${disable ? styles.disabled : ""}`}
       onClick={handleClick}
-      disabled={loading}
+      disabled={{loading} || disable}
+
+
     >
       {loading ? <SpinnerMini /> : "Withdraw"}
     </button>

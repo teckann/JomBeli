@@ -11,10 +11,10 @@ export default function Modal({ isOpen, onClose, title, children }){
                 <div className={Styles.modalHeader}>
                     {title}
                     <button className={Styles.closeButton} onClick={onClose}>
-                         &times; {/*x button */}
+                         &times; 
                     </button>
                 </div>
-                <div className={Styles.contentContainer}>
+                <div className={Styles.modalBody}>
                     {children}
                 </div>
             </div>
