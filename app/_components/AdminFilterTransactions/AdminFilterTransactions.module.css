@@ -9,13 +9,23 @@
     padding: 10px;
     border-radius: 5px;
     border: none;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
 }
-
 
 .dropdown{
     padding: 10px; 
-    border-radius: 5%;
-    border: none;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown:hover{
+    background-color: var(--color-bg-hover);
 }
 
 .roleAndStatus{
