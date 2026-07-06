@@ -20,7 +20,8 @@ export async function RefundAction(formData) {
         .from("REFUNDS_T")
         .update({
             seller_status: decision,
-            seller_remarks: sellerRemarks
+            seller_remarks: sellerRemarks,
+            refunded_at: new Date().toISOString(),
         })
         .eq("refund_id", refundId)
         .select("order_id")
