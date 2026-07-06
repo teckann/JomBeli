@@ -39,7 +39,7 @@ export default function EvidencesPhoto({ evidence }) {
                 </div>
             </div>
             <div className={ Styles.navBar}>
-                <button className={ `${Styles.navButton} ${!evidencsExist && Styles.hide} `} onClick={handleDeduct}>
+                <button className={ `${Styles.navButton} ${!evidencsExist && Styles.hide} `} onClick={handleAdd}>
                     <NextIcon />
                 </button>
             </div>
