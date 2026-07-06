@@ -31,10 +31,6 @@ export default function AssignCourierClient({datas, fields, titles, actions, cou
         }
     }
 
-    // console.log(deliveryList);
-    console.log(selectedCourierId);
-    console.log(isAble);
-
     const handleAssign = async () => {
         deliveryList.forEach(async (id)=>{
             const orderId = datas.find( data => data.shipping_id === id)?.order_id;
@@ -43,6 +39,8 @@ export default function AssignCourierClient({datas, fields, titles, actions, cou
         })
 
         await updateCourierStatus(selectedCourierId);
+        setDeliveryList([]);
+        setSelectedCourierId(null);
 
         router.refresh();
     }
