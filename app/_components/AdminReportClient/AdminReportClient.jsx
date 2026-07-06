@@ -1,58 +1,57 @@
 "use client";
 
-import AdminTable from '@/app/_components/AdminTable/AdminTable';
-import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import Styles from './AdminReportClient.module.css';
+import { DownloadReportButton } from '@/app/_components/AdminGeneratePlatformReports/AdminGeneratePlatformReports';
+import { formatDateTime } from "@/app/_lib/useful-func";
+import Styles from '../../admin/PlatformReports/MonthlyYearly.module.css';
+import BackButton from '@/app/_components/AdminBackButton/AdminBackButton';
 
-export default function AdminReportClient({month, year, total, monthlyProducts, mostCategory, titles, fields}) {
-
-    const router = useRouter();
-    const reportRef = useRef(null);
+export default function AdminReportClient({ month, year, total, monthlyProducts, mostCategory, titles, fields }) {
 
     const monthLists = ["January", "February", "March", "April", "May", "June", "July", "August",
         "September", "October", "November", "December"
     ];
 
-    const downloadPdf = async () => {
-        // cannot import html2pdf at top, because have no self
-        const html2pdf = (await import("html2pdf.js")).default;
+    const periodLabel = `${monthLists[month]} ${year}`;
 
-        await html2pdf(reportRef.current);
+    // Prepare the table data
+    const tableColumns = ["#", "Product ID", "Product Name", "Category", "Seller Name", "Created Date"];
 
-        // redirect to manage product page
-        router.push("/admin/ManageProducts");
-    }
+    const tableRows = monthlyProducts.map((product, index) => [
+        index + 1,
+        product.product_id,
+        product.product_name,
+        product.category,
+        product.username,
+        formatDateTime(product.created_at)
+    ]);
 
-    downloadPdf();
-    
-    return(
-    <div ref={reportRef} className={ Styles.reportFrame }>
-            <div className={ Styles.companyInfo }>
-                <h1><span className={ Styles.logo }>JomBeli</span> Company</h1>
-                <h3>Platform Product Review</h3>
-                <h3>Report for {monthLists[month]}, {year}</h3>
+    const summaryItems = [
+        { label: "Total Products", value: total },
+        { label: "New Products", value: monthlyProducts.length },
+        { label: "Most Popular Category", value: mostCategory },
+    ];
+
+    return (
+        <div className={Styles.formPage}>
+            <BackButton />
+            <h1>Product Report</h1>
+            <div className={Styles.formBox}>
+                {monthlyProducts.length === 0 ? (
+                    <div className={Styles.errorText}>No products found for this period.</div>
+                ) : (
+                    <DownloadReportButton
+                        companyName="JomBeli Company"
+                        reportTitle="Platform Product Report"
+                        reportSubtitle={`Report for ${periodLabel}`}
+                        summaryItems={summaryItems}
+                        tableTitle="Products"
+                        columns={tableColumns}
+                        rows={tableRows}
+                        filename={`product-report-${periodLabel}.pdf`}
+                    />
+                )}
             </div>
-            <div className={ Styles.moreInsights }>
-                <table className={ Styles.tableWithInfo }>
-                    <tbody>
-                        <tr>
-                            <td className={ Styles.firstCol }><strong>Total Product</strong></td>
-                            <td className={ Styles.secCol }><strong>{(total || 0)}</strong></td>
-                        </tr>
-                        <tr>
-                            <td className={ Styles.firstCol }><strong>New Product</strong></td>
-                            <td className={ Styles.secCol }><strong>{monthlyProducts.length}</strong></td>
-                        </tr>
-                        <tr>
-                            <td className={ Styles.firstCol }><strong>Most Popular New Product Category</strong></td>
-                            <td className={ Styles.secCol }><strong>{mostCategory}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div className={ Styles.adminTable}>
-                <AdminTable titles={titles} fields={fields} datas={monthlyProducts} slice={false} dataIdFormat="product_id" />
-            </div>
-        </div>)
+        </div>
+    );
 }
