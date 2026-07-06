@@ -448,6 +448,7 @@ export async function getDiscountProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -468,6 +469,7 @@ export async function getHotProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("total_sold", { ascending: false })
     .limit(5);
 
@@ -484,6 +486,7 @@ export async function getDiscoverProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false })
     .limit(10);
 
@@ -1986,3 +1989,20 @@ export async function getHubCourierMan(hubId) {
 }
 
 // export async function 
+
+export async function hasPendingDelivery(courierId) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("SHIPPING_T")
+    .select("*", { count: "exact", head: true })
+    .eq("courier_id", courierId)
+    .neq("shipping_status", "Delivered");
+
+  if (error) {
+    console.error("Error checking pending deliveries:", error);
+    return false; // fail-safe: don't block the admin if the check itself errors
+  }
+
+  return count > 0;
+}

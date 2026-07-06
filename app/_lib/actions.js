@@ -547,7 +547,7 @@ export async function addCourier(formData){
   const temporaryPassword = "CourierDefault@123456";
   const availableStatus = "TRUE";
 
-  const { data,error } = await supabase.auth.admin.createUser({ 
+  const { data,error } = await supabase.auth.signUp({ 
     email,
     password:temporaryPassword })
   
@@ -1206,7 +1206,6 @@ export async function fetchUserTransactions(userId){
     return await getUserTransactions(userId);
 }
 
-
 export async function withdrawalAction(formData) {
   const wallet_transaction_id = await IDGenerator();
   const user_id = formData.get("userID");
@@ -1236,6 +1235,58 @@ export async function withdrawalAction(formData) {
   revalidatePath("/seller/wallet");
 }
 
+export async function addAdmin(formData){
+
+  const username = formData.get("username");
+  const gender = formData.get("gender");
+  const email = formData.get("email");
+  const contactNumber = formData.get("contact_number");
+
+  const supabase = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+  );
+
+  const temporaryPassword = "AdminDefault@123456";
+  
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password: temporaryPassword,
+  });
+
+  if (error) {
+    console.error("Admin authentication generation error:", error.message);
+    return redirect("/admin/ManageAdmins?error=This email is already registered.");
+  }
+
+  const user = data.user;
+  if (!user) {
+    return redirect("/admin/ManageAdmins?error=Admin authentication creation failed.");
+  }
+
+  const { error: insertError } = await supabase
+    .from("USERS_T")
+    .insert([
+      {
+        user_id: user.id,
+        username: username,
+        gender: gender,
+        email: email,
+        contact_number: contactNumber,
+        role: "Admin",
+        user_status: "Active",
+        balances: 0.00,
+      },
+    ]);
+
+  if (insertError) {
+    console.error("Insert USER_T error for admin: ", insertError.message);
+    return redirect("/admin/ManageAdmins?error=Failed to populate database row");
+  }
+
+  revalidatePath("/admin/ManageAdmins");
+  return redirect("/admin/ManageAdmins?message=Admin account successfully added.");
+}
 
 export async function createHubAction(hubName, hubLocation, capacity) {
 

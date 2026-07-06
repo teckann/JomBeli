@@ -132,7 +132,6 @@ export default async function ReviewsPage({ searchParams }) {
                     <span className={styles.starRating}>★ {review.rating}</span>
                     <div className={styles.rightActions}>
                       <span className={styles.commentDate}>{review.date}</span>
-                      <button className={styles.deleteBtn} title="Delete Review">delete</button>
                     </div>
                   </div>
                   <p className={styles.commentText}>“{review.text}”</p>

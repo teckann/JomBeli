@@ -216,7 +216,7 @@ export default function EditProductPage() {
             });
             await Promise.all(variantPromises);
 
-            alert('Product rows completely updated without creation leaks.');
+            alert('Product has been successfully updated');
             router.back(); 
 
         } catch (error) {
@@ -286,10 +286,7 @@ export default function EditProductPage() {
                                 <label>Value :</label>
                                 <input type="text" value={v.values} onChange={(e) => handleVariantChange(idx, 'values', e.target.value)} />
                             </div>
-                            <div className={styles.actionBtns}>
-                                <button type="button" onClick={handleAddOption} className={styles.iconBtn}>＋</button>
-                                <button type="button" onClick={() => handleRemoveOption(idx)} className={styles.iconBtn}>X</button>
-                            </div>
+                            
                         </div>
                     ))}
                 </section>

@@ -83,18 +83,18 @@ export default function AddProductPage() {
             results = nextCombinations; 
         }
 
-        const newCombinations = results.map(comboArray => {
-            const skuName = comboArray.join(' * ');
-            const existing = combinations.find(c => c.sku === skuName);
-            
-            return {
-                sku: skuName,
-                price: existing ? existing.price : '',
-                stock: existing ? existing.stock : ''
-            };
+        setCombinations((prevCombinations) => {
+            return results.map(comboArray => {
+                const skuName = comboArray.join(' * ');
+                const existing = prevCombinations.find(c => c.sku === skuName);
+                
+                return {
+                    sku: skuName,
+                    price: existing ? existing.price : '',
+                    stock: existing ? existing.stock : ''
+                };
+            });
         });
-
-        setCombinations(newCombinations); 
     }, [variants]);
 
 

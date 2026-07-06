@@ -76,6 +76,7 @@
 .inputGroup input[type="number"],
 .inputGroup input[type="file"],
 .variantRow input[type="text"],
+.inputGroup select,
 .skuTable input[type="text"],
 .skuTable input[type="number"],
 .inputGroup textarea {

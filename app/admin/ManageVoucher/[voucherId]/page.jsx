@@ -18,7 +18,6 @@ export default async function UserDetail({params}){
         {field:"Voucher Type", value: voucher.voucher_type},
         {field:"Discount Value", value: voucher.discount_value},
         {field:"Minimum Spend", value: voucher.min_spend},
-        {field:"Maximum Spend", value: voucher.max_spend},
         {field:"Quantity", value: voucher.quantity},
         {field:"Start Date", value: voucher.start_date},
         {field:"End Date", value: voucher.end_date},

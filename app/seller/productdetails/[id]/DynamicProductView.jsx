@@ -3,25 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
 import styles from './productdetails.module.css';
-import { supabase } from '@/app/_lib/supabase'; 
 
 export default function DynamicProductView({ 
   initialProduct, 
   variants, 
+  productOptions = [], 
   currentUrlId, 
   latestReview,
   averageRating = "0.0",
   totalReviews = 0,
   starCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
-  totalSales = 0
+  totalSales = 0,
+  onDeleteProduct
 }) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false); 
 
-  const [storages, setStorages] = useState([]);
-  const [colours, setColours] = useState([]);
-  const [selectedStorage, setSelectedStorage] = useState('');
-  const [selectedColour, setSelectedColour] = useState('');
+  const [dynamicOptions, setDynamicOptions] = useState([]);
+  const [selectedValues, setSelectedValues] = useState({});
 
   const productImages = Array.isArray(initialProduct?.product_image_url) 
     ? initialProduct.product_image_url 
@@ -48,46 +47,44 @@ export default function DynamicProductView({
   };
 
   useEffect(() => {
-    if (!variants?.length) {
+    if (!variants?.length || !productOptions?.length) {
       setCurrentStock(initialProduct?.stock_quantity ?? 0);
       setCurrentPrice(initialProduct?.price || 0); 
       return;
     }
 
-    const storageSet = new Set();
-    const colourSet = new Set();
+    const parsedOptionSets = productOptions.map(() => new Set());
 
     variants.forEach(v => {
-      if (v.sku?.includes('*')) {
+      if (v.sku) {
         const parts = v.sku.split('*').map(p => p.trim());
-        let storagePart = parts[0];
-        let colourPart = parts[1];
-
-        const colorKeywords = ['black', 'white', 'blue', 'red', 'green', 'grey', 'silver', 'gold', 'purple', 'pink', 'starlight'];
-        if (colorKeywords.some(keyword => parts[0].toLowerCase().includes(keyword))) {
-          storagePart = parts[1];
-          colourPart = parts[0];
-        }
-
-        if (storagePart) storageSet.add(storagePart);
-        if (colourPart) colourSet.add(colourPart);
-      } else if (v.sku) {
-        colourSet.add(v.sku.trim());
+        parts.forEach((part, index) => {
+          if (parsedOptionSets[index] && part) {
+            parsedOptionSets[index].add(part);
+          }
+        });
       }
     });
 
-    const finalStorages = Array.from(storageSet);
-    const finalColours = Array.from(colourSet);
+    const structuredOptions = productOptions.map((opt, index) => ({
+      name: opt.option_name,
+      values: Array.from(parsedOptionSets[index] || [])
+    }));
 
-    setStorages(finalStorages);
-    setColours(finalColours);
+    setDynamicOptions(structuredOptions);
 
-    if (finalStorages.length > 0) setSelectedStorage(finalStorages[0]);
-    if (finalColours.length > 0) setSelectedColour(finalColours[0]);
-  }, [variants, initialProduct]);
+    const initialSelection = {};
+    structuredOptions.forEach(opt => {
+      if (opt.values.length > 0) {
+        initialSelection[opt.name] = opt.values[0];
+      }
+    });
+    setSelectedValues(initialSelection);
+
+  }, [variants, productOptions, initialProduct]);
 
   useEffect(() => {
-    if (!variants?.length) {
+    if (!variants?.length || dynamicOptions.length === 0) {
       setCurrentPrice(initialProduct?.price || 0);
       return;
     }
@@ -96,15 +93,10 @@ export default function DynamicProductView({
       if (!v.sku) return false;
       const skuParts = v.sku.split('*').map(p => p.trim().toLowerCase());
       
-      const sLower = selectedStorage.toLowerCase();
-      const cLower = selectedColour.toLowerCase();
-
-      if (skuParts.length === 2) {
-        return (skuParts.includes(sLower) && skuParts.includes(cLower)) || 
-               (skuParts[0] === sLower && !selectedColour) || 
-               (skuParts[0] === cLower && !selectedStorage);
-      }
-      return skuParts[0] === cLower || skuParts[0] === sLower;
+      return dynamicOptions.every((opt, index) => {
+        const selectedValue = selectedValues[opt.name]?.toLowerCase();
+        return skuParts[index] === selectedValue;
+      });
     });
 
     if (matched) {
@@ -117,7 +109,7 @@ export default function DynamicProductView({
       setCurrentPrice(initialProduct?.price || 0);
       setCurrentStock(0);
     }
-  }, [selectedStorage, selectedColour, variants, initialProduct]);
+  }, [selectedValues, dynamicOptions, variants, initialProduct]);
 
   const handleDeleteProduct = async (e) => {
     e.preventDefault(); 
@@ -125,12 +117,9 @@ export default function DynamicProductView({
 
     setIsDeleting(true);
     try {
-      const { error } = await supabase
-        .from('PRODUCTS_T')
-        .update({ product_status: 'Inactive' })
-        .eq('product_id', currentUrlId);
+      const res = await onDeleteProduct(currentUrlId);
+      if (res?.error) throw new Error(res.error);
 
-      if (error) throw error;
       alert('Product has been successfully Deleted.');
       router.push('/seller/productlisting');
       router.refresh(); 
@@ -227,58 +216,31 @@ export default function DynamicProductView({
           <div className={styles.variantsContainer}>
             <h2 className={styles.sectionTitle}>Product Variants</h2>
             
-            {storages.length > 0 && (
-              <div className={styles.variantGroup}>
-                <div className={styles.variantLabel}>Options / Storage</div>
-                <div className={styles.variantOptions}>
-                  {storages.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => {
-                        setSelectedStorage(size);
-                        setVariantImage(null);
-                      }}
-                      className={`${styles.optionTagButton} ${selectedStorage === size ? styles.activeOption : ''}`}
-                      type="button"
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {storages.length > 0 && colours.length > 0 && <hr className={styles.divider} />}
-            
-            {colours.length > 0 && (
-              <div className={styles.variantGroup}>
-                <div className={styles.variantLabel}>Colour</div>
-                <div className={styles.colorOptions}>
-                  {colours.map(color => {
-                    let colorClass = styles.greyBg;
-                    if (color.toLowerCase().includes('black')) colorClass = styles.blackBg;
-                    if (color.toLowerCase().includes('white') || color.toLowerCase().includes('starlight')) colorClass = styles.whiteBg;
-
-                    return (
-                      <button
-                        key={color}
-                        onClick={() => {
-                          setSelectedColour(color);
-                          setVariantImage(null);
-                        }}
-                        className={`${styles.colorBoxButton} ${selectedColour === color ? styles.activeColorBox : ''}`}
-                        type="button"
-                      >
-                        <div className={`${styles.colorPreview} ${colorClass}`}></div>
-                        <span>{color}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {storages.length === 0 && colours.length === 0 && (
+            {dynamicOptions.length > 0 ? (
+              dynamicOptions.map((opt, idx) => (
+                <React.Fragment key={opt.name}>
+                  {idx > 0 && <hr className={styles.divider} />}
+                  <div className={styles.variantGroup}>
+                    <div className={styles.variantLabel}>{opt.name}</div>
+                    <div className={styles.variantOptions}>
+                      {opt.values.map(val => (
+                        <button
+                          key={val}
+                          onClick={() => {
+                            setSelectedValues(prev => ({ ...prev, [opt.name]: val }));
+                            setVariantImage(null);
+                          }}
+                          className={`${styles.optionTagButton} ${selectedValues[opt.name] === val ? styles.activeOption : ''}`}
+                          type="button"
+                        >
+                          {val}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))
+            ) : (
               <div style={{ color: '#999', padding: '10px 0' }}>Standard item (No extra configurations)</div>
             )}
           </div>
