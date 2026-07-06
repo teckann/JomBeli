@@ -31,7 +31,7 @@ async function page({ searchParams }) {
       <div className={styles.div2}>
         <Wallet>
           <WalletBalances balances={balances} />
-          <Withdrawal userID={user.id} />
+          <Withdrawal userID={user.id} balance={balances} />
         </Wallet>
       </div>
     </main>
