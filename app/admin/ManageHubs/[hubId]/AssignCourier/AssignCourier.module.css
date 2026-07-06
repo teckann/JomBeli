@@ -1,0 +1,174 @@
+.linkText {
+    text-decoration: none;
+    color: white;
+}
+
+.contentPage {
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.productsOverviewContainer {
+    padding-top: 2em;
+}
+
+.analyticsComponent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+.upperPart {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    /* padding: 1em; */
+}
+
+.generateReportPart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.productsOverviewContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.analyticsBar {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: #DBC7BE;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+}
+
+.analyticsTitle {
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.countWrapper {
+    background-color: #F15946;
+    border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 2em;
+    padding: 2px;
+}
+
+.countContainer {
+    display: flex;
+    justify-content: center;;
+}
+
+.analyticsBarDatas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1em;
+}                   
+
+.courierComponent {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 10px;
+    border: black solid 1px;
+    gap: 0.5em;
+    height: 10em;
+    width: 20em;
+    cursor: pointer;
+}
+
+.courierComponent:hover {
+    background-color: var(--color-bg-hover);
+}
+
+
+.courierShow {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    padding: 1em;
+    gap: 1em;
+}
+
+.courierUpper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.greenStatus, .redStatus {
+    display: flex;
+    padding: 3px 6px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    border-radius: 10px;
+}
+
+.greenStatus {
+    background-color: green;
+}
+
+.redStatus {
+    background-color: red;
+}
+
+.courierBottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.assignButton {
+    display: flex;
+    padding: 0.5em 1em;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: none;
+}
+
+.activeCourier {
+    border: black solid 2px;
+    background-color: var(--color-bg-surface);
+}
+
+.assignButton {
+    display: flex;
+    padding: 1em;
+    background-color: var(--color-primary);
+    color: white;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.assignButton:hover {
+    transform: scale(1.2);
+    background-color: var(--color-primary-dark);
+}
+
+.assignButton:disabled {
+    opacity: 0.5;
+    transform: none;
+}
+
+.backButtonComponent {
+    width: 100%;
+}

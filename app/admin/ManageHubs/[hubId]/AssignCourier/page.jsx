@@ -1,33 +1,38 @@
 import Styles from './AssignCourier.module.css';
 import { getUser } from '@/app/_lib/auth';
 import Link from 'next/link';
-import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
+import AdminBackButton from "@/app/_components/AdminHubBackButton/AdminHubBackButton";
+// import AdminBackButton from '@/app/_components/AdminBackButton/AdminBackButton';
 import { getFilterSupport } from '@/app/_lib/analysis-serives';
-import AdminFilterSupportsBar from '@/app/_components/AdminFilterSupportBars/AdminFilterSupportBars';
-import AdminTable from '@/app/_components/AdminTable/AdminTable';
-// import { getUserInfo, deactiveProduct } from '@/app/_lib/data-services';
+import { getHubDelivery, getHubCourierMan } from '@/app/_lib/data-services';
+import AssignCourierClient from './AssignCourierClient';
 
 
 
-export default async function ManageSupportPage({ params }) {
+export default async function AssignCorierPage({ params }) {
 
     const { hubId } = await params;
+    const user = await getUser();
+    
+    const hub = await getHubDelivery(hubId);
 
-    const supportList = await getFilterSupport(date, supportType, supportStatus);
+    // const supportList = await getFilterSupport(date, supportType, supportStatus);
 
-    const titles = ["Support ID", "Reporter Name", "Report Type", "Report Status", "Request Date"];
+    const titles = ["Shipping ID", "Shipping Area", "Status", "Delivery Type", "Created Date"];
 
-    const actions = [{type: "viewSupport"}];
-    const fields = ["support_id", "reporter.username", "support_type", "support_status", "created_at"];
-    const datas = supportList;
+    const actions = [{type: "assignDelivery"}];
+    const fields = ["shipping_id", "order.address.city", "shipping_status", "delivery_type", "created_at"];
+    // const datas = hub;
 
     // const yearMonthsSelect = await getYearsMonthsWithNewProduct();
 
+    const datas = hub;
+    const couriers = await getHubCourierMan(hubId);
 
 
     return (
         <div className={ Styles.contentPage}>
-            <AdminBackButton />
+            <div className={ Styles.backButtonComponent }><AdminBackButton /></div>
             <div className={Styles.showTablePart}>
                 <div className={ Styles.upperPart}>
                     <div className={Styles.listingText}>
@@ -35,16 +40,17 @@ export default async function ManageSupportPage({ params }) {
                         <p>Assign delivery to courier man at here</p>
                     </div>
                     <div>
-                        <button className={ Styles.hubButton }><Link href="#">Hub Profile</Link></button>
+                        <button className="btn btn-primary"><Link className={ Styles.linkText } href={`/admin/ManageHubs/${hubId}/HubProfile`}>Hub Profile</Link></button>
                     </div>
                 </div>
                 <div>
-                    <AdminFilterSupportsBar />
+                    {/* <AdminFilterSupportsBar /> */}
                 </div>
             </div>
             <div>
-                <AdminTable titles={titles} fields={fields} actions={actions} datas={datas} slice={false} dataIdFormat="refund_id" />
+                <AssignCourierClient datas={datas} fields={fields} titles={titles} actions={actions} couriers={couriers} user={user} />
             </div>
         </div>
     );
 }
+
