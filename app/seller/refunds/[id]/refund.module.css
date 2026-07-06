@@ -331,6 +331,11 @@
 
 }
 
+.orderId {
+
+  margin: 0;
+}
+
 .productList {
   display: flex;
   flex-direction: column;

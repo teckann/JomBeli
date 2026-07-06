@@ -244,7 +244,7 @@
 }
 
 .submitBtn {
-  background-color: #111111;
+  background-color: var(--color-primary);
   border: none;
   border-radius: 8px;
   padding: 12px 30px;
@@ -255,9 +255,6 @@
   transition: background-color 0.2s ease;
 }
 
-.submitBtn:hover {
-  background-color: #333333;
-}
 
 .submitBtn:disabled {
   background-color: #cccccc;

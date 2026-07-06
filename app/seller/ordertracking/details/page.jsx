@@ -40,19 +40,17 @@ function OrderDetailsContent() {
                 if (orderErr) throw orderErr;
                 
                 if (!orderData) {
-                    setErrorMessage(`Order ID "${orderId}" was not found in the database. Please check your ORDERS_T table entries.`);
+                    setErrorMessage(`Order ID "${orderId}" was not found.`);
                     setLoading(false);
                     return;
                 }
                 setOrderInfo(orderData);
 
-                const { data: transData, error: transErr } = await supabase
+                const { data: transData } = await supabase
                     .from('ORDER_TRANSACTIONS_T')
-                    .select('amount, order_transaction_status')
+                    .select('amount')
                     .eq('order_id', orderId)
                     .maybeSingle();
-
-                if (transErr) throw transErr;
                 setTransactionInfo(transData);
 
                 const { data: hubsData } = await supabase
@@ -60,39 +58,33 @@ function OrderDetailsContent() {
                     .select('hub_id, hub_name, hub_location');
                 setHubs(hubsData || []);
 
-                const { data: itemsData, error: itemsErr } = await supabase
+                const { data: itemsData } = await supabase
                     .from('ORDER_ITEMS_T')
                     .select(`
-                        order_item_id,
-                        product_variant_id,
-                        quantity,
-                        unit_price,
+                        order_item_id, product_variant_id, quantity, unit_price,
                         PRODUCT_VARIANTS_T (
-                            sku,
-                            product_variant_stock,
-                            PRODUCTS_T (
-                                product_name,
-                                category,
-                                product_image_url
-                            )
+                            sku, product_variant_stock,
+                            PRODUCTS_T ( product_name, category, product_image_url )
                         )
                     `)
                     .eq('order_id', orderId);
-                
-                if (itemsErr) throw itemsErr;
                 setOrderItems(itemsData || []);
 
-                const { data: shippingData } = await supabase
+                const { data: shippingRows } = await supabase
                     .from('SHIPPING_T')
                     .select('hub_id')
                     .eq('order_id', orderId)
-                    .maybeSingle();
-                if (shippingData?.hub_id) {
-                    setSelectedHub(shippingData.hub_id);
+                    .order('shipping_id', { ascending: false });
+                
+                if (shippingRows && shippingRows.length > 0) {
+                    const targetedRow = shippingRows.find(row => row.hub_id) || shippingRows[0];
+                    if (targetedRow && targetedRow.hub_id) {
+                        setSelectedHub(targetedRow.hub_id);
+                    }
                 }
 
             } catch (err) {
-                console.error("Supabase Data Fetch Exception:", err.message);
+                console.error("Fetch Error:", err.message);
                 setErrorMessage(`Database Error: ${err.message}`);
             } finally {
                 setLoading(false);
@@ -109,6 +101,7 @@ function OrderDetailsContent() {
 
         try {
             setActionLoading(true);
+
             const { error } = await supabase
                 .from('SHIPPING_T')
                 .update({ hub_id: hubId })
@@ -127,7 +120,7 @@ function OrderDetailsContent() {
         if (!orderInfo) return;
         const currentStatus = orderInfo.order_status;
 
-        if ((currentStatus === 'Ordered' || currentStatus === 'Pending' || currentStatus === 'Packed') && !selectedHub) {
+        if (currentStatus === 'Packed By Seller' && !selectedHub) {
             alert('Please select a logistics hub first before processing.');
             return;
         }
@@ -142,36 +135,31 @@ function OrderDetailsContent() {
                     const finalStock = currentStock - buyQty;
 
                     if (finalStock < 0) {
-                        alert(`Insufficient stock! Item SKU: [${item.PRODUCT_VARIANTS_T?.sku}] only has ${currentStock} units left.`);
+                        alert(`Insufficient stock for SKU: [${item.PRODUCT_VARIANTS_T?.sku}].`);
                         setActionLoading(false);
                         return; 
                     }
 
-                    const { error: stockError } = await supabase
+                    await supabase
                         .from('PRODUCT_VARIANTS_T')
                         .update({ product_variant_stock: finalStock })
                         .eq('product_variant_id', item.product_variant_id);
-
-                    if (stockError) throw stockError;
                 }
 
-                const { error: statusErr } = await supabase
+                await supabase
                     .from('ORDERS_T')
-                    .update({ order_status: 'Packed' })
+                    .update({ order_status: 'Packed By Seller' })
                     .eq('order_id', orderId);
 
-                if (statusErr) throw statusErr;
-                alert('Order packed successfully! Stocks have been updated.');
-
+                alert('Order packed successfully!');
             } 
-            else if (currentStatus === 'Packed') {
-                const { error: statusErr } = await supabase
+            else if (currentStatus === 'Packed By Seller') {
+                await supabase
                     .from('ORDERS_T')
                     .update({ order_status: 'Shipped' })
                     .eq('order_id', orderId);
 
-                if (statusErr) throw statusErr;
-                alert('Order shipped successfully! Item is on its way.');
+                alert('Order shipped successfully!');
             }
 
             router.refresh();
@@ -192,7 +180,6 @@ function OrderDetailsContent() {
             <div className={styles.container}>
                 <button className={styles.backBtn} onClick={() => router.back()}>← Back</button>
                 <div style={{ padding: '20px', border: '1px solid #ffcccb', backgroundColor: '#fff6f6', borderRadius: '8px', color: '#d8000c' }}>
-                    <h3 style={{ margin: '0 0 10px 0' }}>Resource Not Found</h3>
                     <p>{errorMessage}</p>
                 </div>
             </div>
@@ -202,13 +189,13 @@ function OrderDetailsContent() {
     const getUIConfig = () => {
         const status = orderInfo?.order_status;
         if (status === 'Ordered' || status === 'Pending') {
-            return { title: 'NEW ORDER', buttonText: 'Packed by Seller', disabled: false };
-        } else if (status === 'Packed') {
-            return { title: 'PACKED ORDER', buttonText: 'Shipped', disabled: false };
+            return { title: 'NEW ORDER', buttonText: 'Packed By Seller', showButton: true, hubView: 'hide' };
+        } else if (status === 'Packed' || status === 'Packed By Seller') { 
+            return { title: 'PACKED ORDER', buttonText: 'Shipped', showButton: true, hubView: 'select' };
         } else if (status === 'Shipped' || status === 'Completed' || status === 'Success' || status === 'Succuess') {
-            return { title: 'COMPLETED', buttonText: 'Completed', disabled: true };
+            return { title: 'COMPLETED', buttonText: '', showButton: false, hubView: 'text' };
         }
-        return { title: 'ORDER DETAILS', buttonText: 'Processed', disabled: true };
+        return { title: 'ORDER DETAILS', buttonText: '', showButton: false, hubView: 'text' };
     };
 
     const uiConfig = getUIConfig();
@@ -223,11 +210,11 @@ function OrderDetailsContent() {
         }
     };
 
+    const assignedHubDetails = hubs.find(h => String(h.hub_id) === String(selectedHub));
+
     return (
         <div className={styles.container}>
-            <button className={styles.backBtn} onClick={() => router.back()}>
-                <span>←</span> Back
-            </button>
+            <button className={styles.backBtn} onClick={() => router.back()}>← Back</button>
 
             <h1 className={styles.pageTitle}>{uiConfig.title}</h1>
             <div className={styles.orderIdSub}>Order ID : {orderId}</div>
@@ -249,22 +236,35 @@ function OrderDetailsContent() {
                     </span>
                 </div>
                 
-                <div className={styles.rowItem}>
-                    <span className={styles.rowLabel}>Choose Hub</span>
-                    <select 
-                        value={selectedHub} 
-                        onChange={handleHubChange}
-                        disabled={actionLoading || uiConfig.disabled}
-                        className={styles.hubSelect}
-                    >
-                        <option value="">-- Select Hub --</option>
-                        {hubs.map((hub) => (
-                            <option key={hub.hub_id} value={hub.hub_id}>
-                                {hub.hub_name} ({hub.hub_location})
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                {uiConfig.hubView === 'select' && (
+                    <div className={styles.rowItem}>
+                        <span className={styles.rowLabel}>Choose Hub</span>
+                        <select 
+                            value={selectedHub} 
+                            onChange={handleHubChange}
+                            disabled={actionLoading}
+                            className={styles.hubSelect}
+                        >
+                            <option value="">-- Select Hub --</option>
+                            {hubs.map((hub) => (
+                                <option key={hub.hub_id} value={hub.hub_id}>
+                                    {hub.hub_name} ({hub.hub_location})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
+                {uiConfig.hubView === 'text' && (
+                    <div className={styles.rowItem}>
+                        <span className={styles.rowLabel}>Allocated Hub</span>
+                        <span className={styles.rowValue} style={{ fontWeight: '600', color: '#333' }}>
+                            {assignedHubDetails 
+                                ? `${assignedHubDetails.hub_name} (${assignedHubDetails.hub_location})` 
+                                : 'No hub was selected'}
+                        </span>
+                    </div>
+                )}
             </div>
 
             <div className={styles.productsList}>
@@ -276,9 +276,8 @@ function OrderDetailsContent() {
                         <div key={item.order_item_id} className={styles.productCard}>
                             <img 
                                 src={parseImgUrl(productDetails.product_image_url)} 
-                                alt="Ordered Product" 
+                                alt="Product" 
                                 className={styles.imagePlaceholder}
-                                onError={(e) => { e.target.src = '/placeholder.png'; }}
                             />
                             <table className={styles.productSpecsTable}>
                                 <tbody>
@@ -296,7 +295,6 @@ function OrderDetailsContent() {
                                             {variantDetails.sku || 'N/A'} <strong>(Qty: {item.quantity})</strong>
                                         </td>
                                     </tr>
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -304,15 +302,17 @@ function OrderDetailsContent() {
                 })}
             </div>
 
-            <div className={styles.actionArea}>
-                <button 
-                    className={styles.packedBtn} 
-                    onClick={handleStatusTransition}
-                    disabled={actionLoading || uiConfig.disabled}
-                >
-                    {actionLoading ? 'Processing...' : uiConfig.buttonText}
-                </button>
-            </div>
+            {uiConfig.showButton && (
+                <div className={styles.actionArea}>
+                    <button 
+                        className={styles.packedBtn} 
+                        onClick={handleStatusTransition}
+                        disabled={actionLoading}
+                    >
+                        {actionLoading ? 'Processing...' : uiConfig.buttonText}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
