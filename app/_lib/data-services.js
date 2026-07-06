@@ -448,6 +448,7 @@ export async function getDiscountProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -468,6 +469,7 @@ export async function getHotProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("total_sold", { ascending: false })
     .limit(5);
 
@@ -484,6 +486,7 @@ export async function getDiscoverProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
+    .eq("product_status", "Active")
     .order("created_at", { ascending: false })
     .limit(10);
 
@@ -1829,7 +1832,7 @@ export async function getUsedVoucher(id) {
   return data;
 }
 
-export async function getAvailableShipments() {
+export async function getHubDelivery(hubId) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -1844,6 +1847,7 @@ export async function getAvailableShipments() {
     `)
     .is("courier_id", null)
     .eq("shipping_status", "Created")
+    .eq("hub_id", hubId)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -1893,6 +1897,98 @@ export async function getUserTransactions(userId) {
     }
     return data;
 }
+
+export async function getHubs() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("HUBS_T")
+    .select(`*`)
+    .order("hub_id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
+}
+
+// export async function getHubCourierMan(hubId) {
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from("USERS_T")
+//     .select(`
+//       user_id,
+//       username,
+//       available_status,
+//       HUBS_T (
+//         hub_name
+//       ),
+//       SHIPPING_T (
+//         shipping_id,
+//         shipping_status
+//       )
+//     `)
+//     .eq("role", "Courier")
+//     .eq("hub_id", hubId);
+
+//   if (error) {
+//     console.error("Supabase error:", error);
+//     throw error;
+//   }
+
+//   return data;
+// }
+
+export async function getHubCourierMan(hubId) {
+  const supabase = await createClient();
+
+  // Step 1: Get all active couriers in the hub
+  const { data: couriers, error: courierError } = await supabase
+    .from("USERS_T")
+    .select("user_id, username, available_status")
+    .eq("hub_id", hubId)
+    .eq("role", "Courier")
+    .eq("user_status", "Active");
+
+  if (courierError) {
+    console.error(courierError);
+    throw new Error("Failed to fetch couriers");
+  }
+
+  // hubinfo
+  const hubInfo = await supabase.from("HUBS_T").select("*").eq("hub_id", hubId).single();
+
+  // Step 2: Count each courier's OutForDelivery shipments
+  const result = await Promise.all(
+    couriers.map(async (courier) => {
+      const { count, error } = await supabase
+        .from("SHIPPING_T")
+        .select("*", { count: "exact", head: true })
+        .eq("hub_id", hubId)
+        .eq("courier_id", courier.user_id)
+        .eq("shipping_status", "OutForDelivery");
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        user_id: courier.user_id,
+        username: courier.username,
+        hub_name: hubInfo.data.hub_name,
+        available_status: courier.available_status,
+        total_shipping: count,
+      };
+    })
+  );
+
+  return result;
+}
+
+// export async function 
 
 export async function hasPendingDelivery(courierId) {
   const supabase = await createClient();
