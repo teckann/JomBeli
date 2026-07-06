@@ -292,7 +292,7 @@ export async function BuyerContactForm(formData) {
       support_id: supportId,
       support_type: category,
       support_description: message,
-      support_status: "pending",
+      support_status: "Pending",
       reporter_id: userID,
       target_product_id: productID? productID : null,
       target_seller_id: shopID? shopID : null
