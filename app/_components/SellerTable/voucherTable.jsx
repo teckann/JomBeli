@@ -16,7 +16,7 @@ const VoucherTable = ({ data }) => {
         tableHeader={[{header: 'Voucher Name', data: 'voucher_name'},
                       {header: 'T&C', multiple: (row) => `Min spend: RM ${row.min_spend ?? '-'}`},
                       {header: 'Discount', data: 'discount_value'},
-                      {header: 'Expiry', multiple: (row) => `${row.start_date} - ${row.end_date}`}, 
+                      {header: 'Expiry', multiple: (row) => `${row.start_date ?? ''} - ${row.end_date ?? ''}`}, 
                       {header: 'Created By', multiple: (row) => `${row.temp_date} ${row.temp_time}`}, 
                       {header: 'Action', multiple: (row) => <> <Link className={styles.view}  href={`./vouchers/${row.voucher_id}`}>view</Link> </>}]} 
         navColumn='voucher_status'

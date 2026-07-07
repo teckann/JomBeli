@@ -280,7 +280,7 @@ export async function getSellerVoucher(id) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("VOUCHERS_T")
-    .select("*, temp_date:created_at::date, temp_time:created_at::time")
+    .select("*, temp_date:created_at::date, temp_time:created_at::time, start_date::date, end_date::date")
     .eq("user_id", id)
     .eq("voucher_type", "shop");
 
