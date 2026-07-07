@@ -672,7 +672,7 @@ export async function adminUpdateVoucher(voucherId,saveData){
 }
 
 export async function adminAddVoucher(formData){
-  const requiredFields = ['voucherName', 'discountValue', 'maximumSpend', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
+  const requiredFields = ['voucherName', 'discountValue', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
 
   if (Number(formData.minimumSpend) < Number(formData.discountValue)) {
     throw new Error("Minimum spend cannot be less than the discount value.");
@@ -689,7 +689,7 @@ export async function adminAddVoucher(formData){
     throw new Error("Please ensure that the end date is later than start date");
   }
 
-  const user = getUser();
+  const user = await getUser();
   if (!user) {
     throw new Error("You must be logged in to create a voucher.")
   }
@@ -706,7 +706,6 @@ export async function adminAddVoucher(formData){
     user_id: user.id,
     voucher_name: formData.voucherName,
     discount_value: formData.discountValue,
-    max_spend: formData.maximumSpend,
     min_spend: formData.minimumSpend,
     quantity: formData.quantity,
     start_date: formData.startDate,

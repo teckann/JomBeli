@@ -67,7 +67,7 @@ export function AdminAddVoucherForm(){
 
                         <div className={Styles.formGroup}>
                             <label>Voucher Name</label>
-                            <input type="text" name="voucherName" required placeholder="Delivery Voucher (Start with JOMBELI)" />
+                            <input type="text" name="voucherName" required placeholder="Voucher Name" />
                         </div>
 
                         <div className={Styles.formGroup}>

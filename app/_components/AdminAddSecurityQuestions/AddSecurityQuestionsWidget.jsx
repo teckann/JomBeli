@@ -17,7 +17,8 @@ export function AdminAddSecurityQuestionsForm({ userId }){
     const [error,setError] = useState("");
     const [message, setMessage] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+    const [securityQuestion1, setSecurityQuestion1] = useState("");
+
     const boundAction = setSecurityQuestions.bind(null, userId);
 
     const handleSubmit = async (formData) => {
@@ -50,7 +51,10 @@ export function AdminAddSecurityQuestionsForm({ userId }){
 
                     <div className={Styles.formGroup}>
                         <label>Security Question 1</label>
-                        <select name="security_question_1" required defaultValue="">
+                        <select name="security_question_1" 
+                        required 
+                        value={securityQuestion1} 
+                        onChange={(e) => setSecurityQuestion1(e.target.value)}>
                             <option value="" disabled>-- Select a question --</option>
                             {SECURITY_QUESTIONS.map((q) => (
                                 <option key={q} value={q}>{q}</option>
@@ -66,7 +70,9 @@ export function AdminAddSecurityQuestionsForm({ userId }){
                         <label>Security Question 2</label>
                         <select name="security_question_2" required defaultValue="">
                             <option value="" disabled>-- Select a question --</option>
-                            {SECURITY_QUESTIONS.map((q) => (
+                            {SECURITY_QUESTIONS
+                                .filter((q) => q !== securityQuestion1)
+                                .map((q) => (
                                 <option key={q} value={q}>{q}</option>
                             ))}
                         </select>
