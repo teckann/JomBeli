@@ -34,7 +34,6 @@ export default function AssignCourierClient({datas, fields, titles, actions, cou
     const handleAssign = async () => {
         deliveryList.forEach(async (id)=>{
             const orderId = datas.find( data => data.shipping_id === id)?.order_id;
-            console.log(orderId);
             await adminAssignCourier(user.id, id, selectedCourierId, orderId)
         })
 

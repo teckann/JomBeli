@@ -1628,7 +1628,7 @@ export async function getOutOfDeliveryParcelCount() {
   const { count, error } = await supabase
     .from('SHIPPING_T')
     .select('*', { count: 'exact', head: true })
-    .eq('shipping_status', 'Out Of Delivery');
+    .eq('shipping_status', 'Assigned');
 
   if (error) {
     console.error(error);

@@ -85,7 +85,6 @@ export default async function reportDetails({params}) {
     const refundList1 = [{field: "Refund ID", value: refund.refund_id}, {field: "Buyer ID", value: refund.ORDERS_T.buyer.user_id}];
     const refundList2 = [{field: "Refund Subject", value: refund.refund_subject}, {field: "Buyer Name", value: refund.ORDERS_T.buyer.username}];
     const refundList3 = [{field: "Request Date", value: requestDate}];
-    console.log("refund",refund);
 
     return (<div className={ Styles.refundDetailsPage }>
         <div className={ Styles.upperPart }>
