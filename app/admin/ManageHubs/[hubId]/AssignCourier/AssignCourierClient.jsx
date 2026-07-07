@@ -49,6 +49,8 @@ export default function AssignCourierClient({datas, fields, titles, actions, cou
         <div>
             <div>
                 <AdminTable handleClickDelivery={handleClickDelivery} titles={titles} deliveryList={deliveryList} fields={fields} datas={datas} slice={false} actions={actions} dataIdFormat="refund_id"  />
+                <p>{deliveryList.length} shipping orders are selected</p>
+                <br />
             </div>
             <div>
                 <h3>Pick One Courier Man</h3>
