@@ -9,9 +9,9 @@ import { getAllProducts } from "@/app/_lib/buyer-products-services";
 import ProductCard from "../ProductCard/ProductCard";
 import styles from "./ProductListing.module.css";
 import TempCoverComponent from "../TempCoverComponent/TempCoverComponent";
-import { getProducts, getProductsBySellerID } from "@/app/_lib/dynamic-services";
+import { getProducts, getProductsBySellerID, searchProducts } from "@/app/_lib/dynamic-services";
 
-async function ProductListing({ type, filter, sellerID }) {
+async function ProductListing({ type, filter, sellerID, keyword}) {
   let products = [];
 
   if (type === "discountProducts") products = await getDiscountProducts();
@@ -24,13 +24,15 @@ async function ProductListing({ type, filter, sellerID }) {
 
   if (sellerID){
     displayProducts = await getFilterProductsBySellerID(filter, sellerID);
+  } else if (keyword){
+    displayProducts = await searchProducts(keyword);
   } else if (filter === "all") {
     displayProducts = products;
   } else if (filter !== "") {
     displayProducts = await getFilterProducts(filter);
   }
 
-  if (filter)
+  if (filter || keyword)
     return (
       <>
         {displayProducts.length === 0 ? (

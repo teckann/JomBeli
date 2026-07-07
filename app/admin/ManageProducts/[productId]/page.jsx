@@ -75,7 +75,7 @@ export default async function ProductDetails({params}) {
                                 📜Total Orders: {sales.totalOrders}
                             </div>
                             <div>
-                                💵Total Sales: {sales.totalSales}
+                                💵Total Sales: RM {sales.totalSales}
                             </div>
                         </div>
                     </div>

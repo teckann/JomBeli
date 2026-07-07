@@ -1,0 +1,21 @@
+.container{
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.title{
+    font-weight: 600;
+    font-size: var(--text-4xl);
+    margin-bottom: 40px;
+}
+
+.title span{
+    color: var(--color-primary);
+}
+
+.products{
+    background-color: var(--color-bg-surface);
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border-light);
+}

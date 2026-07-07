@@ -1,8 +1,9 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Styles from "@/app/_components/BuyerNavBar/BuyerNavBar.module.css";
+import { useState } from "react";
 
 const icons = {
   Category: "M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z",
@@ -28,6 +29,19 @@ export default function BuyerNavBarClient({ user }) {
   const RouteWithSearch = ["/buyer", "/"];
   const currentPath = usePathname();
   const showSearch = RouteWithSearch.includes(currentPath);
+
+  const router = useRouter();
+  const [keyword, setKeyword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const trimmedKeyword = keyword.trim();
+
+    if (!trimmedKeyword) return;
+
+    router.push(`/buyer/searchPage?keyword=${encodeURIComponent(trimmedKeyword)}`);
+  };
 
   const renderLink = (item) => {
     return (
@@ -58,11 +72,13 @@ export default function BuyerNavBarClient({ user }) {
           <Link className={Styles.logo} href="/buyer">
             JomBeli
           </Link>
-          <form action="" className={Styles.searchContainer}>
+          <form onSubmit={handleSubmit} className={Styles.searchContainer}>
             <input
               className={Styles.searchbar}
               type="search"
               placeholder="Search for product"
+              value={keyword}
+              onChange={(e)=>setKeyword(e.target.value)}
             />
             <button className={Styles.searchButton} type="submit">
               Search
