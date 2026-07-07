@@ -21,13 +21,23 @@ export default async function transactionDetail({params}){
         { field: "Status", value: transaction.wallet_transaction_status },
         { field: "Made At", value: transaction.created_at },
     ]
+    const mid = Math.ceil(transactionInfo.length / 2);
+    const leftInfo = transactionInfo ? transactionInfo.slice(0, mid) : [];
+    const rightInfo = transactionInfo ? transactionInfo.slice(mid) : [];
 
     return(
         <div className={Styles.transactionDetailsPage}>
+            <div className={Styles.upperContainer}>
+                <div className={Styles.buttonContainer}>
+                    <BackButton />
+                </div> 
+            </div>
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
-                    <BackButton />
-                    <AdminShowInformationList itemTitle="Transaction details" objectlist={transactionInfo}/>
+                    <AdminShowInformationList itemTitle="Transaction details" objectlist={leftInfo}/>
+                </div>
+                <div className={Styles.rightSide}>
+                    <AdminShowInformationList itemTitle="Transaction details" objectlist={rightInfo}/>
                 </div>
             </div>
         </div>

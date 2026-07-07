@@ -17,7 +17,7 @@ export default async function AdminDashboard(){
         <div className = {Styles.contentPage}>
             <div className = {Styles.upperPart}>
                 <div className = {Styles.pageDescription}>
-                    <h1>Welcome admin, {userDetails.username}</h1>
+                    <h1>Welcome back, admin {userDetails.username}</h1>
                     <p>Track orders, deliveries, and performance here!</p>
                 </div>
             </div>
@@ -26,18 +26,24 @@ export default async function AdminDashboard(){
             </div> 
             <div className = {Styles.chartRow}>
                 <div className={Styles.chartContainer}>
-                    <h3>Order Status Distribution</h3>
-                    <AdminOrderStatusChart counts={orderStatusCounts} />
+                    <h3 className={Styles.chartTitle}>Order Status Distribution</h3>
+                    <div className={Styles.chartInner}>
+                        <AdminOrderStatusChart counts={orderStatusCounts} />
+                    </div>
                 </div>
                 <div className={Styles.chartContainer}>
-                    <h3>Platform Top Selling Products</h3>
-                    <AdminTopSellingProductsChart products={topProducts}/>
+                    <h3 className={Styles.chartTitle}>Platform Top Selling Products</h3>
+                    <div className={Styles.chartInner}>
+                        <AdminTopSellingProductsChart products={topProducts}/>
+                    </div>
                 </div>
             </div>
             <div className = {Styles.chartRow}>
                 <div className={Styles.trendChartContainer}>
-                    <h3>Order Trend for last 30 days</h3>
-                    <AdminOrderTrendChart trendData={trendData}/>
+                    <h3 className={Styles.chartTitle}>Order Trend for last 30 days</h3>
+                    <div className={Styles.trendChartInner} >
+                        <AdminOrderTrendChart trendData={trendData}/>
+                    </div>
                 </div>
             </div>
         </div>

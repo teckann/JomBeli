@@ -1,16 +1,18 @@
 .upperContainer{
     display: flex;
-    justify-content: space-between;
-    width: 90%;
-    gap: 50px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap:20px;
+    width: 100%;
 }
 
 .infoBox{
     display: flex;
-    width: 400px;
-    padding: 20px;
+    flex: 1;
+    min-width: 160px;
+    padding: 10px;
     align-items: center;
-    border: 1px solid #ccc;
-    background-color: #ffadad;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-card);
     border-radius: 10px;
 }

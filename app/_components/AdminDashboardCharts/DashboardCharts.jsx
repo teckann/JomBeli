@@ -34,10 +34,11 @@ export function AdminOrderStatusChart({ counts }) {
     };
 
     const options = {
+        maintainAspectRatio: false,
         responsive: true,
         plugins: {
             legend: { display: false },
-            title: { display: true, text: "Order Status Distribution (Today)" },
+            title: { display: false, text: "Order Status Distribution (Today)" },
         },
         scales: {
             y: { beginAtZero: true, ticks: { stepSize: 1 } },
@@ -53,7 +54,7 @@ export function AdminTopSellingProductsChart({ products }) {
     }
 
     const data = {
-        labels: products.map(p => p.product_name),
+        labels: products.map(p => p.product_name.length >20 ?p.product_name.slice(0,20) + '...' : p.product_name),
         datasets: [{
             label: "Quantity Sold",
             data: products.map(p => p.total_sold),
@@ -62,11 +63,20 @@ export function AdminTopSellingProductsChart({ products }) {
     };
 
     const options = {
+        maintainAspectRatio: false,
         indexAxis: 'y', // horizontal bars — reads better with product names
         responsive: true,
         plugins: {
             legend: { display: false },
-            title: { display: true, text: "Platform Top Selling Products" },
+            title: { display: false, text: "Platform Top Selling Products" },
+            tooltip: {
+                callbacks: {
+                    title: (context) => {
+                        // context[0].dataIndex maps back to the original, untruncated name
+                        return products[context[0].dataIndex].product_name;
+                    },
+                },
+            },
         },
         scales: {
             x: { beginAtZero: true, ticks: { stepSize: 2 } },
@@ -99,9 +109,17 @@ export function AdminOrderTrendChart({ trendData }) {
         maintainAspectRatio: false,
         plugins: {
             legend: { display: false },
-            title: { display: true, text: "Order Trend (Last 30 Days)" },
+            title: { display: false, text: "Order Trend (Last 30 Days)" },
         },
         scales: {
+            x:{
+                ticks:{
+                    maxRotation: 45,
+                    minRotation: 45,
+                    autoSkip: true,
+                    font: {size:10},
+                }
+            },
             y: { beginAtZero: true, ticks: { stepSize: 1 } },
         },
     };

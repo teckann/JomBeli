@@ -49,7 +49,7 @@ export function SelectType({ type,handleChange,values }){
     return(
         <div>
             <label className={Styles.selectText} htmlFor='type'/>
-            <select name="type" id="type" className={Styles.typeDropdown} onChange={handleChange} value={values}>
+            <select name="type" id="type" className={Styles.statusDropdown} onChange={handleChange} value={values}>
                 <option value="All">All</option>
                 {type.map((types) => {
                     return <option key={types} value={types}>{types}</option>  

@@ -361,3 +361,24 @@ export async function getFilterReviews(productId, star) {
 
   return result;
 }
+
+export async function searchProducts(keyword) {
+  const trimmedKeyword = keyword.trim();
+
+  if (!trimmedKeyword) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .eq("product_status", "Active")
+    .ilike("product_name", `%${trimmedKeyword}%`)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(`Failed to search products: ${error.message}`);
+  }
+
+  return data;
+}

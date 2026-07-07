@@ -12,20 +12,12 @@
 }
 
 .openFormBtn:hover {
-    background-color: var(--color-primary-darker);
-    color: var(--color-primary-subtle);
+    background-color: var(--color-primary-lighter);
+    color: var(--color-text-on-primary);
     cursor: pointer;
 }
 
-.formContainer {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
 .formGroup {
-
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
@@ -36,7 +28,7 @@
     border: none;
     font-size: 18px;
     cursor: pointer;
-    color: #666;
+    color: var(--color-font-secondary);
 }
 
 .formActions {
@@ -48,23 +40,36 @@
 .formGroup label{
     font-size: 16px;
     color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
 }
 
-.formGroup input,
-.formGroup select{
+.formGroup input{
     display: flex;
     font-size: 16px;
-    width: 80%;
+    width: 100%;
     box-sizing: border-box;
-    border: none;
-    border-radius: 20px;
-    background-color: #e0eec6;
+    border: 1px solid var(--color-border-primary);
+    border-radius: 5%;
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
     padding: 10px;
     align-items: center;
     margin-top: 10px;
 }
 
-.formGroup select {
+.formGroup select{
+    display: flex;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--color-border-primary);
+    border-radius: 5px;
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
+    padding: 10px;
+    align-items: center;
+    margin-top: 10px;
     appearance: none;       
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -76,8 +81,8 @@
 }
 
 .cancelBtn {
-    background-color: #eaeaea;
-    color: #333;
+    background-color:  var(--color-bg-hover);
+    color: var(--color-font-primary);
     border: none;
     padding: 10px 15px;
     border-radius: 6px;
@@ -85,14 +90,14 @@
 }
 
 .cancelBtn:hover{
-    background-color: var(--color-danger);
+    background-color: var(--color-font-secondary);
     color: var(--color-primary-subtle);
     cursor: pointer;
 }
 
 .submitBtn {
-    background-color: #0070f3;
-    color: white;
+    background-color: var(--color-success);
+    color: var(--color-primary-subtle);
     border: none;
     padding: 10px 15px;
     border-radius: 6px;
@@ -100,6 +105,7 @@
 }
 
 .submitBtn:hover{
-    background-color: var(--color-info-text);
+    transform: scale(0.97);
+    background-color: var(--color-success-text);
     cursor: pointer;
 }

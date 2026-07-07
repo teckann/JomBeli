@@ -9,7 +9,9 @@
     border: none;
     padding: 10px;
     border-radius: 5px;
-    
+    color: var(--color-font-primary);
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-input);
 }
 
 .searchUser{
@@ -27,6 +29,11 @@
     padding: 10px; 
     border-radius: 5%;
     border: none;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-bg-input);
+    color: var(--color-font-primary);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .roleAndStatus{

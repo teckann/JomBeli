@@ -1,9 +1,10 @@
 .AdminStatCard {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes the title to the top and value to the bottom */
-    height: 100%; /* Ensures all cards in the row stretch to match the tallest card */
-    gap: 20px;
+    justify-content: space-between;
+    height: 100%;
+    gap: 5px;
+    min-height: 140px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     text-decoration: inherit;
     color: inherit;
@@ -16,4 +17,17 @@
 
 .AdminStatCard:active{
     transform: scale(0.98);
+}
+
+.title{
+    color: var(--color-font-primary);
+    font-size: 22px;
+    margin: 0 0 8px 0 ;
+}
+
+.value{
+    justify-content: space-between;
+    color: var(--color-font-primary);
+    font-size: 22px;
+    margin-top: auto;
 }

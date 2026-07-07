@@ -41,8 +41,8 @@ const FilterBig = ({ changeNav, currentNav,
 
     return (
         <div className={styles.navs}>
-            {navDetail.map((bar) => (
-                <button className={`${styles.nav} ${currentNav === bar.navStatus ? styles.activeNav : ''}`}
+            {navDetail.map((bar, index) => (
+                <button key={index} className={`${styles.nav} ${currentNav === bar.navStatus ? styles.activeNav : ''}`}
                     onClick={(e) => {
                         changeNav(bar.navStatus);
 

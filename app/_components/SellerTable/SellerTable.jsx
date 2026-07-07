@@ -80,15 +80,15 @@ const SellerTable = ({
                         
                         <thead className={styles.thead}  style={{textAlign: align}}>
                             <tr>
-                            {tableHeader.map((head) => (
-                                <th >{head.header}</th>
+                            {tableHeader.map((head, index) => (
+                                <th key={index}>{head.header}</th>
                             ))}
                             </tr>
                         </thead>
 
                         <tbody className={styles.tbody}  styles={{textAlign: align}}>
-                            {filteredData.map((row) => (
-                            <tr key={row.id}>
+                            {filteredData.map((row, rowIndex) => (
+                            <tr key={rowIndex}>
                                 {tableHeader.map((oneData, id) => (
                                     <td key = {id}>
                                         {oneData.data ? row[oneData.data] : oneData.multiple(row)}

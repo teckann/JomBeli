@@ -26,6 +26,7 @@ const Refund = async ({ params }) => {
     const order = oneRefund.ORDERS_T;
     const buyer = order.buyer;
     const orderItem = order.ORDER_ITEMS_T;
+    const shipping = order.SHIPPING_T;
 
     let status = 'Pending';
     let isResponse = false;
@@ -198,7 +199,7 @@ const Refund = async ({ params }) => {
                 <div className={styles.timelineContent}>
 
                   <h4>Payment Successful :</h4>
-                  <p></p>
+                  <p>{order.order_temp_date}</p>
 
                 </div>
               </div>
@@ -212,7 +213,7 @@ const Refund = async ({ params }) => {
                 <div className={styles.timelineContent}>
 
                   <h4>Shipped :</h4>
-                  <p></p>
+                  <p>{shipping.created_date}</p>
 
                 </div>
               </div>
@@ -224,7 +225,7 @@ const Refund = async ({ params }) => {
                 <div className={styles.timelineContent}>
 
                   <h4>Arrived :</h4>
-                  <p></p>
+                  <p>{shipping.shipped_date}</p>
 
                 </div>
               </div>

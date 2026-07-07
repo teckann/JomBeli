@@ -22,27 +22,27 @@ export function AdminAddCourierForm({ hubs }){
                     isOpen={isModalOpen}
                     title="Add New Courier">
                     
-                    <form action={addCourier} className={Styles.formContainer}>
+                    <form action={addCourier} >
                         {error && <p className={Styles.errorText}>{error}</p>}
 
                         <div className={Styles.formGroup}>
                             <label>Full Name</label>
-                            <input type="text" name="username" required placeholder="e.g. John Doe" />
+                            <input type="text" name="username" required placeholder="Courier Name Here" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Gender</label>
-                            <input type="text" name="gender" required placeholder="e.g. Male/Female" />
+                            <input type="text" name="gender" required placeholder="Male/Female" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Email Address</label>
-                            <input type="email" name="email" required placeholder="e.g. john@courier.com" />
+                            <input type="email" name="email" required placeholder="courier@gmail.com" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Contact Number</label>
-                            <input type="text" name="contact_number" required placeholder="e.g. 0123456789" />
+                            <input type="text" name="contact_number" required placeholder="Contact Number: 01xxxxxxxx" />
                         </div>
 
                         <div className={Styles.formGroup}>
@@ -92,23 +92,23 @@ export function AdminAddAdminForm(){
                 isOpen={isModalOpen}
                 title="Add New Admin">
 
-                <form action={addAdmin} className={Styles.formContainer}>
+                <form action={addAdmin} >
                     {error && <p className={Styles.errorText}>{error}</p>}
                     <div className={Styles.formGroup}>
                         <label>Full Name</label>
-                        <input type="text" name="username" required placeholder="e.g. John Doe" />
+                        <input type="text" name="username" required placeholder="Admin Name Here" />
                     </div>
                     <div className={Styles.formGroup}>
                         <label>Gender</label>
-                        <input type="text" name="gender" required placeholder="e.g. Male/Female" />
+                        <input type="text" name="gender" required placeholder="Male/Female" />
                     </div>
                     <div className={Styles.formGroup}>
                         <label>Email Address</label>
-                        <input type="email" name="email" required placeholder="e.g. admin@jombeli.com" />
+                        <input type="email" name="email" required placeholder="admin@gmail.com" />
                     </div>
                     <div className={Styles.formGroup}>
                         <label>Contact Number</label>
-                        <input type="text" name="contact_number" required placeholder="e.g. 0123456789" />
+                        <input type="text" name="contact_number" required placeholder="Contact Number: 01xxxxxxxx" />
                     </div>
                     <div className={Styles.formActions}>
                         <button
