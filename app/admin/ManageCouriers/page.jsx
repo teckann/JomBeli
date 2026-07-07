@@ -4,7 +4,7 @@ import AdminTable from '@/app/_components/AdminTable/AdminTable'
 import { AdminFilterCourier } from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
 import { getFilterCouriers }from '@/app/_lib/analysis-serives';
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function manageCouriers({ searchParams }) {
     const { status, username } = await searchParams;

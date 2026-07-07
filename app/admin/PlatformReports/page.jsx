@@ -1,5 +1,6 @@
 import Styles from "./PlatformReports.module.css";
 import Link from 'next/link';
+import GenerateFinancialReport from "@/app/_components/AdminGenerateFinancialReport/AdminGenerateFinancialReport";
 
 export default async function manageVoucher({ searchParams }) {
     return (  
@@ -13,13 +14,13 @@ export default async function manageVoucher({ searchParams }) {
             <div className={Styles.cardBox}>
                 <h1 className={Styles.header}>Financial</h1>
                 <div className={Styles.cardContainer}>
-                    <Link href="/admin/PlatformReports/Financial/MonthlyYearly" className={Styles.cardText}>Monthly and Yearly Report</Link>
+                    <GenerateFinancialReport />
                 </div>
             </div>
             <div className={Styles.cardBox}>
                 <h1 className={Styles.header}>Users</h1>
                 <div className={Styles.cardContainer}>
-                    <Link href="/admin/PlatformReports/User/MonthlyYearly" className={Styles.cardText}>Monthly and Yearly Report</Link>
+                    {/* User report button, similarly dedicated, once I know that endpoint's fields */}
                 </div>
             </div>
         </div> 

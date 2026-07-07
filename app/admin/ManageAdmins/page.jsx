@@ -4,7 +4,7 @@ import AdminTable from '@/app/_components/AdminTable/AdminTable'
 import { SuperAdminFilterAdmin } from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
 import { getFilterAdmin }from '@/app/_lib/analysis-serives';
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function manageAdmins({ searchParams }) {
     const { status, username } = await searchParams;

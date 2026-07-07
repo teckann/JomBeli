@@ -26,7 +26,7 @@ const Links = [
 
 export default function BuyerNavBarClient({ user }) {
   const { username, avatar, balances } = user;
-  const RouteWithSearch = ["/buyer", "/"];
+  const RouteWithSearch = ["/buyer", "/buyer/searchPage", "/buyer/category"];
   const currentPath = usePathname();
   const showSearch = RouteWithSearch.includes(currentPath);
 
@@ -39,7 +39,7 @@ export default function BuyerNavBarClient({ user }) {
     const trimmedKeyword = keyword.trim();
 
     if (!trimmedKeyword) return;
-
+    setKeyword('');
     router.push(`/buyer/searchPage?keyword=${encodeURIComponent(trimmedKeyword)}`);
   };
 

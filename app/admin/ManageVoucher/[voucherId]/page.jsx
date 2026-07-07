@@ -24,6 +24,9 @@ export default async function UserDetail({params}){
         {field:"Status", value: voucher.voucher_status},
         {field:"Created at", value: voucher.created_at},
     ]
+    const mid = Math.ceil(voucherInfo.length / 2);
+    const leftInfo = voucherInfo ? voucherInfo.slice(0, mid) : [];
+    const rightInfo = voucherInfo ? voucherInfo.slice(mid) : [];
 
     return(
         <div className={Styles.voucherDetailsPage}>
@@ -37,11 +40,14 @@ export default async function UserDetail({params}){
             </div>
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
-                    <AdminShowInformationList itemTitle="Voucher details" objectlist={voucherInfo}/>
-                    {voucher?.voucher_type == "platform" && (
-                        <EditVoucherWidget voucher={voucher}/>
-                    )}
-                    <AdminDeactivateVoucherButton voucherId={voucher.voucher_id} voucherStatus={voucher.voucher_status}/>
+                    <AdminShowInformationList itemTitle="Voucher details" objectlist={leftInfo}/>
+                    <AdminDeactivateVoucherButton className={Styles.deactivateBtn} voucherId={voucher.voucher_id} voucherStatus={voucher.voucher_status}/>
+                </div>    
+                <div className={Styles.rightSide}>
+                        {voucher?.voucher_type == "platform" && (
+                            <EditVoucherWidget voucher={voucher}/>
+                        )}
+                    <AdminShowInformationList itemTitle="" objectlist={rightInfo} />
                 </div>
             </div>
         </div>

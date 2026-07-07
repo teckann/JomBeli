@@ -12,7 +12,7 @@
 }
 
 .openFormBtn:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-lighter);
     color: var(--color-text-on-primary);
     cursor: pointer;
 }
@@ -20,12 +20,11 @@
 .formContainer {
     background: white;
     padding: 30px;
-    border-radius: 8px;
+    border-radius: 4cap;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .formGroup {
-
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
@@ -54,10 +53,10 @@
 .formGroup select{
     display: flex;
     font-size: 16px;
-    width: 80%;
+    width: 100%;
     box-sizing: border-box;
     border: none;
-    border-radius: 20px;
+    border-radius: 5px;
     background-color: var(--color-bg-input);
     color: var(--color-font-primary);
     padding: 10px;
@@ -86,13 +85,14 @@
 }
 
 .cancelBtn:hover{
-    background-color: var(--color-danger);
-    color: var(--color-primary-subtle);
+    background-color: var(--color-bg-card);
+    transform: scale(0.97);
+    color: var(--color-font-primary);
     cursor: pointer;
 }
 
 .submitBtn {
-    background-color: var(--color-info);
+    background-color: var(--color-success);
     color: var(--color-primary-subtle);
     border: none;
     padding: 10px 15px;
@@ -101,6 +101,7 @@
 }
 
 .submitBtn:hover{
-    background-color: var(--color-info-text);
+    transform: scale(0.97);
+    background-color: var(--color-success-text);
     cursor: pointer;
 }

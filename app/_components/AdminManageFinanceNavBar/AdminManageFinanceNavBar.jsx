@@ -5,7 +5,7 @@ import { useRouter,useSearchParams } from "next/navigation";
 
 const TABS = [
     {key: "overview", label: "Overview"},
-    {key: "transactionHistory", label: "Transaction History"},
+    {key: "financialInformation", label: "Financial Information"},  
 ];
 
 export default function NavBar(){

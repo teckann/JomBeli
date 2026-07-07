@@ -55,6 +55,7 @@
 
 .lowerContainer {
     display:flex;
+    flex-direction: row;
     width:100%;
     /* background-color: #e5deca; */
     flex: 1;
@@ -74,3 +75,6 @@
     flex-direction: column;
 }
 
+.deactivateBtn{
+    margin-top: 16px;
+}
