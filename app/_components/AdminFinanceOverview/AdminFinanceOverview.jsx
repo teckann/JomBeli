@@ -1,5 +1,5 @@
 import Styles from './AdminFinanceOverview.module.css';
-import AdminStatCard from '@/app/_components/AdminFinanceOverviewData/OverviewData';
+import AdminFinanceStatCard from '../AdminFinanceStatCard/AdminFinanceStatCard';
 import { getDailyTransactionCount,getDailyInflowAmount,getDailyOutflowAmount, getPlatformDeliveryRevenue } from '@/app/_lib/analysis-serives';
 import { getDailyTransactionTypeBreakdown } from '@/app/_lib/analysis-serives';
 import AdminDailyTransactionPieChart from '../AdminDailyTransactionChart/DailyTransactionPieChart';
@@ -14,24 +14,27 @@ export default async function AdminFinanceOverview(){
 
     return(
         <>
-            <div className={Styles.upperContainer}>
-                <div className={Styles.infoBox}> {/* in number */}
-                    <AdminStatCard title="Transactions Made Today" value={dailyTransactionCount}/>
+            <div className={Styles.Container}>
+                <div className={Styles.infoBarColumn} >
+                    <div className={Styles.infoBox}> {/* in number */}
+                        <AdminFinanceStatCard title="Transactions Made Today" value={dailyTransactionCount}/>
+                    </div>
+                    <div className={Styles.infoBox}> {/* in rm */} 
+                        <AdminFinanceStatCard title="Daily Buyer TopUp" value={dailyInflow} isCurrency={true}/>
+                    </div>
+                    <div className={Styles.infoBox}> {/* in rm */}
+                        <AdminFinanceStatCard title="Daily Buyer Money Used" value={dailyOutflow} isCurrency={true}/>
+                    </div>
+                    <div className={Styles.infoBox}> {/* in rm */}
+                        <AdminFinanceStatCard title="Platform Daily Delivery Revenue" value={revenue} isCurrency={true}/>
+                    </div>
                 </div>
-                <div className={Styles.infoBox}> {/* in rm */} 
-                    <AdminStatCard title="Daily Buyer TopUp" value={dailyInflow} isCurrency={true}/>
-                </div>
-                <div className={Styles.infoBox}> {/* in rm */}
-                    <AdminStatCard title="Daily Buyer Money Used" value={dailyOutflow} isCurrency={true}/>
-                </div>
-                <div className={Styles.infoBox}> {/* in rm */}
-                    <AdminStatCard title="Platform Daily Delivery Revenue" value={revenue} isCurrency={true}/>
+                <div className={Styles.chartContainer}>
+                    <h3>Daily Transaction Types</h3>
+                    <AdminDailyTransactionPieChart counts={counts} />
                 </div>
             </div>
-            <div className={Styles.lowerContainer}>
-                <h3>Daily Transaction Types</h3>
-                <AdminDailyTransactionPieChart counts={counts} />
-            </div>
+            
         </>
     );
 }

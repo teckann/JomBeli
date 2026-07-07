@@ -1,22 +1,43 @@
-.upperContainer{
+.Container{
     display: flex;
-    justify-content: space-between;
-    width: 90%;
-    gap: 50px;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 60px;
+    min-height: 450;
+    align-items: stretch;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 20px;
+}
+
+.infoBarColumn{
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-top: 2%;
+    width: 55%;
 }
 
 .infoBox{
     display: flex;
-    width: 400px;
-    padding: 20px;
+    flex-direction: column;
+    justify-content: space-between;
+    /* flex: 0 0 40px; */
+    min-width: 45%;
+    padding: 10px;
     align-items: center;
-    border: 1px solid #ccc;
-    background-color: #ffadad;
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-primary-lighter);
     border-radius: 10px;
+    height: 80px;
 }
 
 
-.lowerContainer{
+.chartContainer{
+    align-items: center;
+    justify-content: center;
     margin-top: 2%;
     width: 400px;
     height: 400px;

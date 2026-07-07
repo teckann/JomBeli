@@ -4,19 +4,35 @@
     align-items: center; 
     /* padding: 15px 0; */
     margin: 1% 0 2% 0;
+    border-radius: 999px;
+    gap: 10px;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-primary);
+    width: fit-content;
 }
 
 .tabButton{
-    width: 200px;
-    height: 50px;
+    width: auto;
+    height: auto;
     padding: 10px 20px;
-    border: 2px black solid;
+    border: none;
+    white-space: nowrap; /* keep label on one line */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 999px;
+    background: transparent;
 }
 
 .activeTab{
-    background-color: var(--color-primary-lighter);
+    background-color: var(--color-primary);
     transform: scale(1.1);
     transform-origin: center;
+    border-radius: 999px;
+    color: white;
 }
 
 .activeTab:first-child{

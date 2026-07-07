@@ -1,10 +1,10 @@
 import Styles from './ManageUsers.module.css';
-import Link from 'next/link';
 import AdminTable from '@/app/_components/AdminTable/AdminTable'
 import { AdminFilterUser } from '@/app/_components/AdminFilterUsers/AdminFilterUsers';
 import { getFilterUsers }from '@/app/_lib/analysis-serives';
+import GenerateUserReport from '@/app/_components/AdminGenerateUserReport/AdminGenerateUserReport';
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 export default async function manageUser({ searchParams }) {
     const { role, status, username } = await searchParams;
@@ -26,6 +26,7 @@ export default async function manageUser({ searchParams }) {
                     <h1>Manage Users</h1>
                     <p>Manage System Users Right Now!</p>
                 </div>
+                <GenerateUserReport />
             </div>
             <div>
                 <AdminFilterUser />

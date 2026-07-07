@@ -620,7 +620,7 @@ export async function getYearsMonthsWithNewProduct() {
   result.forEach((each) => each.months.sort((a, b) => a - b));
   result.sort((a, b) => b.year - a.year);
 
-  console.log(result);
+  // console.log(result);
 
   return result;
 }
@@ -1681,6 +1681,7 @@ export async function getCourierDetails(userId){
       : data.avatar
         ? [data.avatar]
         : [],
+    created_at: formatDateTime(data.created_at),
   };
   
   return cleanedData;

@@ -5,6 +5,8 @@ import { ProfileInformation, AccountSecurityAnalysis } from "@/app/_components/A
 import AdminItemCard from "@/app/_components/AdminItemCard/AdminItemCard";
 import EditProfileWidget from "@/app/_components/AdminEditProfile/EditProfileWidget";
 import { AdminAddSecurityQuestionsForm } from "@/app/_components/AdminAddSecurityQuestions/AddSecurityQuestionsWidget";
+
+
 export default async function adminProfile(){
 
     const user = await getUser();

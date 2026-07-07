@@ -26,7 +26,11 @@ export default function AdminViewOrderHistoryButton({userId}){
         setIsOrderModalOpen(true);
         setLoadingOrders(true);
         const data = await fetchUserOrders(userId);
-        setOrders(data);
+        const formatted = data.map((row) => ({
+            ...row,
+            created_at: formatDateTime(row.created_at),
+        }));
+        setOrders(formatted);
         setLoadingOrders(false);
     };
 

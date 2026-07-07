@@ -12,20 +12,12 @@
 }
 
 .openFormBtn:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-lighter);
     color: var(--color-text-on-primary);
     cursor: pointer;
 }
 
-.formContainer {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
 .formGroup {
-
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
@@ -48,15 +40,18 @@
 .formGroup label{
     font-size: 16px;
     color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .formGroup input{
     display: flex;
     font-size: 16px;
-    width: 80%;
+    width: 100%;
     box-sizing: border-box;
-    border: none;
-    border-radius: 20px;
+    border: 1px solid var(--color-border-primary);
+    border-radius: 5%;
     background-color: var(--color-bg-input);
     color: var(--color-font-primary);
     padding: 10px;
@@ -74,13 +69,13 @@
 }
 
 .cancelBtn:hover{
-    background-color: var(--color-danger);
+    background-color: var(--color-font-secondary);
     color: var(--color-primary-subtle);
     cursor: pointer;
 }
 
 .submitBtn {
-    background-color: var(--color-info);
+    background-color: var(--color-success);
     color: var(--color-primary-subtle);
     border: none;
     padding: 10px 15px;
@@ -89,6 +84,7 @@
 }
 
 .submitBtn:hover{
-    background-color: var(--color-info-text);
+    transform: scale(0.97);
+    background-color: var(--color-success-text);
     cursor: pointer;
 }

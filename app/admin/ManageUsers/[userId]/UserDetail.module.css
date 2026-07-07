@@ -13,20 +13,19 @@
 
 .upperContainer{
     width: 100%;
-    /* background-color: #e5deca; */
 }
 
 .buttonContainer{
     display: flex;
-    align-items: center; /* Vertically centers the items */
+    align-items: center; 
     gap: 30px;
 }
 
 .profileContainer {
     display: flex;
     justify-content: center;
-    align-items: center; /* Vertically centers the items */
-    gap: 30px; /* Space between buttons, avatar, and text */
+    align-items: center;
+    gap: 30px; 
     margin: 2%;
 }
 
@@ -34,7 +33,7 @@
     margin: 2%;
     display: flex;
     flex-direction: column;
-    gap: 12px; /* Space between the two buttons */
+    gap: 12px; 
 }
 
 .btnSecondary {

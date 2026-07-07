@@ -19,7 +19,6 @@ export function AdminAddVoucherForm(){
             voucherName: formData.get("voucherName"),
             discountValue: formData.get("discountValue"),
             minimumSpend: formData.get("minimumSpend"),
-            maximumSpend: formData.get("maximumSpend"),
             quantity: formData.get("quantity"),
             startDate: formData.get("startDate"),
             endDate: formData.get("endDate"),
@@ -63,32 +62,27 @@ export function AdminAddVoucherForm(){
                     isOpen={isModalOpen}
                     title="Add New Voucher">
                     
-                    <form onSubmit={handleSubmit} className={Styles.formContainer}>
+                    <form onSubmit={handleSubmit} >
                         {error && <p className={Styles.errorText}>{error}</p>}
 
                         <div className={Styles.formGroup}>
                             <label>Voucher Name</label>
-                            <input type="text" name="voucherName" required placeholder="e.g. Delivery Voucher" />
+                            <input type="text" name="voucherName" required placeholder="Delivery Voucher (Start with JOMBELI)" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Discount Value (RM)</label>
-                            <input type="number" name="discountValue" required placeholder="e.g. 20" />
+                            <input type="number" name="discountValue" required placeholder="20" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Minimum Spend (RM)</label>
-                            <input type="number" name="minimumSpend" required placeholder="e.g. 40 (Value must be bigger than discount value)" />
-                        </div>
-
-                        <div className={Styles.formGroup}>
-                            <label>Maximum Spend (RM)</label>
-                            <input type="number" name="maximumSpend" required placeholder="e.g. 100" />
+                            <input type="number" name="minimumSpend" required placeholder="40 (Value must be bigger than discount value)" />
                         </div>
 
                         <div className={Styles.formGroup}>
                             <label>Quantity</label>
-                            <input type="number" name="quantity" required placeholder="e.g. 30" />
+                            <input type="number" name="quantity" required placeholder="30" />
                         </div>
 
                         <div className={Styles.formGroup}>
