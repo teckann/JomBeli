@@ -1,0 +1,15 @@
+To setup the project:
+- open up terminal in this project's directory
+- enter command "npm i"
+- then run "npm run dev"
+
+Accounts:
+Buyer: email: teckann06@gmail.com password: Teckann123@
+Seller: email: cyntiatan0121@gmail.com password: cyntia123
+Courier: email: beluga@gmail.com password: beluga123
+Admin: email: eeyang383@gmail.com password: yangee123
+
+# you can also register new account for buyer and seller at the sign up page
+# courier account can be added by admin
+
+THANK YOU FOR USING OUR SYSTEM!
