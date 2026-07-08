@@ -24,7 +24,6 @@ export default function EditVoucherWidget( {voucher} ){
             const saveData = {
                 voucherName: formData.get("voucherName"),
                 discountValue: formData.get("discountValue"),
-                maximumSpend: formData.get("maxSpend"),
                 minimumSpend: formData.get("minSpend"),
                 quantity: formData.get("quantity"),
                 startDate: formData.get("startDate"),
@@ -74,10 +73,6 @@ export default function EditVoucherWidget( {voucher} ){
                             <div className={Styles.fieldGroup}>
                                 <label className={Styles.label}>Discount Value: (RM)</label>
                                 <input className={Styles.textBox} type="number" name="discountValue" required defaultValue={voucher.discount_value}/>
-                            </div>
-                            <div className={Styles.fieldGroup}>
-                                <label className={Styles.label}>Maximum Spend:</label>
-                                <input className={Styles.textBox} type="number" name="maxSpend" required defaultValue={voucher.max_spend}/>
                             </div>
                             <div className={Styles.fieldGroup}>
                                 <label className={Styles.label}>Minimum Spend:</label>

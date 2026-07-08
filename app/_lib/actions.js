@@ -622,7 +622,7 @@ export async function reactivateVoucher(voucherId){
 }
 
 export async function adminUpdateVoucher(voucherId,saveData){
-  const requiredFields = ['voucherName', 'discountValue', 'maximumSpend', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
+  const requiredFields = ['voucherName', 'discountValue', 'minimumSpend', 'quantity', 'startDate', 'endDate',];
 
   if (Number(saveData.minimumSpend) < Number(saveData.discountValue)) {
     throw new Error("Minimum spend cannot be less than the discount value.");
@@ -648,7 +648,6 @@ export async function adminUpdateVoucher(voucherId,saveData){
   const dbData = {
     voucher_name: saveData.voucherName,
     discount_value: saveData.discountValue,
-    max_spend: saveData.maximumSpend,
     min_spend: saveData.minimumSpend,
     quantity: saveData.quantity,
     start_date: saveData.startDate,
@@ -667,7 +666,7 @@ export async function adminUpdateVoucher(voucherId,saveData){
     throw new Error("Could not save data.");
   }
 
-  revalidatePath(`/damin/ManageVoucher/${voucherId}`);
+  revalidatePath(`/admin/ManageVoucher/${voucherId}`);
   revalidatePath('/admin/ManageVoucher')
 }
 
