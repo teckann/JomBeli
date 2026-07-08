@@ -27,7 +27,7 @@ export default async function UserDetail({params}){
                     <BackButton className={Styles.backButton} />
                 </div>
                 <div className={Styles.pageHeader}>
-                    <h1 className={Styles.header}>View User Page</h1>
+                    <h1 className={Styles.header}>User Detail</h1>
                 </div>
                 <div className={Styles.profileContainer}>
                     <div className={Styles.actionButtons}>
