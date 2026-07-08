@@ -719,7 +719,7 @@ export async function getFilterSupport(date, supportType, supportStatus) {
     .from("SHIPPING_T")
     .select("*", { count: "exact", head: true })
     .eq("courier_id", courierId)
-    .eq("shipping_status", "Delivered");
+    .eq("shipping_status", "Completed");
 
   if (error) {
     console.error("Error fetching delivered count:", error);
