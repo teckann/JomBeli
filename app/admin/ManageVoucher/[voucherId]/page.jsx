@@ -23,7 +23,7 @@ export default async function UserDetail({params}){
         {field:"End Date", value: voucher.end_date},
         {field:"Status", value: voucher.voucher_status},
         {field:"Created at", value: voucher.created_at},
-        {field:"Created by", value: voucher.user_id},
+        // {field:"Created by", value: voucher.user_id},
     ]
     const mid = Math.ceil(voucherInfo.length / 2);
     const leftInfo = voucherInfo ? voucherInfo.slice(0, mid) : [];
