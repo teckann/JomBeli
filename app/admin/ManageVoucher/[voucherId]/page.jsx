@@ -41,12 +41,12 @@ export default async function UserDetail({params}){
             <div className={Styles.lowerContainer}>
                 <div className={Styles.leftSide}>
                     <AdminShowInformationList itemTitle="Voucher details" objectlist={leftInfo}/>
+                    {voucher?.voucher_type == "platform" && (
+                            <EditVoucherWidget voucher={voucher}/>
+                        )}
                     <AdminDeactivateVoucherButton className={Styles.deactivateBtn} voucherId={voucher.voucher_id} voucherStatus={voucher.voucher_status}/>
                 </div>    
                 <div className={Styles.rightSide}>
-                        {voucher?.voucher_type == "platform" && (
-                            <EditVoucherWidget voucher={voucher}/>
-                        )}
                     <AdminShowInformationList itemTitle="" objectlist={rightInfo} />
                 </div>
             </div>
