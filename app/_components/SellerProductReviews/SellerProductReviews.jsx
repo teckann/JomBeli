@@ -40,7 +40,7 @@ export default function SellerProductReview({ sellerId }) {
           if (dbReviews?.length) {
             const total = dbReviews.length;
             let sum = 0;
-            const counts = { 5: 0, 4: 0, 3: 2, 2: 0, 1: 0 };
+            const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
             const userIds = Array.from(new Set(dbReviews.map(r => r.user_id).filter(Boolean)));
             let userMap = {};

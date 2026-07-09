@@ -925,7 +925,7 @@ export async function confirmOrder(formData) {
         wallet_transaction_id: transactionID,
         user_id: seller_id,
         transaction_type: `Payment for order: #${order_id}`,
-        direction: 'Debit',
+        direction: 'Credit',
         payment_method: 'Wallet Balance',
         amount: sellerEarn,
         wallet_transaction_status: 'Success'

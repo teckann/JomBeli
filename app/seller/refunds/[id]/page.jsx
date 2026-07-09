@@ -257,7 +257,7 @@ const Refund = async ({ params }) => {
       <h2 className={styles.orderTitle}>Order Details</h2>
 
       <p className={styles.orderId}>Order ID : {oneRefund.order_id}</p>
-      <p className={styles.orderTotal}>Order Total : RM 1123</p>
+      {/* <p className={styles.orderTotal}>Order Total : RM 1123</p> */}
 
       <div className={styles.orderCon}>
         <div className={styles.orderSecCon}>
@@ -269,7 +269,7 @@ const Refund = async ({ params }) => {
               return (
                 <div className={styles.productItem} key={index}>
                   <div className={styles.productImage}>
-                    <img src={product.product_image_url} alt="product" />
+                    <img src={product.product_image_url[0]} alt="product" />
                   </div>
                   <div className={styles.productDetails}>
                     <div className={styles.detailRow}>

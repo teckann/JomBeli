@@ -5,8 +5,8 @@ export async function getShippingCountByHub(hubId) {
     const { count, error } = await supabase
         .from("SHIPPING_T")
         .select("*", { count: "exact", head: true })
-        .eq("hub_id", hubId);
-
+        .eq("hub_id", hubId)
+        .neq("shipping_status", "Completed")
     if (error) {
         throw new Error(`Failed to retrieve shipping count: ${error.message}`);
     }

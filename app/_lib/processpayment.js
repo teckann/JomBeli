@@ -131,7 +131,7 @@ export async function processPayment({
       wallet_transaction_id: await IDGenerator(),
       user_id: buyerId,
       transaction_type: "Purchase",
-      direction: "Credit",
+      direction: "Debit",
       payment_method: "Wallet",
       amount: totalAmount,
       wallet_transaction_status: "Success",
