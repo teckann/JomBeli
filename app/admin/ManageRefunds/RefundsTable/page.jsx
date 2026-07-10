@@ -30,8 +30,8 @@ export default async function manageProductsPage({ searchParams }) {
             <AdminBackButton />
             <div className={Styles.showTablePart}>
                 <div className={Styles.listingText}>
-                    <h2>Product Listing</h2>
-                    <p>View and manage system products through this table</p>
+                    <h2>Refund Listing</h2>
+                    <p>View and manage system refunds through this table</p>
                 </div>
                 <div>
                     <AdminFilterReportsBar />

@@ -46,7 +46,7 @@ export default async function manageSystemSupport() {
           <button className="btn btn-primary">
             <Link
               className={Styles.linkText}
-              href="/admin/ManageSystemSupport/SupportTable"
+              href="/admin/ManageSystemSupport/SupportTable?date=true"
             >
               View Report Records
             </Link>

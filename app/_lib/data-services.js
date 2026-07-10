@@ -41,8 +41,7 @@ export async function getProducts() {
   const { data, error } = await supabase
     .from("PRODUCTS_T")
     .select("*")
-    .order("created_at", { ascending: false })
-    .eq('user_id', user.id); 
+    .order("created_at", { ascending: false }); 
 
   if (error) {
     console.error("Failed to fetch products:", error.message);

@@ -12,6 +12,8 @@ export  default async function AdminFilterProductsBar() {
     // filter the same category (... is used to create new array, set must combine with new to construct new object)
     const distinctCategory = [... new Set(products.map((product) => product.category))];
     // console.log(distinctCategory);
+    // console.log(distinctCategory);
+    console.log("productya", products);
 
     // const [products, setProducts] = useState([]);
 

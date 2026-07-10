@@ -73,7 +73,7 @@ export function DateSelect({handleChange, values}) {
 
     return (
         <div className={ Styles.selectBox }>
-            <label className={ Styles.selectText } htmlFor="date" >Status</label>
+            <label className={ Styles.selectText } htmlFor="date" >Date</label>
             <select className={ Styles.inputs } value={values} onChange={handleChange} name="date" id="date">
                 <option value="true">Latest</option>
                 <option value="false">Oldest</option>

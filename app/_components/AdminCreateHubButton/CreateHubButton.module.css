@@ -23,7 +23,7 @@
     padding: 1em;
 }
 
-.openButton, .confirmButton {
+.openButton, .confirmButton, .disableButton {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,11 +92,16 @@
     border: 1px black solid;
 }
 
-.confirmButton {
+.confirmButton, .disableButton {
     background-color: var(--color-success);
 }
 
 .confirmButton:hover {
     transform: scale(1.2);
     background-color: var(--color-success-text);
+}
+
+.disableButton {
+    opacity: 0.5;
+    transform: none;
 }

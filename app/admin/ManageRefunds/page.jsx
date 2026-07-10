@@ -23,7 +23,7 @@ export default async function manageRefunds() {
                     <p>Admin are able to manage the request that are rejected from seller or is not response from seller within certain period.</p>
                 </div>
                 <div className={Styles.generateReportPart}>
-                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable">View Refund Records</Link></button>
+                    <button className="btn btn-primary"><Link className={ Styles.linkText } href="/admin/ManageRefunds/RefundsTable?date=true">View Refund Records</Link></button>
                 </div>
             </div>
             <div className={Styles.refundsOverviewContainer}>

@@ -100,41 +100,68 @@ export default async function reportDetails({params}) {
                                 <div className={ Styles.calculateTitle }></div>
                                 <div className={ Styles.numberInput}>RM</div>
                             </div>
+
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }>Sum of Total</div>
                                 <div className={ Styles.numberInput}>
-                                    {hasVoucher ? 
-                                    Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) + Number(order.voucher.VOUCHERS_T.discount_value)
-                                : Number(order.total_amount) - Number(order.shipping[0]?.delivery_fee) }
+                                    {hasVoucher
+                                        ? Number(order.total_amount) -
+                                        Number(order.shipping[0]?.delivery_fee) +
+                                        Number(order.voucher.VOUCHERS_T.discount_value) +
+                                        Number(order.discount_amount)
+                                        : Number(order.total_amount) -
+                                        Number(order.shipping[0]?.delivery_fee) +
+                                        Number(order.discount_amount)
+                                    }
                                 </div>
                             </div>
+
+                            <div className={ Styles.calculateRow}>
+                                <div className={ Styles.calculateTitle }>Product Discount</div>
+                                <div className={ Styles.numberInput}>
+                                    - {Number(order.discount_amount).toFixed(2)}
+                                </div>
+                            </div>
+
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }>Delivery Fee</div>
                                 <div className={ Styles.numberInput}>
-                                    {Number(order.shipping[0]?.delivery_fee)}
+                                    + {Number(order.shipping[0]?.delivery_fee)}
                                     <div className={Styles.divider}></div>
                                 </div>
                             </div>
+
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }></div>
                                 <div className={ Styles.numberInput}>
-                                    {hasVoucher ? 
-                                        Number(order.total_amount) + Number(order.voucher.VOUCHERS_T.discount_value)
-                                    : Number(order.total_amount) }
+                                    {hasVoucher
+                                        ? Number(order.total_amount) +
+                                        Number(order.voucher.VOUCHERS_T.discount_value)
+                                        : Number(order.total_amount)
+                                    }
                                 </div>
                             </div>
+
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }><small>Applied Voucher</small></div>
                                 <div className={ Styles.numberInput}>
                                 </div>
                             </div>
+
                             <div className={ Styles.calculateRow}>
-                                <div className={ Styles.calculateTitle }>{hasVoucher ? `${order.voucher.VOUCHERS_T.voucher_name} (${order.voucher.VOUCHERS_T.voucher_type} voucher)` : "-"}</div>
+                                <div className={ Styles.calculateTitle }>
+                                    {hasVoucher
+                                        ? `${order.voucher.VOUCHERS_T.voucher_name} (${order.voucher.VOUCHERS_T.voucher_type} voucher)`
+                                        : "-"}
+                                </div>
                                 <div className={ Styles.numberInput}>
-                                    {hasVoucher ? `- ${order.voucher.VOUCHERS_T.discount_value}` : "0"}
+                                    {hasVoucher
+                                        ? `- ${order.voucher.VOUCHERS_T.discount_value}`
+                                        : "0"}
                                     <div className={Styles.divider}></div>
                                 </div>
-                            </div> 
+                            </div>
+
                             <div className={ Styles.calculateRow}>
                                 <div className={ Styles.calculateTitle }>Total Paid</div>
                                 <div className={ Styles.numberInput}>
@@ -151,7 +178,7 @@ export default async function reportDetails({params}) {
                             <div className={ Styles.infoMore}>
                                 <span>🚚 Delivery Status: {order.shipping[0]?.shipping_status}</span>
                                 <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.user_id : "-"}</span>
-                                <span>👤 Assigned by: {order.shipping[0]?.courier?.admin ? order.shipping[0].courier.admin.username : "-"}</span>
+                                <span>👤 Assigned by: {order.shipping[0]?.admin ? order.shipping[0].admin.username : "-"}</span>
                             </div>
                         </div>
                         <div className={ Styles.moreInfoComponent }>

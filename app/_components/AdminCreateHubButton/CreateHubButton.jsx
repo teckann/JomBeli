@@ -68,7 +68,7 @@ export function Overlay({handleAction, hubName, hubLocation, capacity, handleHub
                 <div className={ Styles.createForm }>
                     <div className={ Styles.inputChange}>
                         <label htmlFor="hubNameInput"><b>Hub Name</b></label>
-                        <input className={ Styles.input } id="hubNameInput" name="hubNameInput" onChange={handleHubNameChange} type="text" required value={hubName} placeholder="New Huub Name" />
+                        <input className={ Styles.input } id="hubNameInput" name="hubNameInput" onChange={handleHubNameChange} type="text" required value={hubName} placeholder="New Hub Name" />
                     </div>
                     <div className={ Styles.inputChange}>
                         <label htmlFor="hubLocationInput"><b>Hub Location</b></label>
@@ -82,7 +82,7 @@ export function Overlay({handleAction, hubName, hubLocation, capacity, handleHub
                         <input id="hubCheckBox" className={ Styles.checkBox } type="checkbox" name="hubCheckBox" onClick={handleChekInput} />
                         <label htmlFor="hubCheckBox" className={ Styles.checkBox }>I understand that once a hub is created, it cannot be deleted. It can only be deactivated.</label>
                     </div>
-                    <button disabled={!isAble} className={ Styles.confirmButton } onClick={handleCreate}><b>Confirm</b></button>
+                    <button disabled={!isAble} className={ `${ isAble ? Styles.confirmButton : Styles.disableButton }` } onClick={handleCreate}><b>Confirm</b></button>
                 </div>
             </div>
         </div>
