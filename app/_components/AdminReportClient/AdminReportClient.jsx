@@ -22,7 +22,7 @@ export default function AdminReportClient({ month, year, total, monthlyProducts,
         product.product_id,
         product.product_name,
         product.category,
-        product.username,
+        product.USERS_T.username ?? "-",
         formatDateTime(product.created_at)
     ]);
 
