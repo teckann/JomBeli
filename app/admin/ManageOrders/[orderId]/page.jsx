@@ -177,7 +177,7 @@ export default async function reportDetails({params}) {
                             <AdminTitle title="Delivery Details" />
                             <div className={ Styles.infoMore}>
                                 <span>🚚 Delivery Status: {order.shipping[0]?.shipping_status}</span>
-                                <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.user_id : "-"}</span>
+                                <span>📦 Delivered by: {order.shipping[0]?.courier ? order.shipping[0]?.courier.username : "-"}</span>
                                 <span>👤 Assigned by: {order.shipping[0]?.admin ? order.shipping[0].admin.username : "-"}</span>
                             </div>
                         </div>
