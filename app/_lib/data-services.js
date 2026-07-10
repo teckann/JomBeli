@@ -52,6 +52,23 @@ export async function getProducts() {
   return data;
 }
 
+export async function getProductsAdmin() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { data, error } = await supabase
+    .from("PRODUCTS_T")
+    .select("*")
+    .order("created_at", { ascending: false }); 
+
+  if (error) {
+    console.error("Failed to fetch products:", error.message);
+    throw new Error("Could not fetch products");
+  }
+
+  return data;
+}
+
 export async function getBuyerSellerInfo() {
   const supabase = await createClient();
   const { data, error } = await supabase

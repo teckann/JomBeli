@@ -1,12 +1,12 @@
 // "use client";
 
 import Styles from "./AdminFilterProductsBars.module.css"
-import { getProducts } from "@/app/_lib/data-services";
+import { getProductsAdmin } from "@/app/_lib/data-services";
 import FilterProductsBar from "./AdminFilterProductsClient";
 
 export  default async function AdminFilterProductsBar() {
 
-    const products = await getProducts();
+    const products = await getProductsAdmin();
     // console.log(products);
 
     // filter the same category (... is used to create new array, set must combine with new to construct new object)
