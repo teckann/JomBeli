@@ -63,7 +63,7 @@ export async function RefundOverViewBar({rejectedBySellerCount, notProcessBySell
     const overviewData = [
         {title: "Total Waiting Refund Request", count: totalCount}, 
         {title: "Rejected by Seller", count: rejectedBySellerCount},
-        {title: "Not ProcessBySeller", count: notProcessBySellerCount}
+        {title: "Not Process By Seller", count: notProcessBySellerCount}
     ]
 
     return (
